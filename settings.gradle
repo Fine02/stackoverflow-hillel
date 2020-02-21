@@ -1,1 +1,3 @@
 rootProject.name = 'mercury'
+include 'aws-online-shopping'
+
