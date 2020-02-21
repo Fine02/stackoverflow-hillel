@@ -1,5 +1,7 @@
 package com.ra.course.aws.online.shopping.entity;
 
+import com.ra.course.aws.online.shopping.entity.interfaces.User;
+
 import java.util.Date;
 import java.util.Map;
 
