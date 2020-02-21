@@ -2,12 +2,20 @@ package com.ra.course.aws.online.shopping.entity;
 
 import com.ra.course.aws.online.shopping.entity.interfaces.Address;
 
-public class ShippingAddress implements Address {
+public class DeliveryAddress implements Address {
     private Long id;
     private int zipCode;
     private String State;
     private String City;
     private String streetAddress;
+
+    public DeliveryAddress(Long id, int zipCode, String state, String city, String streetAddress) {
+        this.id = id;
+        this.zipCode = zipCode;
+        State = state;
+        City = city;
+        this.streetAddress = streetAddress;
+    }
 
     public Long getId() {
         return id;

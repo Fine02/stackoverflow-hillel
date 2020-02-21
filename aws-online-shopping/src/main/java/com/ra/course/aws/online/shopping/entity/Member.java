@@ -9,6 +9,8 @@ public class Member implements User {
     private ShoppingCart shoppingCart;
     private Account account;
 
+
+
     public Long getId() {
         return id;
     }

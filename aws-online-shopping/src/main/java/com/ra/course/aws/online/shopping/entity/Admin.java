@@ -8,6 +8,13 @@ public class Admin implements User {
     private char[] password;
     private Account account;
 
+    public Admin(Long id, String login, char[] password, Account account) {
+        this.id = id;
+        Login = login;
+        this.password = password;
+        this.account = account;
+    }
+
     public Long getId() {
         return id;
     }

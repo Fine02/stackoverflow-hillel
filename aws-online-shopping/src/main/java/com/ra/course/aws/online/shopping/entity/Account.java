@@ -13,7 +13,21 @@ public class Account {
     private Gender gender;
     List <PhoneNumber> phoneNumbers;
     List<Address> addresses;
-    private Long creditCard;
+    private PaymentCard card;
+
+    public Account() {
+    }
+
+    public Account(Long id, String name, String lastName, String email, Gender gender, List<PhoneNumber> phoneNumbers, List<Address> addresses, PaymentCard Card) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.gender = gender;
+        this.phoneNumbers = phoneNumbers;
+        this.addresses = addresses;
+        this.card = card;
+    }
 
     public Long getId() {
         return id;
@@ -71,12 +85,12 @@ public class Account {
         this.addresses = addresses;
     }
 
-    public Long getCreditCard() {
-        return creditCard;
+    public PaymentCard getCard() {
+        return card;
     }
 
-    public void setCreditCard(Long creditCard) {
-        this.creditCard = creditCard;
+    public void setCard(PaymentCard card) {
+        this.card = card;
     }
 
 

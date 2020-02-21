@@ -6,6 +6,11 @@ public class Guest implements User {
     private Long id;
     private ShoppingCart shoppingCart;
 
+    public Guest(Long id, ShoppingCart shoppingCart) {
+        this.id = id;
+        this.shoppingCart = shoppingCart;
+    }
+
     public Long getId() {
         return id;
     }

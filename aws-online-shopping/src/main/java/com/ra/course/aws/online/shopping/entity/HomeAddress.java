@@ -9,6 +9,14 @@ public class HomeAddress implements Address {
     private String City;
     private String streetAddress;
 
+    public HomeAddress(Long id, int zipCode, String state, String city, String streetAddress) {
+        this.id = id;
+        this.zipCode = zipCode;
+        State = state;
+        City = city;
+        this.streetAddress = streetAddress;
+    }
+
     public Long getId() {
         return id;
     }
