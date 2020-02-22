@@ -41,6 +41,13 @@ configure(allprojects) { project ->
         testCompile testing.mockito
     }
 }
+project(':aws-online-shopping'){
+
+}
+
+project (':aws-online-shopping'){
+
+}
 
 wrapper {
     version = '6.1.1'
