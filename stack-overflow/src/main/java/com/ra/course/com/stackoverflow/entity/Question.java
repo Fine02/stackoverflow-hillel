@@ -1,9 +1,11 @@
 package com.ra.course.com.stackoverflow.entity;
 
+import com.ra.course.com.stackoverflow.entity.interfaces.Search;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Question {
+public class Question implements Search {
     private String title;
     private String description;
     private int viewCount;
