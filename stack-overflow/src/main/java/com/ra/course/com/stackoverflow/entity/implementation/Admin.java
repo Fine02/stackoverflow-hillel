@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.entity.implementations;
+package com.ra.course.com.stackoverflow.entity.implementation;
 
 public class Admin extends Member {
     public Admin(Account account) {

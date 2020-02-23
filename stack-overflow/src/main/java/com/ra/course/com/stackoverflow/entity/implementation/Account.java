@@ -1,6 +1,6 @@
-package com.ra.course.com.stackoverflow.entity.implementations;
+package com.ra.course.com.stackoverflow.entity.implementation;
 
-import com.ra.course.com.stackoverflow.entity.enums.AccountStatus;
+import com.ra.course.com.stackoverflow.entity.enumeration.AccountStatus;
 
 public class Account {
     final private long id;
