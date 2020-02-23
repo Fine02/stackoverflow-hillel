@@ -1,14 +1,15 @@
 package com.ra.course.com.stackoverflow.entity;
 
 public class Account {
-    private long id;
+    final private long id;
     private String password;
     private AccountStatus status;
     private String name;
     private String email;
     private int reputation;
 
-    public Account(String password, AccountStatus status, String name, String email, int reputation) {
+    public Account(Long id, String password, AccountStatus status, String name, String email, int reputation) {
+        this.id = id;
         this.password = password;
         this.status = status;
         this.name = name;
@@ -18,10 +19,6 @@ public class Account {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getPassword() {
