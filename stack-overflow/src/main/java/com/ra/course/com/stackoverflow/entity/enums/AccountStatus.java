@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.entity;
+package com.ra.course.com.stackoverflow.entity.enums;
 
 public enum AccountStatus {
     ACTIVE,

@@ -1,7 +1,7 @@
-package com.ra.course.com.stackoverflow.entity;
+package com.ra.course.com.stackoverflow.entity.implementations;
 
-public class Admin extends Member {
-    public Admin(Account account) {
+public class Moderator extends Member {
+    public Moderator(Account account) {
         super(account);
     }
 

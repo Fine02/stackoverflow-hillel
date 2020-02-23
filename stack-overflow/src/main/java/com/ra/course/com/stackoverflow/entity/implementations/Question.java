@@ -1,6 +1,8 @@
-package com.ra.course.com.stackoverflow.entity;
+package com.ra.course.com.stackoverflow.entity.implementations;
 
-import com.ra.course.com.stackoverflow.entity.interfaces.Search;
+import com.ra.course.com.stackoverflow.entity.Search;
+import com.ra.course.com.stackoverflow.entity.enums.QuestionClosingRemark;
+import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;

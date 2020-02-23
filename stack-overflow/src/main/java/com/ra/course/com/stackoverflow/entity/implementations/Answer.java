@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.entity;
+package com.ra.course.com.stackoverflow.entity.implementations;
 
 import java.time.LocalDateTime;
 import java.util.List;
