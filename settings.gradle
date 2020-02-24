@@ -1,4 +1,3 @@
 rootProject.name = 'mercury'
-include 'com.ra.course.aws.online.shopping'
 include 'aws-online-shopping'
 
