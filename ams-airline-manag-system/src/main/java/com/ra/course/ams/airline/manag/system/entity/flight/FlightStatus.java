@@ -1,4 +1,4 @@
-package com.ra.course.ams.airline.manag.system.entity;
+package com.ra.course.ams.airline.manag.system.entity.flight;
 
 public enum FlightStatus {
     ACTIVE,

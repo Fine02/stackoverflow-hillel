@@ -1,4 +1,4 @@
-package src.main.java.com.ra.course.ams.airline.manag.system.entity.flight;
+package com.ra.course.ams.airline.manag.system.entity.flight;
 
 public class Seat {
 
@@ -79,7 +79,7 @@ public class Seat {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("src.main.java.com.ra.course.ams.airline.manag.system.entity.flight.Seat{");
+        final StringBuffer sb = new StringBuffer("com.ra.course.ams.airline.manag.system.entity.flight.Seat{");
         sb.append("\"seatNumber\": \"").append(seatNumber).append('"');
         sb.append(", \"seatType\":").append(type);
         sb.append(", \"seatClass\":").append(seatClass);

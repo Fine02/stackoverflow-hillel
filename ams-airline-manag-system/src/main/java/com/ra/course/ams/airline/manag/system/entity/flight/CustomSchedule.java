@@ -1,4 +1,4 @@
-package src.main.java.com.ra.course.ams.airline.manag.system.entity.flight;
+package com.ra.course.ams.airline.manag.system.entity.flight;
 
 import java.sql.Time;
 import java.util.Date;
@@ -63,7 +63,7 @@ public class CustomSchedule {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("src.main.java.com.ra.course.ams.airline.manag.system.entity.flight.CustomSchedule{");
+        final StringBuffer sb = new StringBuffer("com.ra.course.ams.airline.manag.system.entity.flight.CustomSchedule{");
         sb.append("\"customDate\": \"").append(customDate).append('"');
         sb.append(", \"departureTime\": \"").append(departureTime).append('"');
         sb.append('}');

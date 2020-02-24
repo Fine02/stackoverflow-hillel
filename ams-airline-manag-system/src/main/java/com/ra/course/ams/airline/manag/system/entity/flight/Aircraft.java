@@ -1,4 +1,4 @@
-package src.main.java.com.ra.course.ams.airline.manag.system.entity.flight;
+package com.ra.course.ams.airline.manag.system.entity.flight;
 
 import java.util.List;
 
@@ -134,7 +134,7 @@ public class Aircraft {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("src.main.java.com.ra.course.ams.airline.manag.system.entity.flight.Aircraft{");
+        final StringBuffer sb = new StringBuffer("com.ra.course.ams.airline.manag.system.entity.flight.Aircraft{");
         sb.append("\"name\": \"").append(name).append('"');
         sb.append(", \"modal\": \"").append(modal).append('"');
         sb.append(", \"manufacturingYear\":").append(manufacturingYear);

@@ -1,4 +1,4 @@
-package src.main.java.com.ra.course.ams.airline.manag.system.entity.flight;
+package com.ra.course.ams.airline.manag.system.entity.flight;
 
 import java.sql.Time;
 
@@ -62,7 +62,7 @@ public class WeeklySchedule {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("src.main.java.com.ra.course.ams.airline.manag.system.entity.flight.WeeklySchedule{");
+        final StringBuffer sb = new StringBuffer("com.ra.course.ams.airline.manag.system.entity.flight.WeeklySchedule{");
         sb.append("\"dayOfWeek\":").append(dayOfWeek);
         sb.append(", \"departureTime\": \"").append(departureTime).append('"');
         sb.append('}');

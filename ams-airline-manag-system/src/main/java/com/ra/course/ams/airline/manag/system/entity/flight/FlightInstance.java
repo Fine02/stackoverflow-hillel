@@ -1,4 +1,4 @@
-package src.main.java.com.ra.course.ams.airline.manag.system.entity.flight;
+package com.ra.course.ams.airline.manag.system.entity.flight;
 
 import java.sql.Time;
 import java.util.List;
@@ -102,7 +102,7 @@ public class FlightInstance {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("src.main.java.com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance{");
+        final StringBuffer sb = new StringBuffer("com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance{");
         sb.append("\"departureTime\": \"").append(departureTime).append('"');
         sb.append(", \"gate\": \"").append(gate).append('"');
         sb.append(", \"status\":").append(status);

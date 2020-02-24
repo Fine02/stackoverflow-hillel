@@ -1,4 +1,4 @@
-package src.main.java.com.ra.course.ams.airline.manag.system.entity.flight;
+package com.ra.course.ams.airline.manag.system.entity.flight;
 
 import java.util.List;
 
@@ -98,7 +98,7 @@ public class Airline {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("src.main.java.com.ra.course.ams.airline.manag.system.entity.flight.Airline{");
+        final StringBuffer sb = new StringBuffer("com.ra.course.ams.airline.manag.system.entity.flight.Airline{");
         sb.append("\"name\": \"").append(name).append('"');
         sb.append(", \"code\": \"").append(code).append('"');
         sb.append(", \"flights\":").append(flights);

@@ -1,4 +1,4 @@
-package src.main.java.com.ra.course.ams.airline.manag.system.entity.flight;
+package com.ra.course.ams.airline.manag.system.entity.flight;
 
 public class FlightSeat extends Seat {
 
@@ -60,7 +60,7 @@ public class FlightSeat extends Seat {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("src.main.java.com.ra.course.ams.airline.manag.system.entity.flight.FlightSeat{");
+        final StringBuffer sb = new StringBuffer("com.ra.course.ams.airline.manag.system.entity.flight.FlightSeat{");
         sb.append("\"fare\":").append(fare);
         sb.append(", \"reservationNumber\": \"").append(reservationNumber).append('"');
         sb.append('}');
