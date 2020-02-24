@@ -1,4 +1,6 @@
-package com.ra.course.ams.airline.manag.system.entity;
+package com.ra.course.ams.airline.manag.system.entity.notification;
+
+import com.ra.course.ams.airline.manag.system.entity.notification.Notification;
 
 import java.util.Date;
 

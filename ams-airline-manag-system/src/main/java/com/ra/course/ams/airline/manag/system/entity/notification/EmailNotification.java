@@ -1,4 +1,6 @@
-package com.ra.course.ams.airline.manag.system.entity;
+package com.ra.course.ams.airline.manag.system.entity.notification;
+
+import com.ra.course.ams.airline.manag.system.entity.notification.Notification;
 
 public class EmailNotification extends Notification {
     private String email;

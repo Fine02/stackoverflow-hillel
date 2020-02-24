@@ -1,4 +1,4 @@
-package com.ra.course.ams.airline.manag.system.entity;
+package com.ra.course.ams.airline.manag.system.entity.payment;
 
 public class Payment {
     private int paimentId;
