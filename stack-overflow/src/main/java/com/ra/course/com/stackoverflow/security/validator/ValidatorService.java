@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.service.validator;
+package com.ra.course.com.stackoverflow.security.validator;
 
 public interface ValidatorService <T> {
 

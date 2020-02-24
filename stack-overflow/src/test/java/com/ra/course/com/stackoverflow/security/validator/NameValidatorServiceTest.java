@@ -1,6 +1,6 @@
-package com.ra.course.com.stackoverflow.service.validator;
+package com.ra.course.com.stackoverflow.security.validator;
 
-import com.ra.course.com.stackoverflow.service.validator.implementation.NameValidatorService;
+import com.ra.course.com.stackoverflow.security.validator.implementation.NameValidatorService;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class NameValidatorServiceTest {
         }
 
         @Test
-        public void validNameTest(){
+        public void testShouldReturnTrueIfNameIsValid(){
             List<String> validName= new ArrayList<>(){{
                 add("askj12nfj");
                 add("Alina.Fine02");
@@ -34,7 +34,7 @@ public class NameValidatorServiceTest {
             }
         }
         @Test
-        public void invalidNameTest(){
+        public void testShouldReturnFalseIfNameIsInvalid(){
             List<String> invalidName= new ArrayList<>(){{
                 add("4glfkn");
                 add("ert");
@@ -46,7 +46,7 @@ public class NameValidatorServiceTest {
             }
         }
         @Test
-        public void nullNameTest(){
+        public void testShouldReturnFalseIfEnterNull(){
             assertFalse(nameValidator.checkIsValid(null));
         }
 }

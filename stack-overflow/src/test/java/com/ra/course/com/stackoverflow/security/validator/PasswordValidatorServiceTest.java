@@ -1,6 +1,6 @@
-package com.ra.course.com.stackoverflow.service.validator;
+package com.ra.course.com.stackoverflow.security.validator;
 
-import com.ra.course.com.stackoverflow.service.validator.implementation.PasswordValidatorService;
+import com.ra.course.com.stackoverflow.security.validator.implementation.PasswordValidatorService;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
@@ -17,13 +17,8 @@ public class PasswordValidatorServiceTest {
         passwordValidator = new PasswordValidatorService();
     }
 
-    @AfterEach
-    void tearDown() {
-        passwordValidator = null;
-    }
-
     @Test
-    public void validPasswordTest(){
+    public void testShouldReturnTrueIfPasswordIsValid(){
         List<String> validPassword= new ArrayList<>(){{
             add("Rt8&lkmf ");
             add("#jUU889 ");
@@ -33,7 +28,7 @@ public class PasswordValidatorServiceTest {
         }
     }
     @Test
-    public void invalidPasswordTest(){
+    public void testShouldReturnFalseIfPasswordIsInvalid(){
         List<String> invalidPassword= new ArrayList<>(){{
             add("dsfg");
             add("PASSWORD");
@@ -45,7 +40,7 @@ public class PasswordValidatorServiceTest {
         }
     }
     @Test
-    public void nullPasswordTest(){
+    public void testShouldReturnFalseIfEnterNull(){
         assertFalse(passwordValidator.checkIsValid(null));
     }
 }

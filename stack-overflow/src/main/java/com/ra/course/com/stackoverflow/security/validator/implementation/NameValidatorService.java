@@ -1,6 +1,6 @@
-package com.ra.course.com.stackoverflow.service.validator.implementation;
+package com.ra.course.com.stackoverflow.security.validator.implementation;
 
-import com.ra.course.com.stackoverflow.service.validator.ValidatorService;
+import com.ra.course.com.stackoverflow.security.validator.ValidatorService;
 
 import java.util.regex.Pattern;
 

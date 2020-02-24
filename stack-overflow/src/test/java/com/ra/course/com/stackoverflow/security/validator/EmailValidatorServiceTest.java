@@ -1,6 +1,6 @@
-package com.ra.course.com.stackoverflow.service.validator;
+package com.ra.course.com.stackoverflow.security.validator;
 
-import com.ra.course.com.stackoverflow.service.validator.implementation.EmailValidatorService;
+import com.ra.course.com.stackoverflow.security.validator.implementation.EmailValidatorService;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
@@ -17,13 +17,8 @@ public class EmailValidatorServiceTest {
         emailValidator = new EmailValidatorService();
     }
 
-    @AfterEach
-    void tearDown() {
-        emailValidator = null;
-    }
-
     @Test
-    public void validEmailTest() {
+    public void testShouldReturnTrueIfEmailIsValid() {
         List<String> validEmail = new ArrayList<>() {{
             add("user@domain.com");
             add("user@domain.co.in");
@@ -37,7 +32,7 @@ public class EmailValidatorServiceTest {
     }
 
     @Test
-    public void invalidEmailTest() {
+    public void testShouldReturnFalseIfEmailIsInvalid() {
         List<String> invalidEmail = new ArrayList<>() {{
             add(".username@yahoo.com");
             add("username@yahoo.com.");
@@ -51,7 +46,7 @@ public class EmailValidatorServiceTest {
     }
 
     @Test
-    public void nullEmailTest(){
+    public void testShouldReturnFalseIfEnterNull(){
         assertFalse(emailValidator.checkIsValid(null));
     }
 }
