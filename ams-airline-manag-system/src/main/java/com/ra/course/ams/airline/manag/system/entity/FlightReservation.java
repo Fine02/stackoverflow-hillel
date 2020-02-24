@@ -2,11 +2,8 @@ package com.ra.course.ams.airline.manag.system.entity;
 
 public class FlightReservation {
     private String reservationNumber;
-    // TODO: add
+    // TODO: add after adding necessary classes
     //  FlightInstanse flight
     //  seatMap: map<Passengers, FlightSeat>
-    //  status ????????
-
-
-
+    private ReservationStatus staus;
 }
