@@ -1,7 +1,5 @@
 package com.ra.course.ams.airline.manag.system.entity.payment;
 
-import com.ra.course.ams.airline.manag.system.entity.payment.Payment;
-
 public class CheckTransaction extends Payment {
     private String bankName;
     private String checkNumber;

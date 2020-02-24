@@ -1,7 +1,5 @@
 package com.ra.course.ams.airline.manag.system.entity.payment;
 
-import com.ra.course.ams.airline.manag.system.entity.payment.Payment;
-
 public class CreditCardTransaction extends Payment {
     private String nameOnCard;
 

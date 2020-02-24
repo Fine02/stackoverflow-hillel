@@ -1,7 +1,5 @@
 package com.ra.course.ams.airline.manag.system.entity.payment;
 
-import com.ra.course.ams.airline.manag.system.entity.payment.Payment;
-
 public class CashTransaction extends Payment {
     private double cashTendered;
 
