@@ -1,6 +1,6 @@
 package com.ra.course.com.stackoverflow.entity.implementation;
 
-import com.ra.course.com.stackoverflow.entity.Search;
+import com.ra.course.com.stackoverflow.entity.Searchable;
 import com.ra.course.com.stackoverflow.entity.enumeration.QuestionClosingRemark;
 import com.ra.course.com.stackoverflow.entity.enumeration.QuestionStatus;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Question implements Search {
+public class Question implements Searchable {
     private final long id;
     private final String title;
     private String description;

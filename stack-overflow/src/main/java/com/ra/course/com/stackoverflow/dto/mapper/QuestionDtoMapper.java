@@ -1,7 +1,7 @@
 package com.ra.course.com.stackoverflow.dto.mapper;
 
 import com.ra.course.com.stackoverflow.dto.QuestionDto;
-import com.ra.course.com.stackoverflow.entity.Search;
+import com.ra.course.com.stackoverflow.entity.Searchable;
 import com.ra.course.com.stackoverflow.entity.implementation.Question;
 import com.ra.course.com.stackoverflow.exception.repository.RepositoryException;
 import com.ra.course.com.stackoverflow.repository.GeneralRepository;
@@ -29,7 +29,7 @@ public interface QuestionDtoMapper {
             @Mapping(target = "photoList", source = "questionDto.photoList"),
             @Mapping(target = "tagList", source = "questionDto.tagList")
     })
-    Question toEntity(final QuestionDto questionDto);
+    Searchable toEntity(final QuestionDto questionDto);
 
     @Mappings({
             @Mapping(target = "title", source = "question.title"),
@@ -47,10 +47,10 @@ public interface QuestionDtoMapper {
             @Mapping(target = "photoList", source = "question.photoList"),
             @Mapping(target = "tagList", source = "question.tagList")
     })
-    QuestionDto toDto(final Question question);
+    QuestionDto toDto(final Searchable question);
 
     @Named("nextId")
-    default long getNextId(final GeneralRepository<Search> questionRepository, Search question) throws RepositoryException {
-        return questionRepository.getNextId(question);
+    default long getNextId(final GeneralRepository<Searchable> questionRepository) throws RepositoryException {
+        return questionRepository.getNextId();
     }
 }

@@ -1,5 +1,7 @@
 package com.ra.course.com.stackoverflow.entity.implementation;
 
+import com.ra.course.com.stackoverflow.entity.Searchable;
+
 import java.util.*;
 
 
@@ -8,7 +10,7 @@ public class Member {
     private Account account;
 
     final private List<Badge> badges;
-    final private List<Question> questions;
+    final private List<Searchable> questions;
     final private List<Answer> answers;
     final private List<Comment> comments;
     final private List<Notification> notifications;
@@ -52,8 +54,14 @@ public class Member {
         return badges;
     }
 
-    public List<Question> getQuestions() {
+    public List<Searchable> getQuestions() {
         return questions;
+    }
+
+    public void addQuestion(Searchable question) {
+        Objects.requireNonNull(question, "argument 'question' must not be null");
+
+        questions.add(question);
     }
 
     public List<Answer> getAnswers() {

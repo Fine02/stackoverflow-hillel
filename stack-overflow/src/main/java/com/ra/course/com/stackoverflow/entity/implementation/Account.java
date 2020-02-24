@@ -1,6 +1,9 @@
 package com.ra.course.com.stackoverflow.entity.implementation;
 
 import com.ra.course.com.stackoverflow.entity.enumeration.AccountStatus;
+import org.mapstruct.ObjectFactory;
+
+import java.util.Objects;
 
 public class Account {
     final private long id;
@@ -61,5 +64,37 @@ public class Account {
 
     public void setReputation(int reputation) {
         this.reputation = reputation;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Account)) {
+            return false;
+        }
+
+        Account that = (Account) o;
+
+        return this.id == that.id;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", password='" + password + '\'' +
+                ", status=" + status +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", reputation=" + reputation +
+                '}';
     }
 }
