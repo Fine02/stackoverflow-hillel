@@ -1,15 +1,19 @@
-package com.ra.course.com.stackoverflow.dto.implementation;
+package com.ra.course.com.stackoverflow.dto.mapper;
 
 import com.ra.course.com.stackoverflow.dto.QuestionDto;
+import com.ra.course.com.stackoverflow.entity.Search;
 import com.ra.course.com.stackoverflow.entity.implementation.Question;
+import com.ra.course.com.stackoverflow.exception.repository.RepositoryException;
+import com.ra.course.com.stackoverflow.repository.GeneralRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import org.mapstruct.Named;
 
 @Mapper()
 public interface QuestionDtoMapper {
     @Mappings({
-            @Mapping(target = "id", source = "0"), //TODO: id must be taken from data base!
+            @Mapping(target = "id", source = "nextId"),
             @Mapping(target = "title", source = "questionDto.title"),
             @Mapping(target = "description", source = "questionDto.description"),
             @Mapping(target = "viewCount", source = "questionDto.viewCount"),
@@ -22,9 +26,10 @@ public interface QuestionDtoMapper {
             @Mapping(target = "bounty", source = "questionDto.bounty"),
             @Mapping(target = "commentList", source = "questionDto.commentList"),
             @Mapping(target = "answerList", source = "questionDto.answerList"),
-            @Mapping(target = "photoList", source = "questionDto.photoList")
+            @Mapping(target = "photoList", source = "questionDto.photoList"),
+            @Mapping(target = "tagList", source = "questionDto.tagList")
     })
-    Question toEntity(QuestionDto questionDto);
+    Question toEntity(final QuestionDto questionDto);
 
     @Mappings({
             @Mapping(target = "title", source = "question.title"),
@@ -39,7 +44,13 @@ public interface QuestionDtoMapper {
             @Mapping(target = "bounty", source = "question.bounty"),
             @Mapping(target = "commentList", source = "question.commentList"),
             @Mapping(target = "answerList", source = "question.answerList"),
-            @Mapping(target = "photoList", source = "question.photoList")
+            @Mapping(target = "photoList", source = "question.photoList"),
+            @Mapping(target = "tagList", source = "question.tagList")
     })
-    QuestionDto toDto(Question question);
+    QuestionDto toDto(final Question question);
+
+    @Named("nextId")
+    default long getNextId(final GeneralRepository<Search> questionRepository, Search question) throws RepositoryException {
+        return questionRepository.getNextId(question);
+    }
 }

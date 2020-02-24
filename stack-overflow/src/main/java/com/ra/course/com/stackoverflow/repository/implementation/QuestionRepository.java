@@ -7,7 +7,12 @@ import com.ra.course.com.stackoverflow.repository.GeneralRepository;
 public class QuestionRepository implements GeneralRepository<Search>{
 
     @Override
-    public Search save(Search question) throws RepositoryException {
+    public Search save(final Search question) throws RepositoryException {
         return null;
+    }
+
+    @Override
+    public long getNextId(final Search question) throws RepositoryException {
+        return 1L;
     }
 }

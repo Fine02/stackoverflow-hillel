@@ -1,11 +1,13 @@
 package com.ra.course.com.stackoverflow.exception.repository;
 
 public class QuestionRepositoryException extends RepositoryException {
-    public QuestionRepositoryException(String message) {
+    private static final long serialVersionUID = 1L;
+
+    public QuestionRepositoryException(final String message) {
         super(message);
     }
 
-    public QuestionRepositoryException(String message, Throwable cause) {
+    public QuestionRepositoryException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }

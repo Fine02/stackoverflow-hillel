@@ -39,13 +39,15 @@ configure(allprojects) { project ->
         testCompile testing.junit5Api
         testCompile testing.junit5Params
         testCompile testing.mockito
-        compileOnly utils.mapstructJdk8
-        compileOnly utils.mapstructProcessor
     }
 }
 
 project (':stack-overflow'){
 
+    dependencies {
+        compileOnly utils.mapstructJdk8
+        compileOnly utils.mapstructProcessor
+    }
 }
 
 wrapper {

@@ -1,11 +1,17 @@
 package com.ra.course.com.stackoverflow.exception.service;
 
 public class ServiceException extends Exception{
-    public ServiceException(String message) {
+    private static final long serialVersionUID = 1L;
+
+    public ServiceException(){
+        super();
+    }
+
+    public ServiceException(final String message) {
         super(message);
     }
 
-    public ServiceException(String message, Throwable cause) {
+    public ServiceException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }

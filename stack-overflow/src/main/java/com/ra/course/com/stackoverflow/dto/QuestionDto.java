@@ -24,9 +24,10 @@ public class QuestionDto {
     private final List<Comment> commentList;
     private final List<Answer> answerList;
     private final List<Photo> photoList;
+    private final List<Tag> tagList;
 
 
-    private QuestionDto(QuestionDto.Builder builder) {
+    private QuestionDto(Builder builder) {
         Objects.requireNonNull(builder.title, "field 'builder.title' must not be null");
         Objects.requireNonNull(builder.description, "field 'builder.description' must not be null");
         Objects.requireNonNull(builder.creationTime, "field 'builder.creationTime' must not be null");
@@ -36,7 +37,8 @@ public class QuestionDto {
         Objects.requireNonNull(builder.commentList, "field 'builder.commentList' must not be null");
         Objects.requireNonNull(builder.answerList, "field 'builder.answerList' must not be null");
         Objects.requireNonNull(builder.photoList, "field 'builder.photoList' must not be null");
-
+        Objects.requireNonNull(builder.tagList, "field 'builder.tagList' must not be null");
+        
         this.title = builder.title;
         this.description = builder.description;
         this.viewCount = builder.viewCount;
@@ -46,31 +48,39 @@ public class QuestionDto {
         this.status = builder.status;
         this.author = builder.author;
         this.bounty = builder.bounty;
+        this.closingRemark = builder.closingRemark;
         this.commentList = builder.commentList;
         this.answerList = builder.answerList;
         this.photoList = builder.photoList;
+        this.tagList = builder.tagList;
     }
 
     public static class Builder {
-        private final String title;
-        private String description;
-        private int viewCount;
-        private int voteCount;
-        private final LocalDateTime creationTime;
-        private LocalDateTime updateTime;
-        private QuestionStatus status;
-        private final Member author;
-        private Bounty bounty;
+        private transient final String title;
+        private transient String description;
+        private transient int viewCount;
+        private transient int voteCount;
+        private transient final LocalDateTime creationTime;
+        private transient LocalDateTime updateTime;
+        private transient QuestionStatus status;
+        private transient QuestionClosingRemark closingRemark;
+        private transient final Member author;
+        private transient Bounty bounty;
 
-        private final List<Comment> commentList = new ArrayList<>();
-        private final List<Answer> answerList = new ArrayList<>();
-        private final List<Photo> photoList = new ArrayList<>();
+        private transient final List<Comment> commentList;
+        private transient final List<Answer> answerList;
+        private transient final List<Photo> photoList;
+        private transient final List<Tag> tagList;
 
         public Builder(String title, LocalDateTime creationTime, Member author) {
             this.title = title;
             this.creationTime = creationTime;
             this.author = author;
             this.updateTime = creationTime;
+            this.commentList = new ArrayList<>();
+            this.answerList = new ArrayList<>();
+            this.photoList = new ArrayList<>();
+            this.tagList = new ArrayList<>();
 
             this.description = "";
             this.viewCount = 0;
@@ -79,33 +89,40 @@ public class QuestionDto {
             this.bounty = new Bounty(0, creationTime, author);
         }
 
-        public Builder description(String description) {
+
+
+        public QuestionDto.Builder withDescription(final String description) {
             this.description = description;
             return this;
         }
 
-        public Builder viewCount(int viewCount) {
+        public QuestionDto.Builder withViewCount(final int viewCount) {
             this.viewCount = viewCount;
             return this;
         }
 
-        public Builder voteCount(int voteCount) {
+        public QuestionDto.Builder withVoteCount(final int voteCount) {
             this.voteCount = voteCount;
             return this;
         }
 
-        public Builder updateTime(LocalDateTime updateTime) {
+        public QuestionDto.Builder withUpdateTime(final LocalDateTime updateTime) {
             this.updateTime = updateTime;
             return this;
         }
 
-        public Builder status(QuestionStatus status) {
+        public QuestionDto.Builder withStatus(final QuestionStatus status) {
             this.status = status;
             return this;
         }
 
-        public Builder bounty(Bounty bounty) {
+        public QuestionDto.Builder withBounty(final Bounty bounty) {
             this.bounty = bounty;
+            return this;
+        }
+
+        public QuestionDto.Builder withClosingRemark(final QuestionClosingRemark remark) {
+            this.closingRemark = remark;
             return this;
         }
 
@@ -123,7 +140,7 @@ public class QuestionDto {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -131,7 +148,7 @@ public class QuestionDto {
         return viewCount;
     }
 
-    public void setViewCount(int viewCount) {
+    public void setViewCount(final int viewCount) {
         this.viewCount = viewCount;
     }
 
@@ -139,7 +156,7 @@ public class QuestionDto {
         return voteCount;
     }
 
-    public void setVoteCount(int voteCount) {
+    public void setVoteCount(final int voteCount) {
         this.voteCount = voteCount;
     }
 
@@ -151,7 +168,7 @@ public class QuestionDto {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
+    public void setUpdateTime(final LocalDateTime updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -159,7 +176,7 @@ public class QuestionDto {
         return status;
     }
 
-    public void setStatus(QuestionStatus status) {
+    public void setStatus(final QuestionStatus status) {
         this.status = status;
     }
 
@@ -167,7 +184,7 @@ public class QuestionDto {
         return closingRemark;
     }
 
-    public void setClosingRemark(QuestionClosingRemark closingRemark) {
+    public void setClosingRemark(final QuestionClosingRemark closingRemark) {
         this.closingRemark = closingRemark;
     }
 
@@ -175,11 +192,21 @@ public class QuestionDto {
         return author;
     }
 
+    public Bounty getBounty() {
+        return this.bounty;
+    }
+
+    public void setBounty(final Bounty bounty) {
+        Objects.requireNonNull(bounty, "argument 'bounty' must not be null");
+
+        this.bounty = bounty;
+    }
+
     public List<Comment> getCommentList() {
         return commentList;
     }
 
-    public void addComment(Comment comment) {
+    public void addComment(final Comment comment) {
         Objects.requireNonNull(comment, "argument 'comment' must not be null");
 
         this.commentList.add(comment);
@@ -189,30 +216,30 @@ public class QuestionDto {
         return answerList;
     }
 
-    public void addAnswer(Answer answer) {
+    public void addAnswer(final Answer answer) {
         Objects.requireNonNull(answer, "argument 'answer' must not be null");
 
         this.answerList.add(answer);
-    }
-
-    public Bounty getBounty() {
-        return this.bounty;
-    }
-
-    public void setBounty(Bounty bounty) {
-        Objects.requireNonNull(bounty, "argument 'bounty' must not be null");
-
-        this.bounty = bounty;
     }
 
     public List<Photo> getPhotoList() {
         return photoList;
     }
 
-    public void setPhotoList(Photo photo) {
+    public void setPhotoList(final Photo photo) {
         Objects.requireNonNull(photo, "argument 'photo' must not be null");
 
         this.photoList.add(photo);
+    }
+
+    public List<Tag> getTagList() {
+        return tagList;
+    }
+
+    public void addTag(final Tag tag) {
+        Objects.requireNonNull(tag, "argument 'tag' must not be null");
+
+        this.tagList.add(tag);
     }
 
     @Override
@@ -221,11 +248,11 @@ public class QuestionDto {
             return true;
         }
 
-        if (!(o instanceof Question)) {
+        if (!(o instanceof QuestionDto)) {
             return false;
         }
 
-        Question that = (Question) o;
+        QuestionDto that = (QuestionDto) o;
         return this.title.equals(that.getTitle()) &&
                 this.description.equals(that.getDescription()) &&
                 this.author.equals(that.getAuthor());
@@ -238,7 +265,7 @@ public class QuestionDto {
 
     @Override
     public String toString() {
-        return "Question{" +
+        return "QuestionDto{" +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", viewCount=" + viewCount +

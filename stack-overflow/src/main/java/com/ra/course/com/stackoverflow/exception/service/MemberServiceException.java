@@ -1,10 +1,11 @@
 package com.ra.course.com.stackoverflow.exception.service;
 
 public class MemberServiceException extends ServiceException{
-    public MemberServiceException(String message) {
+    private static final long serialVersionUID = 1L;
+    public MemberServiceException(final String message) {
         super(message);
     }
-    public MemberServiceException(String message, Throwable cause) {
+    public MemberServiceException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }
