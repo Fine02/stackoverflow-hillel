@@ -1,4 +1,5 @@
 package com.ra.course.ams.airline.manag.system.entity;
 
 public class CashTransaction {
+    private double cashTendered;
 }
