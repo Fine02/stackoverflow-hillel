@@ -1,40 +1,47 @@
 package com.ra.course.aws.online.shopping.entity;
 
-import com.ra.course.aws.online.shopping.entity.enums.Gender;
-import com.ra.course.aws.online.shopping.entity.interfaces.Address;
-
-import java.util.List;
 
 public class Account {
-    private Long id;
+    private String userName;
+    private String password;
+    private AccountStatus status;
     private String name;
-    private String lastName;
+    private Address shippingAddress;
     private String email;
-    private Gender gender;
-    List <PhoneNumber> phoneNumbers;
-    List<Address> addresses;
-    private PaymentCard card;
+    private String phone;
 
-    public Account() {
-    }
-
-    public Account(Long id, String name, String lastName, String email, Gender gender, List<PhoneNumber> phoneNumbers, List<Address> addresses, PaymentCard Card) {
-        this.id = id;
+    public Account(String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone) {
+        this.userName = userName;
+        this.password = password;
+        this.status = status;
         this.name = name;
-        this.lastName = lastName;
+        this.shippingAddress = shippingAddress;
         this.email = email;
-        this.gender = gender;
-        this.phoneNumbers = phoneNumbers;
-        this.addresses = addresses;
-        this.card = card;
+        this.phone = phone;
     }
 
-    public Long getId() {
-        return id;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AccountStatus status) {
+        this.status = status;
     }
 
     public String getName() {
@@ -45,12 +52,12 @@ public class Account {
         this.name = name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public Address getShippingAddress() {
+        return shippingAddress;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setShippingAddress(Address shippingAddress) {
+        this.shippingAddress = shippingAddress;
     }
 
     public String getEmail() {
@@ -61,37 +68,11 @@ public class Account {
         this.email = email;
     }
 
-    public Gender getGender() {
-        return gender;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setGender(Gender gender) {
-        this.gender = gender;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
-
-    public List<PhoneNumber> getPhoneNumbers() {
-        return phoneNumbers;
-    }
-
-    public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
-        this.phoneNumbers = phoneNumbers;
-    }
-
-    public List<Address> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
-    }
-
-    public PaymentCard getCard() {
-        return card;
-    }
-
-    public void setCard(PaymentCard card) {
-        this.card = card;
-    }
-
-
 }
