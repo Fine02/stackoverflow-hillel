@@ -17,10 +17,10 @@ public class Person {
     }
 
     private Person(Builder builder) {
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.address = address;
+        this.name = builder.name;
+        this.email = builder.email;
+        this.phone = builder.phone;
+        this.address = builder.address;
     }
      public static class Builder {
          private String name;
