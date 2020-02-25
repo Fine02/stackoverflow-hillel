@@ -1,5 +1,8 @@
 package com.ra.course.ams.airline.manag.system.entity.flight;
 
+import com.ra.course.ams.airline.manag.system.entity.person.Crew;
+import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
+
 import java.sql.Time;
 import java.util.List;
 
@@ -10,9 +13,7 @@ public class FlightInstance {
     private FlightStatus status;
     private List<FlightSeat> seats;
     private Aircraft aircraft;
-    // TODO resolve dependency
     private List<Crew> crews;
-    // TODO resolve dependency
     private List<Pilot> pilots;
 
     // TODO implementation is not clear
