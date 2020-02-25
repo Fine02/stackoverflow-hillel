@@ -16,11 +16,6 @@ public class Flight {
         return flightInstances;
     }
 
-    // TODO implementation is not clear
-    public boolean cancel() {
-        return false;
-    }
-
     public boolean addFlightSchedule(WeeklySchedule weeklySchedule) {
         try {
             weeklySchedules.add(weeklySchedule);
