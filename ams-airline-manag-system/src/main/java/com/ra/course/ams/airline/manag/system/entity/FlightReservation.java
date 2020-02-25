@@ -5,5 +5,5 @@ public class FlightReservation {
     // TODO: add after adding necessary classes
     //  FlightInstanse flight
     //  seatMap: map<Passengers, FlightSeat>
-    private ReservationStatus staus;
+    private ReservationStatus status;
 }
