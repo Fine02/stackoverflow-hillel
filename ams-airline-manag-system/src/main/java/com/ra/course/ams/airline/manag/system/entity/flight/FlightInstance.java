@@ -38,6 +38,68 @@ public class FlightInstance {
         this.pilots = pilots;
     }
 
+    private FlightInstance(Builder builder) {
+        departureTime = builder.departureTime;
+        gate = builder.gate;
+        status = builder.status;
+        seats = builder.seats;
+        aircraft = builder.aircraft;
+        crews = builder.crews;
+        pilots = builder.pilots;
+    }
+
+    public static class Builder {
+
+        private transient Time departureTime;
+        private transient String gate;
+        private transient FlightStatus status;
+        private transient List<FlightSeat> seats;
+        private transient Aircraft aircraft;
+        private transient List<Crew> crews;
+        private transient List<Pilot> pilots;
+
+        public Builder () {}
+
+        public Builder setDepartureTime(Time departureTime) {
+            this.departureTime = departureTime;
+            return this;
+        }
+
+        public Builder setGate(String gate) {
+            this.gate = gate;
+            return this;
+        }
+
+        public Builder setStatus(FlightStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder setSeats(List<FlightSeat> seats) {
+            this.seats = seats;
+            return this;
+        }
+
+        public Builder setAircraft(Aircraft aircraft) {
+            this.aircraft = aircraft;
+            return this;
+        }
+
+        public Builder setCrews(List<Crew> crews) {
+            this.crews = crews;
+            return this;
+        }
+
+        public Builder setPilots(List<Pilot> pilots) {
+            this.pilots = pilots;
+            return this;
+        }
+
+        public FlightInstance build() {
+            return new FlightInstance(this);
+        }
+    }
+
     public Time getDepartureTime() {
         return departureTime;
     }
