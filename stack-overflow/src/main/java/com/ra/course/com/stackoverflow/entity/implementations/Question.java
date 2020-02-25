@@ -1,11 +1,13 @@
-package com.ra.course.com.stackoverflow.entity;
+package com.ra.course.com.stackoverflow.entity.implementations;
 
-import com.ra.course.com.stackoverflow.entity.interfaces.Search;
+import com.ra.course.com.stackoverflow.entity.enums.QuestionClosingRemark;
+import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
+import com.ra.course.com.stackoverflow.entity.interfaces.Searchable;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Question implements Search {
+public class Question implements Searchable {
     private String title;
     private String description;
     private int viewCount;
