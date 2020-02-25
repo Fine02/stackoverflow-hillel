@@ -61,13 +61,13 @@ public class Flight {
 
     public static class Builder {
 
-        private String flightNumber;
-        private Airport departure;
-        private Airport arrival;
-        private int durationInMinutes;
-        private List<WeeklySchedule> weeklySchedules;
-        private List<CustomSchedule> customSchedules;
-        private List<FlightInstance> flightInstances;
+        private transient String flightNumber;
+        private transient Airport departure;
+        private transient Airport arrival;
+        private transient int durationInMinutes;
+        private transient List<WeeklySchedule> weeklySchedules;
+        private transient List<CustomSchedule> customSchedules;
+        private transient List<FlightInstance> flightInstances;
 
         public Builder () {}
 

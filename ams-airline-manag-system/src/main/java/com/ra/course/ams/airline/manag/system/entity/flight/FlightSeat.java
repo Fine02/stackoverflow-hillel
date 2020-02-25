@@ -20,8 +20,8 @@ public class FlightSeat extends Seat {
 
     public static class Builder {
 
-        private float fare;
-        private String reservationNumber;
+        private transient float fare;
+        private transient String reservationNumber;
 
         public Builder () {}
 

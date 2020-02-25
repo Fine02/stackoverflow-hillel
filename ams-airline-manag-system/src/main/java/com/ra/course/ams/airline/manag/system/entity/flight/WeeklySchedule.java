@@ -22,8 +22,8 @@ public class WeeklySchedule {
 
     public static class Builder {
 
-        private int dayOfWeek;
-        private Time departureTime;
+        private transient int dayOfWeek;
+        private transient Time departureTime;
 
         public Builder () {}
 

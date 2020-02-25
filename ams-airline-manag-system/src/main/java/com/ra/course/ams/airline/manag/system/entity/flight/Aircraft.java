@@ -34,12 +34,12 @@ public class Aircraft {
 
     public static class Builder {
 
-        private String name;
-        private String modal;
-        private int manufacturingYear;
-        private FlightInstance flightInstance;
-        private List<Seat> seats;
-        private List<Flight> flights;
+        private transient String name;
+        private transient String modal;
+        private transient int manufacturingYear;
+        private transient FlightInstance flightInstance;
+        private transient List<Seat> seats;
+        private transient List<Flight> flights;
 
         public Builder () {}
 

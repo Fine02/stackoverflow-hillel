@@ -22,31 +22,31 @@ public class Account {
     }
 
     public static class Builder {
-        private String id;
-        private String password;
-        private AccountStatus accountStatus;
-        private Person person;
+        private transient String id;
+        private transient String password;
+        private transient AccountStatus accountStatus;
+        private transient Person person;
 
         public Account build(){
             return new Account(this);
         }
 
-        public Builder id(String id) {
+        public Builder setId(String id) {
             this.id = id;
             return this;
         }
 
-        public Builder password(String password) {
+        public Builder setPassword(String password) {
             this.password = password;
             return this;
         }
 
-        public Builder accountStatus(AccountStatus accountStatus) {
+        public Builder setAccountStatus(AccountStatus accountStatus) {
             this.accountStatus = accountStatus;
             return this;
         }
 
-        public Builder person(Person person) {
+        public Builder setPerson(Person person) {
             this.person = person;
             return this;
         }

@@ -28,10 +28,10 @@ public class Airport {
 
     public static class Builder {
 
-        private String name;
-        private Address address;
-        private String code;
-        private List<Flight> flights;
+        private transient String name;
+        private transient Address address;
+        private transient String code;
+        private transient List<Flight> flights;
 
         public Builder () {}
 

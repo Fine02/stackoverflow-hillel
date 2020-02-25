@@ -28,10 +28,10 @@ public class Airline {
 
     public static class Builder {
 
-        private String name;
-        private String code;
-        private List<Flight> flights;
-        private List<Aircraft> aircrafts;
+        private transient String name;
+        private transient String code;
+        private transient List<Flight> flights;
+        private transient List<Aircraft> aircrafts;
 
         public Builder () {}
 

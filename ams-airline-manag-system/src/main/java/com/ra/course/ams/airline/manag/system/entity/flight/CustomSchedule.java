@@ -23,8 +23,8 @@ public class CustomSchedule {
 
     public static class Builder {
 
-        private Date customDate;
-        private Time departureTime;
+        private transient Date customDate;
+        private transient Time departureTime;
 
         public Builder () {}
 

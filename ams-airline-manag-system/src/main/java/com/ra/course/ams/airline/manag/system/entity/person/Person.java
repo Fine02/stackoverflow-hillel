@@ -23,31 +23,31 @@ public class Person {
         this.address = builder.address;
     }
      public static class Builder {
-         private String name;
-         private String email;
-         private String phone;
-         private Address address;
+         private transient String name;
+         private transient String email;
+         private transient String phone;
+         private transient Address address;
 
          public Person build() {
              return new Person(this);
          }
 
-         public Builder name(String name) {
+         public Builder setName(String name) {
              this.name = name;
              return this;
          }
 
-         public Builder email(String email) {
+         public Builder setEmail(String email) {
              this.email = email;
              return this;
          }
 
-         public Builder phone(String phone) {
+         public Builder setPhone(String phone) {
              this.phone = phone;
              return this;
          }
 
-         public Builder address(Address address) {
+         public Builder setAddress(Address address) {
              this.address = address;
              return this;
          }

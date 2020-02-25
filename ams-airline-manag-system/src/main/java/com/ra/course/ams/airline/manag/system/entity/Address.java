@@ -20,11 +20,11 @@ public class Address {
     }
 
     public static class Builder {
-        private String streetAddress;
-        private String city;
-        private String state;
-        private String zipcode;
-        private String country;
+        private transient String streetAddress;
+        private transient String city;
+        private transient String state;
+        private transient String zipcode;
+        private transient String country;
         public Address build() {
             return new Address(this);
         }
@@ -34,27 +34,27 @@ public class Address {
             this.country = country;
         }
 
-        public Builder streetAddress(String streetAddress) {
+        public Builder setStreetAddress(String streetAddress) {
             this.streetAddress = streetAddress;
             return this;
         }
 
-        public Builder city(String city) {
+        public Builder setCity(String city) {
             this.city = city;
             return this;
         }
 
-        public Builder state(String state) {
+        public Builder setState(String state) {
             this.state = state;
             return this;
         }
 
-        public Builder zipcode(String zipcode) {
+        public Builder setZipcode(String zipcode) {
             this.zipcode = zipcode;
             return this;
         }
 
-        public Builder country(String country) {
+        public Builder setCountry(String country) {
             this.country = country;
             return this;
         }

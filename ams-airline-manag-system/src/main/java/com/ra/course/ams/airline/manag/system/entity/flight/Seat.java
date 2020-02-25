@@ -24,9 +24,9 @@ public class Seat {
 
     public static class Builder {
 
-        private String seatNumber;
-        private SeatType type;
-        private SeatClass seatClass;
+        private transient String seatNumber;
+        private transient SeatType type;
+        private transient SeatClass seatClass;
 
         public Builder () {}
 
