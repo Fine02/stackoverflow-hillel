@@ -1,11 +1,9 @@
 package com.ra.course.ams.airline.manag.system.service;
 
-public interface PaymentService {
+import com.ra.course.ams.airline.manag.system.entity.payment.Payment;
 
-    int paymentByCreditCard(int amount, String nameOnCard);
+public interface PaymentService<T extends Payment> {
 
-    int paymentByCheckTransaction(int amount, String bankName, String checkNumber);
-
-    int paymentByCash(int amount, double cashTendered);
+    boolean makeTransaction(T t);
 
 }

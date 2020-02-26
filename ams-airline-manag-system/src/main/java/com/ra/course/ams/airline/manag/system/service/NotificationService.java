@@ -1,13 +1,10 @@
 package com.ra.course.ams.airline.manag.system.service;
 
 import com.ra.course.ams.airline.manag.system.entity.Address;
+import com.ra.course.ams.airline.manag.system.entity.notification.Notification;
 
-public interface NotificationService {
+public interface NotificationService<T extends Notification> {
 
-    int notificationByEmail(String email);
-
-    int notificationByPostal(Address address);
-
-    int notificationBySms(String email);
+    boolean send(T t);
 
 }

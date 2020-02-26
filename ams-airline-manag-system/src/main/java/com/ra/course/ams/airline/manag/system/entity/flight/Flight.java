@@ -12,33 +12,6 @@ public class Flight {
     private List<CustomSchedule> customSchedules;
     private List<FlightInstance> flightInstances;
 
-    public List<FlightInstance> getInstances() {
-        return flightInstances;
-    }
-
-    // TODO implementation is not clear
-    public boolean cancel() {
-        return false;
-    }
-
-    public boolean addFlightSchedule(WeeklySchedule weeklySchedule) {
-        try {
-            weeklySchedules.add(weeklySchedule);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public boolean addFlightSchedule(CustomSchedule customSchedule) {
-        try {
-            customSchedules.add(customSchedule);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     public Flight() {
     }
 
@@ -115,61 +88,69 @@ public class Flight {
         return flightNumber;
     }
 
-    public void setFlightNumber(String flightNumber) {
+    public Flight setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
+        return this;
     }
 
     public Airport getDeparture() {
         return departure;
     }
 
-    public void setDeparture(Airport departure) {
+    public Flight setDeparture(Airport departure) {
         this.departure = departure;
+        return this;
     }
 
     public Airport getArrival() {
         return arrival;
     }
 
-    public void setArrival(Airport arrival) {
+    public Flight setArrival(Airport arrival) {
         this.arrival = arrival;
+        return this;
     }
 
     public int getDurationInMinutes() {
         return durationInMinutes;
     }
 
-    public void setDurationInMinutes(int durationInMinutes) {
+    public Flight setDurationInMinutes(int durationInMinutes) {
         this.durationInMinutes = durationInMinutes;
+        return this;
     }
 
     public List<WeeklySchedule> getWeeklySchedules() {
         return weeklySchedules;
     }
 
-    public void setWeeklySchedules(List<WeeklySchedule> weeklySchedules) {
+    public Flight setWeeklySchedules(List<WeeklySchedule> weeklySchedules) {
         this.weeklySchedules = weeklySchedules;
+        return this;
     }
 
     public List<CustomSchedule> getCustomSchedules() {
         return customSchedules;
     }
 
-    public void setCustomSchedules(List<CustomSchedule> customSchedules) {
+    public Flight setCustomSchedules(List<CustomSchedule> customSchedules) {
         this.customSchedules = customSchedules;
+        return this;
     }
 
     public List<FlightInstance> getFlightInstances() {
         return flightInstances;
     }
 
-    public void setFlightInstances(List<FlightInstance> flightInstances) {
+    public Flight setFlightInstances(List<FlightInstance> flightInstances) {
         this.flightInstances = flightInstances;
+        return this;
     }
+
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("com.ra.course.ams.airline.manag.system.entity.flight.Flight{");
+        final StringBuffer sb = new StringBuffer("Flight{");
         sb.append("\"flightNumber\": \"").append(flightNumber).append('"');
         sb.append(", \"departure\":").append(departure);
         sb.append(", \"arrival\":").append(arrival);
