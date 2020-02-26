@@ -1,5 +1,6 @@
 package com.ra.course.com.stackoverflow.entity.implementations;
 
+import com.ra.course.com.stackoverflow.entity.interfaces.Commentable;
 import com.ra.course.com.stackoverflow.entity.interfaces.IDEntity;
 import com.ra.course.com.stackoverflow.entity.interfaces.Searchable;
 import lombok.*;
@@ -12,7 +13,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
-public class Answer implements IDEntity {
+public class Answer implements Commentable,  IDEntity {
 
     @EqualsAndHashCode.Include
     final private long id;
