@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.entity;
+package com.ra.course.com.stackoverflow.entity.enums;
 
 public enum AccountStatus {
     ACTIVE,
@@ -6,7 +6,5 @@ public enum AccountStatus {
     BANNED,
     COMPROMISED,
     ARCHIVED,
-    UNKNOWN,
-    ADMIN,
-    MODERATOR
+    UNKNOWN
 }
