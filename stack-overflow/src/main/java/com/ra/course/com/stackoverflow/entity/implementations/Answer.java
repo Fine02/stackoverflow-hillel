@@ -12,8 +12,7 @@ import java.util.List;
 @SuperBuilder
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
-public class Answer implements Commentable,  IDEntity {
+public class Answer implements Commentable, IDEntity {
 
     @EqualsAndHashCode.Include
     final private long id;
