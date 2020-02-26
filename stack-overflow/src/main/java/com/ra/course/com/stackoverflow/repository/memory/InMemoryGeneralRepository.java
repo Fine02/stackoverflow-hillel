@@ -40,4 +40,8 @@ public class InMemoryGeneralRepository<D extends GeneralSaveDto,I extends IDEnti
     public List<I> findAll() {
         return new ArrayList<>(dataOfIdEntity.values());
     }
+
+    protected Map<Long, I> getData() {
+        return dataOfIdEntity;
+    }
 }

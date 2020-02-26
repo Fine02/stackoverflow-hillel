@@ -1,5 +1,6 @@
 package com.ra.course.com.stackoverflow.entity.implementations;
 
+import com.ra.course.com.stackoverflow.entity.interfaces.IDEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -9,7 +10,7 @@ import java.util.List;
 @SuperBuilder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
-public class Answer {
+public class Answer implements IDEntity {
 
     @EqualsAndHashCode.Include
     @Getter
@@ -38,6 +39,10 @@ public class Answer {
     @NonNull
     @Getter
     private final Member author;
+
+    @NonNull
+    @Getter
+    private final Question question;
 
     @NonNull
     @Getter
