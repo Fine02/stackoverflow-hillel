@@ -54,4 +54,7 @@ public class Question implements Searchable {
 
     @NonNull
     private List<Photo> photoList;
+
+    @NonNull
+    private List<Tag> tagList;
 }
