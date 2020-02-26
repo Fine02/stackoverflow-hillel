@@ -1,6 +1,7 @@
 package com.ra.course.com.stackoverflow.entity.implementations;
 
 import com.ra.course.com.stackoverflow.entity.interfaces.IDEntity;
+import com.ra.course.com.stackoverflow.entity.interfaces.Searchable;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -42,7 +43,7 @@ public class Answer implements IDEntity {
 
     @NonNull
     @Getter
-    private final Question question;
+    private final Searchable question;
 
     @NonNull
     @Getter

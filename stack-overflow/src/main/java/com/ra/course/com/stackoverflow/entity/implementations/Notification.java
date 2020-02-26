@@ -4,8 +4,9 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@SuperBuilder
+@AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -20,5 +21,8 @@ public class Notification {
 
     @NonNull
     private String content;
+
+    @NonNull
+    private final List<Notification> notifications;
 
 }

@@ -26,6 +26,7 @@ public class Question implements Searchable {
     private String description;
 
     private int viewCount;
+
     private int voteCount;
 
     @NonNull

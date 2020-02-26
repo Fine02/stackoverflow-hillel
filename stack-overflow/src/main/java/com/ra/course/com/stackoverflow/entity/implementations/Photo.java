@@ -1,11 +1,12 @@
 package com.ra.course.com.stackoverflow.entity.implementations;
 
+import com.ra.course.com.stackoverflow.entity.interfaces.Searchable;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
-@SuperBuilder
+@AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -20,5 +21,11 @@ public class Photo {
 
     @NonNull
     private LocalDateTime creationDate;
+
+    @NonNull
+    private Searchable question;
+
+    @NonNull
+    private Answer answer;
 
 }

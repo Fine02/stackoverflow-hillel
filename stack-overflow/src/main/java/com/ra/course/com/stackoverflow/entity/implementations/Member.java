@@ -36,4 +36,11 @@ public class Member implements IDEntity {
     @NonNull
     final private List<Notification> notifications;
 
+    public int getReputation() {
+        return this.account.getReputation();
+    }
+
+    public String getEmail() {
+        return this.account.getEmail();
+    }
 }

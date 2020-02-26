@@ -3,7 +3,7 @@ package com.ra.course.com.stackoverflow.entity.implementations;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@SuperBuilder
+@AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -11,15 +11,16 @@ import lombok.experimental.SuperBuilder;
 public class Tag {
 
     @EqualsAndHashCode.Include
-    final private long id;
+    private final long id;
 
     @NonNull
-    private String name;
+    private final String name;
 
     @NonNull
     private String description;
 
     private int dailyAskedFrequency;
+
     private int weeklyAskedFrequency;
 
 }

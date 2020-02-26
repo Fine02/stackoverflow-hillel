@@ -4,9 +4,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
-@Getter
-@Setter
 @ToString
 public class Admin extends Member {
-
 }
