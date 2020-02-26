@@ -4,7 +4,7 @@ public class CreditCard {
     String nameOnCard;
     String cardNumber;
     Integer code;
-    String billingAddress;
+    Address billingAddress;
 
     public String getNameOnCard(){
         return nameOnCard;
@@ -18,7 +18,7 @@ public class CreditCard {
         return code;
     }
 
-    public String getBillingAddress(){
+    public Address getBillingAddress(){
         return billingAddress;
     }
     public void setNameOnCard(String nameOnCard){
@@ -32,7 +32,7 @@ public class CreditCard {
     public void setCode(Integer code){
         this.code = code;
     }
-    public void setBillingAddress(String billingAddress){
+    public void  setBillingAddress (Address billingAddress){
         this.billingAddress = billingAddress;
 
     }
