@@ -1,5 +1,6 @@
 package com.ra.course.com.stackoverflow.entity.implementations;
 
+import com.ra.course.com.stackoverflow.entity.interfaces.Commentable;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -26,6 +27,9 @@ public class Comment {
 
     @NonNull
     private final Member author;
+
+    @NonNull
+    private Commentable commentable;
 
 
     public void incrementVoteCount() {
