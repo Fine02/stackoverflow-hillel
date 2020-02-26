@@ -1,5 +1,6 @@
 package com.ra.course.com.stackoverflow.entity.implementations;
 
+import com.ra.course.com.stackoverflow.entity.interfaces.Searchable;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -38,6 +39,10 @@ public class Answer {
     @NonNull
     @Getter
     private final Member author;
+
+    @NonNull
+    @Getter
+    private final Searchable question;
 
     @NonNull
     @Getter

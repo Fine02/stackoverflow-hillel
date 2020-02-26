@@ -11,7 +11,6 @@ import java.util.*;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
-
 public class Member {
 
     @EqualsAndHashCode.Include
@@ -35,4 +34,11 @@ public class Member {
     @NonNull
     final private List<Notification> notifications;
 
+    public int getReputation() {
+        return this.account.getReputation();
+    }
+
+    public String getEmail() {
+        return this.account.getEmail();
+    }
 }
