@@ -1,37 +1,24 @@
 package com.ra.course.com.stackoverflow.entity.implementations;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+
+@SuperBuilder
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 public class Notification {
+
+    @EqualsAndHashCode.Include
     final private long id;
+
+    @NonNull
     final private LocalDateTime createdON;
+
+    @NonNull
     private String content;
 
-    public Notification(long id, LocalDateTime createdOn, String content) {
-        Objects.requireNonNull(createdOn, "argument 'createdOn' must not be null");
-        Objects.requireNonNull(content, "argument 'content' must not be null");
-
-        this.id = id;
-        this.createdON = createdOn;
-        this.content = content;
-    }
-
-    public long getId() {
-        return this.id;
-    }
-
-    public LocalDateTime getCreatedON() {
-        return this.createdON;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(final String content) {
-        Objects.requireNonNull(content, "argument 'content' must not be null");
-
-        this.content = content;
-    }
 }

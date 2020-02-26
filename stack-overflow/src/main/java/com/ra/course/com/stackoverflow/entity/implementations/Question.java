@@ -3,144 +3,55 @@ package com.ra.course.com.stackoverflow.entity.implementations;
 import com.ra.course.com.stackoverflow.entity.enums.QuestionClosingRemark;
 import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
 import com.ra.course.com.stackoverflow.entity.interfaces.Searchable;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@SuperBuilder
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 public class Question implements Searchable {
+
+    @EqualsAndHashCode.Include
+    final private long id;
+
+    @NonNull
     private String title;
+
+    @NonNull
     private String description;
+
     private int viewCount;
     private int voteCount;
+
+    @NonNull
     private LocalDateTime creationTime;
+
+    @NonNull
     private LocalDateTime updateTime;
+
+    @NonNull
     private QuestionStatus status;
+
+    @NonNull
     private QuestionClosingRemark closingRemark;
 
+    @NonNull
     private Member author;
+
+    @NonNull
     private List<Comment> commentList;
+
+    @NonNull
     private List<Answer> answerList;
+
+    @NonNull
     private List<Bounty> bountyList;
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getViewCount() {
-        return viewCount;
-    }
-
-    public void setViewCount(int viewCount) {
-        this.viewCount = viewCount;
-    }
-
-    public int getVoteCount() {
-        return voteCount;
-    }
-
-    public void setVoteCount(int voteCount) {
-        this.voteCount = voteCount;
-    }
-
-    public LocalDateTime getCreationTime() {
-        return creationTime;
-    }
-
-    public void setCreationTime(LocalDateTime creationTime) {
-        this.creationTime = creationTime;
-    }
-
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public QuestionStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(QuestionStatus status) {
-        this.status = status;
-    }
-
-    public QuestionClosingRemark getClosingRemark() {
-        return closingRemark;
-    }
-
-    public void setClosingRemark(QuestionClosingRemark closingRemark) {
-        this.closingRemark = closingRemark;
-    }
-
-    public Member getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Member author) {
-        this.author = author;
-    }
-
-    public List<Comment> getCommentList() {
-        return commentList;
-    }
-
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
-    }
-
-    public List<Answer> getAnswerList() {
-        return answerList;
-    }
-
-    public void setAnswerList(List<Answer> answerList) {
-        this.answerList = answerList;
-    }
-
-    public List<Bounty> getBountyList() {
-        return bountyList;
-    }
-
-    public void setBountyList(List<Bounty> bountyList) {
-        this.bountyList = bountyList;
-    }
-
-    public List<Photo> getPhotoList() {
-        return photoList;
-    }
-
-    public void setPhotoList(List<Photo> photoList) {
-        this.photoList = photoList;
-    }
-
-    public Question(String title, String description, int viewCount, int voteCount, LocalDateTime creationTime, LocalDateTime updateTime, QuestionStatus status, QuestionClosingRemark closingRemark, Member author, List<Comment> commentList, List<Answer> answerList, List<Bounty> bountyList, List<Photo> photoList) {
-        this.title = title;
-        this.description = description;
-        this.viewCount = viewCount;
-        this.voteCount = voteCount;
-        this.creationTime = creationTime;
-        this.updateTime = updateTime;
-        this.status = status;
-        this.closingRemark = closingRemark;
-        this.author = author;
-        this.commentList = commentList;
-        this.answerList = answerList;
-        this.bountyList = bountyList;
-        this.photoList = photoList;
-    }
-
+    @NonNull
     private List<Photo> photoList;
 }
