@@ -6,7 +6,5 @@ public enum AccountStatus {
     BANNED,
     COMPROMISED,
     ARCHIVED,
-    UNKNOWN,
-    ADMIN,
-    MODERATOR
+    UNKNOWN
 }

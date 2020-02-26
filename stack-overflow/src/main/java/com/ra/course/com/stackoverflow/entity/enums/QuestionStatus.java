@@ -3,6 +3,6 @@ package com.ra.course.com.stackoverflow.entity.enums;
 public enum QuestionStatus {
     OPEN,
     CLOSE,
-    ONHOLD,
+    ON_HOLD,
     DELETED
 }

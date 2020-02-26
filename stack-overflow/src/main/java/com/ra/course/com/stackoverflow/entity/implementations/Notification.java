@@ -7,10 +7,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
 public class Notification {
 
     @EqualsAndHashCode.Include
@@ -23,6 +21,6 @@ public class Notification {
     private String content;
 
     @NonNull
-    private final List<Notification> notifications;
+    private List<Notification> notifications;
 
 }
