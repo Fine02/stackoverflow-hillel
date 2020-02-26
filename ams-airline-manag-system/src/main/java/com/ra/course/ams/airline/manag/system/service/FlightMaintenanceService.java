@@ -6,7 +6,7 @@ import com.ra.course.ams.airline.manag.system.entity.person.*;
 import java.sql.Time;
 import java.util.Date;
 
-public interface MaintenanceService {
+public interface FlightMaintenanceService {
 
     int addFlight(Flight flight);
 
@@ -31,21 +31,5 @@ public interface MaintenanceService {
     void assignCrew(FlightInstance flightInstance, Crew crew);
 
     void removeCrew(FlightInstance flightInstance, String id);
-
-    int addCustomer(Customer customer);
-
-    int addPilot(Pilot pilot);
-
-    int addCrew(Crew crew);
-
-    int addAdmin(Admin admin);
-
-    void deleteAccount(String id);
-
-    void blockAccount(String id);
-
-    int updateAccount(Account account);
-
-    int resetPassword(String id, String password);
 
 }
