@@ -12,36 +12,7 @@ public class Flight {
     private List<CustomSchedule> customSchedules;
     private List<FlightInstance> flightInstances;
 
-    public List<FlightInstance> getInstances() {
-        return flightInstances;
-    }
-
-    public boolean addFlightSchedule(WeeklySchedule weeklySchedule) {
-        try {
-            weeklySchedules.add(weeklySchedule);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public boolean addFlightSchedule(CustomSchedule customSchedule) {
-        try {
-            customSchedules.add(customSchedule);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     public Flight() {
-    }
-
-    public Flight(String flightNumber, Airport departure, Airport arrival, int durationInMinutes) {
-        this.flightNumber = flightNumber;
-        this.departure = departure;
-        this.arrival = arrival;
-        this.durationInMinutes = durationInMinutes;
     }
 
     private Flight(Builder builder) {

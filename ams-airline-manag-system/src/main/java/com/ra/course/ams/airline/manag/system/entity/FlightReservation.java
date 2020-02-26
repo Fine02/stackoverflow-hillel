@@ -3,15 +3,15 @@ package com.ra.course.ams.airline.manag.system.entity;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightSeat;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class FlightReservation {
     private String reservationNumber;
     private FlightInstance flight;
-    private HashMap <Passenger, FlightSeat> seatMap;
+    private Map<Passenger, FlightSeat> seatMap;
     private ReservationStatus status;
 
-    public FlightReservation(String reservationNumber, FlightInstance flight, HashMap<Passenger, FlightSeat> seatMap, ReservationStatus status) {
+    public FlightReservation(String reservationNumber, FlightInstance flight, Map<Passenger, FlightSeat> seatMap, ReservationStatus status) {
         this.reservationNumber = reservationNumber;
         this.flight = flight;
         this.seatMap = seatMap;
@@ -34,11 +34,11 @@ public class FlightReservation {
         this.flight = flight;
     }
 
-    public HashMap<Passenger, FlightSeat> getSeatMap() {
+    public Map<Passenger, FlightSeat> getSeatMap() {
         return seatMap;
     }
 
-    public void setSeatMap(HashMap<Passenger, FlightSeat> seatMap) {
+    public void setSeatMap(Map<Passenger, FlightSeat> seatMap) {
         this.seatMap = seatMap;
     }
 

@@ -11,11 +11,6 @@ public class CustomSchedule {
     public CustomSchedule() {
     }
 
-    public CustomSchedule(Date customDate, Time departureTime) {
-        this.customDate = customDate;
-        this.departureTime = departureTime;
-    }
-
     private CustomSchedule(Builder builder) {
         customDate = builder.customDate;
         departureTime = builder.departureTime;

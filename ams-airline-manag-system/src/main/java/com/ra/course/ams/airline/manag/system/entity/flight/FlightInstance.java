@@ -16,26 +16,7 @@ public class FlightInstance {
     private List<Crew> crews;
     private List<Pilot> pilots;
 
-    // TODO implementation is not clear
-    private boolean cancel() {
-        return false;
-    }
-
-    private void updateStatus(FlightStatus status) {
-        this.status = status;
-    }
-
     public FlightInstance() {
-    }
-
-    public FlightInstance(Time departureTime, String gate, FlightStatus status, List<FlightSeat> seats, Aircraft aircraft, List<Crew> crews, List<Pilot> pilots) {
-        this.departureTime = departureTime;
-        this.gate = gate;
-        this.status = status;
-        this.seats = seats;
-        this.aircraft = aircraft;
-        this.crews = crews;
-        this.pilots = pilots;
     }
 
     private FlightInstance(Builder builder) {

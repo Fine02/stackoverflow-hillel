@@ -14,15 +14,6 @@ public class Aircraft {
     public Aircraft() {
     }
 
-    public Aircraft(String name, String modal, int manufacturingYear, FlightInstance flightInstance, List<Seat> seats, List<Flight> flights) {
-        this.name = name;
-        this.modal = modal;
-        this.manufacturingYear = manufacturingYear;
-        this.flightInstance = flightInstance;
-        this.seats = seats;
-        this.flights = flights;
-    }
-
     private Aircraft(Builder builder) {
         name = builder.name;
         modal = builder.modal;
