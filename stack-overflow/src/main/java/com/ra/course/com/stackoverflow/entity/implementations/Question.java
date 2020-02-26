@@ -10,10 +10,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @SuperBuilder
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
 public class Question implements Searchable {
 
     @EqualsAndHashCode.Include

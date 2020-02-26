@@ -7,14 +7,12 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
 public class Photo {
 
     @EqualsAndHashCode.Include
-    private int photoId;
+    private final long photoId;
 
     @NonNull
     private String photoPath;

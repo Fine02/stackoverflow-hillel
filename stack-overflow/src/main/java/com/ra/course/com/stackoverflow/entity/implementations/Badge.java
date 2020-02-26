@@ -4,10 +4,8 @@ import lombok.*;
 
 
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
 public class Badge {
 
     @EqualsAndHashCode.Include

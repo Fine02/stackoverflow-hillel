@@ -5,10 +5,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
 public class Bounty {
 
     @EqualsAndHashCode.Include

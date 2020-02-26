@@ -8,11 +8,8 @@ import lombok.experimental.SuperBuilder;
 import java.util.*;
 
 @SuperBuilder
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
-
 public class Member implements IDEntity {
 
     @EqualsAndHashCode.Include
@@ -22,19 +19,19 @@ public class Member implements IDEntity {
     private Account account;
 
     @NonNull
-    final private List<Badge> badges;
+    private List<Badge> badges;
 
     @NonNull
-    final private List<Question> questions;
+    private List<Question> questions;
 
     @NonNull
-    final private List<Answer> answers;
+    private List<Answer> answers;
 
     @NonNull
-    final private List<Comment> comments;
+    private List<Comment> comments;
 
     @NonNull
-    final private List<Notification> notifications;
+    private List<Notification> notifications;
 
     public int getReputation() {
         return this.account.getReputation();

@@ -5,10 +5,8 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
 public class Account {
 
     @EqualsAndHashCode.Include

@@ -4,10 +4,8 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
 public class Tag {
 
     @EqualsAndHashCode.Include
@@ -22,5 +20,4 @@ public class Tag {
     private int dailyAskedFrequency;
 
     private int weeklyAskedFrequency;
-
 }
