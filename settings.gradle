@@ -1,3 +1,4 @@
 rootProject.name = 'mercury'
+include 'aws-online-shopping'
 include 'ams-airline-manag-system'
 
