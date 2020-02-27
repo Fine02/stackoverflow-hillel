@@ -12,6 +12,17 @@ import java.util.stream.Collectors;
 
 public class InMemoryAnswerRepository extends InMemoryGeneralRepository<AnswerSaveDto, Answer> implements AnswerRepository {
 
+    private static InMemoryAnswerRepository instanceOf;
+
+    private InMemoryAnswerRepository() { }
+
+    public static InMemoryAnswerRepository getInstanceOf(){
+            if (instanceOf == null){
+                instanceOf = new InMemoryAnswerRepository();
+            }
+        return instanceOf;
+    }
+
     @Override
     public List<Answer> listAnswersForQuestion(final Question question) {
         return findAll().stream()

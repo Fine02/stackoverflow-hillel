@@ -12,6 +12,18 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class InMemoryQuestionRepository extends InMemoryGeneralRepository<QuestionSaveDto, Question> implements QuestionRepository {
+
+    private static InMemoryQuestionRepository instanceOf;
+
+    private InMemoryQuestionRepository(){}
+
+    public static InMemoryQuestionRepository getInstanceOf(){
+        if (instanceOf == null){
+            instanceOf = new InMemoryQuestionRepository();
+        }
+        return instanceOf;
+    }
+
     @Override
     public List<Question> findInTitle(final String textToSearch) {
         return getData().values().stream()

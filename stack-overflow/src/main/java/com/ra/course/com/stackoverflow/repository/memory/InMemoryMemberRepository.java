@@ -12,6 +12,17 @@ public class InMemoryMemberRepository extends InMemoryGeneralRepository<MemberSa
 
     final transient private Map<Long, Member> data = super.getData();
 
+    private static InMemoryMemberRepository instanceOf;
+
+    private InMemoryMemberRepository() {}
+
+    public static InMemoryMemberRepository getInstanceOf(){
+        if (instanceOf == null){
+            instanceOf = new InMemoryMemberRepository();
+        }
+        return instanceOf;
+    }
+
     @Override
     public Optional<Member> findByMemberName(final String name) {
         return data.values().stream()

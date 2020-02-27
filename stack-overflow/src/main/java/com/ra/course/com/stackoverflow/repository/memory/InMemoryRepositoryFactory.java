@@ -5,21 +5,21 @@ import com.ra.course.com.stackoverflow.repository.interfaces.*;
 public class InMemoryRepositoryFactory implements RepositoryFactory {
     @Override
     public AnswerRepository createAnswerRepository() {
-        return new InMemoryAnswerRepository();
+        return InMemoryAnswerRepository.getInstanceOf();
     }
 
     @Override
     public QuestionRepository createQuestionRepository() {
-        return new InMemoryQuestionRepository();
+        return InMemoryQuestionRepository.getInstanceOf();
     }
 
     @Override
     public MemberRepository createMemberRepository() {
-        return new InMemoryMemberRepository();
+        return InMemoryMemberRepository.getInstanceOf();
     }
 
     @Override
     public TagRepository createTagRepository() {
-        return new InMemoryTagRepository();
+        return InMemoryTagRepository.getInstanceOf();
     }
 }

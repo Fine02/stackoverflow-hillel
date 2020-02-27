@@ -11,6 +11,17 @@ import java.util.Optional;
 
 public class InMemoryTagRepository extends InMemoryGeneralRepository<TagSaveDto, Tag> implements TagRepository {
 
+    private static InMemoryTagRepository instanceOf;
+
+    private InMemoryTagRepository(){}
+
+    public static InMemoryTagRepository getInstanceOf(){
+        if (instanceOf == null){
+            instanceOf = new InMemoryTagRepository();
+        }
+        return instanceOf;
+    }
+
     transient final private Map<Long, Tag> data = super.getData();
 
     @Override
