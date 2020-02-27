@@ -1,7 +1,8 @@
 package com.ra.course.com.stackoverflow.entity.implementations;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @AllArgsConstructor
 @Data
@@ -16,6 +17,9 @@ public class Tag {
 
     @NonNull
     private String description;
+
+    @NonNull
+    private List<Question> questionList;
 
     private int dailyAskedFrequency;
 
