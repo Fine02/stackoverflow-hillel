@@ -15,13 +15,6 @@ public class Flight {
     public Flight() {
     }
 
-    public Flight(String flightNumber, Airport departure, Airport arrival, int durationInMinutes) {
-        this.flightNumber = flightNumber;
-        this.departure = departure;
-        this.arrival = arrival;
-        this.durationInMinutes = durationInMinutes;
-    }
-
     private Flight(Builder builder) {
         flightNumber = builder.flightNumber;
         departure = builder.departure;

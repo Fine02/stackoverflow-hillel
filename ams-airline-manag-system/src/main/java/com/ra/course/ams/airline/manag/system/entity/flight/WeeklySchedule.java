@@ -10,11 +10,6 @@ public class WeeklySchedule {
     public WeeklySchedule() {
     }
 
-    public WeeklySchedule(int dayOfWeek, Time departureTime) {
-        this.dayOfWeek = dayOfWeek;
-        this.departureTime = departureTime;
-    }
-
     private WeeklySchedule(Builder builder) {
         dayOfWeek = builder.dayOfWeek;
         departureTime = builder.departureTime;

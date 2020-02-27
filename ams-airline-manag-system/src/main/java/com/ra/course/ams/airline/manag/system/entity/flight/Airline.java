@@ -12,13 +12,6 @@ public class Airline {
     public Airline() {
     }
 
-    public Airline(String name, String code, List<Flight> flights, List<Aircraft> aircrafts) {
-        this.name = name;
-        this.code = code;
-        this.flights = flights;
-        this.aircrafts = aircrafts;
-    }
-
     private Airline(Builder builder) {
         name = builder.name;
         code = builder.code;

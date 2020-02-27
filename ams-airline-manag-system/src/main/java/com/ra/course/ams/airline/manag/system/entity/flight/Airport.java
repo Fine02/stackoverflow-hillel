@@ -13,12 +13,6 @@ public class Airport {
     public Airport() {
     }
 
-    public Airport(String name, Address address, String code) {
-        this.name = name;
-        this.address = address;
-        this.code = code;
-    }
-
     private Airport(Builder builder) {
         name = builder.name;
         address = builder.address;

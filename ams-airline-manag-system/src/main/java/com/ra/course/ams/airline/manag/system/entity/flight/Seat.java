@@ -10,12 +10,6 @@ public class Seat {
     public Seat() {
     }
 
-    public Seat(String seatNumber, SeatType type, SeatClass seatClass) {
-        this.seatNumber = seatNumber;
-        this.type = type;
-        this.seatClass = seatClass;
-    }
-
     private Seat(Builder builder) {
         seatNumber = builder.seatNumber;
         type = builder.type;
