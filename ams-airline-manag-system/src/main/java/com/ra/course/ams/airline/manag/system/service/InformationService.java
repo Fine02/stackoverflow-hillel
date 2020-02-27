@@ -26,8 +26,4 @@ public interface InformationService {
 
     Flight searchFlightByDestinationAirport(String airportCode);
 
-    List<Pilot> getPilots(String flightNumber);
-
-    List<Crew> getCrew(String flightNumber);
-
 }

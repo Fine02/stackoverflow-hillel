@@ -1,24 +1,16 @@
 package com.ra.course.ams.airline.manag.system.service;
 
+import com.ra.course.ams.airline.manag.system.entity.FlightReservation;
 import com.ra.course.ams.airline.manag.system.entity.Itinerary;
 import com.ra.course.ams.airline.manag.system.entity.Passenger;
-import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
-import com.ra.course.ams.airline.manag.system.entity.flight.FlightSeat;
+import com.ra.course.ams.airline.manag.system.entity.person.Customer;
 
 import java.util.List;
 
 public interface ReservationService {
 
-    String reserveTicket(FlightInstance flightInstance, FlightSeat flightSeat, Passenger passenger);
+    FlightReservation create(FlightReservation reservation);
+    void cancel(FlightReservation reservation);
+    List<Passenger> getPassengers(FlightReservation reservation);
 
-    List<String> reserveMultipleTicketsByOneItinerary(Itinerary itinerary);
-
-    void addItinerary(Itinerary itinerary);
-
-    void addMultiFlightItinerary(Itinerary itinerary);
-
-    void cancelReservation(String reservationNumber);
-
-    void cancelItinerary(Itinerary itinerary);
-        
 }

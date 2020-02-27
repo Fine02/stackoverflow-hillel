@@ -1,4 +1,4 @@
-package com.ra.course.ams.airline.manag.system.service.draft;
+package com.ra.course.ams.airline.manag.system.service;
 
 import com.ra.course.ams.airline.manag.system.entity.Itinerary;
 import com.ra.course.ams.airline.manag.system.entity.person.Customer;

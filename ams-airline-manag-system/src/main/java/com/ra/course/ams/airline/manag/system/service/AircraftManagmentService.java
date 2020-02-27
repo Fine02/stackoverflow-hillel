@@ -1,4 +1,4 @@
-package com.ra.course.ams.airline.manag.system.service.draft;
+package com.ra.course.ams.airline.manag.system.service;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.Aircraft;
 import com.ra.course.ams.airline.manag.system.entity.flight.Flight;
