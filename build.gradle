@@ -46,6 +46,10 @@ project(':ams-airline-manag-system') {
 
 }
 
+project(':aws-online-shopping') {
+
+}
+
 wrapper {
     version = '6.1.1'
 }
