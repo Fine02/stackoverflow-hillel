@@ -1,19 +1,22 @@
 package com.ra.course.ams.airline.manag.system.exceptions;
 
 public class AccountNotExistException extends InstanceNotExistException {
+
+    private static final long serialVersionUID = 4L;
+
     public AccountNotExistException() {
         super();
     }
 
-    public AccountNotExistException(String message) {
+    public AccountNotExistException(final String message) {
         super(message);
     }
 
-    public AccountNotExistException(String message, Throwable cause) {
+    public AccountNotExistException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public AccountNotExistException(Throwable cause) {
+    public AccountNotExistException(final Throwable cause) {
         super(cause);
     }
 }

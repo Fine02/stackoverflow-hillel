@@ -1,19 +1,22 @@
 package com.ra.course.ams.airline.manag.system.exceptions;
 
 public class InstanceNotExistException extends RuntimeException {
+
+    private static final long serialVersionUID = 4L;
+
     public InstanceNotExistException() {
         super();
     }
 
-    public InstanceNotExistException(String message) {
+    public InstanceNotExistException(final String message) {
         super(message);
     }
 
-    public InstanceNotExistException(String message, Throwable cause) {
+    public InstanceNotExistException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public InstanceNotExistException(Throwable cause) {
+    public InstanceNotExistException(final Throwable cause) {
         super(cause);
     }
 }

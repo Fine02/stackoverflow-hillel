@@ -1,8 +1,6 @@
 package com.ra.course.ams.airline.manag.system.service;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.*;
-import com.ra.course.ams.airline.manag.system.entity.person.Crew;
-import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
 
 import java.sql.Time;
 import java.util.Date;

@@ -3,20 +3,17 @@ package com.ra.course.ams.airline.manag.system.repository.person;
 import com.ra.course.ams.airline.manag.system.entity.person.Account;
 import com.ra.course.ams.airline.manag.system.exceptions.AccountAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exceptions.AccountNotExistException;
-import com.ra.course.ams.airline.manag.system.exceptions.InstanceAlreadyExistException;
-import com.ra.course.ams.airline.manag.system.exceptions.InstanceNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 public class AccountsRepository implements Repository<Account, String> {
 
-    private Map<String, Account> accounts = new HashMap<>();
+    private Map<String, Account> accounts;
 
     @Override
-    public Account getInstance(String accountId) {
+    public Account getInstance(final String accountId) {
         return accounts.get(accountId);
     }
 
@@ -26,21 +23,25 @@ public class AccountsRepository implements Repository<Account, String> {
     }
 
     @Override
-    public Account addInstance(Account account) throws InstanceAlreadyExistException {
-        String accountId = account.getId();
-        if (accounts.get(accountId) != null) throw new AccountAlreadyExistException();
+    public Account addInstance(final Account account) {
+        final String accountId = account.getId();
+        if (accounts.get(accountId) != null) {
+            throw new AccountAlreadyExistException();
+        }
         return accounts.put(accountId, account);
     }
 
     @Override
-    public void updateInstance(Account account) throws InstanceNotExistException {
-        String accountId = account.getId();
-        if (accounts.get(accountId) == null) throw new AccountNotExistException();
+    public void updateInstance(final Account account) {
+        final String accountId = account.getId();
+        if (accounts.get(accountId) == null) {
+            throw new AccountNotExistException();
+        }
         accounts.put(accountId, account);
     }
 
     @Override
-    public void remoteInstance(Account account) {
+    public void remoteInstance(final Account account) {
         accounts.remove(account.getId());
     }
 
@@ -48,8 +49,7 @@ public class AccountsRepository implements Repository<Account, String> {
         return accounts;
     }
 
-    public AccountsRepository setAccounts(Map<String, Account> accounts) {
+    public void setAccounts(final Map<String, Account> accounts) {
         this.accounts = accounts;
-        return this;
     }
 }

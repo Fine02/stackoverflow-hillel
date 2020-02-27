@@ -1,9 +1,7 @@
 package com.ra.course.ams.airline.manag.system.service;
 
 import com.ra.course.ams.airline.manag.system.entity.FlightReservation;
-import com.ra.course.ams.airline.manag.system.entity.Itinerary;
 import com.ra.course.ams.airline.manag.system.entity.Passenger;
-import com.ra.course.ams.airline.manag.system.entity.person.Customer;
 
 import java.util.List;
 

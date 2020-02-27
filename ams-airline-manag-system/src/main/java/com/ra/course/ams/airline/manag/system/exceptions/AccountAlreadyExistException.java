@@ -1,19 +1,22 @@
 package com.ra.course.ams.airline.manag.system.exceptions;
 
 public class AccountAlreadyExistException extends InstanceAlreadyExistException {
+
+    private static final long serialVersionUID = 4L;
+
     public AccountAlreadyExistException() {
         super();
     }
 
-    public AccountAlreadyExistException(String message) {
+    public AccountAlreadyExistException(final String message) {
         super(message);
     }
 
-    public AccountAlreadyExistException(String message, Throwable cause) {
+    public AccountAlreadyExistException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public AccountAlreadyExistException(Throwable cause) {
+    public AccountAlreadyExistException(final Throwable cause) {
         super(cause);
     }
 }
