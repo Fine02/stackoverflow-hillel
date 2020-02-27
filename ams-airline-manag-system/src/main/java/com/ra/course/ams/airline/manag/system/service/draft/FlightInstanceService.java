@@ -5,6 +5,8 @@ import com.ra.course.ams.airline.manag.system.entity.flight.FlightStatus;
 import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
 
+import java.util.List;
+
 public interface FlightInstanceService {
 
     FlightInstance add(FlightInstance flightInstance);
@@ -12,5 +14,7 @@ public interface FlightInstanceService {
     boolean cancel(FlightInstance flightInstance);
     boolean assignPilot(FlightInstance flightInstance, Pilot pilot);
     boolean assignCrew(FlightInstance flightInstance, Crew crew);
+    List<Pilot> getAssignedPilots(FlightInstance flightInstance);
+    List<Crew> getAssignedCrew(FlightInstance flightInstance);
 
 }
