@@ -1,8 +1,7 @@
 package com.ra.course.com.stackoverflow.entity.implementations;
 
-import com.ra.course.com.stackoverflow.entity.interfaces.Searchable;
+import com.ra.course.com.stackoverflow.entity.interfaces.Commentable;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +20,7 @@ public class Photo {
     private LocalDateTime creationDate;
 
     @NonNull
-    private Searchable question;
+    private Commentable commentable;
 
     @NonNull
     private Answer answer;

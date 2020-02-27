@@ -1,7 +1,6 @@
 package com.ra.course.com.stackoverflow.entity.implementations;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +14,7 @@ public class Notification {
     final private long id;
 
     @NonNull
-    final private LocalDateTime createdON;
+    final private LocalDateTime createdOn;
 
     @NonNull
     private String content;

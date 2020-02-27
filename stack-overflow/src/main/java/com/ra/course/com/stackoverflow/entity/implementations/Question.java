@@ -50,8 +50,7 @@ public class Question implements Searchable, Commentable, IDEntity {
     @NonNull
     private List<Answer> answerList;
 
-    @NonNull
-    private List<Bounty> bountyList;
+    private Bounty bounty;
 
     @NonNull
     private List<Photo> photoList;
