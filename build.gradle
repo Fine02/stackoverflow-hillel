@@ -42,7 +42,11 @@ configure(allprojects) { project ->
     }
 }
 
-project (':stack-overflow'){
+project(':ams-airline-manag-system') {
+
+}
+
+project (':stack-overflow') {
     dependencies {
         compileOnly utils.lombok
         annotationProcessor utils.lombok
