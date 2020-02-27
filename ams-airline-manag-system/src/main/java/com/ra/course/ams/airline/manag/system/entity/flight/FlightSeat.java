@@ -8,11 +8,6 @@ public class FlightSeat extends Seat {
     public FlightSeat() {
     }
 
-    public FlightSeat(float fare, String reservationNumber) {
-        this.fare = fare;
-        this.reservationNumber = reservationNumber;
-    }
-
     private FlightSeat(Builder builder) {
         fare = builder.fare;
         reservationNumber = builder.reservationNumber;

@@ -13,9 +13,6 @@ public class Itinerary {
     private List<Passenger> passengers;
     private List<FlightReservation> flightReservations;
 
-    public Itinerary() {
-    }
-
     public Airport getStartingAirport() {
         return startingAirport;
     }
