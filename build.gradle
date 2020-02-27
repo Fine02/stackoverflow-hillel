@@ -50,6 +50,13 @@ project(':aws-online-shopping') {
 
 }
 
+project (':stack-overflow') {
+    dependencies {
+        compileOnly utils.lombok
+        annotationProcessor utils.lombok
+    }
+}
+
 wrapper {
     version = '6.1.1'
 }
