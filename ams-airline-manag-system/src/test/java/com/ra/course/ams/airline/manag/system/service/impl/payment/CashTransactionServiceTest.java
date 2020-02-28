@@ -10,9 +10,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CashTransactionServiceTest {
-    private CheckTransactionService cashTransactionService;
-    private CheckTransaction failedCheckTransaction;
-    private CheckTransaction confirmedCheckTransaction;
+    private CashTransactionService cashTransactionService;
+    private CashTransaction failedCashTransaction;
+    private CashTransaction confirmedCashTransaction;
 
     @BeforeEach
     public void createTransaction () {
