@@ -10,7 +10,7 @@ public class CashTransactionService implements PaymentService <CashTransaction> 
     public boolean makeTransaction(CashTransaction payment) {
         if (payment.getPaimentId() == 0 || payment.getAmound() == 0  || payment.getCashTendered() == 0) {
             payment.setStaus(PaymentStatus.FAILED);
-            throw  new IllegalArgumentException("Payment fields can't de empty");
+            return false;
         } else {
             payment.setStaus(PaymentStatus.COMPLETED);
         }
