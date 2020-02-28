@@ -39,6 +39,8 @@ configure(allprojects) { project ->
         testCompile testing.junit5Api
         testCompile testing.junit5Params
         testCompile testing.mockito
+        testImplementation testing.assertJ
+        testCompile testing.hamcrestCore
     }
 }
 
