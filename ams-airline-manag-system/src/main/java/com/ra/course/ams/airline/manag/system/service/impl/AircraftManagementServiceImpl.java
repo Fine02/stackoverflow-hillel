@@ -17,12 +17,18 @@ public class AircraftManagementServiceImpl implements AircraftManagementService 
 
     @Override
     public Aircraft addAircraft(Aircraft aircraft) {
+        if (aircraft == null) {
+            throw new NullPointerException("Cannot process add aircraft operation for null value argument.");
+        }
         aircraftRepository.addInstance(aircraft);
         return aircraft;
     }
 
     @Override
     public Aircraft updateAircraft(Aircraft aircraft) {
+        if (aircraft == null) {
+            throw new NullPointerException("Cannot process update aircraft operation for null value argument.");
+        }
         aircraftRepository.updateInstance(aircraft);
         return aircraft;
     }

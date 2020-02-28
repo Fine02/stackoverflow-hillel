@@ -5,7 +5,7 @@ import java.util.List;
 public class Aircraft {
 
     private String id;
-
+    private Airline airline;
     private String name;
     private String modal;
     private int manufacturingYear;
@@ -18,6 +18,7 @@ public class Aircraft {
 
     private Aircraft(Builder builder) {
         id = builder.id;
+        airline = builder.airline;
         name = builder.name;
         modal = builder.modal;
         manufacturingYear = builder.manufacturingYear;
@@ -29,6 +30,7 @@ public class Aircraft {
     public static class Builder {
 
         private transient String id;
+        private transient Airline airline;
         private transient String name;
         private transient String modal;
         private transient int manufacturingYear;
@@ -40,6 +42,11 @@ public class Aircraft {
 
         public Builder setId(String id) {
             this.id = id;
+            return this;
+        }
+
+        public Builder setAirline(Airline airline) {
+            this.airline = airline;
             return this;
         }
 
@@ -82,69 +89,71 @@ public class Aircraft {
         return id;
     }
 
-    public Aircraft setId(String id) {
+    public void setId(String id) {
         this.id = id;
-        return this;
+    }
+
+    public Airline getAirline() {
+        return airline;
+    }
+
+    public void setAirline(Airline airline) {
+        this.airline = airline;
     }
 
     public String getName() {
         return name;
     }
 
-    public Aircraft setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
 
     public String getModal() {
         return modal;
     }
 
-    public Aircraft setModal(String modal) {
+    public void setModal(String modal) {
         this.modal = modal;
-        return this;
     }
 
     public int getManufacturingYear() {
         return manufacturingYear;
     }
 
-    public Aircraft setManufacturingYear(int manufacturingYear) {
+    public void setManufacturingYear(int manufacturingYear) {
         this.manufacturingYear = manufacturingYear;
-        return this;
     }
 
     public FlightInstance getFlightInstance() {
         return flightInstance;
     }
 
-    public Aircraft setFlightInstance(FlightInstance flightInstance) {
+    public void setFlightInstance(FlightInstance flightInstance) {
         this.flightInstance = flightInstance;
-        return this;
     }
 
     public List<Seat> getSeats() {
         return seats;
     }
 
-    public Aircraft setSeats(List<Seat> seats) {
+    public void setSeats(List<Seat> seats) {
         this.seats = seats;
-        return this;
     }
 
     public List<Flight> getFlights() {
         return flights;
     }
 
-    public Aircraft setFlights(List<Flight> flights) {
+    public void setFlights(List<Flight> flights) {
         this.flights = flights;
-        return this;
     }
 
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("Aircraft{");
         sb.append("\"id\": \"").append(id).append('"');
+        sb.append(", \"airline\":").append(airline);
         sb.append(", \"name\": \"").append(name).append('"');
         sb.append(", \"modal\": \"").append(modal).append('"');
         sb.append(", \"manufacturingYear\":").append(manufacturingYear);

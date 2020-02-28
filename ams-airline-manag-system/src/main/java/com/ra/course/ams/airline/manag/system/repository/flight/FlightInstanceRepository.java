@@ -2,7 +2,8 @@ package com.ra.course.ams.airline.manag.system.repository.flight;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.Flight;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
-import com.ra.course.ams.airline.manag.system.exceptions.AccountNotExistException;
+import com.ra.course.ams.airline.manag.system.exceptions.InstanceAlreadyExistException;
+import com.ra.course.ams.airline.manag.system.exceptions.InstanceNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 
 import java.util.Collection;
@@ -11,63 +12,53 @@ import java.util.stream.Collectors;
 
 public class FlightInstanceRepository implements Repository<FlightInstance, String> {
 
-    private final List<Flight> flights;
+    private final List<FlightInstance> flightInstances;
 
-    public FlightInstanceRepository(List<Flight> flights) {
-        this.flights = flights;
+    public FlightInstanceRepository(List<FlightInstance> flightInstances) {
+        this.flightInstances = flightInstances;
     }
 
+
     boolean isAlreadyExist(String identifier) {
-       return flights.stream()
-            .map(Flight::getFlightInstances)
-            .flatMap(List::stream)
-            .anyMatch(fi -> fi.getId().equals(identifier));
+        return flightInstances.stream().map(FlightInstance::getId)
+                .anyMatch(number -> number.equals(identifier));
     }
 
     @Override
     public FlightInstance getInstance(String flightInstanceId) {
-        return flights.stream()
-                .map(Flight::getFlightInstances)
-                .flatMap(List::stream)
+        return flightInstances.stream()
                 .filter(flightInstance -> flightInstance.getId().equals(flightInstanceId))
-                .findAny()
+                .findFirst()
                 .orElse(null);
     }
 
     @Override
     public Collection<FlightInstance> getInstances() {
-        return flights.stream()
-                .map(Flight::getFlightInstances)
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
+        return flightInstances;
     }
 
     @Override
     public FlightInstance addInstance(FlightInstance flightInstance) {
-        return null; // TODO FlightInstance cannot exist without Flight
+        if (isAlreadyExist(flightInstance.getId())) {
+            throw new InstanceAlreadyExistException();
+        }
+        flightInstances.add(flightInstance);
+        return flightInstance;
     }
 
     @Override
     public void updateInstance(FlightInstance flightInstance) {
         if (!isAlreadyExist(flightInstance.getId())) {
-            throw new AccountNotExistException();
+            throw new InstanceNotExistException();
         }
-        FlightInstance f = flights.stream()
-                .map(Flight::getFlightInstances)
-                .flatMap(List::stream)
-                .filter(fI -> fI.getId().equals(flightInstance.getId()))
-                .findFirst().orElse(null);
-        if (f != null) {
-            f = flightInstance;
-        }
+        flightInstances.stream()
+                .filter(flightInstanceItem -> flightInstanceItem.getId().equals(flightInstance.getId()))
+                .forEach(flightInstanceItemForUpdate -> flightInstanceItemForUpdate = flightInstance);
     }
 
     @Override
     public void removeInstance(FlightInstance flightInstance) {
-        flights.stream()
-                .map(Flight::getFlightInstances)
-                .flatMap(List::stream)
-                .collect(Collectors.toList())
-                .removeIf(f -> f.getId().equals(flightInstance.getId()));
+        flightInstances.removeIf(flightInstanceItem -> flightInstanceItem.getId().equals(flightInstance.getId()));
     }
+
 }

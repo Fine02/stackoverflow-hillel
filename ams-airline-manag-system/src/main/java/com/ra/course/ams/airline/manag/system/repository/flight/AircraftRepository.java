@@ -1,8 +1,8 @@
 package com.ra.course.ams.airline.manag.system.repository.flight;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.Aircraft;
-import com.ra.course.ams.airline.manag.system.exceptions.AccountAlreadyExistException;
-import com.ra.course.ams.airline.manag.system.exceptions.AccountNotExistException;
+import com.ra.course.ams.airline.manag.system.exceptions.InstanceAlreadyExistException;
+import com.ra.course.ams.airline.manag.system.exceptions.InstanceNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 
 import java.util.Collection;
@@ -18,7 +18,7 @@ public class AircraftRepository implements Repository<Aircraft, String> {
 
     boolean isAlreadyExist(String identifier) {
         return aircrafts.stream().map(Aircraft::getId)
-                .allMatch(id -> id.equals(identifier));
+                .anyMatch(id -> id.equals(identifier));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class AircraftRepository implements Repository<Aircraft, String> {
     @Override
     public Aircraft addInstance(Aircraft aircraft) {
         if (isAlreadyExist(aircraft.getId())) {
-            throw new AccountAlreadyExistException();
+            throw new InstanceAlreadyExistException();
         }
         aircrafts.add(aircraft);
         return aircraft;
@@ -46,7 +46,7 @@ public class AircraftRepository implements Repository<Aircraft, String> {
     @Override
     public void updateInstance(Aircraft aircraft) {
         if (!isAlreadyExist(aircraft.getId())) {
-            throw new AccountNotExistException();
+            throw new InstanceNotExistException();
         }
         aircrafts.stream()
                 .filter(aircraftItem -> aircraftItem.getId().equals(aircraft.getId()))
@@ -55,6 +55,6 @@ public class AircraftRepository implements Repository<Aircraft, String> {
 
     @Override
     public void removeInstance(Aircraft aircraft) {
-        aircrafts.removeIf(a -> a.getId().equals(aircraft.getId()));
+        aircrafts.removeIf(aircraftItem -> aircraftItem.getId().equals(aircraft.getId()));
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 public class FlightInstance {
 
     private String id;
-
+    private Flight flight;
     private Time departureTime;
     private String gate;
     private FlightStatus status;
@@ -23,6 +23,7 @@ public class FlightInstance {
 
     private FlightInstance(Builder builder) {
         id = builder.id;
+        flight = builder.flight;
         departureTime = builder.departureTime;
         gate = builder.gate;
         status = builder.status;
@@ -35,6 +36,7 @@ public class FlightInstance {
     public static class Builder {
 
         private transient String id;
+        private transient Flight flight;
         private transient Time departureTime;
         private transient String gate;
         private transient FlightStatus status;
@@ -47,6 +49,11 @@ public class FlightInstance {
 
         public Builder setId(String id) {
             this.id = id;
+            return this;
+        }
+
+        public Builder setFlight(Flight flight) {
+            this.flight = flight;
             return this;
         }
 
@@ -94,78 +101,79 @@ public class FlightInstance {
         return id;
     }
 
-    public FlightInstance setId(String id) {
+    public void setId(String id) {
         this.id = id;
-        return this;
+    }
+
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
     }
 
     public Time getDepartureTime() {
         return departureTime;
     }
 
-    public FlightInstance setDepartureTime(Time departureTime) {
+    public void setDepartureTime(Time departureTime) {
         this.departureTime = departureTime;
-        return this;
     }
 
     public String getGate() {
         return gate;
     }
 
-    public FlightInstance setGate(String gate) {
+    public void setGate(String gate) {
         this.gate = gate;
-        return this;
     }
 
     public FlightStatus getStatus() {
         return status;
     }
 
-    public FlightInstance setStatus(FlightStatus status) {
+    public void setStatus(FlightStatus status) {
         this.status = status;
-        return this;
     }
 
     public List<FlightSeat> getSeats() {
         return seats;
     }
 
-    public FlightInstance setSeats(List<FlightSeat> seats) {
+    public void setSeats(List<FlightSeat> seats) {
         this.seats = seats;
-        return this;
     }
 
     public Aircraft getAircraft() {
         return aircraft;
     }
 
-    public FlightInstance setAircraft(Aircraft aircraft) {
+    public void setAircraft(Aircraft aircraft) {
         this.aircraft = aircraft;
-        return this;
     }
 
     public List<Crew> getCrews() {
         return crews;
     }
 
-    public FlightInstance setCrews(List<Crew> crews) {
+    public void setCrews(List<Crew> crews) {
         this.crews = crews;
-        return this;
     }
 
     public List<Pilot> getPilots() {
         return pilots;
     }
 
-    public FlightInstance setPilots(List<Pilot> pilots) {
+    public void setPilots(List<Pilot> pilots) {
         this.pilots = pilots;
-        return this;
     }
 
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("FlightInstance{");
         sb.append("\"id\": \"").append(id).append('"');
+        sb.append(", \"flight\":").append(flight);
         sb.append(", \"departureTime\": \"").append(departureTime).append('"');
         sb.append(", \"gate\": \"").append(gate).append('"');
         sb.append(", \"status\":").append(status);

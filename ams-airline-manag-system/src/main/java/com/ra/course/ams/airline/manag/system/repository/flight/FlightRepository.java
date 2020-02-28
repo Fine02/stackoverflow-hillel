@@ -1,9 +1,8 @@
 package com.ra.course.ams.airline.manag.system.repository.flight;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.Flight;
-import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
-import com.ra.course.ams.airline.manag.system.exceptions.AccountAlreadyExistException;
-import com.ra.course.ams.airline.manag.system.exceptions.AccountNotExistException;
+import com.ra.course.ams.airline.manag.system.exceptions.InstanceAlreadyExistException;
+import com.ra.course.ams.airline.manag.system.exceptions.InstanceNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 
 import java.util.Collection;
@@ -19,7 +18,7 @@ public class FlightRepository implements Repository<Flight, String> {
 
     boolean isAlreadyExist(String identifier) {
         return flights.stream().map(Flight::getFlightNumber)
-                .allMatch(number -> number.equals(identifier));
+                .anyMatch(number -> number.equals(identifier));
     }
 
     @Override
@@ -38,7 +37,7 @@ public class FlightRepository implements Repository<Flight, String> {
     @Override
     public Flight addInstance(final Flight flight) {
         if (isAlreadyExist(flight.getFlightNumber())) {
-            throw new AccountAlreadyExistException();
+            throw new InstanceAlreadyExistException();
         }
         flights.add(flight);
         return flight;
@@ -47,18 +46,15 @@ public class FlightRepository implements Repository<Flight, String> {
     @Override
     public void updateInstance(Flight flight) {
         if (!isAlreadyExist(flight.getFlightNumber())) {
-            throw new AccountNotExistException();
+            throw new InstanceNotExistException();
         }
-        Flight flightToUpdate = flights.stream()
-                .filter(f -> f.getFlightNumber().equals(flight.getFlightNumber()))
-                .findFirst().orElse(null);
-        if (flightToUpdate != null) {
-            flightToUpdate = flight;
-        }
+        flights.stream()
+                .filter(flightItem -> flightItem.getFlightNumber().equals(flight.getFlightNumber()))
+                .forEach(flightItemForUpdate -> flightItemForUpdate = flight);
     }
 
     @Override
     public void removeInstance(Flight flight) {
-        flights.removeIf(f -> f.getFlightNumber().equals(flight.getFlightNumber()));
+        flights.removeIf(flightItem -> flightItem.getFlightNumber().equals(flight.getFlightNumber()));
     }
 }
