@@ -1,11 +1,19 @@
 package com.ra.course.aws.online.shopping.entity;
 
 public class Payment {
-    PaymentStatus status;
-    double amount;
+    private PaymentStatus status;
+    private double amount;
 
+    public Payment(PaymentStatus status, double amount) {
+        this.status = status;
+        this.amount = amount;
+    }
 
-    public Payment(PaymentStatus status) {
+    public PaymentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PaymentStatus status) {
         this.status = status;
     }
 
@@ -13,19 +21,8 @@ public class Payment {
         return amount;
     }
 
-    public PaymentStatus getStatus() {
-        return status;
-    }
-
-
-    public void setStatus(PaymentStatus status) {
-        this.status = status;
-    }
-
     public void setAmount(double amount) {
         this.amount = amount;
     }
-
-
 }
 

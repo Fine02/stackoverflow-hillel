@@ -1,40 +1,48 @@
 package com.ra.course.aws.online.shopping.entity;
 
 public class CreditCard {
-    String nameOnCard;
-    String cardNumber;
-    Integer code;
-    Address billingAddress;
+    private String nameOnCard;
+    private int cardNumber;
+    private int code;
+    private Address billingAddress;
 
-    public String getNameOnCard(){
+    public CreditCard(String nameOnCard, int cardNumber, int code, Address billingAddress) {
+        this.nameOnCard = nameOnCard;
+        this.cardNumber = cardNumber;
+        this.code = code;
+        this.billingAddress = billingAddress;
+    }
+
+    public String getNameOnCard() {
         return nameOnCard;
     }
 
-    public String getCardNumber(){
+    public void setNameOnCard(String nameOnCard) {
+        this.nameOnCard = nameOnCard;
+    }
+
+    public int getCardNumber() {
         return cardNumber;
     }
 
-    public Integer getCode(){
+    public void setCardNumber(int cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public int getCode() {
         return code;
     }
 
-    public Address getBillingAddress(){
-        return billingAddress;
-    }
-    public void setNameOnCard(String nameOnCard){
-        this.nameOnCard = nameOnCard;
-
-    }
-    public void setCardNumber(String cardNumber){
-        this.cardNumber = cardNumber;
-
-    }
-    public void setCode(Integer code){
+    public void setCode(int code) {
         this.code = code;
     }
-    public void  setBillingAddress (Address billingAddress){
-        this.billingAddress = billingAddress;
 
+    public Address getBillingAddress() {
+        return billingAddress;
+    }
+
+    public void setBillingAddress(Address billingAddress) {
+        this.billingAddress = billingAddress;
     }
 }
 

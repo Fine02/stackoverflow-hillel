@@ -1,31 +1,31 @@
 package com.ra.course.aws.online.shopping.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Shipment {
-    private Date shipmentDate;
-    private Date estimatedArrival;
+    private LocalDate shipmentDate;
+    private LocalDate estimatedArrival;
     private String ShipmentMethod;
 
-    public Shipment(Date shipmentDate, Date estimatedArrival, String shipmentMethod) {
+    public Shipment(LocalDate shipmentDate, LocalDate estimatedArrival, String shipmentMethod) {
         this.shipmentDate = shipmentDate;
         this.estimatedArrival = estimatedArrival;
         ShipmentMethod = shipmentMethod;
     }
 
-    public Date getShipmentDate() {
+    public LocalDate getShipmentDate() {
         return shipmentDate;
     }
 
-    public void setShipmentDate(Date shipmentDate) {
+    public void setShipmentDate(LocalDate shipmentDate) {
         this.shipmentDate = shipmentDate;
     }
 
-    public Date getEstimatedArrival() {
+    public LocalDate getEstimatedArrival() {
         return estimatedArrival;
     }
 
-    public void setEstimatedArrival(Date estimatedArrival) {
+    public void setEstimatedArrival(LocalDate estimatedArrival) {
         this.estimatedArrival = estimatedArrival;
     }
 

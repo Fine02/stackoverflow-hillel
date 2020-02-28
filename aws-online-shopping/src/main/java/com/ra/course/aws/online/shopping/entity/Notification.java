@@ -1,13 +1,13 @@
 package com.ra.course.aws.online.shopping.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Notification {
     private int notificationId;
-    private Date createdOn;
+    private LocalDate createdOn;
     private String content;
 
-    public Notification(int notificationId, Date createdOn, String content) {
+    public Notification(int notificationId, LocalDate createdOn, String content) {
         this.notificationId = notificationId;
         this.createdOn = createdOn;
         this.content = content;
@@ -21,11 +21,11 @@ public class Notification {
         this.notificationId = notificationId;
     }
 
-    public Date getCreatedOn() {
+    public LocalDate getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(Date createdOn) {
+    public void setCreatedOn(LocalDate createdOn) {
         this.createdOn = createdOn;
     }
 

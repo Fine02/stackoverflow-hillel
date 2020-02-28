@@ -1,14 +1,14 @@
 package com.ra.course.aws.online.shopping.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Map;
 
 public class Order {
     private String orderNumber;
     private OrderStatus status;
-    private Date orderDate;
+    private LocalDate orderDate;
 
-    public Order(String orderNumber, OrderStatus status, Date orderDate) {
+    public Order(String orderNumber, OrderStatus status, LocalDate orderDate) {
         this.orderNumber = orderNumber;
         this.status = status;
         this.orderDate = orderDate;
@@ -30,11 +30,11 @@ public class Order {
         this.status = status;
     }
 
-    public Date getOrderDate() {
+    public LocalDate getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
     }
 }
