@@ -1,24 +1,19 @@
 package com.ra.course.com.stackoverflow.repository.memory;
 
 import com.ra.course.com.stackoverflow.dto.GeneralSaveDto;
-import com.ra.course.com.stackoverflow.dto.mapper.IDEntityFromSaveDto;
-import com.ra.course.com.stackoverflow.entity.interfaces.IDEntity;
+import com.ra.course.com.stackoverflow.dto.mapper.EntityFromSaveDto;
 import com.ra.course.com.stackoverflow.repository.interfaces.GeneralRepository;
 import org.mapstruct.factory.Mappers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class InMemoryGeneralRepository<D extends GeneralSaveDto,I extends IDEntity> implements GeneralRepository<D, I> {
+public class InMemoryGeneralRepository<D extends GeneralSaveDto, I> implements GeneralRepository<D, I> {
 
     final transient private Map<Long, I> dataOfIdEntity = new ConcurrentHashMap<>();
     final transient private AtomicLong currentID = new AtomicLong(0);
-    final transient private IDEntityFromSaveDto <D, I> idEntityMapper = Mappers.getMapper(IDEntityFromSaveDto.class);
-
+    final transient private EntityFromSaveDto<D, I> idEntityMapper = Mappers.getMapper(EntityFromSaveDto.class);
 
 
     @Override
@@ -35,7 +30,12 @@ public class InMemoryGeneralRepository<D extends GeneralSaveDto,I extends IDEnti
 
     @Override
     public void delete(final I idEntity) {
-        dataOfIdEntity.remove(idEntity.getId());
+        final Optional<Long> idOfEntity = dataOfIdEntity.entrySet()
+                .stream()
+                .filter(entry -> Objects.equals(entry.getValue(), idEntity))
+                .map(Map.Entry::getKey)
+                .findAny();
+        idOfEntity.ifPresent(dataOfIdEntity::remove);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.ra.course.com.stackoverflow.entity.implementations;
 
 
-import com.ra.course.com.stackoverflow.entity.interfaces.IDEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -10,7 +9,7 @@ import java.util.*;
 @SuperBuilder
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Member implements IDEntity {
+public class Member {
 
     @EqualsAndHashCode.Include
     final private long id;

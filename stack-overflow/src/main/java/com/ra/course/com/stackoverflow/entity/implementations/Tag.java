@@ -1,6 +1,5 @@
 package com.ra.course.com.stackoverflow.entity.implementations;
 
-import com.ra.course.com.stackoverflow.entity.interfaces.IDEntity;
 import lombok.*;
 
 import java.util.List;
@@ -8,7 +7,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Tag implements IDEntity {
+public class Tag {
 
     @EqualsAndHashCode.Include
     private final long id;

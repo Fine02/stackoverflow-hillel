@@ -5,7 +5,7 @@ import com.ra.course.com.stackoverflow.entity.interfaces.IDEntity;
 import org.mapstruct.Mapper;
 
 @Mapper
-public interface IDEntityFromSaveDto<D extends GeneralSaveDto, I extends IDEntity> {
+public interface EntityFromSaveDto<D extends GeneralSaveDto, I > {
 
     I createIDEntityFromSaveDto (D saveDto, long id);
 
