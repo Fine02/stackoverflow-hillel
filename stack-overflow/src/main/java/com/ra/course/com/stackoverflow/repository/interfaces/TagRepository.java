@@ -1,7 +1,6 @@
 package com.ra.course.com.stackoverflow.repository.interfaces;
 
 import com.ra.course.com.stackoverflow.dto.TagSaveDto;
-import com.ra.course.com.stackoverflow.entity.implementations.Question;
 import com.ra.course.com.stackoverflow.entity.implementations.Tag;
 
 import java.util.Optional;
