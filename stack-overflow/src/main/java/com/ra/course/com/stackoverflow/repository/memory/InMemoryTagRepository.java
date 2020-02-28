@@ -21,8 +21,4 @@ public class InMemoryTagRepository extends InMemoryGeneralRepository<TagSaveDto,
                 .findFirst();
     }
 
-    @Override
-    public void addTagToQuestion(final Tag tag, final Question question) {
-        question.getTagList().add(tag);
-    }
 }
