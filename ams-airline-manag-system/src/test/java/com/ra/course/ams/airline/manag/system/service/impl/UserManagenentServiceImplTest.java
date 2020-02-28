@@ -20,12 +20,12 @@ public class UserManagenentServiceImplTest {
         @Mock
         private Repository<Person, String> personRepository;
 
-        private UserManagenentServiceImpl userManagementService;
+        private PersonManagenentServiceImpl userManagementService;
 
         @BeforeEach
         public void setup(){
                 MockitoAnnotations.initMocks(this);
-                userManagementService = new UserManagenentServiceImpl();
+                userManagementService = new PersonManagenentServiceImpl();
                 userManagementService.setPersonRepository(personRepository);
         }
 
