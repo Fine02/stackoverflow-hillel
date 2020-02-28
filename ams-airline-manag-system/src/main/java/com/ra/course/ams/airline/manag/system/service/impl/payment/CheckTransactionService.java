@@ -8,18 +8,13 @@ public class CheckTransactionService implements PaymentService <CheckTransaction
 
     @Override
     public boolean makeTransaction(CheckTransaction payment) {
-        if (payment.getPaimentId() == 0 || payment.getBankName().isBlank()  ||
-            payment.getCheckNumber().isBlank() || payment.getAmound() == 0) {
+        if (payment.getPaimentId() == 0 || payment.getAmound() == 0  ||
+            payment.getCheckNumber().isBlank() || payment.getBankName().isBlank() ) {
             payment.setStaus(PaymentStatus.FAILED);
             throw  new IllegalArgumentException("Payment fields can't de empty");
         } else {
             payment.setStaus(PaymentStatus.COMPLETED);
         }
         return true;
-    }
-
-    @Override
-    public boolean refundPayment(CheckTransaction payment) {
-        return false;
     }
 }
