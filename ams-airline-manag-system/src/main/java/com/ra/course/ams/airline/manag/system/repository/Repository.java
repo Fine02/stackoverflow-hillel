@@ -11,6 +11,6 @@ public interface Repository<T,I> {
     Collection<T> getInstances();
     T addInstance(T t); // throws InstanceAlreadyExistException
     void updateInstance(T t); // throws InstanceNotExistException
-    void remoteInstance(T t);
+    void removeInstance(T t);
 
 }

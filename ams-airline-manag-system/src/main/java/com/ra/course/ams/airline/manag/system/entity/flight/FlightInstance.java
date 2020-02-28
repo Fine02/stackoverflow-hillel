@@ -8,6 +8,8 @@ import java.util.List;
 
 public class FlightInstance {
 
+    private String id;
+
     private Time departureTime;
     private String gate;
     private FlightStatus status;
@@ -20,6 +22,7 @@ public class FlightInstance {
     }
 
     private FlightInstance(Builder builder) {
+        id = builder.id;
         departureTime = builder.departureTime;
         gate = builder.gate;
         status = builder.status;
@@ -31,6 +34,7 @@ public class FlightInstance {
 
     public static class Builder {
 
+        private transient String id;
         private transient Time departureTime;
         private transient String gate;
         private transient FlightStatus status;
@@ -40,6 +44,11 @@ public class FlightInstance {
         private transient List<Pilot> pilots;
 
         public Builder () {}
+
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
 
         public Builder setDepartureTime(Time departureTime) {
             this.departureTime = departureTime;
@@ -79,6 +88,15 @@ public class FlightInstance {
         public FlightInstance build() {
             return new FlightInstance(this);
         }
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public FlightInstance setId(String id) {
+        this.id = id;
+        return this;
     }
 
     public Time getDepartureTime() {
@@ -146,8 +164,9 @@ public class FlightInstance {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance{");
-        sb.append("\"departureTime\": \"").append(departureTime).append('"');
+        final StringBuffer sb = new StringBuffer("FlightInstance{");
+        sb.append("\"id\": \"").append(id).append('"');
+        sb.append(", \"departureTime\": \"").append(departureTime).append('"');
         sb.append(", \"gate\": \"").append(gate).append('"');
         sb.append(", \"status\":").append(status);
         sb.append(", \"seats\":").append(seats);

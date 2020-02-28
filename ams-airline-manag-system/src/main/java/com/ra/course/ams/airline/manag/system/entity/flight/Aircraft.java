@@ -4,6 +4,8 @@ import java.util.List;
 
 public class Aircraft {
 
+    private String id;
+
     private String name;
     private String modal;
     private int manufacturingYear;
@@ -15,6 +17,7 @@ public class Aircraft {
     }
 
     private Aircraft(Builder builder) {
+        id = builder.id;
         name = builder.name;
         modal = builder.modal;
         manufacturingYear = builder.manufacturingYear;
@@ -25,6 +28,7 @@ public class Aircraft {
 
     public static class Builder {
 
+        private transient String id;
         private transient String name;
         private transient String modal;
         private transient int manufacturingYear;
@@ -33,6 +37,11 @@ public class Aircraft {
         private transient List<Flight> flights;
 
         public Builder () {}
+
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
 
         public Builder setName(String name) {
             this.name = name;
@@ -67,6 +76,15 @@ public class Aircraft {
         public Aircraft build() {
             return new Aircraft(this);
         }
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Aircraft setId(String id) {
+        this.id = id;
+        return this;
     }
 
     public String getName() {
@@ -125,8 +143,9 @@ public class Aircraft {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("com.ra.course.ams.airline.manag.system.entity.flight.Aircraft{");
-        sb.append("\"name\": \"").append(name).append('"');
+        final StringBuffer sb = new StringBuffer("Aircraft{");
+        sb.append("\"id\": \"").append(id).append('"');
+        sb.append(", \"name\": \"").append(name).append('"');
         sb.append(", \"modal\": \"").append(modal).append('"');
         sb.append(", \"manufacturingYear\":").append(manufacturingYear);
         sb.append(", \"flightInstance\":").append(flightInstance);

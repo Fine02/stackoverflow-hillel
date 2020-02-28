@@ -13,6 +13,9 @@ public interface FlightService {
     Flight add(Flight flight);
     Flight update(Flight flight);
     boolean cancel(Flight flight);
-    void addFlightSchedule(WeeklySchedule schedule);
-    void addFlightSchedule(CustomSchedule schedule);
+    void addFlightSchedule(Flight flight, WeeklySchedule schedule);
+    void addFlightSchedule(Flight flight, CustomSchedule schedule);
+    WeeklySchedule updateSchedule(Flight flight, WeeklySchedule weeklySchedule);
+    CustomSchedule updateSchedule(Flight flight, CustomSchedule customSchedule);
+
 }

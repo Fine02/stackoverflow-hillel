@@ -41,7 +41,7 @@ public class AccountsRepository implements Repository<Account, String> {
     }
 
     @Override
-    public void remoteInstance(final Account account) {
+    public void removeInstance(final Account account) {
         accounts.remove(account.getId());
     }
 
