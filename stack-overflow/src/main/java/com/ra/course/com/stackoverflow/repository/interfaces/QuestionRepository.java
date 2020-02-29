@@ -14,9 +14,11 @@ public interface QuestionRepository <T>  {
 
     void delete(Question question);
 
+    Question update (Question question);
+
     List<Question> findAll();
 
     List<Question> findInTitle(String text);
 
-    List<Question> findMemberQuestions(Member member);
+    List<Question> findAllMemberQuestions(Member member);
 }

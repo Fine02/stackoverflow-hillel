@@ -14,6 +14,8 @@ public interface AnswerRepository<T>  {
 
     void delete(Answer answer);
 
+    Answer update (Answer answer);
+
     List<Answer> findAll();
 
     List<Answer> listAnswersForQuestion(Question question);

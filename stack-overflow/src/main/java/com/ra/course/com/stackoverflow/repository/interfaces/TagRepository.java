@@ -13,6 +13,8 @@ public interface TagRepository<T>  {
 
     void delete(Tag tag);
 
+    Tag update (Tag tag);
+
     List<Tag> findAll();
 
     Optional<Tag> findByTagName(String tagName);

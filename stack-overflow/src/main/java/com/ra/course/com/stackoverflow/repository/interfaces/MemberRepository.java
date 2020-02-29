@@ -9,11 +9,13 @@ public interface MemberRepository<T>  {
 
     long save(T t);
 
-    Optional<T> findById(long id);
+    Optional<Member> findById(long id);
 
-    void delete(T t);
+    void delete(Member member);
 
-    List<T> findAll();
+    Member update (Member member);
+
+    List<Member> findAll();
 
     Optional<Member> findByMemberName(String name);
 
