@@ -54,8 +54,6 @@ project (':stack-overflow') {
     dependencies {
         compileOnly utils.lombok
         annotationProcessor utils.lombok
-        compileOnly utils.mapstructJdk8
-        compileOnly utils.mapstructProcessor
     }
 }
 

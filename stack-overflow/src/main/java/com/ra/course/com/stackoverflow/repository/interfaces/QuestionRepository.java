@@ -1,6 +1,5 @@
 package com.ra.course.com.stackoverflow.repository.interfaces;
 
-import com.ra.course.com.stackoverflow.dto.QuestionSaveDto;
 import com.ra.course.com.stackoverflow.entity.implementations.Member;
 import com.ra.course.com.stackoverflow.entity.implementations.Question;
 
