@@ -1,10 +1,7 @@
 package com.ra.course.com.stackoverflow.dto.mapper;
 
 import com.ra.course.com.stackoverflow.dto.QuestionDto;
-import com.ra.course.com.stackoverflow.entity.Searchable;
 import com.ra.course.com.stackoverflow.entity.implementation.Question;
-import com.ra.course.com.stackoverflow.exception.repository.RepositoryException;
-import com.ra.course.com.stackoverflow.repository.GeneralRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

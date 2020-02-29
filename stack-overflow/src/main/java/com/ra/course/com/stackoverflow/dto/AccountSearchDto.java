@@ -1,7 +1,5 @@
 package com.ra.course.com.stackoverflow.dto;
 
-import com.ra.course.com.stackoverflow.entity.enumeration.AccountStatus;
-
 import java.util.Objects;
 
 public class AccountSearchDto {

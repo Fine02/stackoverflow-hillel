@@ -1,10 +1,7 @@
 package com.ra.course.com.stackoverflow.dto;
 
-import com.ra.course.com.stackoverflow.entity.Searchable;
 import com.ra.course.com.stackoverflow.entity.implementation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 
