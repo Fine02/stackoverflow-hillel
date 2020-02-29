@@ -6,9 +6,11 @@ import com.ra.course.com.stackoverflow.entity.implementations.Question;
 import java.util.List;
 import java.util.Optional;
 
-public interface QuestionRepository <T>  {
+public interface QuestionRepository  {
 
-    long save(T t);
+    Question save(Question question);
+
+    long getNextId();
 
     Optional<Question> findById(long id);
 

@@ -5,9 +5,11 @@ import com.ra.course.com.stackoverflow.entity.implementations.Tag;
 import java.util.List;
 import java.util.Optional;
 
-public interface TagRepository<T>  {
+public interface TagRepository  {
 
-    long save(T t);
+    Tag save(Tag tag);
+
+    long getNextId();
 
     Optional<Tag> findById(long id);
 

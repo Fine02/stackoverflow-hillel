@@ -5,9 +5,11 @@ import com.ra.course.com.stackoverflow.entity.implementations.Comment;
 import java.util.List;
 import java.util.Optional;
 
-public interface CommentRepository<T> {
+public interface CommentRepository {
 
-    long save(T t);
+    Comment save(Comment comment);
+
+    long getNextId();
 
     Optional<Comment> findById(long id);
 

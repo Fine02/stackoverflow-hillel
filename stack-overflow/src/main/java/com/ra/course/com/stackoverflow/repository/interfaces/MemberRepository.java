@@ -5,9 +5,11 @@ import com.ra.course.com.stackoverflow.entity.implementations.Member;
 import java.util.List;
 import java.util.Optional;
 
-public interface MemberRepository<T>  {
+public interface MemberRepository  {
 
-    long save(T t);
+    Member save(Member member);
+
+    long getNextId();
 
     Optional<Member> findById(long id);
 

@@ -7,8 +7,11 @@ import com.ra.course.com.stackoverflow.entity.implementations.Question;
 import java.util.List;
 import java.util.Optional;
 
-public interface AnswerRepository<T>  {
-    long save(T t);
+public interface AnswerRepository  {
+
+    Answer save(Answer answer);
+
+    long getNextId();
 
     Optional<Answer> findById(long id);
 
