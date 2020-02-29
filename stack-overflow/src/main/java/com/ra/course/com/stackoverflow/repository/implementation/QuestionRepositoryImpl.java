@@ -1,17 +1,17 @@
 package com.ra.course.com.stackoverflow.repository.implementation;
 
-import com.ra.course.com.stackoverflow.entity.implementations.Member;
-import com.ra.course.com.stackoverflow.entity.implementations.Question;
+import com.ra.course.com.stackoverflow.entity.Member;
+import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public class QuestionRepositoryImpl implements QuestionRepository<Question> {
+public class QuestionRepositoryImpl implements QuestionRepository {
 
     @Override
-    public long save(final Question question) {
-        return 0L;
+    public Question save(final Question question) {
+        return null;
     }
 
     @Override
@@ -35,9 +35,10 @@ public class QuestionRepositoryImpl implements QuestionRepository<Question> {
     }
 
     @Override
-    public List<Question> findMemberQuestions(final Member member) {
+    public List<Question> findMemberQuestions(Member member) {
         return null;
     }
+
 
     @Override
     public long getNextId() {

@@ -1,17 +1,17 @@
 package com.ra.course.com.stackoverflow.repository.implementation;
 
 
-import com.ra.course.com.stackoverflow.entity.implementations.Member;
+import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public class MemberRepositoryImpl implements MemberRepository<Member> {
+public class MemberRepositoryImpl implements MemberRepository {
 
     @Override
-    public long save(Member question) {
-        return 0L;
+    public Member save(Member question) {
+        return null;
     }
 
     @Override
@@ -36,6 +36,6 @@ public class MemberRepositoryImpl implements MemberRepository<Member> {
 
     @Override
     public long getNextId() {
-        return 2L;
+        return 1L;
     }
 }

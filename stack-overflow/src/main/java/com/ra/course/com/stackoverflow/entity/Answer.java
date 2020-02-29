@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.entity.implementations;
+package com.ra.course.com.stackoverflow.entity;
 
 import com.ra.course.com.stackoverflow.entity.interfaces.Commentable;
 import com.ra.course.com.stackoverflow.entity.interfaces.Searchable;
