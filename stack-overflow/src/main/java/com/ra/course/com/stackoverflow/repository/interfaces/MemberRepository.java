@@ -9,13 +9,16 @@ public interface MemberRepository  {
 
     Member save(Member member);
 
+    long getNextId();
+
     Optional<Member> findById(long id);
 
-    void delete(Member t);
+    void delete(Member member);
+
+    Member update (Member member);
 
     List<Member> findAll();
 
     Optional<Member> findByMemberName(String name);
 
-    long getNextId();
 }
