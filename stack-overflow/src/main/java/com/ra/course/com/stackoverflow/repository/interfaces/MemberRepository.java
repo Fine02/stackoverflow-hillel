@@ -1,6 +1,7 @@
 package com.ra.course.com.stackoverflow.repository.interfaces;
 
 import com.ra.course.com.stackoverflow.entity.Member;
+import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,7 @@ public interface MemberRepository  {
 
     void delete(Member member);
 
-    Member update (Member member);
+    Member update (Member member) throws DataBaseOperationException;
 
     List<Member> findAll();
 
