@@ -15,24 +15,24 @@ import java.util.NoSuchElementException;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class UserManagenentServiceImplTest {
+public class PersonManagenentServiceImplTest {
 
         @Mock
         private Repository<Person, String> personRepository;
 
-        private PersonManagenentServiceImpl userManagementService;
+        private PersonManagenentServiceImpl personManagenentService;
 
         @BeforeEach
         public void setup(){
                 MockitoAnnotations.initMocks(this);
-                userManagementService = new PersonManagenentServiceImpl();
-                userManagementService.setPersonRepository(personRepository);
+                personManagenentService = new PersonManagenentServiceImpl();
+                personManagenentService.setPersonRepository(personRepository);
         }
 
         @Test
         public void testThatFindByEmailReturnsPerson(){
                 when(personRepository.getInstances()).thenReturn(getPersons());
-                Person person = userManagementService.findByEmail("ivanov@example.com");
+                Person person = personManagenentService.findByEmail("ivanov@example.com");
 
                 assertThat(person).isNotNull();
                 assertThat(person.getName()).isEqualTo("Ivanov Ivan");
@@ -44,7 +44,7 @@ public class UserManagenentServiceImplTest {
         @Test
         public void testThatFindByEmailThrowsIllegalArgumentExceptionWhenCallingWithEmptyArgument(){
                 try {
-                        userManagementService.findByEmail("");
+                        personManagenentService.findByEmail("");
                         fail("Expected IllegalArgumentException to be thrown");
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
@@ -57,7 +57,7 @@ public class UserManagenentServiceImplTest {
                 when(personRepository.getInstances()).thenReturn(getPersons());
 
                 try {
-                        userManagementService.findByEmail("unknown@example.com");
+                        personManagenentService.findByEmail("unknown@example.com");
                         fail("Expected NoSuchElementException to be thrown");
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(NoSuchElementException.class);
@@ -71,7 +71,7 @@ public class UserManagenentServiceImplTest {
                 Person personGiven = new Person.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
                 when(personRepository.getInstance(any(String.class))).thenReturn(personGiven);
 
-                Person person = userManagementService.findByPhoneNumber("11111");
+                Person person = personManagenentService.findByPhoneNumber("11111");
                 assertThat(person).isEqualToComparingFieldByField(personGiven);
                 verify(personRepository, times(1)).getInstance("11111");
         }
@@ -81,7 +81,7 @@ public class UserManagenentServiceImplTest {
                 when(personRepository.getInstance(any(String.class))).thenReturn(null);
 
                 try {
-                        userManagementService.findByPhoneNumber("11111");
+                        personManagenentService.findByPhoneNumber("11111");
                         fail("Expected InstanceNotExistException to be thrown");
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(InstanceNotExistException.class);
@@ -93,7 +93,7 @@ public class UserManagenentServiceImplTest {
         @Test
         public void testThatFindByPhoneReturnsPersonThrowsIllegalArgumentExceptionWhenCallWithEmptyArg(){
                 try {
-                        userManagementService.findByPhoneNumber("");
+                        personManagenentService.findByPhoneNumber("");
                         fail("Expected IllegalArgumentException to be thrown");
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
@@ -106,7 +106,7 @@ public class UserManagenentServiceImplTest {
                 Person personGiven = new Person.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
                 when(personRepository.addInstance(any())).thenReturn(personGiven);
 
-                Person person = userManagementService.add(personGiven);
+                Person person = personManagenentService.add(personGiven);
                 assertThat(person).isEqualToComparingFieldByField(personGiven);
                 verify(personRepository, times(1)).addInstance(any());
         }
@@ -114,7 +114,7 @@ public class UserManagenentServiceImplTest {
         @Test
         public void testThatAddInstanceThrowNullPointerExceptionWhenCallWithNullalueArgument(){
                 try {
-                        userManagementService.add(null);
+                        personManagenentService.add(null);
                         fail("Expected NullPointerException to be thrown");
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(NullPointerException.class);
@@ -125,7 +125,7 @@ public class UserManagenentServiceImplTest {
         @Test
         public void testThatAddInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument(){
                 try {
-                        userManagementService.add(null);
+                        personManagenentService.add(null);
                         fail("Expected NullPointerException to be thrown");
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(NullPointerException.class);
@@ -138,7 +138,7 @@ public class UserManagenentServiceImplTest {
                 Person personGiven = new Person.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
 
                 try {
-                        userManagementService.updateData(personGiven);
+                        personManagenentService.updateData(personGiven);
                 } catch (Exception e) {
                         fail("Unexpected exception thrown");
                 }
@@ -149,7 +149,7 @@ public class UserManagenentServiceImplTest {
         @Test
         public void testThatUpdateInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument(){
                 try {
-                        userManagementService.updateData(null);
+                        personManagenentService.updateData(null);
                         fail("Expected NullPointerException to be thrown");
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(NullPointerException.class);
@@ -162,7 +162,7 @@ public class UserManagenentServiceImplTest {
                 Person personGiven = new Person.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
 
                 try {
-                        userManagementService.remove(personGiven);
+                        personManagenentService.remove(personGiven);
                 } catch (Exception e) {
                         fail("Unexpected exception thrown");
                 }
@@ -173,7 +173,7 @@ public class UserManagenentServiceImplTest {
         @Test
         public void testThatRemoveInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument(){
                 try {
-                        userManagementService.remove(null);
+                        personManagenentService.remove(null);
                         fail("Expected NullPointerException to be thrown");
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(NullPointerException.class);
