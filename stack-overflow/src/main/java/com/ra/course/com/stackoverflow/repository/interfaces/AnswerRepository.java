@@ -23,5 +23,5 @@ public interface AnswerRepository  {
 
     List<Answer> listAnswersForQuestion(Question question);
 
-    List<Answer> findAllMemberAnswers(Member Member);
+    List<Answer> findAllMemberAnswers(Member member);
 }
