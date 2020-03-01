@@ -21,4 +21,5 @@ public interface CommentRepository {
 
     List<Comment> findAllMemberComments();
 
+    List<Comment> findByQuestionId(long id);
 }

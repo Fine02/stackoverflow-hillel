@@ -21,4 +21,5 @@ public interface TagRepository  {
 
     Optional<Tag> findByTagName(String tagName);
 
+    long findIdByName(String tag);
 }
