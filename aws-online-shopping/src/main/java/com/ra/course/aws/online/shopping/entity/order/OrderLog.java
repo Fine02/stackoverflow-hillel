@@ -1,14 +1,32 @@
-package com.ra.course.aws.online.shopping.entity;
+package com.ra.course.aws.online.shopping.entity.order;
 
 import java.util.Date;
 
 public class OrderLog {
+    private String orderNumber;
     private Date creationDate;
     private OrderStatus status;
+
+    public OrderLog() {
+    }
 
     public OrderLog(Date creationDate, OrderStatus status) {
         this.creationDate = creationDate;
         this.status = status;
+    }
+
+    public OrderLog(String orderNumber, Date creationDate, OrderStatus status) {
+        this.orderNumber = orderNumber;
+        this.creationDate = creationDate;
+        this.status = status;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public Date getCreationDate() {

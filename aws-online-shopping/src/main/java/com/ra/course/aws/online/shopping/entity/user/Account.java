@@ -1,5 +1,9 @@
-package com.ra.course.aws.online.shopping.entity;
+package com.ra.course.aws.online.shopping.entity.user;
+import com.ra.course.aws.online.shopping.entity.Address;
+import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
+import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
 
+import java.util.List;
 
 public class Account {
     private String userName;
@@ -9,8 +13,13 @@ public class Account {
     private Address shippingAddress;
     private String email;
     private String phone;
+    private List<CreditCard> creditCardList;
+    private List<ElectronicBankTransfer> electronicBankTransferList;
 
-    public Account(String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone) {
+    public Account() {
+    }
+
+    public Account(String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone, List<CreditCard> creditCardList, List<ElectronicBankTransfer> electronicBankTransferList) {
         this.userName = userName;
         this.password = password;
         this.status = status;
@@ -18,6 +27,8 @@ public class Account {
         this.shippingAddress = shippingAddress;
         this.email = email;
         this.phone = phone;
+        this.creditCardList = creditCardList;
+        this.electronicBankTransferList = electronicBankTransferList;
     }
 
     public String getUserName() {
@@ -74,5 +85,21 @@ public class Account {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public List<CreditCard> getCreditCardList() {
+        return creditCardList;
+    }
+
+    public void setCreditCardList(List<CreditCard> creditCardList) {
+        this.creditCardList = creditCardList;
+    }
+
+    public List<ElectronicBankTransfer> getElectronicBankTransferList() {
+        return electronicBankTransferList;
+    }
+
+    public void setElectronicBankTransferList(List<ElectronicBankTransfer> electronicBankTransferList) {
+        this.electronicBankTransferList = electronicBankTransferList;
     }
 }

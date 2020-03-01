@@ -1,8 +1,11 @@
-package com.ra.course.aws.online.shopping.entity;
+package com.ra.course.aws.online.shopping.entity.payment;
 
 public class Payment {
     private PaymentStatus status;
     private double amount;
+
+    public Payment() {
+    }
 
     public Payment(PaymentStatus status, double amount) {
         this.status = status;

@@ -1,8 +1,11 @@
-package com.ra.course.aws.online.shopping.entity;
+package com.ra.course.aws.online.shopping.entity.product;
 
 public class ProductReview {
     private int rating;
     private String review;
+
+    public ProductReview() {
+    }
 
     public ProductReview(int rating, String review) {
         this.rating = rating;

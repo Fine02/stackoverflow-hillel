@@ -1,9 +1,12 @@
-package com.ra.course.aws.online.shopping.entity;
+package com.ra.course.aws.online.shopping.entity.payment;
 
 public class ElectronicBankTransfer {
     private String bankName;
     private String routingNumber;
     private String accountNumber;
+
+    public ElectronicBankTransfer() {
+    }
 
     public ElectronicBankTransfer(String bankName, String routingNumber, String accountNumber) {
         this.bankName = bankName;

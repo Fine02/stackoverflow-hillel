@@ -1,12 +1,16 @@
-package com.ra.course.aws.online.shopping.entity;
+package com.ra.course.aws.online.shopping.entity.payment;
+import com.ra.course.aws.online.shopping.entity.Address;
 
 public class CreditCard {
     private String nameOnCard;
-    private int cardNumber;
+    private String cardNumber;
     private int code;
     private Address billingAddress;
 
-    public CreditCard(String nameOnCard, int cardNumber, int code, Address billingAddress) {
+    public CreditCard() {
+    }
+
+    public CreditCard(String nameOnCard, String cardNumber, int code, Address billingAddress) {
         this.nameOnCard = nameOnCard;
         this.cardNumber = cardNumber;
         this.code = code;
@@ -21,11 +25,11 @@ public class CreditCard {
         this.nameOnCard = nameOnCard;
     }
 
-    public int getCardNumber() {
+    public String getCardNumber() {
         return cardNumber;
     }
 
-    public void setCardNumber(int cardNumber) {
+    public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
 

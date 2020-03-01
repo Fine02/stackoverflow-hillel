@@ -1,4 +1,4 @@
-package com.ra.course.aws.online.shopping.entity;
+package com.ra.course.aws.online.shopping.entity.notification;
 
 import java.time.LocalDate;
 
@@ -6,6 +6,9 @@ public class Notification {
     private int notificationId;
     private LocalDate createdOn;
     private String content;
+
+    public Notification() {
+    }
 
     public Notification(int notificationId, LocalDate createdOn, String content) {
         this.notificationId = notificationId;

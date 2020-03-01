@@ -1,4 +1,4 @@
-package com.ra.course.aws.online.shopping.entity;
+package com.ra.course.aws.online.shopping.entity.notification;
 
 import java.time.LocalDate;
 

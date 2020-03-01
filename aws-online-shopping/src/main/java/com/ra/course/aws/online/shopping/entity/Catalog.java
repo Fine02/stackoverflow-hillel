@@ -1,16 +1,18 @@
 package com.ra.course.aws.online.shopping.entity;
-
-import interfaces.Search;
+import com.ra.course.aws.online.shopping.entity.product.Product;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-public class Catalog implements Search {
+public class Catalog  {
     private LocalDate lastUpdated;
     private Map<String, List<Product>> productNames;
     private Map<String, List<Product>> productCategories;
-    private  String name;
+    private String name;
+
+    public Catalog() {
+    }
 
     public Catalog(LocalDate lastUpdated, Map<String, List<Product>> productNames,
                    Map<String, List<Product>> productCategories, String name) {
@@ -52,13 +54,4 @@ public class Catalog implements Search {
         this.name = name;
     }
 
-    @Override
-    public List<Product> searchProductByName(String name) {
-        return null;
-    }
-
-    @Override
-    public List<Product> searchProductByCategory(String category) {
-        return null;
-    }
 }

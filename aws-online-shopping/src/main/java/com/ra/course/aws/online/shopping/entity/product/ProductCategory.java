@@ -1,8 +1,11 @@
-package com.ra.course.aws.online.shopping.entity;
+package com.ra.course.aws.online.shopping.entity.product;
 
 public class ProductCategory {
     private String name;
     private String description;
+
+    public ProductCategory() {
+    }
 
     public ProductCategory(String name, String description) {
         this.name = name;

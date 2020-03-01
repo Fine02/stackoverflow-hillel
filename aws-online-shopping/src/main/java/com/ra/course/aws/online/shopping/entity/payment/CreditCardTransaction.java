@@ -1,6 +1,6 @@
-package com.ra.course.aws.online.shopping.entity;
+package com.ra.course.aws.online.shopping.entity.payment;
 
-public class CreditCardTransaction extends Payment{
+public class CreditCardTransaction extends Payment {
 
     public CreditCardTransaction(PaymentStatus status, double amount) {
         super(status, amount);
