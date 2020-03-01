@@ -4,7 +4,8 @@ package com.ra.course.com.stackoverflow.entity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuperBuilder
 @Data
@@ -38,6 +39,18 @@ public class Member {
     @Builder.Default
     private List<Notification> notifications = new ArrayList<>();
 
+    @Builder.Default
+    @NonNull
+    private List<Long> votedQuestions = new ArrayList<>();
+
+    @Builder.Default
+    @NonNull
+    private List<Long> votedAnswers = new ArrayList<>();
+
+    @Builder.Default
+    @NonNull
+    private List<Long> votedComments = new ArrayList<>();
+
 
     public int getReputation() {
         return this.account.getReputation();
@@ -47,16 +60,4 @@ public class Member {
         return this.account.getEmail();
     }
 
-    /*@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Member member = (Member) o;
-        return id == member.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }*/
 }

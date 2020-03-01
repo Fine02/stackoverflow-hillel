@@ -21,15 +21,14 @@ import static org.mockito.Mockito.*;
 
 public class MemberServiceImplTest {
 
-    private static MemberService<Question> memberService;
+    private MemberService<Question> memberService;
 
-    private static MemberRepository mockedMemberRepository;
-    private static QuestionRepository mockedQuestionRepository;
+    private MemberRepository mockedMemberRepository;
+    private QuestionRepository mockedQuestionRepository;
 
     private Member expectedMember;
     private Question expectedQuestion;
 
-    private Member givenMember;
     private Question givenQuestion;
 
 
@@ -57,7 +56,7 @@ public class MemberServiceImplTest {
 
         expectedMember.setQuestions(Collections.singletonList(expectedQuestion));
 
-        givenMember = Member.builder()
+        Member givenMember = Member.builder()
                 .id(42L)
                 .account(Account.builder()
                         .id(1L)
@@ -86,6 +85,7 @@ public class MemberServiceImplTest {
         assertEquals(expectedQuestion.getAuthor().getQuestions(), actualQuestion.getAuthor().getQuestions());
         verify(mockedMemberRepository, times(1)).update(isA(Member.class));
         verify(mockedQuestionRepository, times(1)).save(isA(Question.class));
+        verifyNoMoreInteractions(mockedMemberRepository, mockedQuestionRepository);
     }
 
     @Test
@@ -104,6 +104,7 @@ public class MemberServiceImplTest {
 
         verify(mockedMemberRepository, times(1)).update(isA(Member.class));
         verify(mockedQuestionRepository, times(1)).save(isA(Question.class));
+        verifyNoMoreInteractions(mockedMemberRepository, mockedQuestionRepository);
     }
 
     @Test
@@ -120,6 +121,7 @@ public class MemberServiceImplTest {
 
         verify(mockedQuestionRepository, times(1)).save(isA(Question.class));
         verify(mockedMemberRepository, times(1)).update(isA(Member.class));
+        verifyNoMoreInteractions(mockedMemberRepository, mockedQuestionRepository);
     }
 
     @Test
@@ -136,6 +138,7 @@ public class MemberServiceImplTest {
         assertEquals("Unexpected error occurred: 500 Internal Server Error", actualException.getMessage());
 
         verify(mockedQuestionRepository, times(1)).save(isA(Question.class));
+        verifyNoMoreInteractions(mockedMemberRepository);
     }
 
 }

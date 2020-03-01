@@ -13,8 +13,9 @@ public class Notification {
     @EqualsAndHashCode.Include
     final private long id;
 
+    @Builder.Default
     @NonNull
-    final private LocalDateTime createdOn;
+    final private LocalDateTime createdOn = LocalDateTime.now();
 
     @NonNull
     private String content;
