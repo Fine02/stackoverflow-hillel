@@ -83,8 +83,8 @@ public class MemberServiceImplTest {
 
         //then
         assertEquals(expectedQuestion.getAuthor().getQuestions(), actualQuestion.getAuthor().getQuestions());
-        verify(mockedMemberRepository, times(1)).update(isA(Member.class));
-        verify(mockedQuestionRepository, times(1)).save(isA(Question.class));
+        verify(mockedMemberRepository).update(isA(Member.class));
+        verify(mockedQuestionRepository).save(isA(Question.class));
         verifyNoMoreInteractions(mockedMemberRepository, mockedQuestionRepository);
     }
 
@@ -102,8 +102,8 @@ public class MemberServiceImplTest {
 
         assertEquals("Unexpected error occurred: 500 Internal Server Error", actualException.getMessage());
 
-        verify(mockedMemberRepository, times(1)).update(isA(Member.class));
-        verify(mockedQuestionRepository, times(1)).save(isA(Question.class));
+        verify(mockedMemberRepository).update(isA(Member.class));
+        verify(mockedQuestionRepository).save(isA(Question.class));
         verifyNoMoreInteractions(mockedMemberRepository, mockedQuestionRepository);
     }
 
@@ -119,8 +119,8 @@ public class MemberServiceImplTest {
         //then
         assertEquals(expectedQuestion, actualQuestion);
 
-        verify(mockedQuestionRepository, times(1)).save(isA(Question.class));
-        verify(mockedMemberRepository, times(1)).update(isA(Member.class));
+        verify(mockedQuestionRepository).save(isA(Question.class));
+        verify(mockedMemberRepository).update(isA(Member.class));
         verifyNoMoreInteractions(mockedMemberRepository, mockedQuestionRepository);
     }
 
@@ -137,7 +137,7 @@ public class MemberServiceImplTest {
 
         assertEquals("Unexpected error occurred: 500 Internal Server Error", actualException.getMessage());
 
-        verify(mockedQuestionRepository, times(1)).save(isA(Question.class));
+        verify(mockedQuestionRepository).save(isA(Question.class));
         verifyNoMoreInteractions(mockedMemberRepository);
     }
 
