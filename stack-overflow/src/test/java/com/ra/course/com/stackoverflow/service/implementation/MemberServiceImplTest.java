@@ -30,6 +30,7 @@ public class MemberServiceImplTest {
     private Question expectedQuestion;
 
     private Question givenQuestion;
+    private Member givenMember;
 
 
     @BeforeEach
@@ -56,7 +57,7 @@ public class MemberServiceImplTest {
 
         expectedMember.setQuestions(Collections.singletonList(expectedQuestion));
 
-        Member givenMember = Member.builder()
+        givenMember = Member.builder()
                 .id(42L)
                 .account(Account.builder()
                         .id(1L)
@@ -77,14 +78,14 @@ public class MemberServiceImplTest {
     public void whenPostQuestionCalledReturnMemberWithExpectedQuestionList() throws InternalServerErrorException,
                                                                                 DataBaseOperationException {
         //when
-        when(mockedMemberRepository.update(isA(Member.class))).thenReturn(expectedMember);
-        when(mockedQuestionRepository.save(isA(Question.class))).thenReturn(expectedQuestion);
+        when(mockedMemberRepository.update(givenMember)).thenReturn(expectedMember);
+        when(mockedQuestionRepository.save(givenQuestion)).thenReturn(expectedQuestion);
         Question actualQuestion = memberService.postQuestion(givenQuestion);
 
         //then
         assertEquals(expectedQuestion.getAuthor().getQuestions(), actualQuestion.getAuthor().getQuestions());
-        verify(mockedMemberRepository).update(isA(Member.class));
-        verify(mockedQuestionRepository).save(isA(Question.class));
+        verify(mockedMemberRepository).update(givenMember);
+        verify(mockedQuestionRepository).save(givenQuestion);
         verifyNoMoreInteractions(mockedMemberRepository, mockedQuestionRepository);
     }
 
@@ -93,8 +94,8 @@ public class MemberServiceImplTest {
             DataBaseOperationException {
 
         //when
-        when(mockedMemberRepository.update(isA(Member.class))).thenThrow(DataBaseOperationException.class);
-        when(mockedQuestionRepository.save(isA(Question.class))).thenReturn(expectedQuestion);
+        when(mockedMemberRepository.update(givenMember)).thenThrow(DataBaseOperationException.class);
+        when(mockedQuestionRepository.save(givenQuestion)).thenReturn(expectedQuestion);
 
         //then
         Throwable actualException = assertThrows(InternalServerErrorException.class,
@@ -102,8 +103,8 @@ public class MemberServiceImplTest {
 
         assertEquals("Unexpected error occurred: 500 Internal Server Error", actualException.getMessage());
 
-        verify(mockedMemberRepository).update(isA(Member.class));
-        verify(mockedQuestionRepository).save(isA(Question.class));
+        verify(mockedMemberRepository).update(givenMember);
+        verify(mockedQuestionRepository).save(givenQuestion);
         verifyNoMoreInteractions(mockedMemberRepository, mockedQuestionRepository);
     }
 
@@ -112,15 +113,15 @@ public class MemberServiceImplTest {
             DataBaseOperationException {
 
         //when
-        when(mockedMemberRepository.update(isA(Member.class))).thenReturn(expectedMember);
-        when(mockedQuestionRepository.save(isA(Question.class))).thenReturn(expectedQuestion);
+        when(mockedMemberRepository.update(givenMember)).thenReturn(expectedMember);
+        when(mockedQuestionRepository.save(givenQuestion)).thenReturn(expectedQuestion);
         Question actualQuestion = memberService.postQuestion(givenQuestion);
 
         //then
         assertEquals(expectedQuestion, actualQuestion);
 
-        verify(mockedQuestionRepository).save(isA(Question.class));
-        verify(mockedMemberRepository).update(isA(Member.class));
+        verify(mockedQuestionRepository).save(givenQuestion);
+        verify(mockedMemberRepository).update(givenMember);
         verifyNoMoreInteractions(mockedMemberRepository, mockedQuestionRepository);
     }
 
@@ -129,7 +130,7 @@ public class MemberServiceImplTest {
             DataBaseOperationException {
 
         //when
-        when(mockedQuestionRepository.save(isA(Question.class))).thenThrow(DataBaseOperationException.class);
+        when(mockedQuestionRepository.save(givenQuestion)).thenThrow(DataBaseOperationException.class);
 
         //then
         Throwable actualException = assertThrows(InternalServerErrorException.class,
@@ -137,7 +138,7 @@ public class MemberServiceImplTest {
 
         assertEquals("Unexpected error occurred: 500 Internal Server Error", actualException.getMessage());
 
-        verify(mockedQuestionRepository).save(isA(Question.class));
+        verify(mockedQuestionRepository).save(givenQuestion);
         verifyNoMoreInteractions(mockedMemberRepository);
     }
 

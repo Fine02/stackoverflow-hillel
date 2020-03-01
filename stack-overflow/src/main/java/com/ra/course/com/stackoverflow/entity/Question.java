@@ -3,21 +3,18 @@ package com.ra.course.com.stackoverflow.entity;
 import com.ra.course.com.stackoverflow.entity.enums.QuestionClosingRemark;
 import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
 import com.ra.course.com.stackoverflow.entity.interfaces.Commentable;
-import com.ra.course.com.stackoverflow.entity.interfaces.Searchable;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @SuperBuilder
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Question implements Searchable, Commentable {
+public class Question implements Commentable {
 
     @EqualsAndHashCode.Include
     final private long id;

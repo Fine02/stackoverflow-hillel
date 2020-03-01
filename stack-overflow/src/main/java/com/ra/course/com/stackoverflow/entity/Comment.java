@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 public class Comment {
 
     @EqualsAndHashCode.Include
-    @Getter
     private final long id;
 
     @NonNull

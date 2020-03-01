@@ -4,23 +4,22 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
-@AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Notification {
 
     @EqualsAndHashCode.Include
-    final private long id;
-
-    @Builder.Default
-    @NonNull
-    final private LocalDateTime createdOn = LocalDateTime.now();
+    final private LocalDateTime createdOn;
 
     @NonNull
     private String content;
 
-    @NonNull
-    private List<Notification> notifications;
+    public Notification(String content) {
+        Objects.requireNonNull(content, "'content' argument must no be null");
 
+        this.content = content;
+        this.createdOn = LocalDateTime.now();
+    }
 }
