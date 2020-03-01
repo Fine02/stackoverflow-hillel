@@ -9,5 +9,6 @@ public enum QuestionClosingRemark {
     PRIMARLY_OPINION_BASED,
     ADVERTASING,
     ABUSE,
-    SPAM
+    SPAM,
+    NOT_MARKED_FOR_CLOSING
 }

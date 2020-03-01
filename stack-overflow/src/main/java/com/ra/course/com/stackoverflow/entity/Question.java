@@ -7,8 +7,12 @@ import com.ra.course.com.stackoverflow.entity.interfaces.Searchable;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @SuperBuilder
 @Data
@@ -22,38 +26,63 @@ public class Question implements Searchable, Commentable {
     private String title;
 
     @NonNull
-    private String description;
+    @Builder.Default
+    private String description = "";
 
-    private int viewCount;
+    @Builder.Default
+    private int viewCount = 0;
 
-    private int voteCount;
-
-    @NonNull
-    private LocalDateTime creationTime;
-
-    @NonNull
-    private LocalDateTime updateTime;
+    @Builder.Default
+    private int voteCount = 0;
 
     @NonNull
-    private QuestionStatus status;
+    @Builder.Default
+    private LocalDateTime creationTime = LocalDateTime.now();
 
     @NonNull
-    private QuestionClosingRemark closingRemark;
+    @Builder.Default
+    private LocalDateTime updateTime = LocalDateTime.now();
+
+    @NonNull
+    @Builder.Default
+    private QuestionStatus status = QuestionStatus.OPEN;
+
+    @NonNull
+    @Builder.Default
+    private QuestionClosingRemark closingRemark = QuestionClosingRemark.NOT_MARKED_FOR_CLOSING;
 
     @NonNull
     private Member author;
 
     @NonNull
-    private List<Comment> commentList;
+    @Builder.Default
+    private List<Comment> commentList = new ArrayList<>();
 
     @NonNull
-    private List<Answer> answerList;
+    @Builder.Default
+    private List<Answer> answerList = new ArrayList<>();
 
-    private Bounty bounty;
+    @Builder.Default
+    private Optional<Bounty> bounty = Optional.empty();
 
     @NonNull
-    private List<Photo> photoList;
+    @Builder.Default
+    private List<Photo> photoList = new ArrayList<>();
 
     @NonNull
-    private List<Tag> tagList;
+    @Builder.Default
+    private List<Tag> tagList = new ArrayList<>();
+
+    /*@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Question question = (Question) o;
+        return id == question.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }*/
 }
