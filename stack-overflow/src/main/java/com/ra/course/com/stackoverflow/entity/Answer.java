@@ -1,7 +1,6 @@
-package com.ra.course.com.stackoverflow.entity.implementations;
+package com.ra.course.com.stackoverflow.entity;
 
 import com.ra.course.com.stackoverflow.entity.interfaces.Commentable;
-import com.ra.course.com.stackoverflow.entity.interfaces.Searchable;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -32,7 +31,7 @@ public class Answer implements Commentable {
     private final Member author;
 
     @NonNull
-    private final Searchable question;
+    private final Question question;
 
     @NonNull
     private List<Photo> photos;

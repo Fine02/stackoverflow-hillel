@@ -1,7 +1,10 @@
-package com.ra.course.com.stackoverflow.entity.implementations;
+package com.ra.course.com.stackoverflow.entity;
 
 import com.ra.course.com.stackoverflow.entity.enums.AccountStatus;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
@@ -16,7 +19,8 @@ public class Account {
     private String password;
 
     @NonNull
-    private AccountStatus status;
+    @Builder.Default
+    private AccountStatus status = AccountStatus.ACTIVE;
 
     @NonNull
     private String name;
@@ -24,5 +28,6 @@ public class Account {
     @NonNull
     private String email;
 
-    private int reputation;
+    @Builder.Default
+    private int reputation = 0;
 }

@@ -1,9 +1,12 @@
-package com.ra.course.com.stackoverflow.entity.implementations;
+package com.ra.course.com.stackoverflow.entity;
 
-import com.ra.course.com.stackoverflow.entity.interfaces.Commentable;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 
 import java.time.LocalDateTime;
+import com.ra.course.com.stackoverflow.entity.interfaces.Commentable;
 
 @AllArgsConstructor
 @Data
@@ -11,7 +14,7 @@ import java.time.LocalDateTime;
 public class Photo {
 
     @EqualsAndHashCode.Include
-    private final long photoId;
+    private final long Id;
 
     @NonNull
     private String photoPath;
@@ -21,8 +24,4 @@ public class Photo {
 
     @NonNull
     private Commentable commentable;
-
-    @NonNull
-    private Answer answer;
-
 }

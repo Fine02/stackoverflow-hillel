@@ -1,6 +1,6 @@
 package com.ra.course.com.stackoverflow.repository.interfaces;
 
-import com.ra.course.com.stackoverflow.entity.implementations.Tag;
+import com.ra.course.com.stackoverflow.entity.Tag;
 
 import java.util.List;
 import java.util.Optional;

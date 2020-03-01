@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.entity.implementations;
+package com.ra.course.com.stackoverflow.entity;
 
 import com.ra.course.com.stackoverflow.entity.interfaces.Commentable;
 import lombok.*;
@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 public class Comment {
 
     @EqualsAndHashCode.Include
-    @Getter
     private final long id;
 
     @NonNull

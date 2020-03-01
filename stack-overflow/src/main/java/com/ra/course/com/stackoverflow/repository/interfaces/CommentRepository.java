@@ -1,6 +1,6 @@
 package com.ra.course.com.stackoverflow.repository.interfaces;
 
-import com.ra.course.com.stackoverflow.entity.implementations.Comment;
+import com.ra.course.com.stackoverflow.entity.Comment;
 
 import java.util.List;
 import java.util.Optional;
