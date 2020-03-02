@@ -1,7 +1,7 @@
 package com.ra.course.com.stackoverflow.exception.service;
 
 
-public class AnswerNotFoundException extends RuntimeException {
+public class AnswerNotFoundException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
