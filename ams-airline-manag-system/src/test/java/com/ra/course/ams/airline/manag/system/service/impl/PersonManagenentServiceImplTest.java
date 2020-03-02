@@ -133,29 +133,29 @@ public class PersonManagenentServiceImplTest {
                 verifyZeroInteractions(personRepository);
         }
 
-        @Test
-        public void testThatUpdateInstanceWithoutExceptions(){
-                Person personGiven = new Person.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+//        @Test
+//        public void testThatUpdateInstanceWithoutExceptions(){
+//                Person personGiven = new Person.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+//
+//                try {
+//                        personManagenentService.updateData(personGiven);
+//                } catch (Exception e) {
+//                        fail("Unexpected exception thrown");
+//                }
+//
+//                verify(personRepository, times(1)).updateInstance(any());
+//        }
 
-                try {
-                        personManagenentService.updateData(personGiven);
-                } catch (Exception e) {
-                        fail("Unexpected exception thrown");
-                }
-
-                verify(personRepository, times(1)).updateInstance(any());
-        }
-
-        @Test
-        public void testThatUpdateInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument(){
-                try {
-                        personManagenentService.updateData(null);
-                        fail("Expected NullPointerException to be thrown");
-                } catch (Exception e) {
-                        assertThat(e).isInstanceOf(NullPointerException.class);
-                }
-                verifyZeroInteractions(personRepository);
-        }
+//        @Test
+//        public void testThatUpdateInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument(){
+//                try {
+//                        personManagenentService.updateData(null);
+//                        fail("Expected NullPointerException to be thrown");
+//                } catch (Exception e) {
+//                        assertThat(e).isInstanceOf(NullPointerException.class);
+//                }
+//                verifyZeroInteractions(personRepository);
+//        }
 
         @Test
         public void testThatRemoveInstanceProcessWithoutExceptions(){

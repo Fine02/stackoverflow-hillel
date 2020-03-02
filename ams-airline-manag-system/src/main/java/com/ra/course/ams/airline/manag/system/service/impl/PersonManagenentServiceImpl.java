@@ -1,13 +1,14 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
+import com.ra.course.ams.airline.manag.system.entity.Address;
 import com.ra.course.ams.airline.manag.system.entity.person.Person;
 import com.ra.course.ams.airline.manag.system.exceptions.InstanceNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
-import com.ra.course.ams.airline.manag.system.service.UserManagementService;
+import com.ra.course.ams.airline.manag.system.service.PersonManagementService;
 
 import java.util.Collection;
 
-public class PersonManagenentServiceImpl implements UserManagementService<Person> {
+public class PersonManagenentServiceImpl implements PersonManagementService<Person> {
 
     private Repository<Person, String> personRepository;
     
@@ -44,12 +45,20 @@ public class PersonManagenentServiceImpl implements UserManagementService<Person
     }
 
     @Override
-    public void updateData(Person person) {
-        if (person == null) {
-            throw new NullPointerException("Cannot process update operation for null value argument.");
-        }
-        personRepository.updateInstance(person);
+    public Person updatePhone(Person person, String phone) {
+        return null;
     }
+
+    @Override
+    public Person updateEmail(Person person, String email) {
+        return null;
+    }
+
+    @Override
+    public Person updateAddress(Person person, Address address) {
+        return null;
+    }
+
 
     @Override
     public void remove(Person person) {

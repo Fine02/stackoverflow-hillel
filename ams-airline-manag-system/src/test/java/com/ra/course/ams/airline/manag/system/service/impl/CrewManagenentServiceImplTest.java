@@ -1,7 +1,10 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
+import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.entity.person.Person;
+import com.ra.course.ams.airline.manag.system.exceptions.CrewAlreadyExistException;
+import com.ra.course.ams.airline.manag.system.exceptions.CrewNotExistException;
 import com.ra.course.ams.airline.manag.system.exceptions.InstanceNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +35,96 @@ public class CrewManagenentServiceImplTest {
         }
 
         @Test
+        public void testThatAddFlightInstanceWithoutExceptions(){
+                Crew crewInRepo = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                when(crewRepository.getInstance(any())).thenReturn(crewInRepo);
+
+                Crew crew = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                FlightInstance flightInstanceToAdd = new FlightInstance();
+                Crew updatedCrew = crewManagenentService.addFlightInstance(crew, flightInstanceToAdd);
+
+                assertThat(updatedCrew).isEqualTo(crew);
+                assertThat(updatedCrew.getFlightInstances()).hasSize(1);
+                assertThat(updatedCrew.getFlightInstances().get(0)).isEqualTo(flightInstanceToAdd);
+
+                verify(crewRepository, times(1)).updateInstance(eq(crewInRepo));
+                verify(crewRepository, times(1)).getInstance(any());
+                verifyNoMoreInteractions(crewRepository);
+        }
+
+        @Test
+        public void testThatAddFlightInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument(){
+                try {
+                        crewManagenentService.addFlightInstance(null, null);
+                        fail("Expected NullPointerException to be thrown");
+                } catch (Exception e) {
+                        assertThat(e).isInstanceOf(NullPointerException.class);
+                }
+                verifyZeroInteractions(crewRepository);
+        }
+
+        @Test
+        public void testThatAddFlightInstanceThrowCrewNotExistExceptionIfNoSuchCrewFind(){
+                when(crewRepository.getInstance(any())).thenReturn(null);
+                try {
+                        Crew crew = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                        FlightInstance flightInstanceToAdd = new FlightInstance();
+                        crewManagenentService.addFlightInstance(crew, flightInstanceToAdd);
+                        fail("Expected CrewNotExistException to be thrown");
+                } catch (Exception e) {
+                        assertThat(e).isInstanceOf(CrewNotExistException.class);
+                }
+                verify(crewRepository, times(1)).getInstance(any());
+                verifyNoMoreInteractions(crewRepository);
+        }
+
+        @Test
+        public void testThatRemoveFlightInstanceWithoutExceptions(){
+                FlightInstance flightInstanceToRemove = new FlightInstance();
+                Crew crewInRepo = new Crew.Builder().setName("Ivanov Ivan")
+                        .setEmail("ivanov@example.com").setPhone("11111").addFlightInstance(flightInstanceToRemove).build();
+                when(crewRepository.getInstance(any())).thenReturn(crewInRepo);
+
+                Crew crew = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                Crew updatedCrew = crewManagenentService.removeFlightInstance(crew, flightInstanceToRemove);
+
+                assertThat(updatedCrew).isEqualTo(crew);
+                assertThat(updatedCrew.getFlightInstances()).isEmpty();
+                assertThat(crewInRepo.getFlightInstances()).isEmpty();
+
+                verify(crewRepository, times(1)).updateInstance(eq(crewInRepo));
+                verify(crewRepository, times(1)).getInstance(any());
+                verifyNoMoreInteractions(crewRepository);
+        }
+
+        @Test
+        public void testThatRemoveFlightInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument(){
+                try {
+                        crewManagenentService.removeFlightInstance(null, null);
+                        fail("Expected NullPointerException to be thrown");
+                } catch (Exception e) {
+                        assertThat(e).isInstanceOf(NullPointerException.class);
+                }
+                verifyZeroInteractions(crewRepository);
+        }
+
+        @Test
+        public void testThatRemoveFlightInstanceThrowCrewNotExistExceptionIfNoSuchCrewFind(){
+                when(crewRepository.getInstance(any())).thenReturn(null);
+                try {
+                        Crew crew = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                        FlightInstance flightInstanceToRemove = new FlightInstance();
+                        crewManagenentService.addFlightInstance(crew, flightInstanceToRemove);
+                        fail("Expected CrewNotExistException to be thrown");
+                } catch (Exception e) {
+                        assertThat(e).isInstanceOf(CrewNotExistException.class);
+                }
+                verify(crewRepository, times(1)).getInstance(any());
+                verifyNoMoreInteractions(crewRepository);
+        }
+
+
+        @Test
         public void testThatFindByEmailReturnsCrew(){
                 when(crewRepository.getInstances()).thenReturn(getCrew());
                 Crew crew = crewManagenentService.findByEmail("ivanov@example.com");
@@ -41,6 +134,7 @@ public class CrewManagenentServiceImplTest {
                 assertThat(crew.getEmail()).isEqualTo("ivanov@example.com");
 
                 verify(crewRepository, times(1)).getInstances();
+                verifyNoMoreInteractions(crewRepository);
         }
 
         @Test
@@ -55,17 +149,17 @@ public class CrewManagenentServiceImplTest {
         }
 
         @Test
-        public void testThatFindByEmailThrowsNoSuchElementExceptionWhenCallingWhenCannotFindPersonWithEmail(){
+        public void testThatFindByEmailThrowsCrewNotExistExceptionWhenCallingWhenCannotFindPersonWithEmail(){
                 when(crewRepository.getInstances()).thenReturn(getCrew());
 
                 try {
                         crewManagenentService.findByEmail("unknown@example.com");
-                        fail("Expected NoSuchElementException to be thrown");
+                        fail("Expected CrewNotExistException to be thrown");
                 } catch (Exception e) {
-                        assertThat(e).isInstanceOf(NoSuchElementException.class);
+                        assertThat(e).isInstanceOf(CrewNotExistException.class);
                 }
-
                 verify(crewRepository, times(1)).getInstances();
+                verifyNoMoreInteractions(crewRepository);
         }
 
         @Test
@@ -79,17 +173,17 @@ public class CrewManagenentServiceImplTest {
         }
 
         @Test
-        public void testThatFindByPhoneReturnsCrewThrowsInstanceNotExistExceptionWhenNoSuchPersonAvalialable(){
+        public void testThatFindByPhoneReturnsCrewThrowsCrewNotExistExceptionWhenNoSuchPersonAvalialable(){
                 when(crewRepository.getInstance(any(String.class))).thenReturn(null);
 
                 try {
                         crewManagenentService.findByPhoneNumber("11111");
-                        fail("Expected InstanceNotExistException to be thrown");
+                        fail("Expected CrewNotExistException to be thrown");
                 } catch (Exception e) {
-                        assertThat(e).isInstanceOf(InstanceNotExistException.class);
+                        assertThat(e).isInstanceOf(CrewNotExistException.class);
                 }
 
-                verify(crewRepository, times(1)).getInstance("11111");
+                verify(crewRepository, times(1)).getInstance(any());
         }
 
         @Test
@@ -105,12 +199,32 @@ public class CrewManagenentServiceImplTest {
 
         @Test
         public void testThatAddInstanceReturnsCrew(){
-                Crew crewGiven = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
-                when(crewRepository.addInstance(any())).thenReturn(crewGiven);
+                when(crewRepository.getInstance(any())).thenReturn(null);
 
-                Person person = crewManagenentService.add(crewGiven);
-                assertThat(person).isEqualToComparingFieldByField(crewGiven);
+                Crew crewToAdd = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                Crew crew = crewManagenentService.add(crewToAdd);
+
+                assertThat(crew).isEqualToComparingFieldByField(crewToAdd);
+                verify(crewRepository, times(1)).getInstance(any());
                 verify(crewRepository, times(1)).addInstance(any());
+                verifyNoMoreInteractions(crewRepository);
+        }
+
+        @Test
+        public void testThatAddInstanceThrowsCrewAlreadyExistExceptionWhenTryToAddExistingCrew(){
+                Crew crewInRepo = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                when(crewRepository.getInstance(any())).thenReturn(crewInRepo);
+
+                Crew crewToAdd = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                try {
+                        crewManagenentService.add(crewToAdd);
+                        fail("Expected CrewAlreadyExistException to be thrown");
+                } catch (Exception e) {
+                        assertThat(e).isInstanceOf(CrewAlreadyExistException.class);
+                }
+
+                verify(crewRepository, times(1)).getInstance(any());
+                verifyNoMoreInteractions(crewRepository);
         }
 
         @Test
@@ -125,22 +239,25 @@ public class CrewManagenentServiceImplTest {
         }
 
         @Test
-        public void testThatUpdateInstanceWithoutExceptions(){
-                Crew crewGiven = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+        public void testThatUpdatePhoneNumberWithoutExceptions(){
+                Crew crewInRepo = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                when(crewRepository.getInstance(any())).thenReturn(crewInRepo);
 
-                try {
-                        crewManagenentService.updateData(crewGiven);
-                } catch (Exception e) {
-                        fail("Unexpected exception thrown");
-                }
+                Crew crew = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                Crew updatedCrew = crewManagenentService.updatePhone(crew, "55285");
 
-                verify(crewRepository, times(1)).updateInstance(any());
+                assertThat(updatedCrew).isEqualTo(crew);
+                assertThat(updatedCrew.getPhone()).isEqualTo("55285");
+
+                verify(crewRepository, times(1)).updateInstance(eq(crewInRepo));
+                verify(crewRepository, times(1)).getInstance(any());
+                verifyNoMoreInteractions(crewRepository);
         }
 
         @Test
-        public void testThatUpdateInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument(){
+        public void testThatUpdatePhoneNumberThrowNullPointerExceptionWhenCallWithNullValueArgument(){
                 try {
-                        crewManagenentService.updateData(null);
+                        crewManagenentService.updatePhone(null, "55285");
                         fail("Expected NullPointerException to be thrown");
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(NullPointerException.class);
@@ -149,16 +266,71 @@ public class CrewManagenentServiceImplTest {
         }
 
         @Test
-        public void testThatRemoveInstanceProcessWithoutExceptions(){
-                Crew crewGiven = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
-
+        public void testThatUpdatePhoneNumberThrowCrewNotExistExceptionIfNoSuchCrewFind(){
+                when(crewRepository.getInstance(any())).thenReturn(null);
                 try {
-                        crewManagenentService.remove(crewGiven);
+                        Crew crew = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                        crewManagenentService.updatePhone(crew, "55285");
+                        fail("Expected CrewNotExistException to be thrown");
                 } catch (Exception e) {
-                        fail("Unexpected exception thrown");
+                        assertThat(e).isInstanceOf(CrewNotExistException.class);
                 }
+                verify(crewRepository, times(1)).getInstance(any());
+                verifyNoMoreInteractions(crewRepository);
+        }
 
-                verify(crewRepository, times(1)).removeInstance(any());
+        @Test
+        public void testThatUpdateEmailWithoutExceptions(){
+                Crew crewInRepo = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                when(crewRepository.getInstance(any())).thenReturn(crewInRepo);
+
+                Crew crew = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                Crew updatedCrew = crewManagenentService.updateEmail(crew, "ivanov@test.com");
+
+                assertThat(updatedCrew).isEqualTo(crew);
+                assertThat(updatedCrew.getEmail()).isEqualTo("ivanov@test.com");
+
+                verify(crewRepository, times(1)).updateInstance(eq(crewInRepo));
+                verify(crewRepository, times(1)).getInstance(any());
+                verifyNoMoreInteractions(crewRepository);
+        }
+
+        @Test
+        public void testThatUpdateEmailThrowNullPointerExceptionWhenCallWithNullValueArgument(){
+                try {
+                        crewManagenentService.updateEmail(null, "ivanov@test.com");
+                        fail("Expected NullPointerException to be thrown");
+                } catch (Exception e) {
+                        assertThat(e).isInstanceOf(NullPointerException.class);
+                }
+                verifyZeroInteractions(crewRepository);
+        }
+
+        @Test
+        public void testThatUpdateEmailThrowCrewNotExistExceptionIfNoSuchCrewFind(){
+                when(crewRepository.getInstance(any())).thenReturn(null);
+                try {
+                        Crew crew = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                        crewManagenentService.updateEmail(crew, "ivanov@test.com");
+                        fail("Expected CrewNotExistException to be thrown");
+                } catch (Exception e) {
+                        assertThat(e).isInstanceOf(CrewNotExistException.class);
+                }
+                verify(crewRepository, times(1)).getInstance(any());
+                verifyNoMoreInteractions(crewRepository);
+        }
+
+        @Test
+        public void testThatRemoveCrewWithoutExceptions(){
+                Crew crewInRepo = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                when(crewRepository.getInstance(any())).thenReturn(crewInRepo);
+
+                Crew crewToRemove = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                crewManagenentService.remove(crewToRemove);
+
+                verify(crewRepository, times(1)).removeInstance(eq(crewInRepo));
+                verify(crewRepository, times(1)).getInstance(any());
+                verifyNoMoreInteractions(crewRepository);
         }
 
         @Test
@@ -170,6 +342,21 @@ public class CrewManagenentServiceImplTest {
                         assertThat(e).isInstanceOf(NullPointerException.class);
                 }
                 verifyZeroInteractions(crewRepository);
+        }
+
+        @Test
+        public void testThatRemoveInstanceThrowCrewNotExistExceptionWhenCallWithNullValueArgument(){
+                when(crewRepository.getInstance(any())).thenReturn(null);
+
+                try {
+                        Crew crew = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+                        crewManagenentService.remove(crew);
+                        fail("Expected CrewNotExistException to be thrown");
+                } catch (Exception e) {
+                        assertThat(e).isInstanceOf(CrewNotExistException.class);
+                }
+                verify(crewRepository, times(1)).getInstance(any());
+                verifyNoMoreInteractions(crewRepository);
         }
 
         private static Collection<Crew> getCrew() {
