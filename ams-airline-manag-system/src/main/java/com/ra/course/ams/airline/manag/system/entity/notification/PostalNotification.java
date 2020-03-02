@@ -1,14 +1,19 @@
 package com.ra.course.ams.airline.manag.system.entity.notification;
 
 import com.ra.course.ams.airline.manag.system.entity.Address;
+import com.ra.course.ams.airline.manag.system.entity.FlightReservation;
 
 import java.util.Date;
 
 public class PostalNotification extends Notification {
     private Address address;
 
-    public PostalNotification(int notificationId, Date createdOn, String content, Address address) {
-        super(notificationId, createdOn, content);
+    public PostalNotification(Address address) {
+        this.address = address;
+    }
+
+    public PostalNotification(FlightReservation flightReservation, int notificationId, Date createdOn, String content, Address address) {
+        super(flightReservation, notificationId, createdOn, content);
         this.address = address;
     }
 

@@ -1,12 +1,14 @@
 package com.ra.course.ams.airline.manag.system.entity.notification;
 
+import com.ra.course.ams.airline.manag.system.entity.FlightReservation;
+
 import java.util.Date;
 
 public class SmsNotification extends Notification {
     private String email;
 
-    public SmsNotification(int notificationId, Date createdOn, String content, String email) {
-        super(notificationId, createdOn, content);
+    public SmsNotification(FlightReservation flightReservation, int notificationId, Date createdOn, String content, String email) {
+        super(flightReservation, notificationId, createdOn, content);
         this.email = email;
     }
 
