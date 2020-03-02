@@ -1,7 +1,6 @@
 package com.ra.course.ams.airline.manag.system.service.impl.payment;
 
 import com.ra.course.ams.airline.manag.system.entity.payment.CashTransaction;
-import com.ra.course.ams.airline.manag.system.entity.payment.CheckTransaction;
 import com.ra.course.ams.airline.manag.system.entity.payment.PaymentStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

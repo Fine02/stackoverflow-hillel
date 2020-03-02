@@ -1,6 +1,5 @@
 package com.ra.course.ams.airline.manag.system.service.impl.payment;
 
-import com.ra.course.ams.airline.manag.system.entity.payment.CheckTransaction;
 import com.ra.course.ams.airline.manag.system.entity.payment.CreditCardTransaction;
 import com.ra.course.ams.airline.manag.system.entity.payment.PaymentStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +13,6 @@ public class CreditCardTransactionServiceTest {
     private CreditCardTransactionService creditCardTransactionService;
     private CreditCardTransaction failedCreditCardTransaction;
     private CreditCardTransaction confirmedCreditCardTransaction;
-
 
     @BeforeEach
     public void createTransaction() {
