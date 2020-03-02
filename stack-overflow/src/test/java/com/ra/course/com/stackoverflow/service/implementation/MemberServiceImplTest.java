@@ -9,7 +9,6 @@ import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 import com.ra.course.com.stackoverflow.service.MemberService;
 
-import com.ra.course.com.stackoverflow.service.implementation.MemberServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
