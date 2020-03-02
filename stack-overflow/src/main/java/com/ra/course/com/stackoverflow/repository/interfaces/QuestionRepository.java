@@ -2,6 +2,7 @@ package com.ra.course.com.stackoverflow.repository.interfaces;
 
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
+import com.ra.course.com.stackoverflow.entity.Tag;
 import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
 
 import java.util.List;
@@ -24,4 +25,10 @@ public interface QuestionRepository  {
     List<Question> findAllByTitle(String title);
 
     List<Question> findAllMemberQuestions(Member member);
+
+    List<Question> findByTag(Tag tag);
+
+    List<Question> findByTitle(String searchPhrase);
+
+    List<Question> findByTitleAndTag(String searchPhrase, Tag tag);
 }

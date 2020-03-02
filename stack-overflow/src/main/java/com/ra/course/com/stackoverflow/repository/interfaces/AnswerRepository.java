@@ -24,4 +24,6 @@ public interface AnswerRepository  {
     List<Answer> listAnswersForQuestion(Question question);
 
     List<Answer> findAllMemberAnswers(Member member);
+
+    List<Answer> findByQuestionId(long id);
 }
