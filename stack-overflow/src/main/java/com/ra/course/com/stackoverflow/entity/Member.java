@@ -51,6 +51,18 @@ public class Member {
     @NonNull
     private List<Long> votedComments = new ArrayList<>();
 
+    @Builder.Default
+    @NonNull
+    private List<Long> downVotedQuestions = new ArrayList<>();
+
+    @Builder.Default
+    @NonNull
+    private List<Long> downVotedAnswers = new ArrayList<>();
+
+    @Builder.Default
+    @NonNull
+    private List<Long> downVotedComments = new ArrayList<>();
+
 
     public int getReputation() {
         return this.account.getReputation();

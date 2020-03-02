@@ -14,11 +14,13 @@ public class Comment {
     @EqualsAndHashCode.Include
     private final long id;
 
+    @Builder.Default
     @NonNull
-    private String text;
+    private String text = " ";
 
+    @Builder.Default
     @NonNull
-    private LocalDateTime creationDate;
+    private LocalDateTime creationDate = LocalDateTime.now();
 
     private int voteCount;
 
