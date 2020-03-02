@@ -1,9 +1,9 @@
 package com.ra.course.com.stackoverflow.service.implementations;
 
 import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
-import com.ra.course.com.stackoverflow.entity.implementations.Answer;
-import com.ra.course.com.stackoverflow.entity.implementations.Question;
-import com.ra.course.com.stackoverflow.exception.QuestionClosedException;
+import com.ra.course.com.stackoverflow.entity.Answer;
+import com.ra.course.com.stackoverflow.entity.Question;
+import com.ra.course.com.stackoverflow.exception.service.QuestionClosedException;
 import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 import com.ra.course.com.stackoverflow.service.interfaces.AnswerService;
@@ -26,9 +26,8 @@ public class AnswerServiceImpl implements AnswerService<Answer, Question> {
     public Answer addAnswerToQuestion(@NonNull final Answer answer, @NonNull final Question question) {
 
         if (!question.getStatus().equals(QuestionStatus.OPEN)) {
-            throw new QuestionClosedException();
+            throw new QuestionClosedException("addAnswerToQuestion: QuestionStatus is: " + question.getStatus());
         }
-
 
         question.getAnswerList().add(answer);
         questionRepo.update(question); //if it necessary

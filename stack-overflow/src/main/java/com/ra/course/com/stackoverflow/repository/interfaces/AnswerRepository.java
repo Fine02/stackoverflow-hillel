@@ -1,8 +1,8 @@
 package com.ra.course.com.stackoverflow.repository.interfaces;
 
-import com.ra.course.com.stackoverflow.entity.implementations.Answer;
-import com.ra.course.com.stackoverflow.entity.implementations.Member;
-import com.ra.course.com.stackoverflow.entity.implementations.Question;
+import com.ra.course.com.stackoverflow.entity.Answer;
+import com.ra.course.com.stackoverflow.entity.Member;
+import com.ra.course.com.stackoverflow.entity.Question;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,4 +24,6 @@ public interface AnswerRepository  {
     List<Answer> listAnswersForQuestion(Question question);
 
     List<Answer> findAllMemberAnswers(Member member);
+
+    List<Answer> findByQuestionId(long id);
 }

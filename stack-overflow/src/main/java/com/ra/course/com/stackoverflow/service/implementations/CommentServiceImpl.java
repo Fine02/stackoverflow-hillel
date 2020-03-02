@@ -1,8 +1,8 @@
 package com.ra.course.com.stackoverflow.service.implementations;
 
-import com.ra.course.com.stackoverflow.entity.implementations.Answer;
-import com.ra.course.com.stackoverflow.entity.implementations.Comment;
-import com.ra.course.com.stackoverflow.entity.implementations.Question;
+import com.ra.course.com.stackoverflow.entity.Answer;
+import com.ra.course.com.stackoverflow.entity.Comment;
+import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.CommentRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;

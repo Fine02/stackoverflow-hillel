@@ -1,7 +1,7 @@
 package com.ra.course.com.stackoverflow.service.interfaces;
 
-import com.ra.course.com.stackoverflow.entity.implementations.Answer;
-import com.ra.course.com.stackoverflow.entity.implementations.Question;
+import com.ra.course.com.stackoverflow.entity.Answer;
+import com.ra.course.com.stackoverflow.entity.Question;
 
 public interface CommentService<T> {
 
