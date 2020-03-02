@@ -18,13 +18,22 @@ public class Crew extends Person {
         this.flightInstances = flightInstances;
     }
 
-    public Crew(Builder builder) {
+    private Crew(Builder builder) {
         this.setName(builder.name);
         this.setEmail(builder.email);
         this.setPhone(builder.phone);
         this.setAddress(builder.address);
         flightInstances = builder.flightInstances;
     }
+
+    public Crew(Crew crew) {
+        this.setName(crew.getName());
+        this.setEmail(crew.getEmail());
+        this.setPhone(crew.getPhone());
+        this.setAddress(crew.getAddress());
+        flightInstances = crew.getFlightInstances();
+    }
+
 
     public static class Builder {
         private transient String name;
