@@ -57,41 +57,37 @@ public class Airline {
         return name;
     }
 
-    public Airline setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
 
     public String getCode() {
         return code;
     }
 
-    public Airline setCode(String code) {
+    public void setCode(String code) {
         this.code = code;
-        return this;
     }
 
     public List<Flight> getFlights() {
         return flights;
     }
 
-    public Airline setFlights(List<Flight> flights) {
+    public void setFlights(List<Flight> flights) {
         this.flights = flights;
-        return this;
     }
 
     public List<Aircraft> getAircrafts() {
         return aircrafts;
     }
 
-    public Airline setAircrafts(List<Aircraft> aircrafts) {
+    public void setAircrafts(List<Aircraft> aircrafts) {
         this.aircrafts = aircrafts;
-        return this;
     }
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("com.ra.course.ams.airline.manag.system.entity.flight.Airline{");
+        final StringBuffer sb = new StringBuffer("Airline{");
         sb.append("\"name\": \"").append(name).append('"');
         sb.append(", \"code\": \"").append(code).append('"');
         sb.append(", \"flights\":").append(flights);

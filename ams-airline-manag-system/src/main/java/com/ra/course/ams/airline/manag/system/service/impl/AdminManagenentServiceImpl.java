@@ -1,69 +1,69 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
-import com.ra.course.ams.airline.manag.system.entity.person.Person;
+import com.ra.course.ams.airline.manag.system.entity.person.Admin;
 import com.ra.course.ams.airline.manag.system.exceptions.InstanceNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 import com.ra.course.ams.airline.manag.system.service.UserManagementService;
 
 import java.util.Collection;
 
-public class UserManagenentServiceImpl implements UserManagementService<Person> {
+public class AdminManagenentServiceImpl implements UserManagementService<Admin> {
 
-    private Repository<Person, String> personRepository;
+    private Repository<Admin, String> adminRepository;
     
     @Override
-    public Person findByEmail(String email) {
+    public Admin findByEmail(String email) {
         if (email == null || email.isBlank()) {
             throw new IllegalArgumentException("Email address for search cannot be null, empty or blank");
         }
-        Collection<Person> persons = personRepository.getInstances();
-        return persons.stream()
-                .filter(person -> email.equals(person.getEmail()))
+        Collection<Admin> admins = adminRepository.getInstances();
+        return admins.stream()
+                .filter(admin -> email.equals(admin.getEmail()))
                 .findAny()
                 .orElseThrow();
     }
 
     @Override
-    public Person findByPhoneNumber(String phone) {
+    public Admin findByPhoneNumber(String phone) {
         if (phone == null || phone.isBlank()) {
             throw new IllegalArgumentException("Phone for search cannot be null, empty or blank");
         }
-        Person person = personRepository.getInstance(phone);
+        Admin person = adminRepository.getInstance(phone);
         if (person == null) {
-            throw new InstanceNotExistException("No person found for given phone number");
+            throw new InstanceNotExistException("No admin found for given phone number");
         }
         return person;
     }
 
     @Override
-    public Person add(Person person) {
-        if (person == null) {
+    public Admin add(Admin admin) {
+        if (admin == null) {
             throw new NullPointerException("Cannot process add operation for null value argument.");
         }
-        return personRepository.addInstance(person);
+        return adminRepository.addInstance(admin);
     }
 
     @Override
-    public void updateData(Person person) {
-        if (person == null) {
+    public void updateData(Admin admin) {
+        if (admin == null) {
             throw new NullPointerException("Cannot process update operation for null value argument.");
         }
-        personRepository.updateInstance(person);
+        adminRepository.updateInstance(admin);
     }
 
     @Override
-    public void remove(Person person) {
-        if (person == null) {
+    public void remove(Admin admin) {
+        if (admin == null) {
             throw new NullPointerException("Cannot process remove operation for null value argument.");
         }
-        personRepository.removeInstance(person);
+        adminRepository.removeInstance(admin);
     }
 
-    public Repository<Person, String> getPersonRepository() {
-        return personRepository;
+    public Repository<Admin, String> getAdminRepository() {
+        return adminRepository;
     }
 
-    public void setPersonRepository(Repository<Person, String> personRepository) {
-        this.personRepository = personRepository;
+    public void setAdminRepository(Repository<Admin, String> adminRepository) {
+        this.adminRepository = adminRepository;
     }
 }
