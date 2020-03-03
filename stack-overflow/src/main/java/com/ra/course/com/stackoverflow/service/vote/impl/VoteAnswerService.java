@@ -31,13 +31,13 @@ public class VoteAnswerService implements VoteService<Answer> {
         final var memberFromDB = checkMember(member);
 
         checkTheAuthorOfAnswer(answerFromDB, memberFromDB);
-        checkIsAlreadyVoted(answerFromDB.getId(), memberFromDB.getVotedAnswers());
+        checkIsAlreadyVoted(answerFromDB.getId(), memberFromDB.getUpVotedAnswersId());
 
         final var voteCount = answerFromDB.getVoteCount() + 1;
         answerFromDB.setVoteCount(voteCount);
         answerData.update(answerFromDB);
 
-        memberFromDB.getVotedAnswers().add(answerFromDB.getId());
+        memberFromDB.getUpVotedAnswersId().add(answerFromDB.getId());
         updateMemberWithNewReputation(memberFromDB);
 
         answer.setVoteCount(voteCount);
@@ -54,13 +54,13 @@ public class VoteAnswerService implements VoteService<Answer> {
         final var memberFromDB = checkMember(member);
 
         checkTheAuthorOfAnswer(answerFromDB, memberFromDB);
-        checkIsAlreadyVoted(answerFromDB.getId(), memberFromDB.getDownVotedAnswers());
+        checkIsAlreadyVoted(answerFromDB.getId(), memberFromDB.getDownVotedAnswersId());
 
         final var voteCount = answerFromDB.getVoteCount() - 1;
         answerFromDB.setVoteCount(voteCount);
         answerData.update(answerFromDB);
 
-        memberFromDB.getDownVotedAnswers().add(answerFromDB.getId());
+        memberFromDB.getDownVotedAnswersId().add(answerFromDB.getId());
         updateMemberWithNewReputation(memberFromDB);
 
         answer.setVoteCount(voteCount);
@@ -92,7 +92,7 @@ public class VoteAnswerService implements VoteService<Answer> {
         }
     }
 
-    private void updateMemberWithNewReputation (Member member) throws DataBaseOperationException{
+    private void updateMemberWithNewReputation (final Member member) throws DataBaseOperationException{
         final int reputation = member.getReputation() + ADDED_REPUTATION;
         member.getAccount().setReputation(reputation);
         memberData.update(member);

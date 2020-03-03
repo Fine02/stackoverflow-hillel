@@ -21,7 +21,6 @@ public class VoteQuestionService implements VoteService<Question> {
     private transient final MemberRepository memberData;
     private transient final static int ADDED_REPUTATION = 5;
 
-
     @Override
     public Question upVote( final Question question, final Member member)
             throws DataBaseOperationException,
@@ -32,13 +31,13 @@ public class VoteQuestionService implements VoteService<Question> {
         final var memberFromDB = checkMember(member);
 
         checkTheAuthorOfQuestion(questionFromDB, memberFromDB);
-        checkIsAlreadyVoted(questionFromDB.getId(), memberFromDB.getVotedQuestions());
+        checkIsAlreadyVoted(questionFromDB.getId(), memberFromDB.getUpVotedQuestionsId());
 
         final var voteCount = questionFromDB.getVoteCount() + 1;
         questionFromDB.setVoteCount(voteCount);
         questionData.update(questionFromDB);
 
-        memberFromDB.getVotedQuestions().add(questionFromDB.getId());
+        memberFromDB.getUpVotedQuestionsId().add(questionFromDB.getId());
         updateMemberWithNewReputation(memberFromDB);
 
         question.setVoteCount(voteCount);
@@ -55,13 +54,13 @@ public class VoteQuestionService implements VoteService<Question> {
         final var memberFromDB = checkMember(member);
 
         checkTheAuthorOfQuestion(questionFromDB, memberFromDB);
-        checkIsAlreadyVoted(questionFromDB.getId(), memberFromDB.getDownVotedQuestions());
+        checkIsAlreadyVoted(questionFromDB.getId(), memberFromDB.getDownVotedQuestionsId());
 
         final var voteCount = questionFromDB.getVoteCount() - 1;
         questionFromDB.setVoteCount(voteCount);
         questionData.update(questionFromDB);
 
-        memberFromDB.getDownVotedQuestions().add(questionFromDB.getId());
+        memberFromDB.getDownVotedQuestionsId().add(questionFromDB.getId());
         updateMemberWithNewReputation(memberFromDB);
 
         question.setVoteCount(voteCount);
@@ -93,7 +92,7 @@ public class VoteQuestionService implements VoteService<Question> {
         }
     }
 
-    private void updateMemberWithNewReputation (Member member) throws DataBaseOperationException{
+    private void updateMemberWithNewReputation (final Member member) throws DataBaseOperationException{
         final int reputation = member.getReputation() + ADDED_REPUTATION;
         member.getAccount().setReputation(reputation);
         memberData.update(member);

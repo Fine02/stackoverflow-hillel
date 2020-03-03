@@ -89,7 +89,7 @@ public class UpVoteAnswerServiceTest {
     public void whenMemberIsAlreadyVotedTheAnswerThenThrowsAlreadyVotedException() {
         //given
         var wantToVoteMember = mockMember(ID1);
-        wantToVoteMember.getVotedAnswers().add(ID1);
+        wantToVoteMember.getUpVotedAnswersId().add(ID1);
         var author = mockMember(ID2);
         var answer = mockAnswer(author);
         when(answerData.findById(ID1)).thenReturn(Optional.of(answer));
@@ -116,7 +116,7 @@ public class UpVoteAnswerServiceTest {
         //then
         assertEquals(1, answerAfterVoting.getVoteCount());
         assertEquals(10, wantToVoteMember.getReputation());
-        assertTrue(wantToVoteMember.getVotedAnswers().contains(ID1));
+        assertTrue(wantToVoteMember.getUpVotedAnswersId().contains(ID1));
 
         verify(answerData).findById(ID1);
         verify(memberData).findById(ID1);

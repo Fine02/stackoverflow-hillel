@@ -41,27 +41,27 @@ public class Member {
 
     @Builder.Default
     @NonNull
-    private List<Long> votedQuestions = new ArrayList<>();
+    private List<Long> upVotedQuestionsId = new ArrayList<>();
 
     @Builder.Default
     @NonNull
-    private List<Long> votedAnswers = new ArrayList<>();
+    private List<Long> upVotedAnswersId = new ArrayList<>();
 
     @Builder.Default
     @NonNull
-    private List<Long> votedComments = new ArrayList<>();
+    private List<Long> upVotedCommentsId = new ArrayList<>();
 
     @Builder.Default
     @NonNull
-    private List<Long> downVotedQuestions = new ArrayList<>();
+    private List<Long> downVotedQuestionsId = new ArrayList<>();
 
     @Builder.Default
     @NonNull
-    private List<Long> downVotedAnswers = new ArrayList<>();
+    private List<Long> downVotedAnswersId = new ArrayList<>();
 
     @Builder.Default
     @NonNull
-    private List<Long> downVotedComments = new ArrayList<>();
+    private List<Long> downVotedCommentsId = new ArrayList<>();
 
 
     public int getReputation() {

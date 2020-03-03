@@ -16,7 +16,7 @@ public class Comment {
 
     @Builder.Default
     @NonNull
-    private String text = " ";
+    private String text = "";
 
     @Builder.Default
     @NonNull

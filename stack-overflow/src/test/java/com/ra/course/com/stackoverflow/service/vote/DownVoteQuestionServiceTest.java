@@ -10,7 +10,6 @@ import com.ra.course.com.stackoverflow.exception.vote_service.CannotVoteOwnPostE
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 import com.ra.course.com.stackoverflow.service.vote.impl.VoteQuestionService;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -89,7 +88,7 @@ public class DownVoteQuestionServiceTest {
     public void whenMemberIsAlreadyVotedTheQuestionThenThrowsAlreadyVotedException() {
         //given
         var wantToVoteMember = mockMember(ID1);
-        wantToVoteMember.getDownVotedQuestions().add(ID1);
+        wantToVoteMember.getDownVotedQuestionsId().add(ID1);
         var author = mockMember(ID2);
         var question = mockQuestion(author);
         when(questionData.findById(ID1)).thenReturn(Optional.of(question));
@@ -116,7 +115,7 @@ public class DownVoteQuestionServiceTest {
         //then
         assertEquals(-1, questionAfterVoting.getVoteCount());
         assertEquals(5, wantToVoteMember.getReputation());
-        assertTrue(wantToVoteMember.getDownVotedQuestions().contains(ID1));
+        assertTrue(wantToVoteMember.getDownVotedQuestionsId().contains(ID1));
 
         verify(questionData).findById(ID1);
         verify(memberData).findById(ID1);

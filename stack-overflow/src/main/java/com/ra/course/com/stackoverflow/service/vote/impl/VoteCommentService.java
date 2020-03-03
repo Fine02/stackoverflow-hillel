@@ -31,13 +31,13 @@ public class VoteCommentService implements VoteService<Comment> {
         final var memberFromDB = checkMember(member);
 
         checkTheAuthorOfComment(commentFromDB, memberFromDB);
-        checkIsAlreadyVoted(commentFromDB.getId(), memberFromDB.getVotedComments());
+        checkIsAlreadyVoted(commentFromDB.getId(), memberFromDB.getUpVotedCommentsId());
 
         final var voteCount = commentFromDB.getVoteCount() + 1;
         commentFromDB.setVoteCount(voteCount);
         commentData.update(commentFromDB);
 
-        memberFromDB.getVotedComments().add(commentFromDB.getId());
+        memberFromDB.getUpVotedCommentsId().add(commentFromDB.getId());
         updateMemberWithNewReputation(memberFromDB);
 
         comment.setVoteCount(voteCount);
@@ -54,13 +54,13 @@ public class VoteCommentService implements VoteService<Comment> {
         final var memberFromDB = checkMember(member);
 
         checkTheAuthorOfComment(commentFromDB, memberFromDB);
-        checkIsAlreadyVoted(commentFromDB.getId(), memberFromDB.getDownVotedComments());
+        checkIsAlreadyVoted(commentFromDB.getId(), memberFromDB.getDownVotedCommentsId());
 
         final var voteCount = commentFromDB.getVoteCount() - 1;
         commentFromDB.setVoteCount(voteCount);
         commentData.update(commentFromDB);
 
-        memberFromDB.getDownVotedComments().add(commentFromDB.getId());
+        memberFromDB.getDownVotedCommentsId().add(commentFromDB.getId());
         updateMemberWithNewReputation(memberFromDB);
 
         comment.setVoteCount(voteCount);
@@ -92,7 +92,7 @@ public class VoteCommentService implements VoteService<Comment> {
         }
     }
 
-    private void updateMemberWithNewReputation (Member member) throws DataBaseOperationException{
+    private void updateMemberWithNewReputation (final Member member) throws DataBaseOperationException{
         final int reputation = member.getReputation() + ADDED_REPUTATION;
         member.getAccount().setReputation(reputation);
         memberData.update(member);

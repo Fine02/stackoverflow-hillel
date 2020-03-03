@@ -88,7 +88,7 @@ public class DownVoteAnswerServiceTest {
     public void whenMemberIsAlreadyVotedTheAnswerThenThrowsAlreadyVotedException() {
         //given
         var wantToVoteMember = mockMember(ID1);
-        wantToVoteMember.getDownVotedAnswers().add(ID1);
+        wantToVoteMember.getDownVotedAnswersId().add(ID1);
         var author = mockMember(ID2);
         var answer = mockAnswer(author);
         when(answerData.findById(ID1)).thenReturn(Optional.of(answer));
@@ -115,7 +115,7 @@ public class DownVoteAnswerServiceTest {
         //then
         assertEquals(-1, answerAfterVoting.getVoteCount());
         assertEquals(10, wantToVoteMember.getReputation());
-        assertTrue(wantToVoteMember.getDownVotedAnswers().contains(ID1));
+        assertTrue(wantToVoteMember.getDownVotedAnswersId().contains(ID1));
 
         verify(answerData).findById(ID1);
         verify(memberData).findById(ID1);
