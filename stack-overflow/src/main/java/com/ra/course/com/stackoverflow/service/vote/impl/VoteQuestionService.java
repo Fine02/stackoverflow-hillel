@@ -19,6 +19,7 @@ public class VoteQuestionService implements VoteService<Question> {
 
     private transient final QuestionRepository questionData;
     private transient final MemberRepository memberData;
+    private transient final static int ADDED_REPUTATION = 5;
 
 
     @Override
@@ -38,9 +39,7 @@ public class VoteQuestionService implements VoteService<Question> {
         questionData.update(questionFromDB);
 
         memberFromDB.getVotedQuestions().add(questionFromDB.getId());
-        final int reputation = memberFromDB.getReputation() + 5;
-        memberFromDB.getAccount().setReputation(reputation);
-        memberData.update(memberFromDB);
+        updateMemberWithNewReputation(memberFromDB);
 
         question.setVoteCount(voteCount);
         return question;
@@ -63,9 +62,7 @@ public class VoteQuestionService implements VoteService<Question> {
         questionData.update(questionFromDB);
 
         memberFromDB.getDownVotedQuestions().add(questionFromDB.getId());
-        final int reputation = memberFromDB.getReputation() + 5;
-        memberFromDB.getAccount().setReputation(reputation);
-        memberData.update(memberFromDB);
+        updateMemberWithNewReputation(memberFromDB);
 
         question.setVoteCount(voteCount);
         return question;
@@ -96,4 +93,9 @@ public class VoteQuestionService implements VoteService<Question> {
         }
     }
 
+    private void updateMemberWithNewReputation (Member member) throws DataBaseOperationException{
+        final int reputation = member.getReputation() + ADDED_REPUTATION;
+        member.getAccount().setReputation(reputation);
+        memberData.update(member);
+    }
 }

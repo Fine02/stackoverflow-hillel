@@ -19,6 +19,7 @@ public class VoteCommentService implements VoteService<Comment> {
 
     private transient final CommentRepository commentData;
     private transient final MemberRepository memberData;
+    private transient final static int ADDED_REPUTATION = 5;
 
     @Override
     public Comment upVote(final Comment comment, final Member member)
@@ -37,9 +38,7 @@ public class VoteCommentService implements VoteService<Comment> {
         commentData.update(commentFromDB);
 
         memberFromDB.getVotedComments().add(commentFromDB.getId());
-        final int reputation = memberFromDB.getReputation() + 5;
-        memberFromDB.getAccount().setReputation(reputation);
-        memberData.update(memberFromDB);
+        updateMemberWithNewReputation(memberFromDB);
 
         comment.setVoteCount(voteCount);
         return comment;
@@ -62,9 +61,7 @@ public class VoteCommentService implements VoteService<Comment> {
         commentData.update(commentFromDB);
 
         memberFromDB.getDownVotedComments().add(commentFromDB.getId());
-        final int reputation = memberFromDB.getReputation() + 5;
-        memberFromDB.getAccount().setReputation(reputation);
-        memberData.update(memberFromDB);
+        updateMemberWithNewReputation(memberFromDB);
 
         comment.setVoteCount(voteCount);
         return comment;
@@ -93,5 +90,11 @@ public class VoteCommentService implements VoteService<Comment> {
         if (votedComments.contains(commentId)) {
             throw new AlreadyVotedException("This comment is already voted");
         }
+    }
+
+    private void updateMemberWithNewReputation (Member member) throws DataBaseOperationException{
+        final int reputation = member.getReputation() + ADDED_REPUTATION;
+        member.getAccount().setReputation(reputation);
+        memberData.update(member);
     }
 }

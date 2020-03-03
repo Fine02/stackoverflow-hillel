@@ -19,6 +19,7 @@ public class VoteAnswerService implements VoteService<Answer> {
 
     private transient final AnswerRepository answerData;
     private transient final MemberRepository memberData;
+    private transient final static int ADDED_REPUTATION = 10;
 
     @Override
     public Answer upVote(final Answer answer, final Member member)
@@ -37,9 +38,7 @@ public class VoteAnswerService implements VoteService<Answer> {
         answerData.update(answerFromDB);
 
         memberFromDB.getVotedAnswers().add(answerFromDB.getId());
-        final int reputation = memberFromDB.getReputation() + 10;
-        memberFromDB.getAccount().setReputation(reputation);
-        memberData.update(memberFromDB);
+        updateMemberWithNewReputation(memberFromDB);
 
         answer.setVoteCount(voteCount);
         return answer;
@@ -62,9 +61,7 @@ public class VoteAnswerService implements VoteService<Answer> {
         answerData.update(answerFromDB);
 
         memberFromDB.getDownVotedAnswers().add(answerFromDB.getId());
-        final int reputation = memberFromDB.getReputation() + 10;
-        memberFromDB.getAccount().setReputation(reputation);
-        memberData.update(memberFromDB);
+        updateMemberWithNewReputation(memberFromDB);
 
         answer.setVoteCount(voteCount);
         return answer;
@@ -93,5 +90,11 @@ public class VoteAnswerService implements VoteService<Answer> {
         if (votedAnswers.contains(answerId)) {
             throw new AlreadyVotedException("This answer is already voted");
         }
+    }
+
+    private void updateMemberWithNewReputation (Member member) throws DataBaseOperationException{
+        final int reputation = member.getReputation() + ADDED_REPUTATION;
+        member.getAccount().setReputation(reputation);
+        memberData.update(member);
     }
 }

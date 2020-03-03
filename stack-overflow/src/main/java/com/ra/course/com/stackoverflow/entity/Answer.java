@@ -18,7 +18,7 @@ public class Answer implements Commentable {
 
     @Builder.Default
     @NonNull
-    private String answerText = " ";
+    private String answerText = "";
 
     private boolean accepted;
 
