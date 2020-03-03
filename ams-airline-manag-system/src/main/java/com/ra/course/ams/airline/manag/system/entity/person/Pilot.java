@@ -6,7 +6,7 @@ import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Pilot extends Person {
+public class Person extends Person {
 
     private List<FlightInstance> flightInstances;
 
@@ -19,12 +19,20 @@ public class Pilot extends Person {
         this.flightInstances = flightInstances;
     }
 
-    public Pilot(Builder builder) {
+    private Pilot(Builder builder) {
         this.setName(builder.name);
         this.setEmail(builder.email);
         this.setPhone(builder.phone);
         this.setAddress(builder.address);
         flightInstances = builder.flightInstances;
+    }
+
+    public Pilot(Pilot pilot) {
+        this.setName(pilot.getName());
+        this.setEmail(pilot.getEmail());
+        this.setPhone(pilot.getPhone());
+        this.setAddress(pilot.getAddress());
+        flightInstances = pilot.getFlightInstances();
     }
 
     public static class Builder {
