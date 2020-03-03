@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CrewManagenentServiceImpl implements PersonManagementService<Crew>, CrewManagementService {
+public class CrewManagementServiceImpl implements PersonManagementService<Crew>, CrewManagementService {
 
     private Repository<Crew, String> crewRepository;
 

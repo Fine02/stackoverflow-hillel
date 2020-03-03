@@ -2,10 +2,8 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.person.Crew;
-import com.ra.course.ams.airline.manag.system.entity.person.Person;
 import com.ra.course.ams.airline.manag.system.exceptions.CrewAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exceptions.CrewNotExistException;
-import com.ra.course.ams.airline.manag.system.exceptions.InstanceNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,23 +12,22 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
-public class CrewManagenentServiceImplTest {
+public class CrewManagementServiceImplTest {
 
         @Mock
         private Repository<Crew, String> crewRepository;
 
-        private CrewManagenentServiceImpl crewManagenentService;
+        private CrewManagementServiceImpl crewManagenentService;
 
         @BeforeEach
         public void setup(){
                 MockitoAnnotations.initMocks(this);
-                crewManagenentService = new CrewManagenentServiceImpl();
+                crewManagenentService = new CrewManagementServiceImpl();
                 crewManagenentService.setCrewRepository(crewRepository);
         }
 
