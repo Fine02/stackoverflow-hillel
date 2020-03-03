@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PilotManagenentServiceImpl implements PersonManagementService<Pilot>, PilotManagementService {
+public class PilotManagementServiceImpl implements PersonManagementService<Pilot>, PilotManagementService {
 
     private Repository<Pilot, String> pilotRepository;
 
@@ -122,7 +122,7 @@ public class PilotManagenentServiceImpl implements PersonManagementService<Pilot
         }
         Pilot pilotFromRepository = pilotRepository.getInstance(pilot.getPhone());
         if (pilotFromRepository == null) {
-            throw new CrewNotExistException();
+            throw new PilotNotExistException();
         }
         addNewFlightInstance(pilotFromRepository, flightInstance);
         pilotRepository.updateInstance(pilotFromRepository);
@@ -146,7 +146,7 @@ public class PilotManagenentServiceImpl implements PersonManagementService<Pilot
         }
         Pilot pilotFromRepository = pilotRepository.getInstance(pilot.getPhone());
         if (pilotFromRepository == null) {
-            throw new CrewNotExistException();
+            throw new PilotNotExistException();
         }
         deleteFlightInstance(pilotFromRepository, flightInstance);
         pilotRepository.updateInstance(pilotFromRepository);

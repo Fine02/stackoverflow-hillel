@@ -10,7 +10,7 @@ import com.ra.course.ams.airline.manag.system.service.PersonManagementService;
 
 import java.util.Collection;
 
-public class AdminManagenentServiceImpl implements PersonManagementService<Admin> {
+public class AdminManagementServiceImpl implements PersonManagementService<Admin> {
 
     private Repository<Admin, String> adminRepository;
 

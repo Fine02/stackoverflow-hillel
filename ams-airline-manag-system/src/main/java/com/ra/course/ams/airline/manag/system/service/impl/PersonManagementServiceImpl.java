@@ -11,7 +11,7 @@ import com.ra.course.ams.airline.manag.system.service.PersonManagementService;
 
 import java.util.Collection;
 
-public class PersonManagenentServiceImpl implements PersonManagementService<Person> {
+public class PersonManagementServiceImpl implements PersonManagementService<Person> {
 
     private Repository<Person, String> personRepository;
 

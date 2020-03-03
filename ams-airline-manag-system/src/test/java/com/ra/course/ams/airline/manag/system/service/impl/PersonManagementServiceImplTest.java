@@ -1,9 +1,6 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
-import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.entity.person.Person;
-import com.ra.course.ams.airline.manag.system.exceptions.CrewAlreadyExistException;
-import com.ra.course.ams.airline.manag.system.exceptions.CrewNotExistException;
 import com.ra.course.ams.airline.manag.system.exceptions.PersonAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exceptions.PersonNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
@@ -24,12 +21,12 @@ public class PersonManagementServiceImplTest {
         @Mock
         private Repository<Person, String> personRepository;
 
-        private PersonManagenentServiceImpl personManagenentService;
+        private PersonManagementServiceImpl personManagenentService;
 
         @BeforeEach
         public void setup(){
                 MockitoAnnotations.initMocks(this);
-                personManagenentService = new PersonManagenentServiceImpl();
+                personManagenentService = new PersonManagementServiceImpl();
                 personManagenentService.setPersonRepository(personRepository);
         }
 
