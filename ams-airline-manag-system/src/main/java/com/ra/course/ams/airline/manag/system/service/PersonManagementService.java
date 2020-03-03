@@ -3,7 +3,7 @@ package com.ra.course.ams.airline.manag.system.service;
 import com.ra.course.ams.airline.manag.system.entity.Address;
 import com.ra.course.ams.airline.manag.system.entity.person.*;
 
-public interface PersonManagementService<T extends Pilot> {
+public interface PersonManagementService<T extends Person> {
 
     T findByEmail(String email);
     T findByPhoneNumber(String phone);

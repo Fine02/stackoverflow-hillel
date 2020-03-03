@@ -16,7 +16,7 @@ public class Person {
         this.name = name;
     }
 
-    public Person(Pilot person) {
+    public Person(Person person) {
         this.name = person.getName();
         this.email = person.getEmail();
         this.phone = person.getPhone();
@@ -35,8 +35,8 @@ public class Person {
          private transient String phone;
          private transient Address address;
 
-         public Pilot build() {
-             return new Pilot(this);
+         public Person build() {
+             return new Person(this);
          }
 
          public Builder setName(String name) {
