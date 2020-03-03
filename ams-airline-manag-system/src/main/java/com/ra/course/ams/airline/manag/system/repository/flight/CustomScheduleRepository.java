@@ -1,8 +1,8 @@
 package com.ra.course.ams.airline.manag.system.repository.flight;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.CustomSchedule;
-import com.ra.course.ams.airline.manag.system.exceptions.InstanceAlreadyExistException;
-import com.ra.course.ams.airline.manag.system.exceptions.InstanceNotExistException;
+import com.ra.course.ams.airline.manag.system.exception.InstanceAlreadyExistException;
+import com.ra.course.ams.airline.manag.system.exception.InstanceNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 
 import java.util.Collection;

@@ -59,7 +59,7 @@ public class FlightInstanceServiceImpl implements FlightInstanceService {
     @Override
     public boolean assignCrew(FlightInstance flightInstance, Crew crew) {
         if (flightInstance == null || crew == null) {
-            throw new NullPointerException("Cannot process assign сrew operation for null value argument.");
+            throw new NullPointerException("Cannot process assign crew operation for null value argument.");
         }
         List<Crew> crews = flightInstance.getCrews() != null ? flightInstance.getCrews() : new ArrayList<>();
         crews.add(crew);
