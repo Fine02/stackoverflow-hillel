@@ -6,7 +6,7 @@ import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Person extends Person {
+public class Pilot extends Person {
 
     private List<FlightInstance> flightInstances;
 

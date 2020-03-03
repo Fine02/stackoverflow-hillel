@@ -1,18 +1,21 @@
 package com.ra.course.ams.airline.manag.system.entity.person;
 
 import com.ra.course.ams.airline.manag.system.entity.Address;
-import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 
-import java.util.LinkedList;
-import java.util.List;
+public class Admin extends Pilot {
 
-public class Admin extends Person {
-
-    public Admin(Builder builder) {
+    private Admin(Builder builder) {
         this.setName(builder.name);
         this.setEmail(builder.email);
         this.setPhone(builder.phone);
         this.setAddress(builder.address);
+    }
+
+    public Admin(Admin admin) {
+        this.setName(admin.getName());
+        this.setEmail(admin.getEmail());
+        this.setPhone(admin.getPhone());
+        this.setAddress(admin.getAddress());
     }
 
     public static class Builder {

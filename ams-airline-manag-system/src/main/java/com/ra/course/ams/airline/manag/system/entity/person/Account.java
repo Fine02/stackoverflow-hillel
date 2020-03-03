@@ -5,9 +5,9 @@ public class Account {
     private final String id;
     private String password;
     private AccountStatus accountStatus;
-    private final Person person;
+    private final Pilot person;
 
-    public Account(String id, Person person) {
+    public Account(String id, Pilot person) {
         this.id = id;
         this.person = person;
     }
@@ -23,9 +23,9 @@ public class Account {
         private transient String id;
         private transient String password;
         private transient AccountStatus accountStatus;
-        private transient Person person;
+        private transient Pilot person;
 
-        public Builder(String id, Person person) {
+        public Builder(String id, Pilot person) {
             this.id = id;
             this.person = person;
         }
@@ -49,7 +49,7 @@ public class Account {
             return this;
         }
 
-        public Builder setPerson(Person person) {
+        public Builder setPerson(Pilot person) {
             this.person = person;
             return this;
         }
@@ -76,7 +76,7 @@ public class Account {
         this.accountStatus = accountStatus;
     }
 
-    public Person getPerson() {
+    public Pilot getPerson() {
         return person;
     }
 

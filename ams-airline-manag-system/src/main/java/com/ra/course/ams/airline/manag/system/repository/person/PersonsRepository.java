@@ -1,28 +1,28 @@
 package com.ra.course.ams.airline.manag.system.repository.person;
 
-import com.ra.course.ams.airline.manag.system.entity.person.Person;
+import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
 import com.ra.course.ams.airline.manag.system.exceptions.InstanceAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 
 import java.util.Collection;
 import java.util.Map;
 
-public class PersonsRepository implements Repository<Person, String> {
+public class PersonsRepository implements Repository<Pilot, String> {
 
-    private Map<String, Person> persons;
+    private Map<String, Pilot> persons;
 
     @Override
-    public Person getInstance(String phoneNumber) {
+    public Pilot getInstance(String phoneNumber) {
         return persons.get(phoneNumber);
     }
 
     @Override
-    public Collection<Person> getInstances() {
+    public Collection<Pilot> getInstances() {
         return persons.values();
     }
 
     @Override
-    public Person addInstance(Person person) {
+    public Pilot addInstance(Pilot person) {
         if (persons.containsKey(person.getPhone())){
             throw new InstanceAlreadyExistException();
         }
@@ -30,20 +30,20 @@ public class PersonsRepository implements Repository<Person, String> {
     }
 
     @Override
-    public void updateInstance(Person person) {
+    public void updateInstance(Pilot person) {
         persons.put(person.getPhone(), person);
     }
 
     @Override
-    public void removeInstance(Person person) {
+    public void removeInstance(Pilot person) {
         persons.remove(person.getPhone());
     }
 
-    public Map<String, Person> getPersons() {
+    public Map<String, Pilot> getPersons() {
         return persons;
     }
 
-    public void setPersons(Map<String, Person> persons) {
+    public void setPersons(Map<String, Pilot> persons) {
         this.persons = persons;
     }
 }

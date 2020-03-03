@@ -3,8 +3,8 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 import com.ra.course.ams.airline.manag.system.entity.Address;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
-import com.ra.course.ams.airline.manag.system.exceptions.CrewAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exceptions.CrewNotExistException;
+import com.ra.course.ams.airline.manag.system.exceptions.PilotAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exceptions.PilotNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 import com.ra.course.ams.airline.manag.system.service.PersonManagementService;
@@ -51,7 +51,7 @@ public class PilotManagenentServiceImpl implements PersonManagementService<Pilot
         }
         Pilot pilotFromRepo = pilotRepository.getInstance(pilot.getPhone());
         if (pilotFromRepo != null) {
-            throw new CrewAlreadyExistException();
+            throw new PilotAlreadyExistException();
         }
         pilotFromRepo = new Pilot(pilot);
         pilotRepository.addInstance(pilotFromRepo);
