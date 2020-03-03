@@ -13,7 +13,6 @@ import com.ra.course.com.stackoverflow.service.vote.VoteService;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 public class VoteCommentService implements VoteService<Comment> {
@@ -26,12 +25,9 @@ public class VoteCommentService implements VoteService<Comment> {
             throws DataBaseOperationException,
             CannotVoteOwnPostException, AlreadyVotedException,
             CommentNotFoundException, MemberNotFoundException{
-        final var optionalComment = commentData.findById(comment.getId());
-        final var commentFromDB = checkCommentFromDB(optionalComment);
 
-
-        final var optionalMember = memberData.findById(member.getId());
-        final var memberFromDB = checkMemberFromDB(optionalMember);
+        final var commentFromDB = checkComment(comment);
+        final var memberFromDB = checkMember(member);
 
         checkTheAuthorOfComment(commentFromDB, memberFromDB);
         checkIsAlreadyVoted(commentFromDB.getId(), memberFromDB.getVotedComments());
@@ -55,12 +51,8 @@ public class VoteCommentService implements VoteService<Comment> {
             CannotVoteOwnPostException, AlreadyVotedException,
             CommentNotFoundException, MemberNotFoundException {
 
-        final var optionalComment = commentData.findById(comment.getId());
-        final var commentFromDB = checkCommentFromDB(optionalComment);
-
-
-        final var optionalMember = memberData.findById(member.getId());
-        final var memberFromDB = checkMemberFromDB(optionalMember);
+        final var commentFromDB = checkComment(comment);
+        final var memberFromDB = checkMember(member);
 
         checkTheAuthorOfComment(commentFromDB, memberFromDB);
         checkIsAlreadyVoted(commentFromDB.getId(), memberFromDB.getDownVotedComments());
@@ -78,19 +70,17 @@ public class VoteCommentService implements VoteService<Comment> {
         return comment;
     }
 
-    private Comment checkCommentFromDB(final Optional<Comment> optionalComment) throws CommentNotFoundException {
-        if (optionalComment.isEmpty()) {
-            throw new CommentNotFoundException("No such comment in DB");
-        } else {
-            return optionalComment.get();
-        }
+    private Comment checkComment(final Comment comment) throws CommentNotFoundException {
+        final var optionalComment = commentData.findById(comment.getId());
+        return optionalComment.orElseThrow(
+                ()-> new CommentNotFoundException("No such comment in DB"));
     }
-    private Member checkMemberFromDB(final Optional<Member> optionalMember) throws MemberNotFoundException {
-        if(optionalMember.isEmpty()){
-            throw new MemberNotFoundException("No such member in DB");
-        } else{
-            return optionalMember.get();
-        }
+
+    private Member checkMember(final Member member) throws MemberNotFoundException {
+        final var optionalMember = memberData.findById(member.getId());
+        return optionalMember.orElseThrow(
+                ()-> new MemberNotFoundException("No such member in DB"));
+
     }
 
     private void checkTheAuthorOfComment(final Comment comment, final Member member) throws CannotVoteOwnPostException {

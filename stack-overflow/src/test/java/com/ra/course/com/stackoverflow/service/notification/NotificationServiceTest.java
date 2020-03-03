@@ -3,6 +3,7 @@ package com.ra.course.com.stackoverflow.service.notification;
 import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
+import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.service.notifaction.NotificationService;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +19,8 @@ public class NotificationServiceTest {
     private NotificationService notificationService;
     private MemberRepository memberData = mock(MemberRepository.class);
     private long ID = 1L;
+    private boolean addNotification;
+    private Exception exception;
 
     @BeforeEach
     void  setUp(){
@@ -25,40 +28,54 @@ public class NotificationServiceTest {
     }
 
     @Test
-    public void whenNotificationIsAddedToListThenReturnTrue() throws DataBaseOperationException{
+    public void whenNotificationIsAddedToListThenReturnTrue()
+            throws DataBaseOperationException, MemberNotFoundException{
         //given
         var member = mockMember(ID);
         when(memberData.findById(ID)).thenReturn(Optional.of(member));
         //when
         assertEquals(0, member.getNotifications().size());
-        var addNotification = notificationService.sendNotificationToMember("Some notification", member);
+        addNotification = notificationService.sendNotificationToMember("Some notification", member);
         //then
         assertEquals(1, member.getNotifications().size());
         assertTrue(addNotification);
+        verify(memberData).findById(ID);
+        verify(memberData).update(any());
+        verifyNoMoreInteractions(memberData);
     }
 
     @Test
-    public void whenContentOfNotificationIsEmptyThenReturnFalse() throws DataBaseOperationException{
+    public void whenContentOfNotificationIsEmptyThenReturnFalse()
+            throws DataBaseOperationException, MemberNotFoundException{
         //given
         var member = mockMember(ID);
         when(memberData.findById(ID)).thenReturn(Optional.of(member));
         //when
         assertEquals(0, member.getNotifications().size());
-        var addNotification = notificationService.sendNotificationToMember("  ", member);
+        addNotification = notificationService.sendNotificationToMember("  ", member);
         //then
         assertEquals(0, member.getNotifications().size());
         assertFalse(addNotification);
+        verifyNoInteractions(memberData);
     }
 
     @Test
-    public void whenMemberIsNotFoundThenReturnFalse() throws DataBaseOperationException {
+    public void whenMemberIsNotFoundThenThrowsMemberNotFoundException() {
         //given
         var member = mockMember(ID);
         when(memberData.findById(ID)).thenReturn(Optional.empty());
         //when
-        var addNotification = notificationService.sendNotificationToMember("Some notification", member);
+        try {
+            addNotification = notificationService.sendNotificationToMember("Some notification", member);
+        }
         //then
-        assertFalse(addNotification);
+        catch (Exception e){
+            exception = e;
+        }
+        assertTrue(exception instanceof MemberNotFoundException);
+        assertEquals("No such member in DB", exception.getMessage());
+        verify(memberData).findById(ID);
+        verifyNoMoreInteractions(memberData);
     }
 
     private Member mockMember(long idMember){

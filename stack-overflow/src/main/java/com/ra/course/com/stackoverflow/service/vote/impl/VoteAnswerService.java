@@ -13,7 +13,6 @@ import com.ra.course.com.stackoverflow.service.vote.VoteService;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 public class VoteAnswerService implements VoteService<Answer> {
@@ -27,11 +26,8 @@ public class VoteAnswerService implements VoteService<Answer> {
             CannotVoteOwnPostException, AlreadyVotedException,
             AnswerNotFoundException, MemberNotFoundException {
 
-        final var optionalAnswer = answerData.findById(answer.getId());
-        final var answerFromDB = checkAnswerFromDB(optionalAnswer);
-
-        final var optionalMember = memberData.findById(member.getId());
-        final var memberFromDB = checkMemberFromDB(optionalMember);
+        final var answerFromDB = checkAnswer(answer);
+        final var memberFromDB = checkMember(member);
 
         checkTheAuthorOfAnswer(answerFromDB, memberFromDB);
         checkIsAlreadyVoted(answerFromDB.getId(), memberFromDB.getVotedAnswers());
@@ -55,11 +51,8 @@ public class VoteAnswerService implements VoteService<Answer> {
             CannotVoteOwnPostException, AlreadyVotedException,
             AnswerNotFoundException, MemberNotFoundException{
 
-        final var optionalAnswer = answerData.findById(answer.getId());
-        final var answerFromDB = checkAnswerFromDB(optionalAnswer);
-
-        final var optionalMember = memberData.findById(member.getId());
-        final var memberFromDB = checkMemberFromDB(optionalMember);
+        final var answerFromDB = checkAnswer(answer);
+        final var memberFromDB = checkMember(member);
 
         checkTheAuthorOfAnswer(answerFromDB, memberFromDB);
         checkIsAlreadyVoted(answerFromDB.getId(), memberFromDB.getDownVotedAnswers());
@@ -77,19 +70,17 @@ public class VoteAnswerService implements VoteService<Answer> {
         return answer;
     }
 
-    private Answer checkAnswerFromDB(final Optional<Answer> optionalAnswer) throws AnswerNotFoundException {
-        if (optionalAnswer.isEmpty()) {
-            throw new AnswerNotFoundException("No such answer in DB");
-        } else {
-            return optionalAnswer.get();
-        }
+    private Answer checkAnswer(final Answer answer) throws AnswerNotFoundException {
+        final var optionalAnswer = answerData.findById(answer.getId());
+        return optionalAnswer.orElseThrow(
+                ()-> new AnswerNotFoundException("No such answer in DB"));
     }
-    private Member checkMemberFromDB(final Optional<Member> optionalMember) throws MemberNotFoundException {
-        if(optionalMember.isEmpty()){
-            throw new MemberNotFoundException("No such member in DB");
-        } else{
-            return optionalMember.get();
-        }
+
+    private Member checkMember(final Member member) throws MemberNotFoundException {
+        final var optionalMember = memberData.findById(member.getId());
+        return optionalMember.orElseThrow(
+                ()-> new MemberNotFoundException("No such member in DB"));
+
     }
 
     private void checkTheAuthorOfAnswer(final Answer answer, final Member member) throws CannotVoteOwnPostException {

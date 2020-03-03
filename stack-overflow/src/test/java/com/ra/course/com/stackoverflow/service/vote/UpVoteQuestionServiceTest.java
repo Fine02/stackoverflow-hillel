@@ -3,7 +3,6 @@ package com.ra.course.com.stackoverflow.service.vote;
 import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
-import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundException;
 import com.ra.course.com.stackoverflow.exception.vote_service.AlreadyVotedException;
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -27,8 +27,6 @@ public class UpVoteQuestionServiceTest {
 
     private final long ID1 = 1L;
     private final long ID2 = 2L;
-    private Exception exception;
-    private Question questionAfterVoting;
 
     @BeforeEach
     void setUp() {
@@ -39,18 +37,13 @@ public class UpVoteQuestionServiceTest {
     public void whenQuestionIsNotFoundThenThrowsQuestionNotFoundException(){
         //given
         var member = mockMember(ID1);
-        var question = mockQuestion(ID1, member);
+        var question = mockQuestion(member);
         when(questionData.findById(ID1)).thenReturn(Optional.empty());
         //when
-        try {
-            questionAfterVoting = voteQuestionService.upVote(question, member);
-        }
+        assertThatThrownBy(() -> voteQuestionService.upVote(question, member))
+                .isInstanceOf(QuestionNotFoundException.class)
+                .hasMessage("No such question in DB");
         //then
-        catch (Exception ex){
-            exception = ex;
-        }
-        assertTrue(exception instanceof QuestionNotFoundException);
-        assertEquals("No such question in DB", exception.getMessage());
         verify(questionData).findById(ID1);
         verifyNoMoreInteractions(questionData);
         verifyNoInteractions(memberData);
@@ -60,19 +53,14 @@ public class UpVoteQuestionServiceTest {
     public void whenMemberIsNotFoundThenThrowsMemberNotFoundException(){
         //given
         var member = mockMember(ID1);
-        var question = mockQuestion(ID1, member);
+        var question = mockQuestion(member);
         when(questionData.findById(ID1)).thenReturn(Optional.of(question));
         when(memberData.findById(ID1)).thenReturn(Optional.empty());
-        //
-        try{
-            questionAfterVoting = voteQuestionService.upVote(question, member);
-        }
+        //when
+        assertThatThrownBy(() -> voteQuestionService.upVote(question, member))
+                .isInstanceOf(MemberNotFoundException.class)
+                .hasMessage("No such member in DB");
         //then
-        catch(Exception e){
-            exception = e;
-        }
-        assertTrue(exception instanceof MemberNotFoundException);
-        assertEquals("No such member in DB", exception.getMessage());
         verify(questionData).findById(ID1);
         verify(memberData).findById(ID1);
         verifyNoMoreInteractions(questionData, memberData);
@@ -82,19 +70,14 @@ public class UpVoteQuestionServiceTest {
     public void whenMemberTryToVoteOwnQuestionThenThrowsCannotVoteOwnPostException() {
         //given
         var member = mockMember(ID1);
-        var question = mockQuestion(ID1, member);
+        var question = mockQuestion(member);
         when(questionData.findById(ID1)).thenReturn(Optional.of(question));
         when(memberData.findById(ID1)).thenReturn(Optional.of(member));
         //when
-        try {
-            questionAfterVoting = voteQuestionService.upVote(question, member);
-        }
+        assertThatThrownBy(() -> voteQuestionService.upVote(question, member))
+                .isInstanceOf(CannotVoteOwnPostException.class)
+                .hasMessage("Can't vote your own question");
         //then
-        catch(Exception e){
-            exception = e;
-        }
-        assertTrue(exception instanceof CannotVoteOwnPostException);
-        assertEquals("Can't vote your own question", exception.getMessage());
         verify(questionData).findById(ID1);
         verify(memberData).findById(ID1);
         verifyNoMoreInteractions(questionData, memberData);
@@ -106,43 +89,33 @@ public class UpVoteQuestionServiceTest {
         var wantToVoteMember = mockMember(ID1);
         wantToVoteMember.getVotedQuestions().add(ID1);
         var author = mockMember(ID2);
-        var question = mockQuestion(ID1, author);
+        var question = mockQuestion(author);
         when(questionData.findById(ID1)).thenReturn(Optional.of(question));
         when(memberData.findById(ID1)).thenReturn(Optional.of(wantToVoteMember));
         //when
-        try {
-            questionAfterVoting = voteQuestionService.upVote(question, wantToVoteMember);
-        }
-        //then
-        catch (Exception e){
-            exception = e;
-        }
-        assertTrue(exception instanceof AlreadyVotedException);
-        assertEquals("This question is already voted", exception.getMessage());
+        assertThatThrownBy(() -> voteQuestionService.upVote(question, wantToVoteMember))
+                .isInstanceOf(AlreadyVotedException.class)
+                .hasMessage("This question is already voted");
+        //then;
         verify(questionData).findById(ID1);
         verify(memberData).findById(ID1);
         verifyNoMoreInteractions(questionData, memberData);
     }
     @Test
-    public void whenMemberVotesTheQuestionThenVoteCountIncrementAndAddReputation() throws DataBaseOperationException {
+    public void whenMemberVotesTheQuestionThenVoteCountIncrementAndAddReputation() throws Exception {
         //given
         var wantToVoteMember = mockMember(ID1);
         var author = mockMember(ID2);
-        var question = mockQuestion(ID1, author);
+        var question = mockQuestion(author);
         when(questionData.findById(ID1)).thenReturn(Optional.of(question));
         when(memberData.findById(ID1)).thenReturn(Optional.of(wantToVoteMember));
         //when
-        try {
-            questionAfterVoting = voteQuestionService.upVote(question, wantToVoteMember);
-        }
+        var questionAfterVoting = voteQuestionService.upVote(question, wantToVoteMember);
         //then
-        catch (Exception e){
-            exception = e;
-        }
         assertEquals(1, questionAfterVoting.getVoteCount());
         assertEquals(5, wantToVoteMember.getReputation());
         assertTrue(wantToVoteMember.getVotedQuestions().contains(ID1));
-        assertNull(exception);
+
         verify(questionData).findById(ID1);
         verify(memberData).findById(ID1);
         verify(questionData).update(any());
@@ -150,9 +123,9 @@ public class UpVoteQuestionServiceTest {
         verifyNoMoreInteractions(questionData, memberData);
     }
 
-    private Question mockQuestion(long idQuestion, Member member){
+    private Question mockQuestion(Member member){
         return Question.builder()
-                .id(idQuestion)
+                .id(ID1)
                 .title("title")
                 .author(member).build();
     }

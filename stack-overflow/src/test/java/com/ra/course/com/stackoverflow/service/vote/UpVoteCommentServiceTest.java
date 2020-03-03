@@ -4,7 +4,6 @@ import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Comment;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
-import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
 import com.ra.course.com.stackoverflow.exception.service.CommentNotFoundException;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import com.ra.course.com.stackoverflow.exception.vote_service.AlreadyVotedException;
@@ -17,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -28,8 +28,6 @@ public class UpVoteCommentServiceTest {
 
     private final long ID1 = 1L;
     private final long ID2 = 2L;
-    private Exception exception;
-    private Comment commentAfterVoting;
 
 
     @BeforeEach
@@ -41,18 +39,13 @@ public class UpVoteCommentServiceTest {
     public void whenCommentIsNotFoundThenThrowsCommentNotFoundException() {
         //given
         var member = mockMember(ID1);
-        var comment = mockComment(ID1, member);
+        var comment = mockComment(member);
         when(commentData.findById(ID1)).thenReturn(Optional.empty());
         //when
-        try{
-            commentAfterVoting = voteCommentService.upVote(comment, member);
-        }
+        assertThatThrownBy(() -> voteCommentService.upVote(comment, member))
+                .isInstanceOf(CommentNotFoundException.class)
+                .hasMessage("No such comment in DB");
         //then
-        catch(Exception e){
-            exception = e;
-        }
-        assertTrue(exception instanceof CommentNotFoundException);
-        assertEquals("No such comment in DB", exception.getMessage());
         verify(commentData).findById(ID1);
         verifyNoMoreInteractions(commentData);
         verifyNoInteractions(memberData);
@@ -62,19 +55,14 @@ public class UpVoteCommentServiceTest {
     public void whenMemberIsNotFoundThenThrowsMemberNotFoundException() {
         //given
         var member = mockMember(ID1);
-        var comment = mockComment(ID1, member);
+        var comment = mockComment(member);
         when(commentData.findById(ID1)).thenReturn(Optional.of(comment));
         when(memberData.findById(ID1)).thenReturn(Optional.empty());
-        //
-        try {
-            commentAfterVoting = voteCommentService.upVote(comment, member);
-        }
+        //when
+        assertThatThrownBy(() -> voteCommentService.upVote(comment, member))
+                .isInstanceOf(MemberNotFoundException.class)
+                .hasMessage("No such member in DB");
         //then
-        catch (Exception e) {
-            exception = e;
-        }
-        assertTrue(exception instanceof MemberNotFoundException);
-        assertEquals("No such member in DB", exception.getMessage());
         verify(commentData).findById(ID1);
         verify(memberData).findById(ID1);
         verifyNoMoreInteractions(commentData, memberData);
@@ -84,19 +72,14 @@ public class UpVoteCommentServiceTest {
     public void whenMemberTryToVoteOwnCommentThenThrowsCannotVoteOwnPostException(){
         //given
         var member = mockMember(ID1);
-        var comment = mockComment(ID1, member);
+        var comment = mockComment(member);
         when(commentData.findById(ID1)).thenReturn(Optional.of(comment));
         when(memberData.findById(ID1)).thenReturn(Optional.of(member));
         //when
-        try{
-            commentAfterVoting = voteCommentService.upVote(comment, member);
-        }
+        assertThatThrownBy(() -> voteCommentService.upVote(comment, member))
+                .isInstanceOf(CannotVoteOwnPostException.class)
+                .hasMessage("Can't vote your own comment");
         //then
-        catch (Exception e){
-            exception = e;
-        }
-        assertTrue(exception instanceof CannotVoteOwnPostException);
-        assertEquals("Can't vote your own comment", exception.getMessage());
         verify(commentData).findById(ID1);
         verify(memberData).findById(ID1);
         verifyNoMoreInteractions(commentData, memberData);
@@ -108,43 +91,33 @@ public class UpVoteCommentServiceTest {
         var wantToVoteMember = mockMember(ID1);
         wantToVoteMember.getVotedComments().add(ID1);
         var author = mockMember(ID2);
-        var comment = mockComment(ID1, author);
+        var comment = mockComment(author);
         when(commentData.findById(ID1)).thenReturn(Optional.of(comment));
         when(memberData.findById(ID1)).thenReturn(Optional.of(wantToVoteMember));
         //when
-        try{
-            commentAfterVoting = voteCommentService.upVote(comment, wantToVoteMember);
-        }
+        assertThatThrownBy(() -> voteCommentService.upVote(comment, wantToVoteMember))
+                .isInstanceOf(AlreadyVotedException.class)
+                .hasMessage("This comment is already voted");
         //then
-        catch(Exception e){
-            exception = e;
-        }
-        assertTrue(exception instanceof AlreadyVotedException);
-        assertEquals("This comment is already voted", exception.getMessage());
         verify(commentData).findById(ID1);
         verify(memberData).findById(ID1);
         verifyNoMoreInteractions(commentData, memberData);
     }
 
     @Test
-    public void whenMemberVotesTheCommentThenVoteCountIncrementAndAddReputation() throws DataBaseOperationException {
+    public void whenMemberVotesTheCommentThenVoteCountIncrementAndAddReputation() throws Exception {
         var wantToVoteMember = mockMember(ID1);
         var author = mockMember(ID2);
-        var comment = mockComment(ID1, author);
+        var comment = mockComment(author);
         when(commentData.findById(ID1)).thenReturn(Optional.of(comment));
         when(memberData.findById(ID1)).thenReturn(Optional.of(wantToVoteMember));
         //when
-        try{
-            commentAfterVoting = voteCommentService.upVote(comment, wantToVoteMember);
-        }
+        var commentAfterVoting = voteCommentService.upVote(comment, wantToVoteMember);
         //then
-        catch(Exception e){
-            exception = e;
-        }
         assertEquals(1, commentAfterVoting.getVoteCount());
         assertEquals(5, wantToVoteMember.getReputation());
         assertTrue(wantToVoteMember.getVotedComments().contains(ID1));
-        assertNull(exception);
+
         verify(commentData).findById(ID1);
         verify(memberData).findById(ID1);
         verify(commentData).update(any());
@@ -153,15 +126,15 @@ public class UpVoteCommentServiceTest {
     }
 
 
-    private Comment mockComment(long id, Member member){
+    private Comment mockComment(Member member){
         return Comment.builder()
-                .id(id)
+                .id(ID1)
                 .author(member)
-                .commentable(mockQuestion(id, member)).build();
+                .commentable(mockQuestion(member)).build();
     }
-    private Question mockQuestion(long idQuestion, Member member){
+    private Question mockQuestion(Member member){
         return Question.builder()
-                .id(idQuestion)
+                .id(ID1)
                 .title("title")
                 .author(member).build();
     }
