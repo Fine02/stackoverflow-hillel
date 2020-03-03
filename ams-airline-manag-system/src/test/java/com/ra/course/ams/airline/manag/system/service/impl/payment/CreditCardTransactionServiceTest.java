@@ -10,18 +10,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CreditCardTransactionServiceTest {
 
-    private CreditCardTransactionService creditCardTransactionService;
-    private CreditCardTransaction failedCreditCardTransaction;
-    private CreditCardTransaction confirmedCreditCardTransaction;
-
-    @BeforeEach
-    public void createTransaction() {
-        creditCardTransactionService = new CreditCardTransactionService();
-        failedCreditCardTransaction = new CreditCardTransaction(0, 1, PaymentStatus.UNPAID,
-                "nameOn card");
-        confirmedCreditCardTransaction = new CreditCardTransaction(1, 1, PaymentStatus.UNPAID,
-                "nameOn card");
-    }
+    CreditCardTransactionService creditCardTransactionService = new CreditCardTransactionService();
+    CreditCardTransaction confirmedCreditCardTransaction = new CreditCardTransaction(1, 1, PaymentStatus.UNPAID,
+            "nameOn card");
+    CreditCardTransaction failedPaimentIdEmpty = new CreditCardTransaction(0, 1, PaymentStatus.UNPAID,
+            "nameOn card");
+    CreditCardTransaction failedAmoundEmpty = new CreditCardTransaction(1, 0, PaymentStatus.UNPAID,
+            "nameOn card");
+    CreditCardTransaction failedNameOnCardEmpty = new CreditCardTransaction(1, 0, PaymentStatus.UNPAID,
+            "nameOn card");
 
     @Test
     public void whenTransactionisCompleaded() {
@@ -29,7 +26,17 @@ public class CreditCardTransactionServiceTest {
     }
 
     @Test
-    public void whenTransactionisFalse() {
-        assertFalse(creditCardTransactionService.makeTransaction(failedCreditCardTransaction));
+    public void whenPaimentIdEmptyThenTransactionIsFalse() {
+        assertFalse(creditCardTransactionService.makeTransaction(failedPaimentIdEmpty));
+    }
+
+    @Test
+    public void whenAmoundEmptyThenTransactionIsFalse() {
+        assertFalse(creditCardTransactionService.makeTransaction(failedAmoundEmpty));
+    }
+
+    @Test
+    public void whenNameOnCardEmptyThenTransactionIsFalse() {
+        assertFalse(creditCardTransactionService.makeTransaction(failedNameOnCardEmpty));
     }
 }
