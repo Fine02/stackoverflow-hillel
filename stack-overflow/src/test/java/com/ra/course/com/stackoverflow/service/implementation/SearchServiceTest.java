@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.service;
+package com.ra.course.com.stackoverflow.service.implementation;
 
 import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
@@ -7,7 +7,7 @@ import com.ra.course.com.stackoverflow.entity.Tag;
 import com.ra.course.com.stackoverflow.exception.service.TagNotFoundException;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.TagRepository;
-import com.ra.course.com.stackoverflow.service.implementation.SearchServiceImpl;
+import com.ra.course.com.stackoverflow.service.SearchService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
