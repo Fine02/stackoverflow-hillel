@@ -18,6 +18,14 @@ public class FlightReservation {
     private Payment payment;
     private List<Passenger> passengers;
 
+    public FlightReservation(ReservationStatus status) {
+        this.status = status;
+    }
+
+    public FlightReservation(FlightInstance flightInstance, ReservationStatus status) {
+        this.flightInstance = flightInstance;
+        this.status = status;
+    }
 
     public FlightReservation(String reservationNumber, FlightInstance flightInstance, HashMap<Passenger, FlightSeat> seatMap, ReservationStatus status, List<Notification> notifications, Payment payment) {
         this.reservationNumber = reservationNumber;

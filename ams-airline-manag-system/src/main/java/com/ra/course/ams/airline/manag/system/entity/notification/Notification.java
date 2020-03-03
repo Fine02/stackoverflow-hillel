@@ -15,6 +15,11 @@ public class Notification {
     public Notification() {
     }
 
+    public Notification(FlightReservation flightReservation, FlightInstance flightInstance) {
+        this.flightReservation = flightReservation;
+        this.flightInstance = flightInstance;
+    }
+
     public Notification(FlightReservation flightReservation, FlightInstance flightInstance, int notificationId, Date createdOn, String content) {
         this.flightReservation = flightReservation;
         this.flightInstance = flightInstance;
@@ -67,7 +72,6 @@ public class Notification {
     public String toString() {
         return "Notification{" +
                 "flightReservation=" + flightReservation +
-                ", flightInstance=" + flightInstance +
                 ", notificationId=" + notificationId +
                 ", createdOn=" + createdOn +
                 ", content='" + content + '\'' +

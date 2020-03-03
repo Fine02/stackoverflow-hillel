@@ -1,7 +1,6 @@
 package com.ra.course.ams.airline.manag.system.service.impl.payment;
 
 import com.ra.course.ams.airline.manag.system.entity.payment.CreditCardTransaction;
-import com.ra.course.ams.airline.manag.system.entity.payment.Payment;
 import com.ra.course.ams.airline.manag.system.entity.payment.PaymentStatus;
 import com.ra.course.ams.airline.manag.system.service.PaymentService;
 

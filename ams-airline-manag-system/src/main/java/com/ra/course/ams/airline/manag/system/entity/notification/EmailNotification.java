@@ -1,10 +1,17 @@
 package com.ra.course.ams.airline.manag.system.entity.notification;
 
+import com.ra.course.ams.airline.manag.system.entity.FlightReservation;
+import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
+
+import java.util.Date;
+
 public class EmailNotification extends Notification {
     private String email;
+    private Notification notification;
 
-    public EmailNotification(String email) {
+    public EmailNotification(String email, Notification notification) {
         this.email = email;
+        this.notification = notification;
     }
 
     public String getEmail() {
