@@ -24,7 +24,7 @@ public class AdminManagementServiceImpl implements PersonManagementService<Admin
         Admin findedAdmin = admins.stream()
                 .filter(admin -> email.equals(admin.getEmail()))
                 .findAny()
-                .orElseThrow(() -> new PilotNotExistException("No pilot found for given email"));
+                .orElseThrow(() -> new AdminNotExistException("No admin found for given email"));
         return new Admin(findedAdmin);
     }
 
