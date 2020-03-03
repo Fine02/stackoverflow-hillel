@@ -2,10 +2,8 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.Address;
 import com.ra.course.ams.airline.manag.system.entity.person.Person;
-import com.ra.course.ams.airline.manag.system.exceptions.AdminNotExistException;
-import com.ra.course.ams.airline.manag.system.exceptions.PersonAlreadyExistException;
-import com.ra.course.ams.airline.manag.system.exceptions.PersonNotExistException;
-import com.ra.course.ams.airline.manag.system.exceptions.PilotNotExistException;
+import com.ra.course.ams.airline.manag.system.exception.PersonAlreadyExistException;
+import com.ra.course.ams.airline.manag.system.exception.PersonNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 import com.ra.course.ams.airline.manag.system.service.PersonManagementService;
 

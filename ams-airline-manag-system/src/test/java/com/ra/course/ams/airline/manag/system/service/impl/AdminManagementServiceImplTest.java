@@ -1,8 +1,8 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.person.Admin;
-import com.ra.course.ams.airline.manag.system.exceptions.AdminAlreadyExistException;
-import com.ra.course.ams.airline.manag.system.exceptions.AdminNotExistException;
+import com.ra.course.ams.airline.manag.system.exception.AdminAlreadyExistException;
+import com.ra.course.ams.airline.manag.system.exception.AdminNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

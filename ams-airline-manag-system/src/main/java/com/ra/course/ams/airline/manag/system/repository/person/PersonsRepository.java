@@ -1,7 +1,7 @@
 package com.ra.course.ams.airline.manag.system.repository.person;
 
 import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
-import com.ra.course.ams.airline.manag.system.exceptions.InstanceAlreadyExistException;
+import com.ra.course.ams.airline.manag.system.exception.InstanceAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 
 import java.util.Collection;

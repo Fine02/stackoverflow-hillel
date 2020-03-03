@@ -1,8 +1,8 @@
 package com.ra.course.ams.airline.manag.system.repository.person;
 
 import com.ra.course.ams.airline.manag.system.entity.person.Account;
-import com.ra.course.ams.airline.manag.system.exceptions.AccountAlreadyExistException;
-import com.ra.course.ams.airline.manag.system.exceptions.AccountNotExistException;
+import com.ra.course.ams.airline.manag.system.exception.AccountAlreadyExistException;
+import com.ra.course.ams.airline.manag.system.exception.AccountNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 
 import java.util.Collection;

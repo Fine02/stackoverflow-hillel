@@ -2,8 +2,8 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.person.Crew;
-import com.ra.course.ams.airline.manag.system.exceptions.CrewAlreadyExistException;
-import com.ra.course.ams.airline.manag.system.exceptions.CrewNotExistException;
+import com.ra.course.ams.airline.manag.system.exception.CrewAlreadyExistException;
+import com.ra.course.ams.airline.manag.system.exception.CrewNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
