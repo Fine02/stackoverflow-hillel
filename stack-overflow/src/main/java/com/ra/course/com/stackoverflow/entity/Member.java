@@ -1,6 +1,7 @@
 package com.ra.course.com.stackoverflow.entity;
 
 
+import com.ra.course.com.stackoverflow.entity.enums.Badge;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
