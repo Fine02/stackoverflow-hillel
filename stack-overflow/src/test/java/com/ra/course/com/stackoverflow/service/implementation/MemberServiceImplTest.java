@@ -8,11 +8,8 @@ import com.ra.course.com.stackoverflow.exception.repository.InternalServerErrorE
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 import com.ra.course.com.stackoverflow.service.MemberService;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,7 +31,7 @@ public class MemberServiceImplTest {
 
 
     @BeforeEach
-    void setUp() throws DataBaseOperationException {
+    void setUp() {
         mockedMemberRepository = mock(MemberRepository.class);
         mockedQuestionRepository = mock(QuestionRepository.class);
         memberService = new MemberServiceImpl(mockedQuestionRepository, mockedMemberRepository);
@@ -55,7 +52,7 @@ public class MemberServiceImplTest {
                 .author(expectedMember)
                 .build();
 
-        expectedMember.setQuestions(Collections.singletonList(expectedQuestion));
+        expectedMember.getQuestions().add(expectedQuestion);
 
         givenMember = Member.builder()
                 .id(42L)

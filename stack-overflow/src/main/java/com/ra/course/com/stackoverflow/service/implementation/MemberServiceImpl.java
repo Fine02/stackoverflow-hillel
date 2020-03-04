@@ -8,7 +8,6 @@ import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 import com.ra.course.com.stackoverflow.service.MemberService;
 
-import java.util.Collections;
 import java.util.Objects;
 
 public class MemberServiceImpl implements MemberService<Question> {
@@ -53,7 +52,7 @@ public class MemberServiceImpl implements MemberService<Question> {
 
         final Member member = question.getAuthor();
 
-        member.setQuestions(Collections.singletonList(question));
+        member.getQuestions().add(question);
 
         try {
             memberRep.update(member);
