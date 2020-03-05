@@ -35,25 +35,25 @@ class SearchServiceTest {
 
 
     private Account account = Account.builder()
-            .password("password")
-            .email("email")
-            .name("name")
-            .build();
+                                     .password("password")
+                                     .email("email")
+                                     .name("name")
+                                     .build();
 
     private Member member = Member.builder()
-            .id(id)
-            .account(account)
-            .build();
+                                  .id(id)
+                                  .account(account)
+                                  .build();
 
     private Tag tag = new Tag(id, TAG_NAME, description, List.of(), 1, 1);
 
     private Question question = Question.builder()
-            .id(id)
-            .description(description)
-            .title("title")
-            .author(member)
-            .tagList(List.of(tag))
-            .build();
+                                        .id(id)
+                                        .description(description)
+                                        .title("title")
+                                        .author(member)
+                                        .tagList(List.of(tag))
+                                        .build();
 
     @BeforeEach
     void setUp() {
@@ -68,7 +68,7 @@ class SearchServiceTest {
         when(tagRepository.findByTagName(TAG_NAME)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> searchService.searchByTag(TAG_NAME)).isInstanceOf(TagNotFoundException.class)
-                .hasMessage("There is no Tag in DB like: " + TAG_NAME);
+                                                                     .hasMessage("There is no Tag in DB like: " + TAG_NAME);
 
         verify(tagRepository).findByTagName(TAG_NAME);
         verifyNoMoreInteractions(tagRepository);
@@ -137,7 +137,7 @@ class SearchServiceTest {
         when(tagRepository.findByTagName(TAG_NAME)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> searchService.searchInTitleByTag(SEARCH_TEXT, TAG_NAME)).isInstanceOf(TagNotFoundException.class)
-                .hasMessage("There is no Tag in DB like: " + TAG_NAME);
+                                                                                         .hasMessage("There is no Tag in DB like: " + TAG_NAME);
 
         verify(tagRepository).findByTagName(TAG_NAME);
         verifyNoMoreInteractions(tagRepository);
