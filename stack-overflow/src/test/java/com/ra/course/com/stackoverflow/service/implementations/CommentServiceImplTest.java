@@ -1,25 +1,34 @@
 package com.ra.course.com.stackoverflow.service.implementations;
 
 import com.ra.course.com.stackoverflow.entity.*;
+
 import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
+
+import com.ra.course.com.stackoverflow.exception.service.AnswerNotFoundException;
+import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundException;
+
 import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.CommentRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+
 
 public class CommentServiceImplTest {
     private CommentServiceImpl commentService;
     private CommentRepository commentRepository;
-    private long id = 1L;
+    private QuestionRepository questionRepository;
+    private AnswerRepository answerRepository;
+    private final long ID = 1L;
     private String description = "some description";
 
     private Account account = Account.builder()
@@ -29,19 +38,19 @@ public class CommentServiceImplTest {
             .build();
 
     private Member member = Member.builder()
-            .id(id)
+            .id(ID)
             .account(account)
             .build();
 
     private Question question = Question.builder()
-            .id(id)
+            .id(ID)
             .description(description)
             .title("title")
             .author(member)
             .build();
 
     private Answer answer = Answer.builder()
-            .id(id)
+            .id(ID)
             .answerText("answer_text")
             .creationDate(LocalDateTime.now())
             .author(member)
@@ -52,7 +61,7 @@ public class CommentServiceImplTest {
             .build();
 
     private Comment comment = Comment.builder()
-            .id(id)
+            .id(ID)
             .text("Some_comment")
             .creationDate(LocalDateTime.now())
             .author(member)
@@ -63,57 +72,95 @@ public class CommentServiceImplTest {
     @BeforeEach
     public void setUp() {
         commentRepository = mock(CommentRepository.class);
-        QuestionRepository questionRepository = mock(QuestionRepository.class);
-        AnswerRepository answerRepository = mock(AnswerRepository.class);
+        questionRepository = mock(QuestionRepository.class);
+        answerRepository = mock(AnswerRepository.class);
+
         commentService = new CommentServiceImpl(commentRepository, questionRepository, answerRepository);
     }
 
 
     @Test
-    public void whenAddCommentToQuestionThatNotExistThenReturnNewCommentWithId() {
+    public void whenAddCommentToQuestionThenReturnNewCommentWithId() throws QuestionNotFoundException {
+        //when
         question.setStatus(QuestionStatus.OPEN);
 
-        //when
         when(commentRepository.save(comment)).thenReturn(comment);
+        when(questionRepository.findById(ID)).thenReturn(Optional.of(question));
+
 
         //then
         var resultComment = commentService.addCommentToQuestion(comment, question);
-        assertThat(resultComment.getId()).isEqualTo(1L);
+
+        assertThat(resultComment.getId()).isEqualTo(ID);
+        assertThat(question.getCommentList()).contains(resultComment);
+
+
+        //verify
+        verify(commentRepository).save(comment);
+
+        verify(questionRepository).findById(ID);
+        verify(questionRepository).update(question);
+
+        verifyNoMoreInteractions(commentRepository, questionRepository);
     }
+
+
+    @Test
+    public void whenAddCommentToAnswerThenReturnNewCommentWithId() throws AnswerNotFoundException {
+
+        //when
+        when(commentRepository.save(comment)).thenReturn(comment);
+        when(answerRepository.findById(ID)).thenReturn(Optional.of(answer));
+
+        //then
+        var resultComment = commentService.addCommentToAnswer(comment, answer);
+
+        assertThat(resultComment.getId()).isEqualTo(ID);
+        assertThat(answer.getComments()).contains(resultComment);
+
+        //verify
+        verify(commentRepository).save(resultComment);
+
+        verify(answerRepository).findById(ID);
+        verify(answerRepository).update(answer);
+
+        verifyNoMoreInteractions(commentRepository, answerRepository);
+    }
+
 
     @Test
     public void shouldThrowExceptionWhenCommentIsNull() {
 
+        //then
         assertThatThrownBy(() -> commentService.addCommentToQuestion(null, question))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("comment is marked @NonNull but is null");
+
+        assertThatThrownBy(() -> commentService.addCommentToAnswer(null, answer))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessage("comment is marked @NonNull but is null");
     }
 
 
     @Test
-    public void whenAddCommentToAnswerThatNotExistThenReturnNewCommentWithId() {
-
-        //when
-        when(commentRepository.save(comment)).thenReturn(comment);
-
-        //then
-        var resultComment = commentService.addCommentToAnswer(comment, answer);
-        assertThat(resultComment.getId()).isEqualTo(1L);
-    }
-
-    @Test
     public void shouldThrowExceptionWhenQuestionIsNull() {
 
+        //then
         assertThatThrownBy(() -> commentService.addCommentToQuestion(comment, null))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessage("question is marked @NonNull but is null");
     }
 
+
     @Test
     public void shouldThrowExceptionWhenAnswerIsNull() {
 
+        //then
         assertThatThrownBy(() -> commentService.addCommentToAnswer(comment, null))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessage("answer is marked @NonNull but is null");
+
+
     }
+
 }

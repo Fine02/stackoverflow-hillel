@@ -3,13 +3,19 @@ package com.ra.course.com.stackoverflow.service.implementations;
 import com.ra.course.com.stackoverflow.entity.Answer;
 import com.ra.course.com.stackoverflow.entity.Comment;
 import com.ra.course.com.stackoverflow.entity.Question;
+
+import com.ra.course.com.stackoverflow.exception.service.AnswerNotFoundException;
+import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundException;
+
 import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.CommentRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
+
 import com.ra.course.com.stackoverflow.service.interfaces.CommentService;
+
 import lombok.NonNull;
 
-public class CommentServiceImpl implements CommentService<Comment> {
+public class CommentServiceImpl implements CommentService {
 
     private final transient CommentRepository commentRepo;
     private final transient QuestionRepository questionRepo;
@@ -24,22 +30,31 @@ public class CommentServiceImpl implements CommentService<Comment> {
 
     /**Members can add comments to any question.**/
     @Override
-    public Comment addCommentToQuestion(@NonNull final Comment comment, @NonNull final Question question) {
+    public Comment addCommentToQuestion(@NonNull final Comment comment, @NonNull final Question question) throws QuestionNotFoundException {
 
-        question.getCommentList().add(comment);
-        questionRepo.update(question); //if it necessary
+        final var questionFromDB = questionRepo.findById(question.getId())
+                .orElseThrow(() -> new QuestionNotFoundException("Question not found in DB. Can't add comment to nonexistent question"));
 
-        return commentRepo.save(comment);
+
+        questionFromDB.getCommentList().add(comment);
+        questionRepo.update(questionFromDB);
+        commentRepo.save(comment);
+
+        return comment;
     }
 
 
     /**Members can add comments to any answer.**/
     @Override
-    public Comment addCommentToAnswer(@NonNull final Comment comment, @NonNull final Answer answer) {
+    public Comment addCommentToAnswer(@NonNull final Comment comment, @NonNull final Answer answer) throws AnswerNotFoundException {
+
+        final var answerFromDB = answerRepo.findById(answer.getId())
+                .orElseThrow(() -> new AnswerNotFoundException("Answer not found in DB. Can't add comment to nonexistent answer"));
 
         answer.getComments().add(comment);
-        answerRepo.update(answer); //if it necessary
+        answerRepo.update(answerFromDB);
+        commentRepo.save(comment);
 
-        return commentRepo.save(comment);
+        return comment;
     }
 }
