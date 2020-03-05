@@ -5,7 +5,7 @@ import com.ra.course.ams.airline.manag.system.entity.flight.Flight;
 
 import java.util.List;
 
-public interface AircraftManagmentService {
+public interface AircraftManagementService {
 
     Aircraft addAircraft(Aircraft aircraft);
     Aircraft updateAircraft(Aircraft aircraft);

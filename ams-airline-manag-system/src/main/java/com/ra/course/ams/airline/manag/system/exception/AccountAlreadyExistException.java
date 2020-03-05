@@ -1,4 +1,4 @@
-package com.ra.course.ams.airline.manag.system.exceptions;
+package com.ra.course.ams.airline.manag.system.exception;
 
 public class AccountAlreadyExistException extends InstanceAlreadyExistException {
 

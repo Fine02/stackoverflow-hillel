@@ -58,41 +58,37 @@ public class Airport {
         return name;
     }
 
-    public Airport setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
 
     public Address getAddress() {
         return address;
     }
 
-    public Airport setAddress(Address address) {
+    public void setAddress(Address address) {
         this.address = address;
-        return this;
     }
 
     public String getCode() {
         return code;
     }
 
-    public Airport setCode(String code) {
+    public void setCode(String code) {
         this.code = code;
-        return this;
     }
 
     public List<Flight> getFlights() {
         return flights;
     }
 
-    public Airport setFlights(List<Flight> flights) {
+    public void setFlights(List<Flight> flights) {
         this.flights = flights;
-        return this;
     }
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("com.ra.course.ams.airline.manag.system.entity.flight.Airport{");
+        final StringBuffer sb = new StringBuffer("Airport{");
         sb.append("\"name\": \"").append(name).append('"');
         sb.append(", \"address\":").append(address);
         sb.append(", \"code\": \"").append(code).append('"');

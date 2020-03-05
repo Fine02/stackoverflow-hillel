@@ -2,30 +2,33 @@ package com.ra.course.ams.airline.manag.system.entity.person;
 
 public class Account {
 
-    private String id;
+    private final String id;
     private String password;
     private AccountStatus accountStatus;
-    private Person person;
+    private final Pilot person;
 
-    public Account() {
-    }
-
-    public Account(String id) {
+    public Account(String id, Pilot person) {
         this.id = id;
+        this.person = person;
     }
 
     private Account(Builder builder) {
-        this.id = id;
-        this.password = password;
-        this.accountStatus = accountStatus;
-        this.person = person;
+        this.id = builder.id;
+        this.password = builder.password;
+        this.accountStatus = builder.accountStatus;
+        this.person = builder.person;
     }
 
     public static class Builder {
         private transient String id;
         private transient String password;
         private transient AccountStatus accountStatus;
-        private transient Person person;
+        private transient Pilot person;
+
+        public Builder(String id, Pilot person) {
+            this.id = id;
+            this.person = person;
+        }
 
         public Account build(){
             return new Account(this);
@@ -46,7 +49,7 @@ public class Account {
             return this;
         }
 
-        public Builder setPerson(Person person) {
+        public Builder setPerson(Pilot person) {
             this.person = person;
             return this;
         }
@@ -56,9 +59,6 @@ public class Account {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getPassword() {
         return password;
@@ -76,12 +76,8 @@ public class Account {
         this.accountStatus = accountStatus;
     }
 
-    public Person getPerson() {
+    public Pilot getPerson() {
         return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
     }
 
     @Override

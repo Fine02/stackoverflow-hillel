@@ -5,7 +5,7 @@ import com.ra.course.ams.airline.manag.system.entity.Itinerary;
 
 import java.util.List;
 
-public class Customer extends Person {
+public class Customer extends Pilot {
 
     private String frequentlyFlyerNumber;
     private List<Itinerary> itineraries;
