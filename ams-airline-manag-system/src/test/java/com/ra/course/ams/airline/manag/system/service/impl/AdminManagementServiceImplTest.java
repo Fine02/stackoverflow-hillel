@@ -1,9 +1,12 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
+import com.ra.course.ams.airline.manag.system.entity.Address;
 import com.ra.course.ams.airline.manag.system.entity.person.Admin;
+import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.exception.AdminAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.AdminNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -273,5 +276,12 @@ public class AdminManagementServiceImplTest {
                         new Admin.Builder().setName("Egorov Egor").setEmail("egorov@example.com").setPhone("4444").build()
                 };
                 return Arrays.asList(admins);
+        }
+
+        @Test
+        public void whenUpdateEmailWithAdminNullThenThrowNullPointerException(){
+                Admin admin = null;
+                Assertions.assertThrows(NullPointerException.class, () ->
+                        adminManagementService.updateEmail(admin, "email"));
         }
 }

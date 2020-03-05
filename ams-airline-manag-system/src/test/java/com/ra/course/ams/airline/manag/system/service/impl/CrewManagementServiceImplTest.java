@@ -1,10 +1,12 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
+import com.ra.course.ams.airline.manag.system.entity.Address;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.exception.CrewAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.CrewNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -364,5 +366,12 @@ public class CrewManagementServiceImplTest {
                         new Crew.Builder().setName("Egorov Egor").setEmail("egorov@example.com").setPhone("4444").build()
                 };
                 return Arrays.asList(crews);
+        }
+
+        @Test
+        public void whenUpdateAddressWithCrewNullThenThrowNullPointerException(){
+                Crew crew = null;
+                Assertions.assertThrows(NullPointerException.class, () ->
+                        crewManagenentService.updateAddress(crew, new Address()));
         }
 }
