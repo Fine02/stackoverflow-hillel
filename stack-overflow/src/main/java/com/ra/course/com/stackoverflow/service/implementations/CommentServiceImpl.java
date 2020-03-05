@@ -51,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
         final var answerFromDB = answerRepo.findById(answer.getId())
                 .orElseThrow(() -> new AnswerNotFoundException("Answer not found in DB. Can't add comment to nonexistent answer"));
 
-        answer.getComments().add(comment);
+        answerFromDB.getComments().add(comment);
         answerRepo.update(answerFromDB);
         commentRepo.save(comment);
 
