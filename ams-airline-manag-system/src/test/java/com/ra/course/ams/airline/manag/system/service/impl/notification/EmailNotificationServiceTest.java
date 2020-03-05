@@ -4,7 +4,7 @@ import com.ra.course.ams.airline.manag.system.entity.FlightReservation;
 import com.ra.course.ams.airline.manag.system.entity.ReservationStatus;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightStatus;
-import com.ra.course.ams.airline.manag.system.exceptions.ReservationWasNotModifiedException;
+import com.ra.course.ams.airline.manag.system.exception.ReservationWasNotModifiedException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

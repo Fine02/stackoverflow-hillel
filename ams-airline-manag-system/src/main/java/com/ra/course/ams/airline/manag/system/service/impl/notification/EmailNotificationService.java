@@ -3,6 +3,7 @@ package com.ra.course.ams.airline.manag.system.service.impl.notification;
 import com.ra.course.ams.airline.manag.system.entity.FlightReservation;
 import com.ra.course.ams.airline.manag.system.entity.ReservationStatus;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightStatus;
+import com.ra.course.ams.airline.manag.system.exception.ReservationWasNotModifiedException;
 import com.ra.course.ams.airline.manag.system.service.NotificationService;
 
 public class EmailNotificationService implements NotificationService <FlightReservation> {
