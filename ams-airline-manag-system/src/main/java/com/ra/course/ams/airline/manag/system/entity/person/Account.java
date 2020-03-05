@@ -12,6 +12,13 @@ public class Account {
         this.person = person;
     }
 
+    public Account(Account account) {
+        this.id = account.getId();
+        this.password = account.getPassword();
+        this.accountStatus = account.getAccountStatus();
+        this.person = account.getPerson();
+    }
+
     private Account(Builder builder) {
         this.id = builder.id;
         this.password = builder.password;
