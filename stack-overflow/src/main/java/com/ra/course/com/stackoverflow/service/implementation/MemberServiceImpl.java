@@ -3,7 +3,7 @@ package com.ra.course.com.stackoverflow.service.implementation;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
-import com.ra.course.com.stackoverflow.exception.repository.InternalServerErrorException;
+import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 import com.ra.course.com.stackoverflow.service.MemberService;

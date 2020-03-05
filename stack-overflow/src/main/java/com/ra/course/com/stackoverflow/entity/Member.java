@@ -6,7 +6,9 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SuperBuilder
 @Data
@@ -21,7 +23,7 @@ public class Member {
 
     @NonNull
     @Builder.Default
-    private List<Badge> badges = new ArrayList<>();
+    private Map<Badge, List<Question>> questionBadges = new HashMap<>();
 
     @NonNull
     @Builder.Default
