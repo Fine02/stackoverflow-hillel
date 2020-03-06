@@ -9,6 +9,8 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Optional;
 
 @SuperBuilder
@@ -69,4 +71,13 @@ public class Question implements Commentable {
     @NonNull
     @Builder.Default
     private List<Tag> tagList = new ArrayList<>();
+
+    @NonNull
+    @Builder.Default
+    private Map<Long, QuestionClosingRemark> membersIdsWhoVotedQuestionToClose = new HashMap<>();
+
+    @NonNull
+    @Builder.Default
+    private Map<Long, QuestionClosingRemark> membersIdsWhoVotedQuestionToDelete = new HashMap<>();
+
 }
