@@ -9,8 +9,7 @@ import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundExcepti
 import com.ra.course.com.stackoverflow.exception.vote_service.AlreadyVotedException;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
-import com.ra.course.com.stackoverflow.service.vote.impl.VoteQuestionService;
-import com.ra.course.com.stackoverflow.service.vote.impl.VoteToCloseOrDeleteQuestionService;
+import com.ra.course.com.stackoverflow.service.vote.impl.VoteWithRemarkService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class VoteToCloseServiceTest {
-    private VoteToCloseOrDeleteQuestionService voteQuestionService;
+    private VoteWithRemarkService voteQuestionService;
     private QuestionRepository questionData = mock(QuestionRepository.class);
     private MemberRepository memberData = mock(MemberRepository.class);
 
@@ -34,7 +33,7 @@ public class VoteToCloseServiceTest {
 
     @BeforeEach
     void setUp() {
-        voteQuestionService = new VoteToCloseOrDeleteQuestionService(questionData, memberData);
+        voteQuestionService = new VoteWithRemarkService(questionData, memberData);
     }
 
     @Test
@@ -87,6 +86,7 @@ public class VoteToCloseServiceTest {
         verify(memberData).findById(ID1);
         verifyNoMoreInteractions(questionData, memberData);
     }
+
     @Test
     public void whenMemberVotesToCloseTheQuestionThenUpdateQuestion() throws Exception {
         //given
@@ -108,14 +108,13 @@ public class VoteToCloseServiceTest {
         verifyNoMoreInteractions(questionData, memberData);
     }
 
-
-
     private Question mockQuestion(Member member){
         return Question.builder()
                 .id(ID1)
                 .title("title")
                 .author(member).build();
     }
+
     private Member mockMember(long idMember){
         var account = Account.builder()
                 .id(idMember)

@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
 import java.util.Map;
 
 @AllArgsConstructor
-public class VoteToCloseOrDeleteQuestionService {
+public class VoteWithRemarkService {
     private transient final QuestionRepository questionData;
     private transient final MemberRepository memberData;
 
@@ -50,14 +50,12 @@ public class VoteToCloseOrDeleteQuestionService {
         return question;
     }
     private Question checkQuestion(final Question question) throws QuestionNotFoundException {
-        final var optionalQuestion = questionData.findById(question.getId());
-        return optionalQuestion.orElseThrow(
+        return questionData.findById(question.getId()).orElseThrow(
                 ()-> new QuestionNotFoundException("No such question in DB"));
     }
 
     private Member checkMember(final Member member) throws MemberNotFoundException {
-        final var optionalMember = memberData.findById(member.getId());
-        return optionalMember.orElseThrow(
+        return memberData.findById(member.getId()).orElseThrow(
                 ()-> new MemberNotFoundException("No such member in DB"));
 
     }
