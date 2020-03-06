@@ -49,9 +49,9 @@ public class QuestionServiceImpl implements QuestionService {
         question.getAuthor().getAnswers().add(answer);
         questionRepo.update(question); //if it necessary
 
-        answerRepo.save(answer);
 
-        return answer;
+
+        return answerRepo.save(answer);
     }
 
 

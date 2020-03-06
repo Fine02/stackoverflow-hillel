@@ -38,9 +38,9 @@ public class CommentServiceImpl implements CommentService {
 
         questionFromDB.getCommentList().add(comment);
         questionRepo.update(questionFromDB);
-        commentRepo.save(comment);
 
-        return comment;
+
+        return commentRepo.save(comment);
     }
 
 
@@ -53,8 +53,8 @@ public class CommentServiceImpl implements CommentService {
 
         answerFromDB.getComments().add(comment);
         answerRepo.update(answerFromDB);
-        commentRepo.save(comment);
 
-        return comment;
+
+        return commentRepo.save(comment);
     }
 }
