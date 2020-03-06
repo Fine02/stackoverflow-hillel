@@ -1,12 +1,15 @@
 package com.ra.course.aws.online.shopping.entity.product;
 
+import java.util.Objects;
+
 public class Product {
-    private String productID;
+    private Long productID;
     private String name;
     private String description;
     private double price;
     private int availableItemCount;
     private ProductCategory category;
+    private ProductReview productReview;
 
     public Product() {
     }
@@ -19,7 +22,7 @@ public class Product {
         this.category = category;
     }
 
-    public Product(String productID, String name, String description, double price, int availableItemCount, ProductCategory category) {
+    public Product(Long productID, String name, String description, double price, int availableItemCount, ProductCategory category) {
         this.productID = productID;
         this.name = name;
         this.description = description;
@@ -28,11 +31,11 @@ public class Product {
         this.category = category;
     }
 
-    public String getProductID() {
+    public Long getProductID() {
         return productID;
     }
 
-    public void setProductID(String productID) {
+    public void setProductID(Long productID) {
         this.productID = productID;
     }
 
@@ -74,5 +77,45 @@ public class Product {
 
     public void setCategory(ProductCategory category) {
         this.category = category;
+    }
+
+    public ProductReview getProductReview() {
+        return productReview;
+    }
+
+    public void setProductReview(ProductReview productReview) {
+        this.productReview = productReview;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Double.compare(product.price, price) == 0 &&
+                availableItemCount == product.availableItemCount &&
+                Objects.equals(productID, product.productID) &&
+                Objects.equals(name, product.name) &&
+                Objects.equals(description, product.description) &&
+                Objects.equals(category, product.category) &&
+                Objects.equals(productReview, product.productReview);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productID, name, description, price, availableItemCount, category, productReview);
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productID=" + productID +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", availableItemCount=" + availableItemCount +
+                ", category=" + category +
+                ", productReview=" + productReview +
+                '}';
     }
 }
