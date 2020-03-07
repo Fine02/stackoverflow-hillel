@@ -4,12 +4,16 @@ import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightStatus;
 import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
+import com.ra.course.ams.airline.manag.system.exception.ReservationWasNotModifiedException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 import com.ra.course.ams.airline.manag.system.service.FlightInstanceService;
+import com.ra.course.ams.airline.manag.system.service.impl.notification.EmailNotificationService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.matchers.Null;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +36,7 @@ public class FlightInstanceServiceImplTest {
     }
 
     @Test
-    public void testThatIfPassValidObjectInArgumentAddMethodReturnsFlightInstance(){
+    public void testThatIfPassValidObjectInArgumentAddMethodReturnsFlightInstance() {
         FlightInstance flightInstanceToAdd = new FlightInstance.Builder().setId("0001").build();
         when(flightInstanceRepository.addInstance(flightInstanceToAdd)).thenReturn(flightInstanceToAdd);
         FlightInstance returnedFlightInstance = flightInstanceService.add(flightInstanceToAdd);
@@ -44,7 +48,7 @@ public class FlightInstanceServiceImplTest {
     }
 
     @Test
-    public void testThatIfPassNullInArgumentAddMethodThrowsError(){
+    public void testThatIfPassNullInArgumentAddMethodThrowsError() {
         try {
             flightInstanceService.add(null);
             fail("Expected that NullPointerException will be throws");
@@ -55,7 +59,7 @@ public class FlightInstanceServiceImplTest {
     }
 
     @Test
-    public void testThatIfPassValidObjectInArgumentUpdateMethodReturnsFlightNoErrorThrows(){
+    public void testThatIfPassValidObjectInArgumentUpdateMethodReturnsFlightNoErrorThrows() {
         FlightInstance flightInstanceToUpdate = new FlightInstance.Builder().setId("0001").build();
         doNothing().when(flightInstanceRepository).updateInstance(flightInstanceToUpdate);
         try {
@@ -67,7 +71,7 @@ public class FlightInstanceServiceImplTest {
     }
 
     @Test
-    public void testThatIfPassNullInArgumentUpdateMethodThrowsError(){
+    public void testThatIfPassNullInArgumentUpdateMethodThrowsError() {
         try {
             flightInstanceService.updateStatus(null, FlightStatus.ACTIVE);
             fail("Expected that NullPointerException will be throws");
@@ -78,7 +82,13 @@ public class FlightInstanceServiceImplTest {
     }
 
     @Test
-    public void testThatIfPassValidObjectInArgumentCancelMethodReturnsTrue(){
+    public void whenUpdateStatusWithFlightStatusNullThenThrowNullPointerException() {
+        Assertions.assertThrows(NullPointerException.class, () ->
+                flightInstanceService.updateStatus(new FlightInstance(), null));
+    }
+
+    @Test
+    public void testThatIfPassValidObjectInArgumentCancelMethodReturnsTrue() {
         FlightInstance flightInstanceToCancel = new FlightInstance.Builder().setId("0001").build();
         doNothing().when(flightInstanceRepository).removeInstance(flightInstanceToCancel);
         boolean result = flightInstanceService.cancel(flightInstanceToCancel);
@@ -90,7 +100,7 @@ public class FlightInstanceServiceImplTest {
     }
 
     @Test
-    public void testThatIfPassNullInArgumentCancelMethodThrowsError(){
+    public void testThatIfPassNullInArgumentCancelMethodThrowsError() {
         try {
             flightInstanceService.cancel(null);
             fail("Expected that NullPointerException will be throws");
@@ -101,7 +111,7 @@ public class FlightInstanceServiceImplTest {
     }
 
     @Test
-    public void testThatIfPassValidObjectInArgumentAssignPilotMethodCallRepositoryWithRightObjectAndReturnsTrue(){
+    public void testThatIfPassValidObjectInArgumentAssignPilotMethodCallRepositoryWithRightObjectAndReturnsTrue() {
         FlightInstance flightInstanceToUpdate = new FlightInstance.Builder().setId("0001").build();
         doNothing().when(flightInstanceRepository).updateInstance(flightInstanceToUpdate);
         Pilot pilot = new Pilot();
@@ -114,7 +124,7 @@ public class FlightInstanceServiceImplTest {
     }
 
     @Test
-    public void testThatIfPassValidObjectInArgumentAssignCrewMethodCallRepositoryWithRightObjectAndReturnsTrue(){
+    public void testThatIfPassValidObjectInArgumentAssignCrewMethodCallRepositoryWithRightObjectAndReturnsTrue() {
         FlightInstance flightInstanceToUpdate = new FlightInstance.Builder().setId("0001").build();
         doNothing().when(flightInstanceRepository).updateInstance(flightInstanceToUpdate);
         Crew crew = new Crew();
@@ -127,8 +137,8 @@ public class FlightInstanceServiceImplTest {
     }
 
     @Test
-    public void testThatIfPassValidObjectArgumentInGetAssignedPilotsMethodThanReturnPilots(){
-        FlightInstance flightInstance = new FlightInstance.Builder().setId("0001").setPilots(Arrays.asList(new Pilot[] {new Pilot(), new Pilot(), new Pilot()})).build();
+    public void testThatIfPassValidObjectArgumentInGetAssignedPilotsMethodThanReturnPilots() {
+        FlightInstance flightInstance = new FlightInstance.Builder().setId("0001").setPilots(Arrays.asList(new Pilot[]{new Pilot(), new Pilot(), new Pilot()})).build();
         try {
             List<Pilot> returnedPilots = flightInstanceService.getAssignedPilots(flightInstance);
             assertThat(returnedPilots.size()).isEqualTo(3);
@@ -139,8 +149,8 @@ public class FlightInstanceServiceImplTest {
     }
 
     @Test
-    public void testThatIfPassValidObjectArgumentInGetAssignedCrewsMethodThanReturnCrews(){
-        FlightInstance flightInstance = new FlightInstance.Builder().setId("0001").setCrews(Arrays.asList(new Crew[] {new Crew(), new Crew(), new Crew()})).build();
+    public void testThatIfPassValidObjectArgumentInGetAssignedCrewsMethodThanReturnCrews() {
+        FlightInstance flightInstance = new FlightInstance.Builder().setId("0001").setCrews(Arrays.asList(new Crew[]{new Crew(), new Crew(), new Crew()})).build();
         try {
             List<Crew> returnedCrews = flightInstanceService.getAssignedCrew(flightInstance);
             assertThat(returnedCrews.size()).isEqualTo(3);
@@ -150,4 +160,31 @@ public class FlightInstanceServiceImplTest {
         verifyZeroInteractions(flightInstanceRepository);
     }
 
+    @Test
+    public void whenAssignPilotWithflightInstanceNullThenThrowNullPointerException() {
+        FlightInstance flightInstance = null;
+        Assertions.assertThrows(NullPointerException.class, () ->
+                flightInstanceService.assignPilot(flightInstance, new Pilot()));
+    }
+
+    @Test
+    public void whenAssignCrewWithCrewNullThenThrowNullPointerException() {
+        Crew crew = null;
+        Assertions.assertThrows(NullPointerException.class, () ->
+                flightInstanceService.assignCrew(new FlightInstance(), crew));
+    }
+
+    @Test
+    public void whenAssignCrewWithflightInstanceNullThenThrowNullPointerException() {
+        FlightInstance flightInstance = null;
+        Assertions.assertThrows(NullPointerException.class, () ->
+                flightInstanceService.assignCrew(flightInstance, new Crew()));
+    }
+
+    @Test
+    public void whenAssignPilotWithPilotNullThenThrowNullPointerException() {
+        Crew crew = null;
+        Assertions.assertThrows(NullPointerException.class, () ->
+                flightInstanceService.assignPilot(new FlightInstance(), crew));
+    }
 }

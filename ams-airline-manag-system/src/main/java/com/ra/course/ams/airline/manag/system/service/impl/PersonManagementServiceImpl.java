@@ -13,7 +13,6 @@ public class PersonManagementServiceImpl implements PersonManagementService<Pers
 
     private Repository<Person, String> personRepository;
 
-
     @Override
     public Person findByEmail(String email) {
         if (email == null || email.isBlank()) {

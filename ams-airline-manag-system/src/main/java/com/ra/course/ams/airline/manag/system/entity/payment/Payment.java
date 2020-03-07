@@ -3,7 +3,7 @@ package com.ra.course.ams.airline.manag.system.entity.payment;
 public class Payment {
     private int paimentId;
     private double amound;
-    private PaymentStatus staus;
+    private PaymentStatus status;
 
     public Payment() {
     }
@@ -11,7 +11,7 @@ public class Payment {
     public Payment(int paimentId, double amound, PaymentStatus staus) {
         this.paimentId = paimentId;
         this.amound = amound;
-        this.staus = staus;
+        this.status = staus;
     }
 
     public int getPaimentId() {
@@ -31,10 +31,10 @@ public class Payment {
     }
 
     public PaymentStatus getStaus() {
-        return staus;
+        return status;
     }
 
     public void setStaus(PaymentStatus staus) {
-        this.staus = staus;
+        this.status = staus;
     }
 }
