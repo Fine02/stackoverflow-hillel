@@ -82,6 +82,12 @@ public class FlightInstanceServiceImplTest {
     }
 
     @Test
+    public void whenUpdateStatusWithFlightStatusNullThenThrowNullPointerException() {
+        Assertions.assertThrows(NullPointerException.class, () ->
+                flightInstanceService.updateStatus(new FlightInstance(), null));
+    }
+
+    @Test
     public void testThatIfPassValidObjectInArgumentCancelMethodReturnsTrue() {
         FlightInstance flightInstanceToCancel = new FlightInstance.Builder().setId("0001").build();
         doNothing().when(flightInstanceRepository).removeInstance(flightInstanceToCancel);

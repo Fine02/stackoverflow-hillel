@@ -1,9 +1,12 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
+import com.ra.course.ams.airline.manag.system.entity.Address;
+import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.person.Person;
 import com.ra.course.ams.airline.manag.system.exception.PersonAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.PersonNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -55,6 +58,17 @@ public class PersonManagementServiceImplTest {
         }
 
         @Test
+        public void testThatFindByEmailThrowsIllegalArgumentExceptionWhenCallingWithNullArgument(){
+                try {
+                        personManagenentService.findByEmail(null);
+                        fail("Expected IllegalArgumentException to be thrown");
+                } catch (Exception e) {
+                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
+                }
+                verifyZeroInteractions(personRepository);
+        }
+
+        @Test
         public void testThatFindByEmailThrowsPersonNotExistExceptionWhenCallingWhenCannotFindPersonWithEmail(){
                 when(personRepository.getInstances()).thenReturn(getPersons());
 
@@ -96,6 +110,17 @@ public class PersonManagementServiceImplTest {
         public void testThatFindByPhoneThrowsIllegalArgumentExceptionWhenCallWithEmptyArg(){
                 try {
                         personManagenentService.findByPhoneNumber("");
+                        fail("Expected IllegalArgumentException to be thrown");
+                } catch (Exception e) {
+                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
+                }
+                verifyZeroInteractions(personRepository);
+        }
+
+        @Test
+        public void testThatFindByPhoneThrowsIllegalArgumentExceptionWhenCallWithNullArg(){
+                try {
+                        personManagenentService.findByPhoneNumber(null);
                         fail("Expected IllegalArgumentException to be thrown");
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
@@ -263,6 +288,12 @@ public class PersonManagementServiceImplTest {
                 }
                 verify(personRepository, times(1)).getInstance(any());
                 verifyNoMoreInteractions(personRepository);
+        }
+
+        @Test
+        public void whenUpdateAdressWithPersonIsNullThenThrowNullPointerException() {
+                Assertions.assertThrows(NullPointerException.class, () ->
+                        personManagenentService.updateAddress(null, new Address()));
         }
 
         private static Collection<Person> getPersons() {

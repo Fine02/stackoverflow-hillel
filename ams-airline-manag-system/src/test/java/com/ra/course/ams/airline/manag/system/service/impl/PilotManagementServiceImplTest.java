@@ -2,7 +2,6 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.Address;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
-import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
 import com.ra.course.ams.airline.manag.system.exception.PilotAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.PilotNotExistException;
@@ -64,6 +63,13 @@ public class PilotManagementServiceImplTest {
     }
 
     @Test
+    public void whenAddFlightInstanceWithFlightInstancNullThenThrowNullPointerException() {
+        Pilot pilot = null;
+        Assertions.assertThrows(NullPointerException.class, () ->
+                pilotManagenentService.addFlightInstance(new Pilot(), null));
+    }
+
+    @Test
     public void testThatAddFlightInstanceThrowPilotNotExistExceptionIfNoSuchPilotFind() {
         when(pilotRepository.getInstance(any())).thenReturn(null);
         try {
@@ -110,9 +116,8 @@ public class PilotManagementServiceImplTest {
 
     @Test
     public void whenRemoveFlightInstanceWithPilotNullThenThrowNullPointerException() {
-        Pilot pilot = null;
         Assertions.assertThrows(NullPointerException.class, () ->
-                pilotManagenentService.removeFlightInstance(null, new FlightInstance()));
+                pilotManagenentService.removeFlightInstance(new Pilot(), null));
     }
 
     @Test
