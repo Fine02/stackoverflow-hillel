@@ -45,9 +45,9 @@ public class AircraftManagementServiceImplTest {
     public void testThatIfPassNullInArgumentAddAircraftMethodThrowsError(){
         try {
             aircraftManagementService.addAircraft(null);
-            fail("Expected that NullPointerException will be throws");
-        } catch (NullPointerException e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            fail("Expected that IllegalArgumentException will be throws");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(aircraftRepository);
     }
@@ -68,9 +68,9 @@ public class AircraftManagementServiceImplTest {
     public void testThatIfPassNullInArgumentUpdateAircraftMethodThrowsError(){
         try {
             aircraftManagementService.updateAircraft(null);
-            fail("Expected that NullPointerException will be throws");
-        } catch (NullPointerException e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            fail("Expected that IllegalArgumentException will be throws");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(aircraftRepository);
     }

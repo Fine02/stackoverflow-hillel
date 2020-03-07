@@ -40,13 +40,13 @@ public class Crew extends Pilot {
         private transient String email;
         private transient String phone;
         private transient Address address;
-        private List<FlightInstance> flightInstances = new LinkedList<>();
+        transient private List<FlightInstance> flightInstances = new LinkedList<>();
 
         public Crew build() {
             return new Crew(this);
         }
 
-        public Builder addFlightInstance(FlightInstance flightInstance){
+        public Builder addFlightInstance(FlightInstance flightInstance) {
             this.flightInstances.add(flightInstance);
             return this;
         }
@@ -76,6 +76,7 @@ public class Crew extends Pilot {
             return this;
         }
     }
+
     public List<FlightInstance> getFlightInstances() {
         return flightInstances;
     }

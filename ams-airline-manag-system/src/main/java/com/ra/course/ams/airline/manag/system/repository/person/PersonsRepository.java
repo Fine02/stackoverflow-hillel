@@ -12,7 +12,7 @@ public class PersonsRepository implements Repository<Pilot, String> {
     private Map<String, Pilot> persons;
 
     @Override
-    public Pilot getInstance(String phoneNumber) {
+    public Pilot getInstance(final String phoneNumber) {
         return persons.get(phoneNumber);
     }
 
@@ -22,7 +22,7 @@ public class PersonsRepository implements Repository<Pilot, String> {
     }
 
     @Override
-    public Pilot addInstance(Pilot person) {
+    public Pilot addInstance(final Pilot person) {
         if (persons.containsKey(person.getPhone())){
             throw new InstanceAlreadyExistException();
         }
@@ -30,12 +30,12 @@ public class PersonsRepository implements Repository<Pilot, String> {
     }
 
     @Override
-    public void updateInstance(Pilot person) {
+    public void updateInstance(final Pilot person) {
         persons.put(person.getPhone(), person);
     }
 
     @Override
-    public void removeInstance(Pilot person) {
+    public void removeInstance(final Pilot person) {
         persons.remove(person.getPhone());
     }
 
@@ -43,7 +43,7 @@ public class PersonsRepository implements Repository<Pilot, String> {
         return persons;
     }
 
-    public void setPersons(Map<String, Pilot> persons) {
+    public void setPersons(final Map<String, Pilot> persons) {
         this.persons = persons;
     }
 }

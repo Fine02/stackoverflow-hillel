@@ -10,21 +10,21 @@ import java.util.List;
 
 public class CustomScheduleRepository implements Repository<CustomSchedule, String> {
 
-    private final List<CustomSchedule> customSchedules;
+    transient private final List<CustomSchedule> customSchedules;
 
-    public CustomScheduleRepository(List<CustomSchedule> customSchedules) {
+    public CustomScheduleRepository(final List<CustomSchedule> customSchedules) {
         this.customSchedules = customSchedules;
     }
 
-    boolean isAlreadyExist(String identifier) {
+    public boolean isAlreadyExist(final String identifier) {
         return customSchedules.stream().map(CustomSchedule::getId)
                 .anyMatch(id -> id.equals(identifier));
     }
 
     @Override
-    public CustomSchedule getInstance(String instanceId) {
+    public CustomSchedule getInstance(final String instanceId) {
         return customSchedules.stream()
-                .filter(customScheduleItem -> customScheduleItem.getId().equals(instanceId))
+                .filter(customSchedItem -> customSchedItem.getId().equals(instanceId))
                 .findAny()
                 .orElse(null);
     }
@@ -35,7 +35,7 @@ public class CustomScheduleRepository implements Repository<CustomSchedule, Stri
     }
 
     @Override
-    public CustomSchedule addInstance(CustomSchedule customSchedule) {
+    public CustomSchedule addInstance(final CustomSchedule customSchedule) {
         if (isAlreadyExist(customSchedule.getId())) {
             throw new InstanceAlreadyExistException();
         }
@@ -44,17 +44,17 @@ public class CustomScheduleRepository implements Repository<CustomSchedule, Stri
     }
 
     @Override
-    public void updateInstance(CustomSchedule customSchedule) {
+    public void updateInstance(final CustomSchedule customSchedule) {
         if (!isAlreadyExist(customSchedule.getId())) {
             throw new InstanceNotExistException();
         }
         customSchedules.stream()
-                .filter(customScheduleItem -> customScheduleItem.getId().equals(customSchedule.getId()))
-                .forEach(customScheduleItemForUpdate -> customScheduleItemForUpdate = customSchedule);
+                .filter(customSchedItem -> customSchedItem.getId().equals(customSchedule.getId()))
+                .forEach(customSchdItemUpd -> customSchdItemUpd = customSchedule);
     }
 
     @Override
-    public void removeInstance(CustomSchedule customSchedule) {
-        customSchedules.removeIf(customScheduleItem -> customScheduleItem.getId().equals(customSchedule.getId()));
+    public void removeInstance(final CustomSchedule customSchedule) {
+        customSchedules.removeIf(customSchedItem -> customSchedItem.getId().equals(customSchedule.getId()));
     }
 }

@@ -1,6 +1,5 @@
 package com.ra.course.ams.airline.manag.system.repository.flight;
 
-import com.ra.course.ams.airline.manag.system.entity.flight.Flight;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.exception.InstanceAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.InstanceNotExistException;
@@ -8,24 +7,23 @@ import com.ra.course.ams.airline.manag.system.repository.Repository;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FlightInstanceRepository implements Repository<FlightInstance, String> {
 
-    private final List<FlightInstance> flightInstances;
+    transient private final List<FlightInstance> flightInstances;
 
-    public FlightInstanceRepository(List<FlightInstance> flightInstances) {
+    public FlightInstanceRepository(final List<FlightInstance> flightInstances) {
         this.flightInstances = flightInstances;
     }
 
 
-    boolean isAlreadyExist(String identifier) {
+    public boolean isAlreadyExist(final String identifier) {
         return flightInstances.stream().map(FlightInstance::getId)
                 .anyMatch(number -> number.equals(identifier));
     }
 
     @Override
-    public FlightInstance getInstance(String flightInstanceId) {
+    public FlightInstance getInstance(final String flightInstanceId) {
         return flightInstances.stream()
                 .filter(flightInstance -> flightInstance.getId().equals(flightInstanceId))
                 .findFirst()
@@ -38,7 +36,7 @@ public class FlightInstanceRepository implements Repository<FlightInstance, Stri
     }
 
     @Override
-    public FlightInstance addInstance(FlightInstance flightInstance) {
+    public FlightInstance addInstance(final FlightInstance flightInstance) {
         if (isAlreadyExist(flightInstance.getId())) {
             throw new InstanceAlreadyExistException();
         }
@@ -47,18 +45,17 @@ public class FlightInstanceRepository implements Repository<FlightInstance, Stri
     }
 
     @Override
-    public void updateInstance(FlightInstance flightInstance) {
+    public void updateInstance(final FlightInstance flightInstance) {
         if (!isAlreadyExist(flightInstance.getId())) {
             throw new InstanceNotExistException();
         }
         flightInstances.stream()
-                .filter(flightInstanceItem -> flightInstanceItem.getId().equals(flightInstance.getId()))
-                .forEach(flightInstanceItemForUpdate -> flightInstanceItemForUpdate = flightInstance);
+                .filter(flightInstItem -> flightInstItem.getId().equals(flightInstance.getId()))
+                .forEach(flighInstItForUp -> flighInstItForUp = flightInstance);
     }
 
     @Override
-    public void removeInstance(FlightInstance flightInstance) {
-        flightInstances.removeIf(flightInstanceItem -> flightInstanceItem.getId().equals(flightInstance.getId()));
+    public void removeInstance(final FlightInstance flightInstance) {
+        flightInstances.removeIf(flightInstItem -> flightInstItem.getId().equals(flightInstance.getId()));
     }
-
 }

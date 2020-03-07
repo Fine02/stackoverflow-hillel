@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class EmailNotification extends Notification {
     private String email;
-    private Notification notification;
+    transient private Notification notification;
 
     public EmailNotification(String email, Notification notification) {
         this.email = email;

@@ -44,9 +44,9 @@ public class FlightServiceImplTest {
     public void testThatIfPassNullInArgumentAddMethodThrowsError(){
         try {
             flightService.add(null);
-            fail("Expected that NullPointerException will be throws");
-        } catch (NullPointerException e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            fail("Expected that IllegalArgumentException will be throws");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(flightRepository);
     }
@@ -67,9 +67,9 @@ public class FlightServiceImplTest {
     public void testThatIfPassNullInArgumentUpdateMethodThrowsError(){
         try {
             flightService.update(null);
-            fail("Expected that NullPointerException will be throws");
-        } catch (NullPointerException e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            fail("Expected that IllegalArgumentException will be throws");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(flightRepository);
     }
@@ -90,9 +90,9 @@ public class FlightServiceImplTest {
     public void testThatIfPassNullInArgumentCancelMethodThrowsError(){
         try {
             flightService.cancel(null);
-            fail("Expected that NullPointerException will be throws");
-        } catch (NullPointerException e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            fail("Expected that IllegalArgumentException will be throws");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(flightRepository);
     }

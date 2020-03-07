@@ -4,16 +4,13 @@ import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightStatus;
 import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
-import com.ra.course.ams.airline.manag.system.exception.ReservationWasNotModifiedException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 import com.ra.course.ams.airline.manag.system.service.FlightInstanceService;
-import com.ra.course.ams.airline.manag.system.service.impl.notification.EmailNotificationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.matchers.Null;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +29,7 @@ public class FlightInstanceServiceImplTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        flightInstanceService = new FlightInstanceServiceImpl(flightInstanceRepository);
+        flightInstanceService = new FlightInstSerImpl(flightInstanceRepository);
     }
 
     @Test
@@ -51,9 +48,9 @@ public class FlightInstanceServiceImplTest {
     public void testThatIfPassNullInArgumentAddMethodThrowsError() {
         try {
             flightInstanceService.add(null);
-            fail("Expected that NullPointerException will be throws");
-        } catch (NullPointerException e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            fail("Expected that IllegalArgumentException will be throws");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(flightInstanceRepository);
     }
@@ -74,16 +71,16 @@ public class FlightInstanceServiceImplTest {
     public void testThatIfPassNullInArgumentUpdateMethodThrowsError() {
         try {
             flightInstanceService.updateStatus(null, FlightStatus.ACTIVE);
-            fail("Expected that NullPointerException will be throws");
-        } catch (NullPointerException e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            fail("Expected that IllegalArgumentException will be throws");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(flightInstanceRepository);
     }
 
     @Test
-    public void whenUpdateStatusWithFlightStatusNullThenThrowNullPointerException() {
-        Assertions.assertThrows(NullPointerException.class, () ->
+    public void whenUpdateStatusWithFlightStatusNullThenThrowIllegalArgumentException() {
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
                 flightInstanceService.updateStatus(new FlightInstance(), null));
     }
 
@@ -103,9 +100,9 @@ public class FlightInstanceServiceImplTest {
     public void testThatIfPassNullInArgumentCancelMethodThrowsError() {
         try {
             flightInstanceService.cancel(null);
-            fail("Expected that NullPointerException will be throws");
-        } catch (NullPointerException e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            fail("Expected that IllegalArgumentException will be throws");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(flightInstanceRepository);
     }
@@ -161,30 +158,30 @@ public class FlightInstanceServiceImplTest {
     }
 
     @Test
-    public void whenAssignPilotWithflightInstanceNullThenThrowNullPointerException() {
+    public void whenAssignPilotWithflightInstanceNullThenThrowIllegalArgumentException() {
         FlightInstance flightInstance = null;
-        Assertions.assertThrows(NullPointerException.class, () ->
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
                 flightInstanceService.assignPilot(flightInstance, new Pilot()));
     }
 
     @Test
-    public void whenAssignCrewWithCrewNullThenThrowNullPointerException() {
+    public void whenAssignCrewWithCrewNullThenThrowIllegalArgumentException() {
         Crew crew = null;
-        Assertions.assertThrows(NullPointerException.class, () ->
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
                 flightInstanceService.assignCrew(new FlightInstance(), crew));
     }
 
     @Test
-    public void whenAssignCrewWithflightInstanceNullThenThrowNullPointerException() {
+    public void whenAssignCrewWithflightInstanceNullThenThrowIllegalArgumentException() {
         FlightInstance flightInstance = null;
-        Assertions.assertThrows(NullPointerException.class, () ->
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
                 flightInstanceService.assignCrew(flightInstance, new Crew()));
     }
 
     @Test
-    public void whenAssignPilotWithPilotNullThenThrowNullPointerException() {
+    public void whenAssignPilotWithPilotNullThenThrowIllegalArgumentException() {
         Crew crew = null;
-        Assertions.assertThrows(NullPointerException.class, () ->
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
                 flightInstanceService.assignPilot(new FlightInstance(), crew));
     }
 }

@@ -52,19 +52,19 @@ public class CrewManagementServiceImplTest {
     }
 
     @Test
-    public void testThatAddFlightInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument() {
+    public void testThatAddFlightInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
         try {
             crewManagenentService.addFlightInstance(null, null);
-            fail("Expected NullPointerException to be thrown");
+            fail("Expected IllegalArgumentException to be thrown");
         } catch (Exception e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(crewRepository);
     }
 
     @Test
-    public void whenAddFlightInstanceWithFlightInstanceNullThenThrowNullPointerException() {
-        Assertions.assertThrows(NullPointerException.class, () ->
+    public void whenAddFlightInstanceWithFlightInstanceNullThenThrowIllegalArgumentException() {
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
                 crewManagenentService.addFlightInstance(new Crew(), null));
     }
 
@@ -103,19 +103,19 @@ public class CrewManagementServiceImplTest {
     }
 
     @Test
-    public void testThatRemoveFlightInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument() {
+    public void testThatRemoveFlightInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
         try {
             crewManagenentService.removeFlightInstance(null, null);
-            fail("Expected NullPointerException to be thrown");
+            fail("Expected IllegalArgumentException to be thrown");
         } catch (Exception e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(crewRepository);
     }
 
         @Test
-        public void whenRemoveFlightInstanceWithFlightInstanceNullThenThrowNullPointerException() {
-                Assertions.assertThrows(NullPointerException.class, () ->
+        public void whenRemoveFlightInstanceWithFlightInstanceNullThenThrowIllegalArgumentException() {
+                Assertions.assertThrows(IllegalArgumentException.class, () ->
                         crewManagenentService.removeFlightInstance(new Crew(), null));
         }
 
@@ -261,12 +261,12 @@ public class CrewManagementServiceImplTest {
     }
 
     @Test
-    public void testThatAddInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument() {
+    public void testThatAddInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
         try {
             crewManagenentService.add(null);
-            fail("Expected NullPointerException to be thrown");
+            fail("Expected IllegalArgumentException to be thrown");
         } catch (Exception e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(crewRepository);
     }
@@ -288,12 +288,12 @@ public class CrewManagementServiceImplTest {
     }
 
     @Test
-    public void testThatUpdatePhoneNumberThrowNullPointerExceptionWhenCallWithNullValueArgument() {
+    public void testThatUpdatePhoneNumberThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
         try {
             crewManagenentService.updatePhone(null, "55285");
-            fail("Expected NullPointerException to be thrown");
+            fail("Expected IllegalArgumentException to be thrown");
         } catch (Exception e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(crewRepository);
     }
@@ -329,12 +329,12 @@ public class CrewManagementServiceImplTest {
     }
 
     @Test
-    public void testThatUpdateEmailThrowNullPointerExceptionWhenCallWithNullValueArgument() {
+    public void testThatUpdateEmailThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
         try {
             crewManagenentService.updateEmail(null, "ivanov@test.com");
-            fail("Expected NullPointerException to be thrown");
+            fail("Expected IllegalArgumentException to be thrown");
         } catch (Exception e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(crewRepository);
     }
@@ -367,12 +367,12 @@ public class CrewManagementServiceImplTest {
     }
 
     @Test
-    public void testThatRemoveInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument() {
+    public void testThatRemoveInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
         try {
             crewManagenentService.remove(null);
-            fail("Expected NullPointerException to be thrown");
+            fail("Expected IllegalArgumentException to be thrown");
         } catch (Exception e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(crewRepository);
     }
@@ -403,9 +403,9 @@ public class CrewManagementServiceImplTest {
     }
 
     @Test
-    public void whenUpdateAddressWithCrewNullThenThrowNullPointerException() {
+    public void whenUpdateAddressWithCrewNullThenThrowIllegalArgumentException() {
         Crew crew = null;
-        Assertions.assertThrows(NullPointerException.class, () ->
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
                 crewManagenentService.updateAddress(crew, new Address()));
     }
 }

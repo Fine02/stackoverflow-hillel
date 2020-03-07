@@ -7,45 +7,45 @@ import com.ra.course.ams.airline.manag.system.service.FlightScheduleService;
 
 public class FlightScheduleServiceImpl implements FlightScheduleService {
 
-    private final Repository<WeeklySchedule, String> weeklyScheduleRepository;
-    private final Repository<CustomSchedule, String> customScheduleRepository;
+    transient private final Repository<WeeklySchedule, String> weeklySchedRepo;
+    transient private final Repository<CustomSchedule, String> customSchedRepo;
 
-    public FlightScheduleServiceImpl(Repository<WeeklySchedule, String> weeklyScheduleRepository, Repository<CustomSchedule, String> customScheduleRepository) {
-        this.weeklyScheduleRepository = weeklyScheduleRepository;
-        this.customScheduleRepository = customScheduleRepository;
+    public FlightScheduleServiceImpl(final Repository<WeeklySchedule, String> weeklySchedRepo, final Repository<CustomSchedule, String> customSchedRepo) {
+        this.weeklySchedRepo = weeklySchedRepo;
+        this.customSchedRepo = customSchedRepo;
     }
 
     @Override
-    public WeeklySchedule addSchedule(WeeklySchedule weeklySchedule) {
+    public WeeklySchedule addSchedule(final WeeklySchedule weeklySchedule) {
         if (weeklySchedule == null) {
-            throw new NullPointerException("Cannot process add operation for null value argument.");
+            throw new IllegalArgumentException("Cannot procss add operation for null value argument.");
         }
-        return weeklyScheduleRepository.addInstance(weeklySchedule);
+        return weeklySchedRepo.addInstance(weeklySchedule);
     }
 
     @Override
-    public WeeklySchedule updateSchedule(WeeklySchedule weeklySchedule) {
+    public WeeklySchedule updateSchedule(final WeeklySchedule weeklySchedule) {
         if (weeklySchedule == null) {
-            throw new NullPointerException("Cannot process update operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process update operation for null value argment.");
         }
-        weeklyScheduleRepository.updateInstance(weeklySchedule);
+        weeklySchedRepo.updateInstance(weeklySchedule);
         return weeklySchedule;
     }
 
     @Override
-    public CustomSchedule addSchedule(CustomSchedule customSchedule) {
+    public CustomSchedule addSchedule(final CustomSchedule customSchedule) {
         if (customSchedule == null) {
-            throw new NullPointerException("Cannot process add operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process add operation for null value argument.");
         }
-        return customScheduleRepository.addInstance(customSchedule);
+        return customSchedRepo.addInstance(customSchedule);
     }
 
     @Override
-    public CustomSchedule updateSchedule(CustomSchedule customSchedule) {
+    public CustomSchedule updateSchedule(final CustomSchedule customSchedule) {
         if (customSchedule == null) {
-            throw new NullPointerException("Cannot process update operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process update operation for null value argument.");
         }
-        customScheduleRepository.updateInstance(customSchedule);
+        customSchedRepo.updateInstance(customSchedule);
         return customSchedule;
     }
 }
