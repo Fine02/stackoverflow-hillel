@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.service.implementations;
+package com.ra.course.com.stackoverflow.service.question;
 
 import com.ra.course.com.stackoverflow.entity.*;
 import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;

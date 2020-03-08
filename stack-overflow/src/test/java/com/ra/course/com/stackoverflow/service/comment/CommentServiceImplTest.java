@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.service.implementations;
+package com.ra.course.com.stackoverflow.service.comment;
 
 import com.ra.course.com.stackoverflow.entity.*;
 

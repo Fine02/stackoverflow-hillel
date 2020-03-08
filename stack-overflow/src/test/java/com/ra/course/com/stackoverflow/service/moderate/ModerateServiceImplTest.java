@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.service.implementation;
+package com.ra.course.com.stackoverflow.service.moderate;
 
 import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
