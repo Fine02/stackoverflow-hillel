@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.service.implementation;
+package com.ra.course.com.stackoverflow.service.bounty;
 
 import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Bounty;
@@ -7,7 +7,8 @@ import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.service.QuestionRepositoryException;
 import com.ra.course.com.stackoverflow.repository.interfaces.BountyRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
-import com.ra.course.com.stackoverflow.service.BountyService;
+import com.ra.course.com.stackoverflow.service.bounty.BountyService;
+import com.ra.course.com.stackoverflow.service.bounty.BountyServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

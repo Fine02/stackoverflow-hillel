@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.service;
+package com.ra.course.com.stackoverflow.service.search;
 
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.service.TagNotFoundException;
