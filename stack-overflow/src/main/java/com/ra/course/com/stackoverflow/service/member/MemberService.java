@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.service;
+package com.ra.course.com.stackoverflow.service.member;
 
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.repository.InternalServerErrorException;

@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.service;
+package com.ra.course.com.stackoverflow.service.bounty;
 
 import com.ra.course.com.stackoverflow.entity.Bounty;
 import com.ra.course.com.stackoverflow.entity.Question;

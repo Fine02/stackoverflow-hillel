@@ -7,8 +7,9 @@ import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationExc
 import com.ra.course.com.stackoverflow.exception.repository.InternalServerErrorException;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
-import com.ra.course.com.stackoverflow.service.MemberService;
+import com.ra.course.com.stackoverflow.service.member.MemberService;
 
+import com.ra.course.com.stackoverflow.service.member.MemberServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

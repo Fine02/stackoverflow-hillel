@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.service.implementations;
+package com.ra.course.com.stackoverflow.service.question;
 
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.Tag;
@@ -12,7 +12,6 @@ import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.TagRepository;
 
-import com.ra.course.com.stackoverflow.service.interfaces.QuestionService;
 
 import lombok.NonNull;
 

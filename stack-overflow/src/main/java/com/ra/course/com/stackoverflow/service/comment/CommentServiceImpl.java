@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.service.implementations;
+package com.ra.course.com.stackoverflow.service.comment;
 
 import com.ra.course.com.stackoverflow.entity.Answer;
 import com.ra.course.com.stackoverflow.entity.Comment;
@@ -11,7 +11,6 @@ import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.CommentRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 
-import com.ra.course.com.stackoverflow.service.interfaces.CommentService;
 
 import lombok.NonNull;
 

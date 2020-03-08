@@ -1,11 +1,10 @@
-package com.ra.course.com.stackoverflow.service.implementation;
+package com.ra.course.com.stackoverflow.service.bounty;
 
 import com.ra.course.com.stackoverflow.entity.Bounty;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.service.QuestionRepositoryException;
 import com.ra.course.com.stackoverflow.repository.interfaces.BountyRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
-import com.ra.course.com.stackoverflow.service.BountyService;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;

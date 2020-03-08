@@ -6,6 +6,7 @@ import com.ra.course.com.stackoverflow.exception.service.*;
 import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.TagRepository;
+import com.ra.course.com.stackoverflow.service.question.QuestionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -52,7 +53,6 @@ public class QuestionServiceImplTest {
             .question(question)
             .photos(new ArrayList<>())
             .comments(new ArrayList<>())
-            .notifications(new ArrayList<>())
             .build();
 
     private Tag tag = new Tag(ID, "tag_name", "tag_description",

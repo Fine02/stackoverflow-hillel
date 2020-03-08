@@ -11,6 +11,7 @@ import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.CommentRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 
+import com.ra.course.com.stackoverflow.service.comment.CommentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -57,7 +58,6 @@ public class CommentServiceImplTest {
             .question(question)
             .photos(new ArrayList<>())
             .comments(new ArrayList<>())
-            .notifications(new ArrayList<>())
             .build();
 
     private Comment comment = Comment.builder()
