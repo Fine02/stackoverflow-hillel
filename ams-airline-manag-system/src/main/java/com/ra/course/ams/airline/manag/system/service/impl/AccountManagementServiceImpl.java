@@ -17,11 +17,11 @@ import java.util.List;
 public class AccountManagementServiceImpl implements AccountManagementService {
 
     private Repository<Account, String> accountRepository;
-    private AuthorizationService authorizationService;
-    private AuthenticationService authenticationService;
+    private AuthorizationService authorizationSvc;
+    private AuthenticationService authenticationSvc;
 
     @Override
-    public Account createAccount(Account account) {
+    public Account createAccount(final Account account) {
         Account accountFromRepo = accountRepository.getInstance(account.getId());
         if (accountFromRepo != null) {
             throw new AccountAlreadyExistException();
@@ -33,14 +33,14 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 
     @Override
     public List<Account> getAccounts() {
-        Collection<Account> accounts = accountRepository.getInstances();
+        final Collection<Account> accounts = accountRepository.getInstances();
         return new LinkedList<>(accounts);
     }
 
     @Override
-    public void deleteAccount(Account account, Admin admin) {
-        authorizationService.checkGrantsForDeleteAccountOperation(account, admin);
-        Account accountFromRepo = accountRepository.getInstance(account.getId());
+    public void deleteAccount(final Account account, final Admin admin) {
+        authorizationSvc.checkGrantsForDeleteAccountOperation(account, admin);
+        final Account accountFromRepo = accountRepository.getInstance(account.getId());
         if (accountFromRepo == null) {
             throw new AccountNotExistException();
         }
@@ -48,9 +48,9 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     }
 
     @Override
-    public Account updateStatus(Account account, AccountStatus status, Admin admin) {
-        authorizationService.checkGrantsForUpdateAccountOperation(account, admin);
-        Account accountFromRepo = accountRepository.getInstance(account.getId());
+    public Account updateStatus(final Account account, final AccountStatus status, final Admin admin) {
+        authorizationSvc.checkGrantsForUpdateAccountOperation(account, admin);
+        final Account accountFromRepo = accountRepository.getInstance(account.getId());
         if (accountFromRepo == null) {
             throw new AccountNotExistException();
         }
@@ -61,9 +61,9 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     }
 
     @Override
-    public Account blockAccount(Account account, Admin admin) {
-        authorizationService.checkGrantsForBlockAccountOperation(account, admin);
-        Account accountFromRepo = accountRepository.getInstance(account.getId());
+    public Account blockAccount(final Account account, final Admin admin) {
+        authorizationSvc.checkGrantsForBlockAccountOperation(account, admin);
+        final Account accountFromRepo = accountRepository.getInstance(account.getId());
         if (accountFromRepo == null) {
             throw new AccountNotExistException();
         }
@@ -74,16 +74,16 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     }
 
     @Override
-    public void resetPassword(Account account, String oldPassword, String newPassword) {
-        Account realAccountFromDb = authenticationService.login(account.getId(), oldPassword);
+    public void resetPassword(final Account account, final String oldPassword, final String newPassword) {
+        final Account realAccountFromDb = authenticationSvc.login(account.getId(), oldPassword);
         realAccountFromDb.setPassword(newPassword);
         accountRepository.updateInstance(realAccountFromDb);
     }
 
     @Override
-    public void resetPassword(Account account, String newPassword, Admin admin) {
-        authorizationService.checkGrantsForResetPasswordOperation(account, admin);
-        Account accountFromRepo = accountRepository.getInstance(account.getId());
+    public void resetPassword(final Account account, final String newPassword, final Admin admin) {
+        authorizationSvc.checkGrantsForResetPasswordOperation(account, admin);
+        final Account accountFromRepo = accountRepository.getInstance(account.getId());
         if (accountFromRepo == null) {
             throw new AccountNotExistException();
         }
@@ -95,23 +95,23 @@ public class AccountManagementServiceImpl implements AccountManagementService {
         return accountRepository;
     }
 
-    public void setAccountRepository(Repository<Account, String> accountRepository) {
+    public void setAccountRepository(final Repository<Account, String> accountRepository) {
         this.accountRepository = accountRepository;
     }
 
-    public AuthorizationService getAuthorizationService() {
-        return authorizationService;
+    public AuthorizationService getAuthorizationSvc() {
+        return authorizationSvc;
     }
 
-    public void setAuthorizationService(AuthorizationService authorizationService) {
-        this.authorizationService = authorizationService;
+    public void setAuthorizationSvc(final AuthorizationService authorizationSvc) {
+        this.authorizationSvc = authorizationSvc;
     }
 
-    public AuthenticationService getAuthenticationService() {
-        return authenticationService;
+    public AuthenticationService getAuthenticationSvc() {
+        return authenticationSvc;
     }
 
-    public void setAuthenticationService(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
+    public void setAuthenticationSvc(final AuthenticationService authenticationSvc) {
+        this.authenticationSvc = authenticationSvc;
     }
 }

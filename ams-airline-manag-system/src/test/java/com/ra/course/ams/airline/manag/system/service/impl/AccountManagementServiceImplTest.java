@@ -19,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,8 +43,8 @@ public class AccountManagementServiceImplTest {
         MockitoAnnotations.initMocks(this);
         accountManagementService = new AccountManagementServiceImpl();
         accountManagementService.setAccountRepository(accountRepository);
-        accountManagementService.setAuthenticationService(authenticationService);
-        accountManagementService.setAuthorizationService(authorizationService);
+        accountManagementService.setAuthenticationSvc(authenticationService);
+        accountManagementService.setAuthorizationSvc(authorizationService);
     }
 
     @Test
