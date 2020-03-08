@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.service.system.implementation;
+package com.ra.course.com.stackoverflow.service.system;
 
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
@@ -6,7 +6,6 @@ import com.ra.course.com.stackoverflow.entity.enums.Badge;
 import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
 import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
-import com.ra.course.com.stackoverflow.service.system.BadgeAwardService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
@@ -16,6 +15,7 @@ import java.util.*;
 public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
 
     private transient final MemberRepository memberRepository;
+    private static final String SERVER_ERR_MSG = "Unexpected data base error occurred: ";
 
     @Override
     public Member awardMember(@NonNull final Question question) throws InternalServerErrorException {
@@ -33,7 +33,7 @@ public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
             return memberRepository.update(author);
         } catch (DataBaseOperationException e) {
             throw (InternalServerErrorException)
-                    new InternalServerErrorException("Unexpected server error: " + e.getMessage()).initCause(e.getCause());
+                    new InternalServerErrorException(SERVER_ERR_MSG + e.getMessage()).initCause(e.getCause());
         }
     }
 

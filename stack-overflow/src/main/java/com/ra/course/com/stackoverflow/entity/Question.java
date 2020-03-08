@@ -49,6 +49,7 @@ public class Question implements Commentable {
     private QuestionClosingRemark closingRemark = QuestionClosingRemark.NOT_MARKED_FOR_CLOSING;
 
     @NonNull
+    @ToString.Exclude
     private Member author;
 
     @NonNull

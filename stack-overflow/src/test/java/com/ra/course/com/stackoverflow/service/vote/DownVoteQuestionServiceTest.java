@@ -9,6 +9,8 @@ import com.ra.course.com.stackoverflow.exception.vote_service.AlreadyVotedExcept
 import com.ra.course.com.stackoverflow.exception.vote_service.CannotVoteOwnPostException;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
+import com.ra.course.com.stackoverflow.service.system.BadgeAwardService;
+import com.ra.course.com.stackoverflow.service.system.QuestionScoreBadgeAwarder;
 import com.ra.course.com.stackoverflow.service.vote.impl.VoteQuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class DownVoteQuestionServiceTest {
+
+    private BadgeAwardService<Question> badgeAwardService;
     private VoteQuestionService voteQuestionService;
     private QuestionRepository questionData = mock(QuestionRepository.class);
     private MemberRepository memberData = mock(MemberRepository.class);
@@ -31,7 +35,8 @@ public class DownVoteQuestionServiceTest {
 
     @BeforeEach
     void setUp() {
-        voteQuestionService = new VoteQuestionService(questionData, memberData);
+        badgeAwardService = new QuestionScoreBadgeAwarder(memberData);
+        voteQuestionService = new VoteQuestionService(questionData, memberData, badgeAwardService);
     }
 
     @Test

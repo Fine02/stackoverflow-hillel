@@ -9,6 +9,8 @@ import com.ra.course.com.stackoverflow.exception.vote_service.AlreadyVotedExcept
 import com.ra.course.com.stackoverflow.exception.vote_service.CannotVoteOwnPostException;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
+import com.ra.course.com.stackoverflow.service.system.BadgeAwardService;
+import com.ra.course.com.stackoverflow.service.system.QuestionScoreBadgeAwarder;
 import com.ra.course.com.stackoverflow.service.vote.impl.VoteQuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,7 @@ import static org.mockito.Mockito.*;
 
 public class UpVoteQuestionServiceTest {
 
+    private BadgeAwardService<Question> badgeAwardService;
     private VoteQuestionService voteQuestionService;
     private QuestionRepository questionData = mock(QuestionRepository.class);
     private MemberRepository memberData = mock(MemberRepository.class);
@@ -30,7 +33,8 @@ public class UpVoteQuestionServiceTest {
 
     @BeforeEach
     void setUp() {
-        voteQuestionService = new VoteQuestionService(questionData, memberData);
+        badgeAwardService = new QuestionScoreBadgeAwarder(memberData);
+        voteQuestionService = new VoteQuestionService(questionData, memberData, badgeAwardService);
     }
 
     @Test
@@ -119,7 +123,7 @@ public class UpVoteQuestionServiceTest {
         verify(questionData).findById(ID1);
         verify(memberData).findById(ID1);
         verify(questionData).update(any());
-        verify(memberData).update(any());
+        verify(memberData, times(2)).update(any());
         verifyNoMoreInteractions(questionData, memberData);
     }
 

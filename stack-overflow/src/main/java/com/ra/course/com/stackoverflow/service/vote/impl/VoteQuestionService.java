@@ -23,6 +23,7 @@ public class VoteQuestionService implements VoteService<Question> {
     private transient final MemberRepository memberData;
     private transient final BadgeAwardService<Question> badgeAwardService;
     private static final int ADDED_REPUTATION = 5;
+    private static final String SERVER_ERR_MSG = "Unexpected data base error occurred: ";
 
     @Override
     public Question upVote( final Question question, final Member member)
@@ -104,7 +105,7 @@ public class VoteQuestionService implements VoteService<Question> {
             memberData.update(member);
         } catch (DataBaseOperationException e) {
             throw (InternalServerErrorException)
-                    new InternalServerErrorException("Unexpected server error: " + e.getMessage()).initCause(e.getCause());
+                    new InternalServerErrorException(SERVER_ERR_MSG + e.getMessage()).initCause(e.getCause());
         }
     }
 }

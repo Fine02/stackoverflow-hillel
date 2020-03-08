@@ -15,7 +15,7 @@ public class MemberServiceImpl implements MemberService<Question> {
     private transient final QuestionRepository questionRep;
     private transient final MemberRepository memberRep;
 
-    private static final String SERVER_ERR_MSG = "Unexpected error occurred: 500 Internal Server Error";
+    private static final String SERVER_ERR_MSG = "Unexpected data base error occurred";
     private static final String NULL_WARNING_MSG = "argument must not be null";
 
     public MemberServiceImpl(final QuestionRepository questionRep,
