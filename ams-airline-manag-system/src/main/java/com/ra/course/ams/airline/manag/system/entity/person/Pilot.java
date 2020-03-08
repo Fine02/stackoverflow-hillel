@@ -40,13 +40,13 @@ public class Pilot extends Person {
         private transient String email;
         private transient String phone;
         private transient Address address;
-        private List<FlightInstance> flightInstances = new LinkedList<>();
+        transient private List<FlightInstance> flightInstances = new LinkedList<>();
 
         public Pilot build() {
             return new Pilot(this);
         }
 
-        public Builder addFlightInstance(FlightInstance flightInstance){
+        public Builder addFlightInstance(FlightInstance flightInstance) {
             this.flightInstances.add(flightInstance);
             return this;
         }

@@ -12,7 +12,7 @@ public class FrontDeskOfficerRepository implements Repository<FrontDeskOfficer, 
     private Map<String, FrontDeskOfficer> frontDeskOfficers;
 
     @Override
-    public FrontDeskOfficer getInstance(String phoneNumber) {
+    public FrontDeskOfficer getInstance(final String phoneNumber) {
         return frontDeskOfficers.get(phoneNumber);
     }
 
@@ -22,7 +22,7 @@ public class FrontDeskOfficerRepository implements Repository<FrontDeskOfficer, 
     }
 
     @Override
-    public FrontDeskOfficer addInstance(FrontDeskOfficer officer) {
+    public FrontDeskOfficer addInstance(final FrontDeskOfficer officer) {
         if (frontDeskOfficers.containsKey(officer.getPhone())){
             throw new InstanceAlreadyExistException();
         }
@@ -30,12 +30,12 @@ public class FrontDeskOfficerRepository implements Repository<FrontDeskOfficer, 
     }
 
     @Override
-    public void updateInstance(FrontDeskOfficer officer) {
+    public void updateInstance(final FrontDeskOfficer officer) {
         frontDeskOfficers.put(officer.getPhone(), officer);
     }
 
     @Override
-    public void removeInstance(FrontDeskOfficer officer) {
+    public void removeInstance(final FrontDeskOfficer officer) {
         frontDeskOfficers.remove(officer.getPhone());
     }
 
@@ -43,7 +43,7 @@ public class FrontDeskOfficerRepository implements Repository<FrontDeskOfficer, 
         return frontDeskOfficers;
     }
 
-    public void setFrontDeskOfficers(Map<String, FrontDeskOfficer> frontDeskOfficers) {
+    public void setFrontDeskOfficers(final Map<String, FrontDeskOfficer> frontDeskOfficers) {
         this.frontDeskOfficers = frontDeskOfficers;
     }
 }

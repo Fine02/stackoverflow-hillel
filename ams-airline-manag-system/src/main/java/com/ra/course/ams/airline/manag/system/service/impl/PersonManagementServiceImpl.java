@@ -14,12 +14,12 @@ public class PersonManagementServiceImpl implements PersonManagementService<Pers
     private Repository<Person, String> personRepository;
 
     @Override
-    public Person findByEmail(String email) {
+    public Person findByEmail(final String email) {
         if (email == null || email.isBlank()) {
             throw new IllegalArgumentException("Email address for search cannot be null, empty or blank");
         }
-        Collection<Person> persons = personRepository.getInstances();
-        Person findedPerson = persons.stream()
+        final Collection<Person> persons = personRepository.getInstances();
+        final Person findedPerson = persons.stream()
                 .filter(person -> email.equals(person.getEmail()))
                 .findAny()
                 .orElseThrow(() -> new PersonNotExistException("No person found for given email"));
@@ -27,11 +27,11 @@ public class PersonManagementServiceImpl implements PersonManagementService<Pers
     }
 
     @Override
-    public Person findByPhoneNumber(String phone) {
+    public Person findByPhoneNumber(final String phone) {
         if (phone == null || phone.isBlank()) {
             throw new IllegalArgumentException("Phone for search cannot be null, empty or blank");
         }
-        Person personFromRepo = personRepository.getInstance(phone);
+        final Person personFromRepo = personRepository.getInstance(phone);
         if (personFromRepo == null) {
             throw new PersonNotExistException("No person found for given phone number");
         }
@@ -39,9 +39,9 @@ public class PersonManagementServiceImpl implements PersonManagementService<Pers
     }
 
     @Override
-    public Person add(Person person) {
+    public Person add(final Person person) {
         if (person == null) {
-            throw new NullPointerException("Cannot process add operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process add operation for null value argument.");
         }
         Person personFromRepo = personRepository.getInstance(person.getPhone());
         if (personFromRepo != null) {
@@ -53,67 +53,67 @@ public class PersonManagementServiceImpl implements PersonManagementService<Pers
     }
 
     @Override
-    public Person updatePhone(Person person, String phone) {
+    public Person updatePhone(final Person person, final String phone) {
         if (person == null) {
-            throw new NullPointerException("Cannot process updatePhone operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process updatePhone operation for null value argument.");
         }
-        Person personRepositoryInstance = personRepository.getInstance(person.getPhone());
-        if (personRepositoryInstance == null) {
+        final Person personRepoInst = personRepository.getInstance(person.getPhone());
+        if (personRepoInst == null) {
             throw new PersonNotExistException();
         }
-        personRepositoryInstance.setPhone(phone);
-        personRepository.updateInstance(personRepositoryInstance);
+        personRepoInst.setPhone(phone);
+        personRepository.updateInstance(personRepoInst);
         person.setPhone(phone);
         return person;
     }
 
     @Override
-    public Person updateEmail(Person person, String email) {
+    public Person updateEmail(final Person person, final String email) {
         if (person == null) {
-            throw new NullPointerException("Cannot process updateEmail operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process updateEmail operation for null value argument.");
         }
-        Person personRepositoryInstance = personRepository.getInstance(person.getPhone());
-        if (personRepositoryInstance == null) {
+        final Person personRepoInst = personRepository.getInstance(person.getPhone());
+        if (personRepoInst == null) {
             throw new PersonNotExistException();
         }
-        personRepositoryInstance.setEmail(email);
-        personRepository.updateInstance(personRepositoryInstance);
+        personRepoInst.setEmail(email);
+        personRepository.updateInstance(personRepoInst);
         person.setEmail(email);
         return person;
     }
 
     @Override
-    public Person updateAddress(Person person, Address address) {
+    public Person updateAddress(final Person person, final Address address) {
         if (person == null) {
-            throw new NullPointerException("Cannot process updateAddress operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process updateAddress operation for null value argument.");
         }
-        Person personRepositoryInstance = personRepository.getInstance(person.getPhone());
-        if (personRepositoryInstance == null) {
+        final Person personRepoInst = personRepository.getInstance(person.getPhone());
+        if (personRepoInst == null) {
             throw new PersonNotExistException();
         }
-        personRepositoryInstance.setAddress(address);
-        personRepository.updateInstance(personRepositoryInstance);
+        personRepoInst.setAddress(address);
+        personRepository.updateInstance(personRepoInst);
         person.setAddress(address);
         return person;
     }
 
     @Override
-    public void remove(Person person) {
+    public void remove(final Person person) {
         if (person == null) {
-            throw new NullPointerException("Cannot process remove operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process remove operation for null value argument.");
         }
-        Person personRepositoryInstance = personRepository.getInstance(person.getPhone());
-        if (personRepositoryInstance == null) {
+        final Person personRepoInst = personRepository.getInstance(person.getPhone());
+        if (personRepoInst == null) {
             throw new PersonNotExistException();
         }
-        personRepository.removeInstance(personRepositoryInstance);
+        personRepository.removeInstance(personRepoInst);
     }
 
     public Repository<Person, String> getPersonRepository() {
         return personRepository;
     }
 
-    public void setPersonRepository(Repository<Person, String> personRepository) {
+    public void setPersonRepository(final Repository<Person, String> personRepository) {
         this.personRepository = personRepository;
     }
 }

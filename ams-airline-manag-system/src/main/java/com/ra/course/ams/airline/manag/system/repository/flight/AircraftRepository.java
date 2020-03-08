@@ -10,19 +10,19 @@ import java.util.List;
 
 public class AircraftRepository implements Repository<Aircraft, String> {
 
-    private final List<Aircraft> aircrafts;
+    transient private final List<Aircraft> aircrafts;
 
-    public AircraftRepository(List<Aircraft> aircrafts) {
+    public AircraftRepository(final List<Aircraft> aircrafts) {
         this.aircrafts = aircrafts;
     }
 
-    boolean isAlreadyExist(String identifier) {
+    public boolean isAlreadyExist(final String identifier) {
         return aircrafts.stream().map(Aircraft::getId)
                 .anyMatch(id -> id.equals(identifier));
     }
 
     @Override
-    public Aircraft getInstance(String aircraftId) {
+    public Aircraft getInstance(final String aircraftId) {
         return aircrafts.stream()
                 .filter(aircraft -> aircraft.getId().equals(aircraftId))
                 .findAny()
@@ -35,7 +35,7 @@ public class AircraftRepository implements Repository<Aircraft, String> {
     }
 
     @Override
-    public Aircraft addInstance(Aircraft aircraft) {
+    public Aircraft addInstance(final Aircraft aircraft) {
         if (isAlreadyExist(aircraft.getId())) {
             throw new InstanceAlreadyExistException();
         }
@@ -44,17 +44,17 @@ public class AircraftRepository implements Repository<Aircraft, String> {
     }
 
     @Override
-    public void updateInstance(Aircraft aircraft) {
+    public void updateInstance(final Aircraft aircraft) {
         if (!isAlreadyExist(aircraft.getId())) {
             throw new InstanceNotExistException();
         }
         aircrafts.stream()
                 .filter(aircraftItem -> aircraftItem.getId().equals(aircraft.getId()))
-                .forEach(aircraftItemForUpdate -> aircraftItemForUpdate = aircraft);
+                .forEach(aircrftItemForUpd -> aircrftItemForUpd = aircraft);
     }
 
     @Override
-    public void removeInstance(Aircraft aircraft) {
+    public void removeInstance(final Aircraft aircraft) {
         aircrafts.removeIf(aircraftItem -> aircraftItem.getId().equals(aircraft.getId()));
     }
 }

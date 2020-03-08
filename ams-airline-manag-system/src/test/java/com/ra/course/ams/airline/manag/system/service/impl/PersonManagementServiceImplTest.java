@@ -159,12 +159,12 @@ public class PersonManagementServiceImplTest {
         }
 
         @Test
-        public void testThatAddInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument(){
+        public void testThatAddInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument(){
                 try {
                         personManagenentService.add(null);
-                        fail("Expected NullPointerException to be thrown");
+                        fail("Expected IllegalArgumentException to be thrown");
                 } catch (Exception e) {
-                        assertThat(e).isInstanceOf(NullPointerException.class);
+                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
                 verifyZeroInteractions(personRepository);
         }
@@ -186,12 +186,12 @@ public class PersonManagementServiceImplTest {
         }
 
         @Test
-        public void testThatUpdatePhoneNumberThrowNullPointerExceptionWhenCallWithNullValueArgument(){
+        public void testThatUpdatePhoneNumberThrowIllegalArgumentExceptionWhenCallWithNullValueArgument(){
                 try {
                         personManagenentService.updatePhone(null, "55285");
-                        fail("Expected NullPointerException to be thrown");
+                        fail("Expected IllegalArgumentException to be thrown");
                 } catch (Exception e) {
-                        assertThat(e).isInstanceOf(NullPointerException.class);
+                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
                 verifyZeroInteractions(personRepository);
         }
@@ -227,12 +227,12 @@ public class PersonManagementServiceImplTest {
         }
 
         @Test
-        public void testThatUpdateEmailThrowNullPointerExceptionWhenCallWithNullValueArgument(){
+        public void testThatUpdateEmailThrowIllegalArgumentExceptionWhenCallWithNullValueArgument(){
                 try {
                         personManagenentService.updateEmail(null, "ivanov@test.com");
-                        fail("Expected NullPointerException to be thrown");
+                        fail("Expected IllegalArgumentException to be thrown");
                 } catch (Exception e) {
-                        assertThat(e).isInstanceOf(NullPointerException.class);
+                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
                 verifyZeroInteractions(personRepository);
         }
@@ -265,12 +265,12 @@ public class PersonManagementServiceImplTest {
         }
 
         @Test
-        public void testThatRemoveInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument(){
+        public void testThatRemoveInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument(){
                 try {
                         personManagenentService.remove(null);
-                        fail("Expected NullPointerException to be thrown");
+                        fail("Expected IllegalArgumentException to be thrown");
                 } catch (Exception e) {
-                        assertThat(e).isInstanceOf(NullPointerException.class);
+                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
                 verifyZeroInteractions(personRepository);
         }
@@ -291,8 +291,8 @@ public class PersonManagementServiceImplTest {
         }
 
         @Test
-        public void whenUpdateAdressWithPersonIsNullThenThrowNullPointerException() {
-                Assertions.assertThrows(NullPointerException.class, () ->
+        public void whenUpdateAdressWithPersonIsNullThenThrowIllegalArgumentException() {
+                Assertions.assertThrows(IllegalArgumentException.class, () ->
                         personManagenentService.updateAddress(null, new Address()));
         }
 

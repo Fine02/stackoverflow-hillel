@@ -9,38 +9,38 @@ import java.util.List;
 
 public class FlightServiceImpl implements FlightService {
 
-    private final Repository<Flight, String> flightRepository;
+    transient private final Repository<Flight, String> flightRepository;
 
-    public FlightServiceImpl(Repository<Flight, String> flightRepository) {
+    public FlightServiceImpl(final Repository<Flight, String> flightRepository) {
         this.flightRepository = flightRepository;
     }
 
     @Override
-    public List<FlightInstance> getFlightInstances(Flight flight) {
+    public List<FlightInstance> getFlightInstances(final Flight flight) {
         return flight.getFlightInstances();
     }
 
     @Override
-    public Flight add(Flight flight) {
+    public Flight add(final Flight flight) {
         if (flight == null) {
-            throw new NullPointerException("Cannot process add operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process add operation for null value argument.");
         }
         return flightRepository.addInstance(flight);
     }
 
     @Override
-    public Flight update(Flight flight) {
+    public Flight update(final Flight flight) {
         if (flight == null) {
-            throw new NullPointerException("Cannot process update operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process update operation for null value argument.");
         }
         flightRepository.updateInstance(flight);
         return flight;
     }
 
     @Override
-    public boolean cancel(Flight flight) {
+    public boolean cancel(final Flight flight) {
         if (flight == null) {
-            throw new NullPointerException("Cannot process cancel operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process cancel operation for null value argument.");
         }
         flightRepository.removeInstance(flight);
         return true;

@@ -12,7 +12,7 @@ public class AdminsRepository implements Repository<Admin, String> {
     private Map<String, Admin> admins;
 
     @Override
-    public Admin getInstance(String phoneNumber) {
+    public Admin getInstance(final String phoneNumber) {
         return admins.get(phoneNumber);
     }
 
@@ -22,7 +22,7 @@ public class AdminsRepository implements Repository<Admin, String> {
     }
 
     @Override
-    public Admin addInstance(Admin admin) {
+    public Admin addInstance(final Admin admin) {
         if (admins.containsKey(admin.getPhone())){
             throw new InstanceAlreadyExistException();
         }
@@ -30,12 +30,12 @@ public class AdminsRepository implements Repository<Admin, String> {
     }
 
     @Override
-    public void updateInstance(Admin admin) {
+    public void updateInstance(final Admin admin) {
         admins.put(admin.getPhone(), admin);
     }
 
     @Override
-    public void removeInstance(Admin admin) {
+    public void removeInstance(final Admin admin) {
         admins.remove(admin.getPhone());
     }
 
@@ -43,7 +43,7 @@ public class AdminsRepository implements Repository<Admin, String> {
         return admins;
     }
 
-    public void setAdmins(Map<String, Admin> admins) {
+    public void setAdmins( final Map<String, Admin> admins) {
         this.admins = admins;
     }
 }

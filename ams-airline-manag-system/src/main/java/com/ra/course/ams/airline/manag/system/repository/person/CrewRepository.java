@@ -12,7 +12,7 @@ public class CrewRepository implements Repository<Crew, String> {
     private Map<String, Crew> crews;
 
     @Override
-    public Crew getInstance(String phoneNumber) {
+    public Crew getInstance(final String phoneNumber) {
         return crews.get(phoneNumber);
     }
 
@@ -22,7 +22,7 @@ public class CrewRepository implements Repository<Crew, String> {
     }
 
     @Override
-    public Crew addInstance(Crew crew) {
+    public Crew addInstance(final Crew crew) {
         if (crews.containsKey(crew.getPhone())){
             throw new InstanceAlreadyExistException();
         }
@@ -30,12 +30,12 @@ public class CrewRepository implements Repository<Crew, String> {
     }
 
     @Override
-    public void updateInstance(Crew crew) {
+    public void updateInstance(final Crew crew) {
         crews.put(crew.getPhone(), crew);
     }
 
     @Override
-    public void removeInstance(Crew crew) {
+    public void removeInstance(final Crew crew) {
         crews.remove(crew.getPhone());
     }
 
@@ -43,7 +43,7 @@ public class CrewRepository implements Repository<Crew, String> {
         return crews;
     }
 
-    public void setCrews(Map<String, Crew> crews) {
+    public void setCrews(final Map<String, Crew> crews) {
         this.crews = crews;
     }
 }

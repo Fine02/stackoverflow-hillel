@@ -30,7 +30,7 @@ public class PilotManagementServiceImplTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         pilotManagenentService = new PilotManagementServiceImpl();
-        pilotManagenentService.setPilotRepository(pilotRepository);
+        pilotManagenentService.setPilotRepo(pilotRepository);
     }
 
     @Test
@@ -52,20 +52,20 @@ public class PilotManagementServiceImplTest {
     }
 
     @Test
-    public void testThatAddFlightInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument() {
+    public void testThatAddFlightInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
         try {
             pilotManagenentService.addFlightInstance(null, null);
-            fail("Expected NullPointerException to be thrown");
+            fail("Expected IllegalArgumentException to be thrown");
         } catch (Exception e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(pilotRepository);
     }
 
     @Test
-    public void whenAddFlightInstanceWithFlightInstancNullThenThrowNullPointerException() {
+    public void whenAddFlightInstanceWithFlightInstancNullThenThrowIllegalArgumentException() {
         Pilot pilot = null;
-        Assertions.assertThrows(NullPointerException.class, () ->
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
                 pilotManagenentService.addFlightInstance(new Pilot(), null));
     }
 
@@ -104,19 +104,19 @@ public class PilotManagementServiceImplTest {
     }
 
     @Test
-    public void testThatRemoveFlightInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument() {
+    public void testThatRemoveFlightInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
         try {
             pilotManagenentService.removeFlightInstance(null, null);
-            fail("Expected NullPointerException to be thrown");
+            fail("Expected IllegalArgumentException to be thrown");
         } catch (Exception e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(pilotRepository);
     }
 
     @Test
-    public void whenRemoveFlightInstanceWithPilotNullThenThrowNullPointerException() {
-        Assertions.assertThrows(NullPointerException.class, () ->
+    public void whenRemoveFlightInstanceWithPilotNullThenThrowIllegalArgumentException() {
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
                 pilotManagenentService.removeFlightInstance(new Pilot(), null));
     }
 
@@ -252,12 +252,12 @@ public class PilotManagementServiceImplTest {
     }
 
     @Test
-    public void testThatAddInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument() {
+    public void testThatAddInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
         try {
             pilotManagenentService.add(null);
-            fail("Expected NullPointerException to be thrown");
+            fail("Expected IllegalArgumentException to be thrown");
         } catch (Exception e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(pilotRepository);
     }
@@ -279,12 +279,12 @@ public class PilotManagementServiceImplTest {
     }
 
     @Test
-    public void testThatUpdatePhoneNumberThrowNullPointerExceptionWhenCallWithNullValueArgument() {
+    public void testThatUpdatePhoneNumberThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
         try {
             pilotManagenentService.updatePhone(null, "55285");
-            fail("Expected NullPointerException to be thrown");
+            fail("Expected IllegalArgumentException to be thrown");
         } catch (Exception e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(pilotRepository);
     }
@@ -320,12 +320,12 @@ public class PilotManagementServiceImplTest {
     }
 
     @Test
-    public void testThatUpdateEmailThrowNullPointerExceptionWhenCallWithNullValueArgument() {
+    public void testThatUpdateEmailThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
         try {
             pilotManagenentService.updateEmail(null, "ivanov@test.com");
-            fail("Expected NullPointerException to be thrown");
+            fail("Expected IllegalArgumentException to be thrown");
         } catch (Exception e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(pilotRepository);
     }
@@ -358,12 +358,12 @@ public class PilotManagementServiceImplTest {
     }
 
     @Test
-    public void testThatRemoveInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument() {
+    public void testThatRemoveInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
         try {
             pilotManagenentService.remove(null);
-            fail("Expected NullPointerException to be thrown");
+            fail("Expected IllegalArgumentException to be thrown");
         } catch (Exception e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(pilotRepository);
     }
@@ -394,9 +394,9 @@ public class PilotManagementServiceImplTest {
     }
 
     @Test
-    public void whenUpdateAddressWithPilotNullThenThrowNullPointerException() {
+    public void whenUpdateAddressWithPilotNullThenThrowIllegalArgumentException() {
         Pilot pilot = null;
-        Assertions.assertThrows(NullPointerException.class, () ->
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
                 pilotManagenentService.updateAddress(pilot, new Address()));
     }
 }

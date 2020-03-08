@@ -10,21 +10,21 @@ import java.util.List;
 
 public class WeeklyScheduleRepository implements Repository<WeeklySchedule, String> {
 
-    private final List<WeeklySchedule> weeklySchedules;
+    transient private final List<WeeklySchedule> weeklySchedules;
 
-    public WeeklyScheduleRepository(List<WeeklySchedule> weeklySchedules) {
+    public WeeklyScheduleRepository(final List<WeeklySchedule> weeklySchedules) {
         this.weeklySchedules = weeklySchedules;
     }
 
-    boolean isAlreadyExist(String identifier) {
+    public boolean isAlreadyExist(final String identifier) {
         return weeklySchedules.stream().map(WeeklySchedule::getId)
                 .anyMatch(id -> id.equals(identifier));
     }
 
     @Override
-    public WeeklySchedule getInstance(String instanceId) {
+    public WeeklySchedule getInstance(final String instanceId) {
         return weeklySchedules.stream()
-                .filter(weeklyScheduleItem -> weeklyScheduleItem.getId().equals(instanceId))
+                .filter(weeklySchedItem -> weeklySchedItem.getId().equals(instanceId))
                 .findAny()
                 .orElse(null);
     }
@@ -35,7 +35,7 @@ public class WeeklyScheduleRepository implements Repository<WeeklySchedule, Stri
     }
 
     @Override
-    public WeeklySchedule addInstance(WeeklySchedule weeklySchedule) {
+    public WeeklySchedule addInstance(final WeeklySchedule weeklySchedule) {
         if (isAlreadyExist(weeklySchedule.getId())) {
             throw new InstanceAlreadyExistException();
         }
@@ -44,17 +44,17 @@ public class WeeklyScheduleRepository implements Repository<WeeklySchedule, Stri
     }
 
     @Override
-    public void updateInstance(WeeklySchedule weeklySchedule) {
+    public void updateInstance(final WeeklySchedule weeklySchedule) {
         if (!isAlreadyExist(weeklySchedule.getId())) {
             throw new InstanceNotExistException();
         }
         weeklySchedules.stream()
-                .filter(weeklyScheduleItem -> weeklyScheduleItem.getId().equals(weeklySchedule.getId()))
-                .forEach(weeklyScheduleItemForUpdate -> weeklyScheduleItemForUpdate = weeklySchedule);
+                .filter(weeklyScheduleItm -> weeklyScheduleItm.getId().equals(weeklySchedule.getId()))
+                .forEach(weekSchdItmForUpd -> weekSchdItmForUpd = weeklySchedule);
     }
 
     @Override
-    public void removeInstance(WeeklySchedule weeklySchedule) {
-        weeklySchedules.removeIf(weeklyScheduleItem -> weeklyScheduleItem.getId().equals(weeklySchedule.getId()));
+    public void removeInstance(final WeeklySchedule weeklySchedule) {
+        weeklySchedules.removeIf(weekSchedItem -> weekSchedItem.getId().equals(weeklySchedule.getId()));
     }
 }

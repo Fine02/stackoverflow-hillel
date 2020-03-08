@@ -18,22 +18,22 @@ public class CrewManagementServiceImpl implements PersonManagementService<Crew>,
     private Repository<Crew, String> crewRepository;
 
     @Override
-    public Crew addFlightInstance(Crew crew, FlightInstance flightInstance) {
+    public Crew addFlightInstance(final Crew crew, final FlightInstance flightInstance) {
         if (crew == null || flightInstance == null) {
-            throw new NullPointerException("Cannot process addFlightInstance operation with null value arguments");
+            throw new IllegalArgumentException("Cannot process addFlightInstance operation with null value arguments");
         }
-        Crew crewFromRepository = crewRepository.getInstance(crew.getPhone());
-        if (crewFromRepository == null) {
+        final Crew crewFromRepo = crewRepository.getInstance(crew.getPhone());
+        if (crewFromRepo == null) {
             throw new CrewNotExistException();
         }
-        addNewFlightInstance(crewFromRepository, flightInstance);
-        crewRepository.updateInstance(crewFromRepository);
+        addNewFlightInstance(crewFromRepo, flightInstance);
+        crewRepository.updateInstance(crewFromRepo);
 
         addNewFlightInstance(crew, flightInstance);
         return crew;
     }
 
-    private static void addNewFlightInstance(Crew crew, FlightInstance flightInstance) {
+    private static void addNewFlightInstance(final Crew crew, final FlightInstance flightInstance) {
         List<FlightInstance> flightInstances = crew.getFlightInstances();
         if (flightInstances == null) {
             flightInstances = new LinkedList<>();
@@ -42,34 +42,34 @@ public class CrewManagementServiceImpl implements PersonManagementService<Crew>,
     }
 
     @Override
-    public Crew removeFlightInstance(Crew crew, FlightInstance flightInstance) {
+    public Crew removeFlightInstance(final Crew crew, final FlightInstance flightInstance) {
         if (crew == null || flightInstance == null) {
-            throw new NullPointerException("Cannot process removeFlightInstance operation with null value arguments");
+            throw new IllegalArgumentException("Cannot process removeFlightInstance operation with null value arguments");
         }
-        Crew crewFromRepository = crewRepository.getInstance(crew.getPhone());
-        if (crewFromRepository == null) {
+        final Crew crewFromRepo = crewRepository.getInstance(crew.getPhone());
+        if (crewFromRepo == null) {
             throw new CrewNotExistException();
         }
-        deleteFlightInstance(crewFromRepository, flightInstance);
-        crewRepository.updateInstance(crewFromRepository);
+        deleteFlightInstance(crewFromRepo, flightInstance);
+        crewRepository.updateInstance(crewFromRepo);
         deleteFlightInstance(crew, flightInstance);
         return crew;
     }
 
-    private static void deleteFlightInstance(Crew crew, FlightInstance flightInstance) {
-        List<FlightInstance> flightInstances = crew.getFlightInstances();
+    private static void deleteFlightInstance(final Crew crew, final FlightInstance flightInstance) {
+        final List<FlightInstance> flightInstances = crew.getFlightInstances();
         if (flightInstances != null && !flightInstances.isEmpty()) {
             flightInstances.remove(flightInstance);
         }
     }
 
     @Override
-    public Crew findByEmail(String email) {
+    public Crew findByEmail(final String email) {
         if (email == null || email.isBlank()) {
             throw new IllegalArgumentException("Email address for search cannot be null, empty or blank");
         }
-        Collection<Crew> crews = crewRepository.getInstances();
-        Crew findedCrew = crews.stream()
+        final Collection<Crew> crews = crewRepository.getInstances();
+        final Crew findedCrew = crews.stream()
                 .filter(crew -> email.equals(crew.getEmail()))
                 .findAny()
                 .orElseThrow(() -> new CrewNotExistException("No crew found for given email"));
@@ -77,11 +77,11 @@ public class CrewManagementServiceImpl implements PersonManagementService<Crew>,
     }
 
     @Override
-    public Crew findByPhoneNumber(String phone) {
+    public Crew findByPhoneNumber(final String phone) {
         if (phone == null || phone.isBlank()) {
             throw new IllegalArgumentException("Phone for search cannot be null, empty or blank");
         }
-        Crew crew = crewRepository.getInstance(phone);
+        final Crew crew = crewRepository.getInstance(phone);
         if (crew == null) {
             throw new CrewNotExistException("No crew found for given phone number");
         }
@@ -89,9 +89,9 @@ public class CrewManagementServiceImpl implements PersonManagementService<Crew>,
     }
 
     @Override
-    public Crew add(Crew crew) {
+    public Crew add(final Crew crew) {
         if (crew == null) {
-            throw new NullPointerException("Cannot process add operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process add operation for null value argument.");
         }
         Crew crewFromRepo = crewRepository.getInstance(crew.getPhone());
         if (crewFromRepo != null) {
@@ -103,67 +103,67 @@ public class CrewManagementServiceImpl implements PersonManagementService<Crew>,
     }
 
     @Override
-    public Crew updatePhone(Crew crew, String phone) {
+    public Crew updatePhone(final Crew crew, final String phone) {
         if (crew == null) {
-            throw new NullPointerException("Cannot process updatePhone operation for null value argument.");
+            throw new IllegalArgumentException("Cannot proces updatePhone operation for null value argument.");
         }
-        Crew crewFromRepository = crewRepository.getInstance(crew.getPhone());
-        if (crewFromRepository == null) {
+        final Crew crewFromRepo = crewRepository.getInstance(crew.getPhone());
+        if (crewFromRepo == null) {
             throw new CrewNotExistException();
         }
-        crewFromRepository.setPhone(phone);
-        crewRepository.updateInstance(crewFromRepository);
+        crewFromRepo.setPhone(phone);
+        crewRepository.updateInstance(crewFromRepo);
         crew.setPhone(phone);
         return crew;
     }
 
     @Override
-    public Crew updateEmail(Crew crew, String email) {
+    public Crew updateEmail(final Crew crew, final String email) {
         if (crew == null) {
-            throw new NullPointerException("Cannot process updatePhone operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process updatePhone operation for null value argument.");
         }
-        Crew crewFromRepository = crewRepository.getInstance(crew.getPhone());
-        if (crewFromRepository == null) {
+        final Crew crewFromRepo = crewRepository.getInstance(crew.getPhone());
+        if (crewFromRepo == null) {
             throw new CrewNotExistException();
         }
-        crewFromRepository.setEmail(email);
-        crewRepository.updateInstance(crewFromRepository);
+        crewFromRepo.setEmail(email);
+        crewRepository.updateInstance(crewFromRepo);
         crew.setEmail(email);
         return crew;
     }
 
     @Override
-    public Crew updateAddress(Crew crew, Address address) {
+    public Crew updateAddress(final Crew crew, final Address address) {
         if (crew == null) {
-            throw new NullPointerException("Cannot process updateAddress operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process updateAddress operation for null value argument.");
         }
-        Crew crewFromRepository = crewRepository.getInstance(crew.getPhone());
-        if (crewFromRepository == null) {
+        final Crew crewFromRepo = crewRepository.getInstance(crew.getPhone());
+        if (crewFromRepo == null) {
             throw new CrewNotExistException();
         }
-        crewFromRepository.setAddress(address);
-        crewRepository.updateInstance(crewFromRepository);
+        crewFromRepo.setAddress(address);
+        crewRepository.updateInstance(crewFromRepo);
         crew.setAddress(address);
         return crew;
     }
 
     @Override
-    public void remove(Crew crew) {
+    public void remove(final Crew crew) {
         if (crew == null) {
-            throw new NullPointerException("Cannot process remove operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process remove operation for null value argument.");
         }
-        Crew crewFromRepository = crewRepository.getInstance(crew.getPhone());
-        if (crewFromRepository == null) {
+        final Crew crewFromRepo = crewRepository.getInstance(crew.getPhone());
+        if (crewFromRepo == null) {
             throw new CrewNotExistException();
         }
-        crewRepository.removeInstance(crewFromRepository);
+        crewRepository.removeInstance(crewFromRepo);
     }
 
     public Repository<Crew, String> getCrewRepository() {
         return crewRepository;
     }
 
-    public void setCrewRepository(Repository<Crew, String> crewRepository) {
+    public void setCrewRepository(final Repository<Crew, String> crewRepository) {
         this.crewRepository = crewRepository;
     }
 }

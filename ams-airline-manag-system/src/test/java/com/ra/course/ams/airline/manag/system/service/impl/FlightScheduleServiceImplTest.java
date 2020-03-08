@@ -46,9 +46,9 @@ public class FlightScheduleServiceImplTest {
     public void testThatIfPassNullInArgumentAddWeeklyScheduleMethodThrowsError(){
         try {
             flightScheduleService.addSchedule(this.returnWeeklyScheduleNull());
-            fail("Expected that NullPointerException will be throws");
-        } catch (NullPointerException e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            fail("Expected that IllegalArgumentException will be throws");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(weeklyScheduleRepository);
     }
@@ -70,9 +70,9 @@ public class FlightScheduleServiceImplTest {
     public void testThatIfPassNullInArgumentAddCustomScheduleMethodThrowsError(){
         try {
             flightScheduleService.addSchedule(this.returnCustomScheduleNull());
-            fail("Expected that NullPointerException will be throws");
-        } catch (NullPointerException e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            fail("Expected that IllegalArgumentException will be throws");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(customScheduleRepository);
     }
@@ -94,9 +94,9 @@ public class FlightScheduleServiceImplTest {
     public void testThatIfPassNullInArgumentUpdateWeeklyScheduleMethodThrowsError(){
         try {
             flightScheduleService.updateSchedule(this.returnWeeklyScheduleNull());
-            fail("Expected that NullPointerException will be throws");
-        } catch (NullPointerException e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            fail("Expected that IllegalArgumentException will be throws");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(weeklyScheduleRepository);
     }
@@ -118,9 +118,9 @@ public class FlightScheduleServiceImplTest {
     public void testThatIfPassNullInArgumentUpdateCustomScheduleMethodThrowsError(){
         try {
             flightScheduleService.updateSchedule(this.returnCustomScheduleNull());
-            fail("Expected that NullPointerException will be throws");
-        } catch (NullPointerException e) {
-            assertThat(e).isInstanceOf(NullPointerException.class);
+            fail("Expected that IllegalArgumentException will be throws");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
         verifyZeroInteractions(customScheduleRepository);
     }

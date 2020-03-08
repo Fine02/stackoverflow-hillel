@@ -15,16 +15,16 @@ import java.util.List;
 
 public class PilotManagementServiceImpl implements PersonManagementService<Pilot>, PilotManagementService {
 
-    private Repository<Pilot, String> pilotRepository;
+    private Repository<Pilot, String> pilotRepo;
 
 
     @Override
-    public Pilot findByEmail(String email) {
+    public Pilot findByEmail(final String email) {
         if (email == null || email.isBlank()) {
             throw new IllegalArgumentException("Email address for search cannot be null, empty or blank");
         }
-        Collection<Pilot> pilots = pilotRepository.getInstances();
-        Pilot findedPilot = pilots.stream()
+        final Collection<Pilot> pilots = pilotRepo.getInstances();
+        final Pilot findedPilot = pilots.stream()
                 .filter(pilot -> email.equals(pilot.getEmail()))
                 .findAny()
                 .orElseThrow(() -> new PilotNotExistException("No pilot found for given email"));
@@ -32,11 +32,11 @@ public class PilotManagementServiceImpl implements PersonManagementService<Pilot
     }
 
     @Override
-    public Pilot findByPhoneNumber(String phone) {
+    public Pilot findByPhoneNumber(final String phone) {
         if (phone == null || phone.isBlank()) {
             throw new IllegalArgumentException("Phone for search cannot be null, empty or blank");
         }
-        Pilot pilot = pilotRepository.getInstance(phone);
+        final Pilot pilot = pilotRepo.getInstance(phone);
         if (pilot == null) {
             throw new PilotNotExistException("No pilot found for given phone number");
         }
@@ -44,93 +44,93 @@ public class PilotManagementServiceImpl implements PersonManagementService<Pilot
     }
 
     @Override
-    public Pilot add(Pilot pilot) {
+    public Pilot add(final Pilot pilot) {
         if (pilot == null) {
-            throw new NullPointerException("Cannot process add operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process add operation for null value argument.");
         }
-        Pilot pilotFromRepo = pilotRepository.getInstance(pilot.getPhone());
+        Pilot pilotFromRepo = pilotRepo.getInstance(pilot.getPhone());
         if (pilotFromRepo != null) {
             throw new PilotAlreadyExistException();
         }
         pilotFromRepo = new Pilot(pilot);
-        pilotRepository.addInstance(pilotFromRepo);
+        pilotRepo.addInstance(pilotFromRepo);
         return pilot;
     }
 
     @Override
-    public Pilot updatePhone(Pilot pilot, String phone) {
+    public Pilot updatePhone(final Pilot pilot, final String phone) {
         if (pilot == null) {
-            throw new NullPointerException("Cannot process updatePhone operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process updatePhone operation for null value argument.");
         }
-        Pilot pilotFromRepo = pilotRepository.getInstance(pilot.getPhone());
+        final Pilot pilotFromRepo = pilotRepo.getInstance(pilot.getPhone());
         if (pilotFromRepo == null) {
             throw new PilotNotExistException();
         }
         pilotFromRepo.setPhone(phone);
-        pilotRepository.updateInstance(pilotFromRepo);
+        pilotRepo.updateInstance(pilotFromRepo);
         pilot.setPhone(phone);
         return pilot;
     }
 
     @Override
-    public Pilot updateEmail(Pilot pilot, String email) {
+    public Pilot updateEmail(final Pilot pilot, final String email) {
         if (pilot == null) {
-            throw new NullPointerException("Cannot process updateEmail operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process updateEmail operation for null value argument.");
         }
-        Pilot pilotFromRepo = pilotRepository.getInstance(pilot.getPhone());
+        final Pilot pilotFromRepo = pilotRepo.getInstance(pilot.getPhone());
         if (pilotFromRepo == null) {
             throw new PilotNotExistException();
         }
         pilotFromRepo.setEmail(email);
-        pilotRepository.updateInstance(pilotFromRepo);
+        pilotRepo.updateInstance(pilotFromRepo);
         pilot.setEmail(email);
         return pilot;
     }
 
     @Override
-    public Pilot updateAddress(Pilot pilot, Address address) {
+    public Pilot updateAddress(final Pilot pilot, final Address address) {
         if (pilot == null) {
-            throw new NullPointerException("Cannot process updateAddress operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process updateAddress operation for null value argument.");
         }
-        Pilot pilotFromRepo = pilotRepository.getInstance(pilot.getPhone());
+        final Pilot pilotFromRepo = pilotRepo.getInstance(pilot.getPhone());
         if (pilotFromRepo == null) {
             throw new PilotNotExistException();
         }
         pilotFromRepo.setAddress(address);
-        pilotRepository.updateInstance(pilotFromRepo);
+        pilotRepo.updateInstance(pilotFromRepo);
         pilot.setAddress(address);
         return pilot;
     }
 
     @Override
-    public void remove(Pilot pilot) {
+    public void remove(final Pilot pilot) {
         if (pilot == null) {
-            throw new NullPointerException("Cannot process remove operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process remove operation for null value argument.");
         }
-        Pilot pilotFromRepo = pilotRepository.getInstance(pilot.getPhone());
+        final Pilot pilotFromRepo = pilotRepo.getInstance(pilot.getPhone());
         if (pilotFromRepo == null) {
             throw new PilotNotExistException();
         }
-        pilotRepository.removeInstance(pilotFromRepo);
+        pilotRepo.removeInstance(pilotFromRepo);
     }
 
     @Override
-    public Pilot addFlightInstance(Pilot pilot, FlightInstance flightInstance) {
+    public Pilot addFlightInstance(final Pilot pilot, final FlightInstance flightInstance) {
         if (pilot == null || flightInstance == null) {
-            throw new NullPointerException("Cannot process addFlightInstance operation with null value arguments");
+            throw new IllegalArgumentException("Cannot process addFlightInstanc operation with null value arguments");
         }
-        Pilot pilotFromRepository = pilotRepository.getInstance(pilot.getPhone());
-        if (pilotFromRepository == null) {
+        final Pilot pilotFromRepo = pilotRepo.getInstance(pilot.getPhone());
+        if (pilotFromRepo == null) {
             throw new PilotNotExistException();
         }
-        addNewFlightInstance(pilotFromRepository, flightInstance);
-        pilotRepository.updateInstance(pilotFromRepository);
+        addNewFlightInstance(pilotFromRepo, flightInstance);
+        pilotRepo.updateInstance(pilotFromRepo);
 
         addNewFlightInstance(pilot, flightInstance);
         return pilot;
     }
 
-    private static void addNewFlightInstance(Pilot pilot, FlightInstance flightInstance) {
+    private static void addNewFlightInstance(final Pilot pilot, final FlightInstance flightInstance) {
         List<FlightInstance> flightInstances = pilot.getFlightInstances();
         if (flightInstances == null) {
             flightInstances = new LinkedList<>();
@@ -139,33 +139,33 @@ public class PilotManagementServiceImpl implements PersonManagementService<Pilot
     }
 
     @Override
-    public Pilot removeFlightInstance(Pilot pilot, FlightInstance flightInstance) {
+    public Pilot removeFlightInstance(final Pilot pilot, final FlightInstance flightInstance) {
         if (pilot == null || flightInstance == null) {
-            throw new NullPointerException("Cannot process addFlightInstance operation with null value arguments");
+            throw new IllegalArgumentException("Cannot process addFlightInstance operation with null value arguments");
         }
-        Pilot pilotFromRepository = pilotRepository.getInstance(pilot.getPhone());
-        if (pilotFromRepository == null) {
+        final Pilot pilotFromRepo = pilotRepo.getInstance(pilot.getPhone());
+        if (pilotFromRepo == null) {
             throw new PilotNotExistException();
         }
-        deleteFlightInstance(pilotFromRepository, flightInstance);
-        pilotRepository.updateInstance(pilotFromRepository);
+        deleteFlightInstance(pilotFromRepo, flightInstance);
+        pilotRepo.updateInstance(pilotFromRepo);
 
         deleteFlightInstance(pilot, flightInstance);
         return pilot;
     }
 
-    private static void deleteFlightInstance(Pilot pilot, FlightInstance flightInstance) {
-        List<FlightInstance> flightInstances = pilot.getFlightInstances();
+    private static void deleteFlightInstance(final Pilot pilot, final FlightInstance flightInstance) {
+        final List<FlightInstance> flightInstances = pilot.getFlightInstances();
         if (flightInstances != null && !flightInstances.isEmpty()) {
             flightInstances.remove(flightInstance);
         }
     }
 
-    public Repository<Pilot, String> getPilotRepository() {
-        return pilotRepository;
+    public Repository<Pilot, String> getPilotRepo() {
+        return pilotRepo;
     }
 
-    public void setPilotRepository(Repository<Pilot, String> pilotRepository) {
-        this.pilotRepository = pilotRepository;
+    public void setPilotRepo(final Repository<Pilot, String> pilotRepo) {
+        this.pilotRepo = pilotRepo;
     }
 }

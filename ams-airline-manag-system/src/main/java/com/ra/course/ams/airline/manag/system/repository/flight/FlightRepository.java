@@ -10,13 +10,13 @@ import java.util.List;
 
 public class FlightRepository implements Repository<Flight, String> {
 
-    private final List<Flight> flights;
+    transient private final List<Flight> flights;
 
-    public FlightRepository(List<Flight> flights) {
+    public FlightRepository(final List<Flight> flights) {
         this.flights = flights;
     }
 
-    boolean isAlreadyExist(String identifier) {
+    public boolean isAlreadyExist(final String identifier) {
         return flights.stream().map(Flight::getFlightNumber)
                 .anyMatch(number -> number.equals(identifier));
     }
@@ -44,17 +44,17 @@ public class FlightRepository implements Repository<Flight, String> {
     }
 
     @Override
-    public void updateInstance(Flight flight) {
+    public void updateInstance(final Flight flight) {
         if (!isAlreadyExist(flight.getFlightNumber())) {
             throw new InstanceNotExistException();
         }
         flights.stream()
                 .filter(flightItem -> flightItem.getFlightNumber().equals(flight.getFlightNumber()))
-                .forEach(flightItemForUpdate -> flightItemForUpdate = flight);
+                .forEach(flightItemForUpd -> flightItemForUpd = flight);
     }
 
     @Override
-    public void removeInstance(Flight flight) {
+    public void removeInstance(final Flight flight) {
         flights.removeIf(flightItem -> flightItem.getFlightNumber().equals(flight.getFlightNumber()));
     }
 }

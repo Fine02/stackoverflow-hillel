@@ -9,32 +9,32 @@ import java.util.List;
 
 public class AircraftManagementServiceImpl implements AircraftManagementService {
 
-    private final Repository<Aircraft, String> aircraftRepository;
+    transient private final Repository<Aircraft, String> aircraftRepo;
 
-    public AircraftManagementServiceImpl(Repository<Aircraft, String> aircraftRepository) {
-        this.aircraftRepository = aircraftRepository;
+    public AircraftManagementServiceImpl(final Repository<Aircraft, String> aircraftRepo) {
+        this.aircraftRepo = aircraftRepo;
     }
 
     @Override
-    public Aircraft addAircraft(Aircraft aircraft) {
+    public Aircraft addAircraft(final Aircraft aircraft) {
         if (aircraft == null) {
-            throw new NullPointerException("Cannot process add aircraft operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process add aircraft operation for null value argument.");
         }
-        aircraftRepository.addInstance(aircraft);
+        aircraftRepo.addInstance(aircraft);
         return aircraft;
     }
 
     @Override
-    public Aircraft updateAircraft(Aircraft aircraft) {
+    public Aircraft updateAircraft(final Aircraft aircraft) {
         if (aircraft == null) {
-            throw new NullPointerException("Cannot process update aircraft operation for null value argument.");
+            throw new IllegalArgumentException("Cannot process update aircraft operation for null value argument.");
         }
-        aircraftRepository.updateInstance(aircraft);
+        aircraftRepo.updateInstance(aircraft);
         return aircraft;
     }
 
     @Override
-    public List<Flight> getFlights(Aircraft aircraft) {
+    public List<Flight> getFlights(final Aircraft aircraft) {
         return aircraft.getFlights();
     }
 }

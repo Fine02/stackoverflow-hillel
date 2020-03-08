@@ -159,12 +159,12 @@ public class AdminManagementServiceImplTest {
         }
 
         @Test
-        public void testThatAddInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument(){
+        public void addInstancetestThatAddInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument(){
                 try {
                         adminManagementService.add(null);
-                        fail("Expected NullPointerException to be thrown");
+                        fail("Expected IllegalArgumentException to be thrown");
                 } catch (Exception e) {
-                        assertThat(e).isInstanceOf(NullPointerException.class);
+                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
                 verifyZeroInteractions(adminRepository);
         }
@@ -186,12 +186,12 @@ public class AdminManagementServiceImplTest {
         }
 
         @Test
-        public void testThatUpdatePhoneNumberThrowNullPointerExceptionWhenCallWithNullValueArgument(){
+        public void testThatUpdatePhoneNumberThrowIllegalArgumentExceptionWhenCallWithNullValueArgument(){
                 try {
                         adminManagementService.updatePhone(null, "55285");
-                        fail("Expected NullPointerException to be thrown");
+                        fail("Expected IllegalArgumentException to be thrown");
                 } catch (Exception e) {
-                        assertThat(e).isInstanceOf(NullPointerException.class);
+                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
                 verifyZeroInteractions(adminRepository);
         }
@@ -227,12 +227,12 @@ public class AdminManagementServiceImplTest {
         }
 
         @Test
-        public void testThatUpdateEmailThrowNullPointerExceptionWhenCallWithNullValueArgument(){
+        public void testThatUpdateEmailThrowIllegalArgumentExceptionWhenCallWithNullValueArgument(){
                 try {
                         adminManagementService.updateEmail(null, "ivanov@test.com");
-                        fail("Expected NullPointerException to be thrown");
+                        fail("Expected IllegalArgumentException to be thrown");
                 } catch (Exception e) {
-                        assertThat(e).isInstanceOf(NullPointerException.class);
+                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
                 verifyZeroInteractions(adminRepository);
         }
@@ -265,12 +265,12 @@ public class AdminManagementServiceImplTest {
         }
 
         @Test
-        public void testThatRemoveInstanceThrowNullPointerExceptionWhenCallWithNullValueArgument(){
+        public void testThatRemoveInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument(){
                 try {
                         adminManagementService.remove(null);
-                        fail("Expected NullPointerException to be thrown");
+                        fail("Expected IllegalArgumentException to be thrown");
                 } catch (Exception e) {
-                        assertThat(e).isInstanceOf(NullPointerException.class);
+                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
                 verifyZeroInteractions(adminRepository);
         }
@@ -301,15 +301,15 @@ public class AdminManagementServiceImplTest {
         }
 
         @Test
-        public void whenUpdateEmailWithAdminNullThenThrowNullPointerException(){
+        public void whenUpdateEmailWithAdminNullThenThrowIllegalArgumentException(){
                 Admin admin = null;
-                Assertions.assertThrows(NullPointerException.class, () ->
+                Assertions.assertThrows(IllegalArgumentException.class, () ->
                         adminManagementService.updateEmail(admin, "email"));
         }
 
         @Test
-        public void whenUpdateAdressWithAdminIsNullThenThrowNullPointerException() {
-                Assertions.assertThrows(NullPointerException.class, () ->
+        public void whenUpdateAdressWithAdminIsNullThenThrowIllegalArgumentException() {
+                Assertions.assertThrows(IllegalArgumentException.class, () ->
                         adminManagementService.updateAddress(null, new Address()));
         }
 }
