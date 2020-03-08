@@ -15,6 +15,11 @@ import java.util.*;
 public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
 
     private transient final MemberRepository memberRepository;
+
+    private static final int SCR_FOR_STDNT_BDG = 1;
+    private static final int SCR_FOR_NICE_BDG = 10;
+    private static final int SCR_FOR_GOOD_BDG = 25;
+    private static final int SCR_FOR_GREAT_BDG = 100;
     private static final String SERVER_ERR_MSG = "Unexpected data base error occurred: ";
 
     @Override
@@ -22,7 +27,7 @@ public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
 
         final int score = question.getVoteCount();
         final Member author = question.getAuthor();
-        final Map<Badge, List<Question>> memberBadges = author.getQuestionBadges();
+        final Map<Badge, Set<Question>> memberBadges = author.getQuestionBadges();
 
         awardStudentBadge(memberBadges, score, question);
         awardNiceQuestionBadge(memberBadges, score, question);
@@ -37,29 +42,29 @@ public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
         }
     }
 
-    private void awardStudentBadge(@NonNull final Map<Badge, List<Question>> memberBadges, final int score,
+    private void awardStudentBadge(@NonNull final Map<Badge, Set<Question>> memberBadges, final int score,
                                    final Question question) {
-        if (score < 1) {
+        if (score < SCR_FOR_STDNT_BDG) {
             return;
         }
 
-        memberBadges.putIfAbsent(Badge.STUDENT, new ArrayList<>(Collections.singletonList(question)));
+        memberBadges.putIfAbsent(Badge.STUDENT, new HashSet<>(Collections.singletonList(question)));
     }
 
-    private void awardNiceQuestionBadge(@NonNull final Map<Badge, List<Question>> memberBadges, final int score,
+    private void awardNiceQuestionBadge(@NonNull final Map<Badge, Set<Question>> memberBadges, final int score,
                                         final Question question) {
 
-        if (score < 10) {
+        if (score < SCR_FOR_NICE_BDG) {
             return;
         }
 
         addBadgeToMap(memberBadges, question, Badge.NICE_QUESTION);
     }
 
-    private void awardGoodQuestionBadge(@NonNull final Map<Badge, List<Question>> memberBadges, final int score,
+    private void awardGoodQuestionBadge(@NonNull final Map<Badge, Set<Question>> memberBadges, final int score,
                                         final Question question) {
 
-        if (score < 25) {
+        if (score < SCR_FOR_GOOD_BDG) {
             return;
         }
 
@@ -67,20 +72,20 @@ public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
 
     }
 
-    private void awardGreatQuestionBadge(@NonNull final Map<Badge, List<Question>> memberBadges, final int score,
+    private void awardGreatQuestionBadge(@NonNull final Map<Badge, Set<Question>> memberBadges, final int score,
                                          final Question question) {
 
-        if (score < 100) {
+        if (score < SCR_FOR_GREAT_BDG) {
             return;
         }
 
         addBadgeToMap(memberBadges, question, Badge.GREAT_QUESTION);
     }
 
-    private void addBadgeToMap(final Map<Badge, List<Question>> memberBadges, final Question question,
+    private void addBadgeToMap(final Map<Badge, Set<Question>> memberBadges, final Question question,
                                        final Badge badge) {
 
-        List<Question> questions = memberBadges.putIfAbsent(badge, new ArrayList<>(Arrays.asList(question)));
+        final Set<Question> questions = memberBadges.putIfAbsent(badge, new HashSet<>(Arrays.asList(question)));
         if (questions != null) {
             questions.add(question);
         }

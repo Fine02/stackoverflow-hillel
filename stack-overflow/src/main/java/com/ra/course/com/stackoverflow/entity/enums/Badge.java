@@ -1,30 +1,31 @@
 package com.ra.course.com.stackoverflow.entity.enums;
 
 public enum Badge {
-    STUDENT("First question with score of 1 or more ", "BRONZE"),
-    TEACHER("Answer a question with score of 1 or more", "BRONZE"),
-    COMMENTATOR("Leave 10 comments", "BRONZE"),
-    CRITIC("First down vote", "BRONZE"),
-    SUPPORTER("First up vote", "BRONZE"),
-    BENEFACTOR("First bounty you manually award on your own question", "BRONZE"),
-    NICE_QUESTION("Question score of 10 or more", "BRONZE"),
-    GOOD_QUESTION("Question score of 25 or more", "SILVER"),
-    GREAT_QUESTION("Question score of 100 or more", "GOLD");
+    STUDENT("First question with score of 1 or more ", BadgeLevel.BRONZE),
+    TEACHER("Answer a question with score of 1 or more", BadgeLevel.BRONZE),
+    COMMENTATOR("Leave 10 comments", BadgeLevel.BRONZE),
+    CRITIC("First down vote", BadgeLevel.BRONZE),
+    SUPPORTER("First up vote", BadgeLevel.BRONZE),
+    BENEFACTOR("First bounty you manually award on your own question", BadgeLevel.BRONZE),
+    NICE_QUESTION("Question score of 10 or more", BadgeLevel.BRONZE),
+    GOOD_QUESTION("Question score of 25 or more", BadgeLevel.SILVER),
+    GREAT_QUESTION("Question score of 100 or more", BadgeLevel.GOLD);
 
 
     private String description;
-    private String level;
+    private BadgeLevel badgeLevel;
+
     
-    Badge(String description, String level) {
+    Badge(String description, BadgeLevel badgeLevel) {
         this.description = description;
-        this.level = level;
+        this.badgeLevel = badgeLevel;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public String getLevel() {
-        return level;
+    public BadgeLevel getBadgeLevel() {
+        return badgeLevel;
     }
 }

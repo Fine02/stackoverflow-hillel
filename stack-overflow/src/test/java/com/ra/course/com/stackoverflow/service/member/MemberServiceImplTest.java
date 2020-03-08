@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.service.implementation;
+package com.ra.course.com.stackoverflow.service.member;
 
 import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
@@ -7,12 +7,10 @@ import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationExc
 import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
-import com.ra.course.com.stackoverflow.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -98,7 +96,7 @@ public class MemberServiceImplTest {
         Throwable actualException = assertThrows(InternalServerErrorException.class,
                 () -> memberService.postQuestion(givenQuestion));
 
-        assertEquals("Unexpected error occurred: 500 Internal Server Error", actualException.getMessage());
+        assertTrue(actualException.getMessage().contains("Unexpected data base error occurred: "));
 
         verify(mockedMemberRepository).update(givenMember);
         verify(mockedQuestionRepository).save(givenQuestion);
@@ -133,7 +131,7 @@ public class MemberServiceImplTest {
         Throwable actualException = assertThrows(InternalServerErrorException.class,
                 () -> memberService.postQuestion(givenQuestion));
 
-        assertEquals("Unexpected error occurred: 500 Internal Server Error", actualException.getMessage());
+        assertTrue(actualException.getMessage().contains("Unexpected data base error occurred: "));
 
         verify(mockedQuestionRepository).save(givenQuestion);
         verifyNoMoreInteractions(mockedMemberRepository);
