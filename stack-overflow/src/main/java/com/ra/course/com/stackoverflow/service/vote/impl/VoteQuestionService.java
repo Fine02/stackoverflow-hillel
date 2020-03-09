@@ -3,12 +3,14 @@ package com.ra.course.com.stackoverflow.service.vote.impl;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
+import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundException;
-import com.ra.course.com.stackoverflow.exception.vote_service.AlreadyVotedException;
-import com.ra.course.com.stackoverflow.exception.vote_service.CannotVoteOwnPostException;
+import com.ra.course.com.stackoverflow.exception.service.AlreadyVotedException;
+import com.ra.course.com.stackoverflow.exception.service.CannotVoteOwnPostException;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
+import com.ra.course.com.stackoverflow.service.system.BadgeAwardService;
 import com.ra.course.com.stackoverflow.service.vote.VoteService;
 import lombok.AllArgsConstructor;
 
@@ -19,11 +21,13 @@ public class VoteQuestionService implements VoteService<Question> {
 
     private transient final QuestionRepository questionData;
     private transient final MemberRepository memberData;
-    private transient final static int ADDED_REPUTATION = 5;
+    private transient final BadgeAwardService<Question> badgeAwardService;
+    private static final int ADDED_REPUTATION = 5;
+    private static final String SERVER_ERR_MSG = "Unexpected data base error occurred: ";
 
     @Override
     public Question upVote( final Question question, final Member member)
-            throws DataBaseOperationException,
+            throws InternalServerErrorException,
             CannotVoteOwnPostException, AlreadyVotedException,
             QuestionNotFoundException, MemberNotFoundException {
 
@@ -37,6 +41,8 @@ public class VoteQuestionService implements VoteService<Question> {
         questionFromDB.setVoteCount(voteCount);
         questionData.update(questionFromDB);
 
+        badgeAwardService.awardMember(questionFromDB);
+
         memberFromDB.getUpVotedQuestionsId().add(questionFromDB.getId());
         updateMemberWithNewReputation(memberFromDB);
 
@@ -46,7 +52,7 @@ public class VoteQuestionService implements VoteService<Question> {
 
     @Override
     public Question downVote(final Question question, final Member member)
-            throws DataBaseOperationException,
+            throws InternalServerErrorException,
             CannotVoteOwnPostException, AlreadyVotedException,
             QuestionNotFoundException, MemberNotFoundException {
 
@@ -92,9 +98,14 @@ public class VoteQuestionService implements VoteService<Question> {
         }
     }
 
-    private void updateMemberWithNewReputation (final Member member) throws DataBaseOperationException{
+    private void updateMemberWithNewReputation (final Member member) throws InternalServerErrorException{
         final int reputation = member.getReputation() + ADDED_REPUTATION;
         member.getAccount().setReputation(reputation);
-        memberData.update(member);
+        try {
+            memberData.update(member);
+        } catch (DataBaseOperationException e) {
+            throw (InternalServerErrorException)
+                    new InternalServerErrorException(SERVER_ERR_MSG + e.getMessage()).initCause(e.getCause());
+        }
     }
 }

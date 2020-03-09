@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.exception.vote_service;
+package com.ra.course.com.stackoverflow.exception.service;
 
 public class CannotVoteOwnPostException extends Exception{
 

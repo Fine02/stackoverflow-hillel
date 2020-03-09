@@ -3,11 +3,10 @@ package com.ra.course.com.stackoverflow.service.member;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
-import com.ra.course.com.stackoverflow.exception.repository.InternalServerErrorException;
+import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 
-import java.util.Collections;
 import java.util.Objects;
 
 public class MemberServiceImpl implements MemberService<Question> {
@@ -15,7 +14,7 @@ public class MemberServiceImpl implements MemberService<Question> {
     private transient final QuestionRepository questionRep;
     private transient final MemberRepository memberRep;
 
-    private static final String SERVER_ERR_MSG = "Unexpected error occurred: 500 Internal Server Error";
+    private static final String SERVER_ERR_MSG = "Unexpected data base error occurred: ";
     private static final String NULL_WARNING_MSG = "argument must not be null";
 
     public MemberServiceImpl(final QuestionRepository questionRep,
@@ -44,7 +43,7 @@ public class MemberServiceImpl implements MemberService<Question> {
             return questionRep.save(question);
         } catch (final DataBaseOperationException e) {
             throw (InternalServerErrorException)
-                    new InternalServerErrorException(SERVER_ERR_MSG).initCause(e);
+                    new InternalServerErrorException(SERVER_ERR_MSG + e.getMessage()).initCause(e);
         }
     }
 
@@ -52,13 +51,13 @@ public class MemberServiceImpl implements MemberService<Question> {
 
         final Member member = question.getAuthor();
 
-        member.setQuestions(Collections.singletonList(question));
+        member.getQuestions().add(question);
 
         try {
             memberRep.update(member);
         } catch (final DataBaseOperationException e) {
             throw (InternalServerErrorException)
-                    new InternalServerErrorException(SERVER_ERR_MSG).initCause(e);
+                    new InternalServerErrorException(SERVER_ERR_MSG + e.getMessage()).initCause(e);
         }
 
         return member;

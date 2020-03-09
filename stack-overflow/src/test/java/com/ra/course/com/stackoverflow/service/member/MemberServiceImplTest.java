@@ -4,19 +4,13 @@ import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
-import com.ra.course.com.stackoverflow.exception.repository.InternalServerErrorException;
+import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
-import com.ra.course.com.stackoverflow.service.member.MemberService;
-
-import com.ra.course.com.stackoverflow.service.member.MemberServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -35,7 +29,7 @@ public class MemberServiceImplTest {
 
 
     @BeforeEach
-    void setUp() throws DataBaseOperationException {
+    void setUp() {
         mockedMemberRepository = mock(MemberRepository.class);
         mockedQuestionRepository = mock(QuestionRepository.class);
         memberService = new MemberServiceImpl(mockedQuestionRepository, mockedMemberRepository);
@@ -56,7 +50,7 @@ public class MemberServiceImplTest {
                 .author(expectedMember)
                 .build();
 
-        expectedMember.setQuestions(Collections.singletonList(expectedQuestion));
+        expectedMember.getQuestions().add(expectedQuestion);
 
         givenMember = Member.builder()
                 .id(42L)
@@ -102,7 +96,7 @@ public class MemberServiceImplTest {
         Throwable actualException = assertThrows(InternalServerErrorException.class,
                 () -> memberService.postQuestion(givenQuestion));
 
-        assertEquals("Unexpected error occurred: 500 Internal Server Error", actualException.getMessage());
+        assertTrue(actualException.getMessage().contains("Unexpected data base error occurred: "));
 
         verify(mockedMemberRepository).update(givenMember);
         verify(mockedQuestionRepository).save(givenQuestion);
@@ -137,7 +131,7 @@ public class MemberServiceImplTest {
         Throwable actualException = assertThrows(InternalServerErrorException.class,
                 () -> memberService.postQuestion(givenQuestion));
 
-        assertEquals("Unexpected error occurred: 500 Internal Server Error", actualException.getMessage());
+        assertTrue(actualException.getMessage().contains("Unexpected data base error occurred: "));
 
         verify(mockedQuestionRepository).save(givenQuestion);
         verifyNoMoreInteractions(mockedMemberRepository);

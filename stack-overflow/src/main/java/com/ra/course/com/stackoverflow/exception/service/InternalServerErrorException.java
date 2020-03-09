@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.exception.repository;
+package com.ra.course.com.stackoverflow.exception.service;
 
 public class InternalServerErrorException extends Exception{
     private static final long serialVersionUID = 1L;

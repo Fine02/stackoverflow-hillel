@@ -6,7 +6,7 @@ import com.ra.course.com.stackoverflow.entity.enums.QuestionClosingRemark;
 import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundException;
-import com.ra.course.com.stackoverflow.exception.vote_service.AlreadyVotedException;
+import com.ra.course.com.stackoverflow.exception.service.AlreadyVotedException;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 import lombok.AllArgsConstructor;

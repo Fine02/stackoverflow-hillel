@@ -1,11 +1,11 @@
 package com.ra.course.com.stackoverflow.entity;
 
 
+import com.ra.course.com.stackoverflow.entity.enums.Badge;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SuperBuilder
 @Data
@@ -20,7 +20,7 @@ public class Member {
 
     @NonNull
     @Builder.Default
-    private List<Badge> badges = new ArrayList<>();
+    private Map<Badge, Set<Question>> questionBadges = new HashMap<>();
 
     @NonNull
     @Builder.Default
