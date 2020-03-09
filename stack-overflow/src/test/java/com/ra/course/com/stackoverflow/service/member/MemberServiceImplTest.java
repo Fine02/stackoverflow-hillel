@@ -79,9 +79,6 @@ public class MemberServiceImplTest {
 
         //then
         assertEquals(expectedQuestion.getAuthor().getQuestions(), actualQuestion.getAuthor().getQuestions());
-        verify(mockedMemberRepository).update(givenMember);
-        verify(mockedQuestionRepository).save(givenQuestion);
-        verifyNoMoreInteractions(mockedMemberRepository, mockedQuestionRepository);
     }
 
     @Test
@@ -97,10 +94,6 @@ public class MemberServiceImplTest {
                 () -> memberService.postQuestion(givenQuestion));
 
         assertTrue(actualException.getMessage().contains("Unexpected data base error occurred: "));
-
-        verify(mockedMemberRepository).update(givenMember);
-        verify(mockedQuestionRepository).save(givenQuestion);
-        verifyNoMoreInteractions(mockedMemberRepository, mockedQuestionRepository);
     }
 
     @Test
@@ -114,10 +107,6 @@ public class MemberServiceImplTest {
 
         //then
         assertEquals(expectedQuestion, actualQuestion);
-
-        verify(mockedQuestionRepository).save(givenQuestion);
-        verify(mockedMemberRepository).update(givenMember);
-        verifyNoMoreInteractions(mockedMemberRepository, mockedQuestionRepository);
     }
 
     @Test
@@ -132,9 +121,6 @@ public class MemberServiceImplTest {
                 () -> memberService.postQuestion(givenQuestion));
 
         assertTrue(actualException.getMessage().contains("Unexpected data base error occurred: "));
-
-        verify(mockedQuestionRepository).save(givenQuestion);
-        verifyNoMoreInteractions(mockedMemberRepository);
     }
 
 }

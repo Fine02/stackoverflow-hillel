@@ -11,7 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class QuestionScoreBadgeAwarderTest {
     private BadgeAwardService<Question> badgeAwardService;
@@ -64,9 +65,6 @@ public class QuestionScoreBadgeAwarderTest {
         assertTrue(actualAuthor.getQuestionBadges().get(niceQuestionBadge).contains(expectedQuestion));
         assertTrue(actualAuthor.getQuestionBadges().get(goodQuestionBadge).contains(expectedQuestion));
         assertTrue(actualAuthor.getQuestionBadges().get(greatQuestionBadge).contains(expectedQuestion));
-
-        verify(mockedMemberRepository).update(actualAuthor);
-        verifyNoMoreInteractions(mockedMemberRepository);
     }
 
     @Test
@@ -105,9 +103,6 @@ public class QuestionScoreBadgeAwarderTest {
         assertTrue(actualAuthor.getQuestionBadges().get(niceQuestionBadge).contains(expectedQuestion));
         assertTrue(actualAuthor.getQuestionBadges().get(goodQuestionBadge).contains(expectedQuestion));
         assertTrue(actualAuthor.getQuestionBadges().get(greatQuestionBadge).contains(expectedQuestion));
-
-        verify(mockedMemberRepository).update(actualAuthor);
-        verifyNoMoreInteractions(mockedMemberRepository);
     }
 
 
@@ -128,9 +123,6 @@ public class QuestionScoreBadgeAwarderTest {
 
         //then
         assertNull(actualAuthor.getQuestionBadges().get(Badge.STUDENT));
-
-        verify(mockedMemberRepository).update(actualAuthor);
-        verifyNoMoreInteractions(mockedMemberRepository);
     }
 
     @Test
@@ -162,9 +154,6 @@ public class QuestionScoreBadgeAwarderTest {
         assertEquals(1, actualAuthor.getQuestionBadges().size());
 
         assertTrue(actualAuthor.getQuestionBadges().get(studentBadge).contains(expectedQuestion));
-
-        verify(mockedMemberRepository).update(actualAuthor);
-        verifyNoMoreInteractions(mockedMemberRepository);
     }
 
 
@@ -200,9 +189,6 @@ public class QuestionScoreBadgeAwarderTest {
 
         assertTrue(actualAuthor.getQuestionBadges().get(studentBadge).contains(expectedQuestion));
         assertTrue(actualAuthor.getQuestionBadges().get(niceQuestionBadge).contains(expectedQuestion));
-
-        verify(mockedMemberRepository).update(actualAuthor);
-        verifyNoMoreInteractions(mockedMemberRepository);
     }
 
     @Test
@@ -240,9 +226,6 @@ public class QuestionScoreBadgeAwarderTest {
         assertTrue(actualAuthor.getQuestionBadges().get(studentBadge).contains(expectedQuestion));
         assertTrue(actualAuthor.getQuestionBadges().get(niceQuestionBadge).contains(expectedQuestion));
         assertTrue(actualAuthor.getQuestionBadges().get(goodQuestionBadge).contains(expectedQuestion));
-
-        verify(mockedMemberRepository).update(actualAuthor);
-        verifyNoMoreInteractions(mockedMemberRepository);
     }
 
     @Test
@@ -260,9 +243,6 @@ public class QuestionScoreBadgeAwarderTest {
 
         //then
         assertTrue(actualException.getMessage().contains("Unexpected data base error occurred: "));
-
-        verify(mockedMemberRepository).update(givenAuthor);
-        verifyNoMoreInteractions(mockedMemberRepository);
     }
 
 

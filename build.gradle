@@ -55,6 +55,12 @@ project (':stack-overflow') {
     }
 }
 
+project(':stack-overflow-integration-test') {
+    dependencies {
+        implementation project(":stack-overflow")
+    }
+}
+
 wrapper {
     version = '6.1.1'
 }

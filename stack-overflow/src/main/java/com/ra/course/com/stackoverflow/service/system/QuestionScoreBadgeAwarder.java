@@ -6,12 +6,13 @@ import com.ra.course.com.stackoverflow.entity.enums.Badge;
 import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
 import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@AllArgsConstructor
+@Service
 public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
 
     private transient final MemberRepository memberRepository;
@@ -21,6 +22,11 @@ public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
     private static final int SCR_FOR_GOOD_BDG = 25;
     private static final int SCR_FOR_GREAT_BDG = 100;
     private static final String SERVER_ERR_MSG = "Unexpected data base error occurred: ";
+
+    @Autowired
+    public QuestionScoreBadgeAwarder(final MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     @Override
     public Member awardMember(@NonNull final Question question) throws InternalServerErrorException {
