@@ -55,6 +55,16 @@ project (':stack-overflow') {
     }
 }
 
+project(':stack-overflow-integration-test') {
+    bootJar {
+        enabled = false
+    }
+
+    dependencies {
+        compile project(":stack-overflow")
+    }
+}
+
 wrapper {
     version = '6.1.1'
 }

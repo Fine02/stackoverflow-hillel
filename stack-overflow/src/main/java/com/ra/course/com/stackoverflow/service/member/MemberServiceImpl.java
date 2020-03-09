@@ -6,9 +6,12 @@ import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationExc
 import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+@Service
 public class MemberServiceImpl implements MemberService<Question> {
 
     private transient final QuestionRepository questionRep;
@@ -17,6 +20,7 @@ public class MemberServiceImpl implements MemberService<Question> {
     private static final String SERVER_ERR_MSG = "Unexpected data base error occurred: ";
     private static final String NULL_WARNING_MSG = "argument must not be null";
 
+    @Autowired
     public MemberServiceImpl(final QuestionRepository questionRep,
                              final MemberRepository memberRep) {
         Objects.requireNonNull(questionRep, "questionRep' " + NULL_WARNING_MSG);
