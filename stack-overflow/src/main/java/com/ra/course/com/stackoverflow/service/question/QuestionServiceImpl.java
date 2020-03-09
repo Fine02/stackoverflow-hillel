@@ -1,18 +1,15 @@
 package com.ra.course.com.stackoverflow.service.question;
 
+import com.ra.course.com.stackoverflow.entity.Answer;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.Tag;
-import com.ra.course.com.stackoverflow.entity.Answer;
-
 import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
-
-import com.ra.course.com.stackoverflow.exception.service.*;
-
+import com.ra.course.com.stackoverflow.exception.service.QuestionClosedException;
+import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundException;
+import com.ra.course.com.stackoverflow.exception.service.TagAlreadyAddedException;
 import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.TagRepository;
-
-
 import lombok.NonNull;
 
 public class QuestionServiceImpl implements QuestionService {

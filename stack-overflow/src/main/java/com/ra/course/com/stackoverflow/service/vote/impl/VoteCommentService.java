@@ -6,8 +6,8 @@ import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationExc
 import com.ra.course.com.stackoverflow.exception.service.CommentNotFoundException;
 import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
-import com.ra.course.com.stackoverflow.exception.vote_service.AlreadyVotedException;
-import com.ra.course.com.stackoverflow.exception.vote_service.CannotVoteOwnPostException;
+import com.ra.course.com.stackoverflow.exception.service.AlreadyVotedException;
+import com.ra.course.com.stackoverflow.exception.service.CannotVoteOwnPostException;
 import com.ra.course.com.stackoverflow.repository.interfaces.CommentRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import com.ra.course.com.stackoverflow.service.vote.VoteService;
