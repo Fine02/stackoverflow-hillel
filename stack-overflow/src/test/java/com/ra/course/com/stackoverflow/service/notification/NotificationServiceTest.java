@@ -28,8 +28,7 @@ public class NotificationServiceTest {
     }
 
     @Test
-    public void whenNotificationIsAddedToListThenReturnTrue()
-            throws DataBaseOperationException, MemberNotFoundException{
+    public void whenNotificationIsAddedToListThenReturnTrue() {
         //given
         var member = mockMember(ID);
         when(memberData.findById(ID)).thenReturn(Optional.of(member));
@@ -45,8 +44,7 @@ public class NotificationServiceTest {
     }
 
     @Test
-    public void whenContentOfNotificationIsEmptyThenReturnFalse()
-            throws DataBaseOperationException, MemberNotFoundException{
+    public void whenContentOfNotificationIsEmptyThenReturnFalse() {
         //given
         var member = mockMember(ID);
         when(memberData.findById(ID)).thenReturn(Optional.of(member));

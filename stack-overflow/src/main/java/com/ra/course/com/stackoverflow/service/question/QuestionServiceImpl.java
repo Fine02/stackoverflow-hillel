@@ -30,7 +30,7 @@ public class QuestionServiceImpl implements QuestionService {
     /**Members able to add an answer to an open question.
      * If QuestionStatus is not OPEN, throws new QuestionClosedException()**/
     @Override
-    public Answer addAnswerToQuestion(@NonNull final Answer answer) throws QuestionClosedException, QuestionNotFoundException {
+    public Answer addAnswerToQuestion(@NonNull final Answer answer) {
 
         final var question = questionRepo.findById(answer.getQuestion().getId())
                 .orElseThrow(() -> new QuestionNotFoundException("Question not found in DB. Can't add answer to nonexistent question."));
@@ -53,8 +53,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**Members can add tags to their questions. A tag is a word or phrase that describes the topic of the question.**/
     @Override
-    public boolean addTagToQuestion(@NonNull final Tag tag, @NonNull final Question question) throws TagAlreadyAddedException,
-            QuestionNotFoundException {
+    public boolean addTagToQuestion(@NonNull final Tag tag, @NonNull final Question question) {
 
         questionRepo.findById(question.getId())
                 .orElseThrow(() -> new QuestionNotFoundException("Question not found in DB. Can't add tag to nonexistent question"));

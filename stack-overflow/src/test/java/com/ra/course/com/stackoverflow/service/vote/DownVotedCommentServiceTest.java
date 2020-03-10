@@ -105,7 +105,7 @@ public class DownVotedCommentServiceTest {
     }
 
     @Test
-    public void whenMemberVotesTheCommentThenVoteCountDecrementAndAddReputation() throws Exception {
+    public void whenMemberVotesTheCommentThenVoteCountDecrementAndAddReputation() {
         var wantToVoteMember = mockMember(ID1);
         var author = mockMember(ID2);
         var comment = mockComment(author);

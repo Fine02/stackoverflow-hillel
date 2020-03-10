@@ -103,7 +103,7 @@ public class DownVoteAnswerServiceTest {
         verifyNoMoreInteractions(answerData, memberData);
     }
     @Test
-    public void whenMemberVotesTheAnswerThenVoteCountDecrementAndAddReputation() throws Exception {
+    public void whenMemberVotesTheAnswerThenVoteCountDecrementAndAddReputation() {
         //given
         var wantToVoteMember = mockMember(ID1);
         var author = mockMember(ID2);

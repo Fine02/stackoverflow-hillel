@@ -105,7 +105,7 @@ public class UpVoteCommentServiceTest {
     }
 
     @Test
-    public void whenMemberVotesTheCommentThenVoteCountIncrementAndAddReputation() throws Exception {
+    public void whenMemberVotesTheCommentThenVoteCountIncrementAndAddReputation() {
         var wantToVoteMember = mockMember(ID1);
         var author = mockMember(ID2);
         var comment = mockComment(author);

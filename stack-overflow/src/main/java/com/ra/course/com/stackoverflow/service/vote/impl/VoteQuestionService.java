@@ -26,10 +26,7 @@ public class VoteQuestionService implements VoteService<Question> {
     private static final String SERVER_ERR_MSG = "Unexpected data base error occurred: ";
 
     @Override
-    public Question upVote( final Question question, final Member member)
-            throws InternalServerErrorException,
-            CannotVoteOwnPostException, AlreadyVotedException,
-            QuestionNotFoundException, MemberNotFoundException {
+    public Question upVote( final Question question, final Member member) {
 
         final var questionFromDB = checkQuestion(question);
         final var memberFromDB = checkMember(member);
@@ -51,10 +48,7 @@ public class VoteQuestionService implements VoteService<Question> {
     }
 
     @Override
-    public Question downVote(final Question question, final Member member)
-            throws InternalServerErrorException,
-            CannotVoteOwnPostException, AlreadyVotedException,
-            QuestionNotFoundException, MemberNotFoundException {
+    public Question downVote(final Question question, final Member member) {
 
         final var questionFromDB = checkQuestion(question);
         final var memberFromDB = checkMember(member);
@@ -73,32 +67,32 @@ public class VoteQuestionService implements VoteService<Question> {
         return question;
     }
 
-    private Question checkQuestion(final Question question) throws QuestionNotFoundException {
+    private Question checkQuestion(final Question question) {
         final var optionalQuestion = questionData.findById(question.getId());
         return optionalQuestion.orElseThrow(
                 ()-> new QuestionNotFoundException("No such question in DB"));
     }
 
-    private Member checkMember(final Member member) throws MemberNotFoundException {
+    private Member checkMember(final Member member) {
         final var optionalMember = memberData.findById(member.getId());
         return optionalMember.orElseThrow(
                 ()-> new MemberNotFoundException("No such member in DB"));
 
     }
 
-    private void checkTheAuthorOfQuestion(final Question question, final Member member) throws CannotVoteOwnPostException {
+    private void checkTheAuthorOfQuestion(final Question question, final Member member) {
         if (question.getAuthor().getId() == member.getId()) {
             throw new CannotVoteOwnPostException("Can't vote your own question");
         }
     }
 
-    private void checkIsAlreadyVoted(final long questionId, final List<Long> votedQuestions) throws AlreadyVotedException {
+    private void checkIsAlreadyVoted(final long questionId, final List<Long> votedQuestions) {
         if (votedQuestions.contains(questionId)) {
             throw new AlreadyVotedException("This question is already voted");
         }
     }
 
-    private void updateMemberWithNewReputation (final Member member) throws InternalServerErrorException{
+    private void updateMemberWithNewReputation (final Member member) {
         final int reputation = member.getReputation() + ADDED_REPUTATION;
         member.getAccount().setReputation(reputation);
         try {

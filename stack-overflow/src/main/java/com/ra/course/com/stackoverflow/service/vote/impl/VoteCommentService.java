@@ -24,10 +24,7 @@ public class VoteCommentService implements VoteService<Comment> {
     private static final String SERVER_ERR_MSG = "Unexpected data base error occurred: ";
 
     @Override
-    public Comment upVote(final Comment comment, final Member member)
-            throws InternalServerErrorException,
-            CannotVoteOwnPostException, AlreadyVotedException,
-            CommentNotFoundException, MemberNotFoundException{
+    public Comment upVote(final Comment comment, final Member member) {
 
         final var commentFromDB = checkComment(comment);
         final var memberFromDB = checkMember(member);
@@ -47,10 +44,7 @@ public class VoteCommentService implements VoteService<Comment> {
     }
 
     @Override
-    public Comment downVote(final Comment comment, final Member member)
-            throws InternalServerErrorException,
-            CannotVoteOwnPostException, AlreadyVotedException,
-            CommentNotFoundException, MemberNotFoundException {
+    public Comment downVote(final Comment comment, final Member member) {
 
         final var commentFromDB = checkComment(comment);
         final var memberFromDB = checkMember(member);
@@ -69,32 +63,32 @@ public class VoteCommentService implements VoteService<Comment> {
         return comment;
     }
 
-    private Comment checkComment(final Comment comment) throws CommentNotFoundException {
+    private Comment checkComment(final Comment comment) {
         final var optionalComment = commentData.findById(comment.getId());
         return optionalComment.orElseThrow(
                 ()-> new CommentNotFoundException("No such comment in DB"));
     }
 
-    private Member checkMember(final Member member) throws MemberNotFoundException {
+    private Member checkMember(final Member member) {
         final var optionalMember = memberData.findById(member.getId());
         return optionalMember.orElseThrow(
                 ()-> new MemberNotFoundException("No such member in DB"));
 
     }
 
-    private void checkTheAuthorOfComment(final Comment comment, final Member member) throws CannotVoteOwnPostException {
+    private void checkTheAuthorOfComment(final Comment comment, final Member member) {
         if (comment.getAuthor().getId() == member.getId()) {
             throw new CannotVoteOwnPostException("Can't vote your own comment");
         }
     }
 
-    private void checkIsAlreadyVoted(final long commentId, final List<Long> votedComments) throws AlreadyVotedException {
+    private void checkIsAlreadyVoted(final long commentId, final List<Long> votedComments) {
         if (votedComments.contains(commentId)) {
             throw new AlreadyVotedException("This comment is already voted");
         }
     }
 
-    private void updateMemberWithNewReputation (final Member member) throws InternalServerErrorException{
+    private void updateMemberWithNewReputation (final Member member) {
         final int reputation = member.getReputation() + ADDED_REPUTATION;
         member.getAccount().setReputation(reputation);
         try {

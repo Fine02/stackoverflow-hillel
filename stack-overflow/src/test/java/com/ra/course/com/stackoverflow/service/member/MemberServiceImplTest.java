@@ -70,8 +70,7 @@ public class MemberServiceImplTest {
     }
 
     @Test
-    public void whenPostQuestionCalledReturnMemberWithExpectedQuestionList() throws InternalServerErrorException,
-                                                                                DataBaseOperationException {
+    public void whenPostQuestionCalledReturnMemberWithExpectedQuestionList() {
         //when
         when(mockedMemberRepository.update(givenMember)).thenReturn(expectedMember);
         when(mockedQuestionRepository.save(givenQuestion)).thenReturn(expectedQuestion);
@@ -85,8 +84,7 @@ public class MemberServiceImplTest {
     }
 
     @Test
-    public void whenDataBaseExceptionIsThrownByMemberRepositoryThrowInternalErrorException() throws
-            DataBaseOperationException {
+    public void whenDataBaseExceptionIsThrownByMemberRepositoryThrowInternalErrorException() {
 
         //when
         when(mockedMemberRepository.update(givenMember)).thenThrow(DataBaseOperationException.class);
@@ -104,9 +102,7 @@ public class MemberServiceImplTest {
     }
 
     @Test
-    public void whenPostQuestionCalledReturnExpectedQuestion() throws InternalServerErrorException,
-            DataBaseOperationException {
-
+    public void whenPostQuestionCalledReturnExpectedQuestion() {
         //when
         when(mockedMemberRepository.update(givenMember)).thenReturn(expectedMember);
         when(mockedQuestionRepository.save(givenQuestion)).thenReturn(expectedQuestion);
@@ -121,8 +117,7 @@ public class MemberServiceImplTest {
     }
 
     @Test
-    public void whenDataBaseExceptionIsThrownByQuestionRepositoryThrowInternalErrorException() throws
-            DataBaseOperationException {
+    public void whenDataBaseExceptionIsThrownByQuestionRepositoryThrowInternalErrorException() {
 
         //when
         when(mockedQuestionRepository.save(givenQuestion)).thenThrow(DataBaseOperationException.class);

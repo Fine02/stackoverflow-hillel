@@ -32,7 +32,6 @@ class SearchServiceTest {
     private SearchService searchService;
     private List<Question> expectedResult;
 
-
     private Account account = Account.builder()
                                      .password("password")
                                      .email("email")
@@ -74,16 +73,14 @@ class SearchServiceTest {
     }
 
     @Test
-    public void shouldThrowExceptionIfTagByNameNull() {
-        assertThatThrownBy(() -> searchService.searchByTag(null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Tag name is null");
+    public void shouldReturnEmptyListIfTagByNameNull() {
+        assertThat(searchService.searchByTag(null)).isEmpty();
 
         verifyNoInteractions(tagRepository, questionRepository);
     }
 
     @Test
-    public void shouldFindQuestionByTag() throws TagNotFoundException {
+    public void shouldFindQuestionByTag() {
         when(tagRepository.findByTagName(TAG_NAME)).thenReturn(Optional.of(tag));
         when(questionRepository.findByTag(tag)).thenReturn(expectedResult);
 
@@ -93,14 +90,11 @@ class SearchServiceTest {
 
         verify(tagRepository).findByTagName(TAG_NAME);
         verify(questionRepository).findByTag(tag);
-        verifyNoMoreInteractions(tagRepository, questionRepository);
     }
 
     @Test
-    public void shouldThrowExceptionIfSearchPhraseIsNull() {
-        assertThatThrownBy(() -> searchService.searchInTitle(null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Search phrase is null");
+    public void shouldReturnEmptyListIfSearchPhraseIsNull() {
+        assertThat(searchService.searchInTitle(null)).isEmpty();
 
         verifyNoInteractions(tagRepository, questionRepository);
     }
@@ -117,8 +111,7 @@ class SearchServiceTest {
     }
 
     @Test
-    public void shouldFindQuestionByTextAndTag() throws TagNotFoundException {
-
+    public void shouldFindQuestionByTextAndTag() {
         when(tagRepository.findByTagName(TAG_NAME)).thenReturn(Optional.of(tag));
         when(questionRepository.findByTitleAndTag(SEARCH_TEXT, tag)).thenReturn(expectedResult);
 
@@ -143,17 +136,15 @@ class SearchServiceTest {
     }
 
     @Test
-    public void shouldThrowExceptionIfSearchPhraseIsNullButTagIsValid() {
-        assertThatThrownBy(() -> searchService.searchInTitleByTag(null, TAG_NAME))
-                .isInstanceOf(IllegalArgumentException.class);
+    public void shouldReturnEmptyListIfSearchPhraseIsNullButTagIsValid() {
+        assertThat(searchService.searchInTitleByTag(null, TAG_NAME)).isEmpty();
 
         verifyNoInteractions(tagRepository, questionRepository);
     }
 
     @Test
-    public void shouldThrowExceptionIfSearchPhraseIsValidButTagIsNull() {
-        assertThatThrownBy(() -> searchService.searchInTitleByTag(SEARCH_TEXT, null))
-                .isInstanceOf(IllegalArgumentException.class);
+    public void shouldReturnEmptyListIfSearchPhraseIsValidButTagIsNull() {
+        assertThat(searchService.searchInTitleByTag(SEARCH_TEXT, null)).isEmpty();
 
         verifyNoInteractions(tagRepository, questionRepository);
     }

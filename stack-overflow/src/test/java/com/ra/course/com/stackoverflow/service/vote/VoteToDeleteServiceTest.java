@@ -87,7 +87,7 @@ public class VoteToDeleteServiceTest {
     }
 
     @Test
-    public void whenMemberVotesToDeleteTheQuestionThenUpdateQuestion() throws Exception {
+    public void whenMemberVotesToDeleteTheQuestionThenUpdateQuestion() {
         //given
         var member = mockMember(ID1);
         var question = mockQuestion(member);

@@ -104,7 +104,7 @@ public class UpVoteAnswerServiceTest {
         verifyNoMoreInteractions(answerData, memberData);
     }
     @Test
-    public void whenMemberVotesTheAnswerThenVoteCountIncrementAndAddReputation() throws Exception {
+    public void whenMemberVotesTheAnswerThenVoteCountIncrementAndAddReputation() {
         //given
         var wantToVoteMember = mockMember(ID1);
         var author = mockMember(ID2);
