@@ -4,14 +4,18 @@ import com.ra.course.com.stackoverflow.entity.Answer;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.Tag;
 import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
+import com.ra.course.com.stackoverflow.exception.repository.QuestionRepositoryException;
 import com.ra.course.com.stackoverflow.exception.service.QuestionClosedException;
 import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundException;
 import com.ra.course.com.stackoverflow.exception.service.TagAlreadyAddedException;
 import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.TagRepository;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
+
+@AllArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
 
     private final transient AnswerRepository answerRepo;
@@ -19,33 +23,22 @@ public class QuestionServiceImpl implements QuestionService {
     private final transient TagRepository tagRepo;
 
 
-    public QuestionServiceImpl(final AnswerRepository answerRepo,
-                               final QuestionRepository questionRepo, final TagRepository tagRepo) {
-        this.answerRepo = answerRepo;
-        this.questionRepo = questionRepo;
-        this.tagRepo = tagRepo;
-    }
-
-
     /**Members able to add an answer to an open question.
      * If QuestionStatus is not OPEN, throws new QuestionClosedException()**/
     @Override
     public Answer addAnswerToQuestion(@NonNull final Answer answer) {
 
-        final var question = questionRepo.findById(answer.getQuestion().getId())
+        final var questionFromBD = questionRepo.findById(answer.getQuestion().getId())
                 .orElseThrow(() -> new QuestionNotFoundException("Question not found in DB. Can't add answer to nonexistent question."));
 
-
-        if (!question.getStatus().equals(QuestionStatus.OPEN)) {
-            throw new QuestionClosedException("Forbidden. Answer can be added only to open question. Status of question is " + question.getStatus());
+        if (!questionFromBD.getStatus().equals(QuestionStatus.OPEN)) {
+            throw new QuestionClosedException("Forbidden. Answer can be added only to open question. Status of question is " + questionFromBD.getStatus());
         }
 
-
-        question.getAnswerList().add(answer);
-        question.getAuthor().getAnswers().add(answer);
-        questionRepo.update(question); //if it necessary
-
-
+        questionFromBD.getAnswerList().add(answer);
+        answer.getAuthor().getAnswers().add(answer);
+        answerRepo.update(answer);
+        questionRepo.update(questionFromBD);
 
         return answerRepo.save(answer);
     }
@@ -55,22 +48,25 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public boolean addTagToQuestion(@NonNull final Tag tag, @NonNull final Question question) {
 
-        questionRepo.findById(question.getId())
+        final var questionFromDB = questionRepo.findById(question.getId())
                 .orElseThrow(() -> new QuestionNotFoundException("Question not found in DB. Can't add tag to nonexistent question"));
 
-
-        if (question.getTagList().contains(tag)){
+        if (questionFromDB.getTagList().contains(tag)){
             throw new TagAlreadyAddedException("Tag " + tag.getName() + " already added to this question.");
-        }else {
-            final var tagFromDB = tagRepo.findById(tag.getId())
-                    .orElseGet(() -> tagRepo.save(tag));
-
-            question.getTagList().add(tagFromDB);
-            questionRepo.update(question);
-
-            return true;
         }
 
-    }
+        final var tagFromDB = tagRepo.findById(tag.getId())
+                .orElseGet(() -> tagRepo.save(tag));
 
+        questionFromDB.getTagList().add(tagFromDB);
+
+        try {
+            questionRepo.update(questionFromDB);
+        }catch (QuestionRepositoryException e) {
+            tagRepo.delete(tag);
+            return false;
+        }
+
+        return true;
+    }
 }

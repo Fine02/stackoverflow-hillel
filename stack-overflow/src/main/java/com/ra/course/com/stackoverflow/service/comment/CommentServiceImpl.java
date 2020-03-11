@@ -12,19 +12,15 @@ import com.ra.course.com.stackoverflow.repository.interfaces.CommentRepository;
 import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
 
 
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
+@AllArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
     private final transient CommentRepository commentRepo;
     private final transient QuestionRepository questionRepo;
     private final transient AnswerRepository answerRepo;
-
-    public CommentServiceImpl(final CommentRepository commentRepo, final QuestionRepository questionRepo, final AnswerRepository answerRepo) {
-        this.commentRepo = commentRepo;
-        this.questionRepo = questionRepo;
-        this.answerRepo = answerRepo;
-    }
 
 
     /**Members can add comments to any question.**/
@@ -34,10 +30,8 @@ public class CommentServiceImpl implements CommentService {
         final var questionFromDB = questionRepo.findById(question.getId())
                 .orElseThrow(() -> new QuestionNotFoundException("Question not found in DB. Can't add comment to nonexistent question"));
 
-
         questionFromDB.getCommentList().add(comment);
         questionRepo.update(questionFromDB);
-
 
         return commentRepo.save(comment);
     }
@@ -52,7 +46,6 @@ public class CommentServiceImpl implements CommentService {
 
         answerFromDB.getComments().add(comment);
         answerRepo.update(answerFromDB);
-
 
         return commentRepo.save(comment);
     }
