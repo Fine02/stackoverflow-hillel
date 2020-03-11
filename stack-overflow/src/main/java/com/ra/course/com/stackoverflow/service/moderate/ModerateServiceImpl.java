@@ -2,7 +2,7 @@ package com.ra.course.com.stackoverflow.service.moderate;
 
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundException;
-import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
+import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import lombok.AllArgsConstructor;
 
 import static com.ra.course.com.stackoverflow.entity.enums.QuestionStatus.CLOSE;

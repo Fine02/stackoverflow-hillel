@@ -8,8 +8,8 @@ import com.ra.course.com.stackoverflow.exception.service.CommentNotFoundExceptio
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyVotedException;
 import com.ra.course.com.stackoverflow.exception.service.CannotVoteOwnPostException;
-import com.ra.course.com.stackoverflow.repository.interfaces.CommentRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
+import com.ra.course.com.stackoverflow.repository.CommentRepository;
+import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import com.ra.course.com.stackoverflow.service.vote.impl.VoteCommentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,122 +22,93 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class DownVotedCommentServiceTest {
+    private final CommentRepository commentData = mock(CommentRepository.class);
+    private final MemberRepository memberData = mock(MemberRepository.class);
+    private final long ID1 = 1;
+    private final long ID2 = 2;
+
     private VoteCommentService voteCommentService;
-    private CommentRepository commentData = mock(CommentRepository.class);
-    private MemberRepository memberData = mock(MemberRepository.class);
-
-    private final long ID1 = 1L;
-    private final long ID2 = 2L;
-
+    private Member member;
+    private Comment comment;
 
     @BeforeEach
     void setUp() {
         voteCommentService = new VoteCommentService(commentData, memberData);
+        member = mockMember(ID1);
+        comment = mockComment(mockMember(ID2));
     }
 
     @Test
     public void whenCommentIsNotFoundThenThrowsCommentNotFoundException() {
         //given
-        var member = mockMember(ID1);
-        var comment = mockComment(member);
         when(commentData.findById(ID1)).thenReturn(Optional.empty());
         //when
+        //then
         assertThatThrownBy(() -> voteCommentService.downVote(comment, member))
                 .isInstanceOf(CommentNotFoundException.class)
                 .hasMessage("No such comment in DB");
-        //then
-        verify(commentData).findById(ID1);
-        verifyNoMoreInteractions(commentData);
-        verifyNoInteractions(memberData);
     }
 
     @Test
     public void whenMemberIsNotFoundThenThrowsMemberNotFoundException() {
         //given
-        var member = mockMember(ID1);
-        var comment = mockComment(member);
         when(commentData.findById(ID1)).thenReturn(Optional.of(comment));
         when(memberData.findById(ID1)).thenReturn(Optional.empty());
         //when
+        //then
         assertThatThrownBy(() -> voteCommentService.downVote(comment, member))
                 .isInstanceOf(MemberNotFoundException.class)
                 .hasMessage("No such member in DB");
-        //then
-        verify(commentData).findById(ID1);
-        verify(memberData).findById(ID1);
-        verifyNoMoreInteractions(commentData, memberData);
     }
 
     @Test
     public void whenMemberTryToVoteOwnCommentThenThrowsCannotVoteOwnPostException(){
         //given
-        var member = mockMember(ID1);
-        var comment = mockComment( member);
-        when(commentData.findById(ID1)).thenReturn(Optional.of(comment));
+        var commentWithTheSameAuthor = mockComment(member);
+        when(commentData.findById(ID1)).thenReturn(Optional.of(commentWithTheSameAuthor));
         when(memberData.findById(ID1)).thenReturn(Optional.of(member));
         //when
-        assertThatThrownBy(() -> voteCommentService.downVote(comment, member))
+        //then
+        assertThatThrownBy(() -> voteCommentService.downVote(commentWithTheSameAuthor, member))
                 .isInstanceOf(CannotVoteOwnPostException.class)
                 .hasMessage("Can't vote your own comment");
-        //then
-        verify(commentData).findById(ID1);
-        verify(memberData).findById(ID1);
-        verifyNoMoreInteractions(commentData, memberData);
     }
 
     @Test
     public void whenMemberIsAlreadyVotedTheCommentThenThrowsAlreadyVotedException(){
         //given
-        var wantToVoteMember = mockMember(ID1);
-        wantToVoteMember.getDownVotedCommentsId().add(ID1);
-        var author = mockMember(ID2);
-        var comment = mockComment(author);
+        member.getDownVotedCommentsId().add(comment.getId());
         when(commentData.findById(ID1)).thenReturn(Optional.of(comment));
-        when(memberData.findById(ID1)).thenReturn(Optional.of(wantToVoteMember));
+        when(memberData.findById(ID1)).thenReturn(Optional.of(member));
         //when
-        assertThatThrownBy(() -> voteCommentService.downVote(comment, wantToVoteMember))
+        //then
+        assertThatThrownBy(() -> voteCommentService.downVote(comment, member))
                 .isInstanceOf(AlreadyVotedException.class)
                 .hasMessage("This comment is already voted");
-        //then
-        verify(commentData).findById(ID1);
-        verify(memberData).findById(ID1);
-        verifyNoMoreInteractions(commentData, memberData);
     }
 
     @Test
-    public void whenMemberVotesTheCommentThenVoteCountDecrementAndAddReputation() {
-        var wantToVoteMember = mockMember(ID1);
-        var author = mockMember(ID2);
-        var comment = mockComment(author);
+    public void whenMemberVotesTheCommentThenCommentVoteCountDecrementAndAddMemberReputation() {
+        //given
         when(commentData.findById(ID1)).thenReturn(Optional.of(comment));
-        when(memberData.findById(ID1)).thenReturn(Optional.of(wantToVoteMember));
+        when(memberData.findById(ID1)).thenReturn(Optional.of(member));
         //when
-
-        var commentAfterVoting = voteCommentService.downVote(comment, wantToVoteMember);
+        var commentAfterVoting = voteCommentService.downVote(comment, member);
         //then
         assertEquals(-1, commentAfterVoting.getVoteCount());
-        assertEquals(5, wantToVoteMember.getReputation());
-        assertTrue(wantToVoteMember.getDownVotedCommentsId().contains(ID1));
-
-        verify(commentData).findById(ID1);
-        verify(memberData).findById(ID1);
-        verify(commentData).update(any());
-        verify(memberData).update(any());
-        verifyNoMoreInteractions(commentData, memberData);
+        assertEquals(5, member.getReputation());
+        assertTrue(member.getDownVotedCommentsId().contains(comment.getId()));
     }
 
-
     private Comment mockComment(Member member){
+        var question = Question.builder()
+                .id(ID2)
+                .title("title")
+                .author(member).build();
         return Comment.builder()
                 .id(ID1)
                 .author(member)
-                .commentable(mockQuestion(member)).build();
-    }
-    private Question mockQuestion( Member member){
-        return Question.builder()
-                .id(ID1)
-                .title("title")
-                .author(member).build();
+                .commentable(question).build();
     }
     private Member mockMember(long idMember){
         var account = Account.builder()

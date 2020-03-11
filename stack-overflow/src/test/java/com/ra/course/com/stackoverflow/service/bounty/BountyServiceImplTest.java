@@ -6,8 +6,8 @@ import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.repository.QuestionRepositoryException;
 import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
-import com.ra.course.com.stackoverflow.repository.interfaces.BountyRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
+import com.ra.course.com.stackoverflow.repository.BountyRepository;
+import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -2,14 +2,12 @@ package com.ra.course.com.stackoverflow.service.vote.impl;
 
 import com.ra.course.com.stackoverflow.entity.Answer;
 import com.ra.course.com.stackoverflow.entity.Member;
-import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
 import com.ra.course.com.stackoverflow.exception.service.AnswerNotFoundException;
-import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyVotedException;
 import com.ra.course.com.stackoverflow.exception.service.CannotVoteOwnPostException;
-import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
+import com.ra.course.com.stackoverflow.repository.AnswerRepository;
+import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import com.ra.course.com.stackoverflow.service.vote.VoteService;
 import lombok.AllArgsConstructor;
 
@@ -21,58 +19,48 @@ public class VoteAnswerService implements VoteService<Answer> {
     private transient final AnswerRepository answerData;
     private transient final MemberRepository memberData;
     private transient final static int ADDED_REPUTATION = 10;
-    private static final String SERVER_ERR_MSG = "Unexpected data base error occurred: ";
 
     @Override
     public Answer upVote(final Answer answer, final Member member) {
-
-        final var answerFromDB = checkAnswer(answer);
-        final var memberFromDB = checkMember(member);
-
-        checkTheAuthorOfAnswer(answerFromDB, memberFromDB);
-        checkIsAlreadyVoted(answerFromDB.getId(), memberFromDB.getUpVotedAnswersId());
-
-        final var voteCount = answerFromDB.getVoteCount() + 1;
-        answerFromDB.setVoteCount(voteCount);
-        answerData.update(answerFromDB);
-
-        memberFromDB.getUpVotedAnswersId().add(answerFromDB.getId());
-        updateMemberWithNewReputation(memberFromDB);
-
-        answer.setVoteCount(voteCount);
+        voteAnswer(answer, member, 1);
         return answer;
     }
 
     @Override
     public Answer downVote(final Answer answer, final Member member) {
+        voteAnswer(answer, member, -1);
+        return answer;
+    }
 
+    private void voteAnswer(final Answer answer, final Member member, final int i) {
         final var answerFromDB = checkAnswer(answer);
         final var memberFromDB = checkMember(member);
-
         checkTheAuthorOfAnswer(answerFromDB, memberFromDB);
-        checkIsAlreadyVoted(answerFromDB.getId(), memberFromDB.getDownVotedAnswersId());
-
-        final var voteCount = answerFromDB.getVoteCount() - 1;
+        checkIsAlreadyVoted(answerFromDB.getId(), i > 0
+                ? memberFromDB.getUpVotedAnswersId()
+                : memberFromDB.getDownVotedAnswersId());
+        final var voteCount = answerFromDB.getVoteCount() + i;
         answerFromDB.setVoteCount(voteCount);
         answerData.update(answerFromDB);
-
-        memberFromDB.getDownVotedAnswersId().add(answerFromDB.getId());
+        if (i > 0) {
+            memberFromDB.getUpVotedAnswersId().add(answerFromDB.getId());
+        } else {
+            memberFromDB.getDownVotedAnswersId().add(answerFromDB.getId());
+        }
         updateMemberWithNewReputation(memberFromDB);
-
         answer.setVoteCount(voteCount);
-        return answer;
     }
 
     private Answer checkAnswer(final Answer answer) {
         final var optionalAnswer = answerData.findById(answer.getId());
         return optionalAnswer.orElseThrow(
-                ()-> new AnswerNotFoundException("No such answer in DB"));
+                () -> new AnswerNotFoundException("No such answer in DB"));
     }
 
     private Member checkMember(final Member member) {
         final var optionalMember = memberData.findById(member.getId());
         return optionalMember.orElseThrow(
-                ()-> new MemberNotFoundException("No such member in DB"));
+                () -> new MemberNotFoundException("No such member in DB"));
 
     }
 
@@ -88,14 +76,9 @@ public class VoteAnswerService implements VoteService<Answer> {
         }
     }
 
-    private void updateMemberWithNewReputation (final Member member) {
+    private void updateMemberWithNewReputation(final Member member) {
         final int reputation = member.getReputation() + ADDED_REPUTATION;
         member.getAccount().setReputation(reputation);
-        try {
-            memberData.update(member);
-        } catch (DataBaseOperationException e) {
-            throw (InternalServerErrorException)
-                    new InternalServerErrorException(SERVER_ERR_MSG + e.getMessage()).initCause(e.getCause());
-        }
+        memberData.update(member);
     }
 }

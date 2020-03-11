@@ -7,9 +7,9 @@ import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.service.AnswerNotFoundException;
 import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundException;
 
-import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.CommentRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
+import com.ra.course.com.stackoverflow.repository.AnswerRepository;
+import com.ra.course.com.stackoverflow.repository.CommentRepository;
+import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 
 
 import lombok.NonNull;

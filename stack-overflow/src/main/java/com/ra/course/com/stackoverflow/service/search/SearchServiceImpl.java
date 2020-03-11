@@ -3,8 +3,8 @@ package com.ra.course.com.stackoverflow.service.search;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.Tag;
 import com.ra.course.com.stackoverflow.exception.service.TagNotFoundException;
-import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.TagRepository;
+import com.ra.course.com.stackoverflow.repository.QuestionRepository;
+import com.ra.course.com.stackoverflow.repository.TagRepository;
 import lombok.AllArgsConstructor;
 
 import java.util.Collections;
