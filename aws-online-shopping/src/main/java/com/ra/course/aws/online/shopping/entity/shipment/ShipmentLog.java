@@ -1,20 +1,16 @@
 package com.ra.course.aws.online.shopping.entity.shipment;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ShipmentLog {
     private String shipmentNumber;
     private ShipmentStatus status;
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
 
     public ShipmentLog() {
     }
 
-    public ShipmentLog(ShipmentStatus status, LocalDate creationDate) {
-        this.status = status;
-        this.creationDate = creationDate;
-    }
-
-    public ShipmentLog(String shipmentNumber, ShipmentStatus status, LocalDate creationDate) {
+    public ShipmentLog(String shipmentNumber, ShipmentStatus status, LocalDateTime creationDate) {
         this.shipmentNumber = shipmentNumber;
         this.status = status;
         this.creationDate = creationDate;
@@ -36,11 +32,11 @@ public class ShipmentLog {
         this.status = status;
     }
 
-    public LocalDate getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 }

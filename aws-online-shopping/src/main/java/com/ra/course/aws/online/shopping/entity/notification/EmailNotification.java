@@ -1,16 +1,21 @@
 package com.ra.course.aws.online.shopping.entity.notification;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class EmailNotification extends Notification {
     private String email;
 
 
-    public EmailNotification(int notificationId, LocalDate createdOn, String content) {
-        super(notificationId, createdOn, content);
+    public EmailNotification(String email) {
+        this.email = email;
     }
 
-    public EmailNotification(int notificationId, LocalDate createdOn, String content, String email) {
+    public EmailNotification(LocalDateTime createdOn, String content, String email) {
+        super(createdOn, content);
+        this.email = email;
+    }
+
+    public EmailNotification(int notificationId, LocalDateTime createdOn, String content, String email) {
         super(notificationId, createdOn, content);
         this.email = email;
     }

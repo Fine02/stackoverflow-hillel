@@ -2,7 +2,6 @@ package com.ra.course.aws.online.shopping.entity.user;
 
 import com.ra.course.aws.online.shopping.entity.ShoppingCart;
 import com.ra.course.aws.online.shopping.entity.order.Order;
-import java.util.List;
 
 public class Customer {
     private ShoppingCart cart;
