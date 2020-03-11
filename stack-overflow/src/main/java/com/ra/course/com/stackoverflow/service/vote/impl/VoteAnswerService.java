@@ -32,17 +32,17 @@ public class VoteAnswerService implements VoteService<Answer> {
         return answer;
     }
 
-    private void voteAnswer(final Answer answer, final Member member, final int i) {
+    private void voteAnswer(final Answer answer, final Member member, final int countChanges) {
         final var answerFromDB = checkAnswer(answer);
         final var memberFromDB = checkMember(member);
         checkTheAuthorOfAnswer(answerFromDB, memberFromDB);
-        checkIsAlreadyVoted(answerFromDB.getId(), i > 0
+        checkIsAlreadyVoted(answerFromDB.getId(), countChanges > 0
                 ? memberFromDB.getUpVotedAnswersId()
                 : memberFromDB.getDownVotedAnswersId());
-        final var voteCount = answerFromDB.getVoteCount() + i;
+        final var voteCount = answerFromDB.getVoteCount() + countChanges;
         answerFromDB.setVoteCount(voteCount);
         answerData.update(answerFromDB);
-        if (i > 0) {
+        if (countChanges > 0) {
             memberFromDB.getUpVotedAnswersId().add(answerFromDB.getId());
         } else {
             memberFromDB.getDownVotedAnswersId().add(answerFromDB.getId());

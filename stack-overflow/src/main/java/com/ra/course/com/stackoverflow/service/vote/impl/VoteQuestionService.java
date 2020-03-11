@@ -34,18 +34,18 @@ public class VoteQuestionService implements VoteService<Question> {
         return question;
     }
 
-    private void voteQuestion(final Question question, final Member member, final int i) {
+    private void voteQuestion(final Question question, final Member member, final int countChanges) {
         final var questionFromDB = checkQuestion(question);
         final var memberFromDB = checkMember(member);
         checkTheAuthorOfQuestion(questionFromDB, memberFromDB);
-        checkIsAlreadyVoted(questionFromDB.getId(), i > 0
+        checkIsAlreadyVoted(questionFromDB.getId(), countChanges > 0
                 ? memberFromDB.getUpVotedQuestionsId()
                 : memberFromDB.getDownVotedQuestionsId());
-        final var voteCount = questionFromDB.getVoteCount() + i;
+        final var voteCount = questionFromDB.getVoteCount() + countChanges;
         questionFromDB.setVoteCount(voteCount);
         questionData.update(questionFromDB);
         badgeAwardService.awardMember(questionFromDB);
-        if (i > 0) {
+        if (countChanges > 0) {
             memberFromDB.getUpVotedQuestionsId().add(questionFromDB.getId());
         } else {
             memberFromDB.getDownVotedQuestionsId().add(questionFromDB.getId());

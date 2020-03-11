@@ -16,10 +16,9 @@ public class NotificationServiceImpl implements NotificationService {
         if (content.isBlank()) {
             return false;
         }
-        final var optionalMember = memberData.findById(member.getId());
-        final var memberFromDB = optionalMember.orElseThrow(() -> new MemberNotFoundException("No such member in DB"));
-        final var notification = new Notification(content);
-        memberFromDB.getNotifications().add(notification);
+        final var memberFromDB = memberData.findById(member.getId()).
+                orElseThrow(() -> new MemberNotFoundException("No such member in DB"));
+        memberFromDB.getNotifications().add(new Notification(content));
         memberData.update(memberFromDB);
         return true;
     }

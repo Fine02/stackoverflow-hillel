@@ -32,17 +32,17 @@ public class VoteCommentService implements VoteService<Comment> {
         return comment;
     }
 
-    private void voteComment(final Comment comment, final Member member, final int i) {
+    private void voteComment(final Comment comment, final Member member, final int countChanges) {
         final var commentFromDB = checkComment(comment);
         final var memberFromDB = checkMember(member);
         checkTheAuthorOfComment(commentFromDB, memberFromDB);
-        checkIsAlreadyVoted(commentFromDB.getId(), i > 0
+        checkIsAlreadyVoted(commentFromDB.getId(), countChanges > 0
                 ? memberFromDB.getUpVotedCommentsId()
                 : memberFromDB.getDownVotedCommentsId());
-        final var voteCount = commentFromDB.getVoteCount() + i;
+        final var voteCount = commentFromDB.getVoteCount() + countChanges;
         commentFromDB.setVoteCount(voteCount);
         commentData.update(commentFromDB);
-        if (i > 0) {
+        if (countChanges > 0) {
             memberFromDB.getUpVotedCommentsId().add(commentFromDB.getId());
         } else {
             memberFromDB.getDownVotedCommentsId().add(commentFromDB.getId());
