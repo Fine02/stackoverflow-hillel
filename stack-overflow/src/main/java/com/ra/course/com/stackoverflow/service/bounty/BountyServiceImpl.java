@@ -4,8 +4,8 @@ import com.ra.course.com.stackoverflow.entity.Bounty;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.repository.QuestionRepositoryException;
 import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
-import com.ra.course.com.stackoverflow.repository.interfaces.BountyRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
+import com.ra.course.com.stackoverflow.repository.BountyRepository;
+import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

@@ -6,7 +6,7 @@ import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.enums.Badge;
 import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
 import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
-import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
+import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

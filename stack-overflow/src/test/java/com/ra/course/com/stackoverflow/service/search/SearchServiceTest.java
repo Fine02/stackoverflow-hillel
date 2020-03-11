@@ -5,8 +5,8 @@ import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.Tag;
 import com.ra.course.com.stackoverflow.exception.service.TagNotFoundException;
-import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.TagRepository;
+import com.ra.course.com.stackoverflow.repository.QuestionRepository;
+import com.ra.course.com.stackoverflow.repository.TagRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -2,88 +2,72 @@ package com.ra.course.com.stackoverflow.service.notification;
 
 import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
-import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
-import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
+import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import com.ra.course.com.stackoverflow.service.notifaction.NotificationService;
+import com.ra.course.com.stackoverflow.service.notifaction.NotificationServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class NotificationServiceTest {
+    private final MemberRepository memberData = mock(MemberRepository.class);
+    private final long ID = 1;
 
     private NotificationService notificationService;
-    private MemberRepository memberData = mock(MemberRepository.class);
-    private long ID = 1L;
     private boolean addNotification;
-    private Exception exception;
+    private Member member;
 
     @BeforeEach
     void  setUp(){
-        notificationService = new NotificationService(memberData);
+        notificationService = new NotificationServiceImpl(memberData);
+        member = mockMember();
     }
 
     @Test
     public void whenNotificationIsAddedToListThenReturnTrue() {
         //given
-        var member = mockMember(ID);
         when(memberData.findById(ID)).thenReturn(Optional.of(member));
         //when
-        assertEquals(0, member.getNotifications().size());
         addNotification = notificationService.sendNotificationToMember("Some notification", member);
         //then
-        assertEquals(1, member.getNotifications().size());
         assertTrue(addNotification);
-        verify(memberData).findById(ID);
-        verify(memberData).update(any());
-        verifyNoMoreInteractions(memberData);
     }
 
     @Test
     public void whenContentOfNotificationIsEmptyThenReturnFalse() {
         //given
-        var member = mockMember(ID);
         when(memberData.findById(ID)).thenReturn(Optional.of(member));
         //when
-        assertEquals(0, member.getNotifications().size());
         addNotification = notificationService.sendNotificationToMember("  ", member);
         //then
-        assertEquals(0, member.getNotifications().size());
         assertFalse(addNotification);
-        verifyNoInteractions(memberData);
     }
 
     @Test
     public void whenMemberIsNotFoundThenThrowsMemberNotFoundException() {
         //given
-        var member = mockMember(ID);
         when(memberData.findById(ID)).thenReturn(Optional.empty());
         //when
-        try {
-            addNotification = notificationService.sendNotificationToMember("Some notification", member);
-        }
         //then
-        catch (Exception e){
-            exception = e;
-        }
-        assertTrue(exception instanceof MemberNotFoundException);
-        assertEquals("No such member in DB", exception.getMessage());
-        verify(memberData).findById(ID);
-        verifyNoMoreInteractions(memberData);
+        assertThatThrownBy(() -> notificationService.sendNotificationToMember("Some notification", member))
+                .isInstanceOf(MemberNotFoundException.class)
+                .hasMessage("No such member in DB");
     }
 
-    private Member mockMember(long idMember){
+    private Member mockMember(){
         var account = Account.builder()
-                .id(idMember)
+                .id(ID)
                 .password("password")
                 .email("email")
                 .name("name").build();
         return Member.builder()
-                .id(idMember)
+                .id(ID)
                 .account(account).build();
     }
 }
