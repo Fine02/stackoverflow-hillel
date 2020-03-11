@@ -80,7 +80,7 @@ public class CommentServiceImplTest {
 
 
     @Test
-    public void whenAddCommentToQuestionThenReturnNewCommentWithId() throws QuestionNotFoundException {
+    public void whenAddCommentToQuestionThenReturnNewCommentWithId() {
         //when
         question.setStatus(QuestionStatus.OPEN);
 
@@ -106,7 +106,7 @@ public class CommentServiceImplTest {
 
 
     @Test
-    public void whenAddCommentToAnswerThenReturnNewCommentWithId() throws AnswerNotFoundException {
+    public void whenAddCommentToAnswerThenReturnNewCommentWithId() {
 
         //when
         when(commentRepository.save(comment)).thenReturn(comment);

@@ -69,7 +69,7 @@ public class QuestionServiceImplTest {
     }
 
     @Test
-    public void whenAddAnswerToOpenQuestionThenReturnNewAnswerWithId() throws QuestionNotFoundException, QuestionClosedException {
+    public void whenAddAnswerToOpenQuestionThenReturnNewAnswerWithId() {
 
         //when
         question.setStatus(QuestionStatus.OPEN);
@@ -124,7 +124,7 @@ public class QuestionServiceImplTest {
 
 
     @Test
-    public void whenAddTagToQuestionThenReturnTrue() throws TagAlreadyAddedException, QuestionNotFoundException {
+    public void whenAddTagToQuestionThenReturnTrue() {
 
         //when
         when(questionRepository.findById(ID)).thenReturn(Optional.of(question));
@@ -161,7 +161,7 @@ public class QuestionServiceImplTest {
     }
 
     @Test
-    public void ifTagNotFoundInDBShouldSaveTagInDB() throws QuestionNotFoundException, TagAlreadyAddedException {
+    public void ifTagNotFoundInDBShouldSaveTagInDB() {
 
         //when
         when(questionRepository.findById(ID)).thenReturn(Optional.of(question));

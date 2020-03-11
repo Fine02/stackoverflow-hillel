@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.entity;
+package com.ra.course.com.stackoverflow;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

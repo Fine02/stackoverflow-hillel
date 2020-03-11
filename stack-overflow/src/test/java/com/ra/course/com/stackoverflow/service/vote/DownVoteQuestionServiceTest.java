@@ -108,7 +108,7 @@ public class DownVoteQuestionServiceTest {
         verifyNoMoreInteractions(questionData, memberData);
     }
     @Test
-    public void whenMemberVotesTheQuestionThenVoteCountDecrementAndAddReputation() throws Exception {
+    public void whenMemberVotesTheQuestionThenVoteCountDecrementAndAddReputation() {
         //given
         var wantToVoteMember = mockMember(ID1);
         var author = mockMember(ID2);

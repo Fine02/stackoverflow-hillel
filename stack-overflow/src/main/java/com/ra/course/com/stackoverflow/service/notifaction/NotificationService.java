@@ -2,7 +2,6 @@ package com.ra.course.com.stackoverflow.service.notifaction;
 
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Notification;
-import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
 import lombok.AllArgsConstructor;
@@ -14,8 +13,7 @@ public class NotificationService {
 
     private transient final MemberRepository memberData;
 
-    public boolean sendNotificationToMember(final String content, final Member member)
-            throws DataBaseOperationException, MemberNotFoundException {
+    public boolean sendNotificationToMember(final String content, final Member member) {
         if (content.isBlank()) {
             return false;
         } else {

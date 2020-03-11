@@ -29,7 +29,7 @@ public class CommentServiceImpl implements CommentService {
 
     /**Members can add comments to any question.**/
     @Override
-    public Comment addCommentToQuestion(@NonNull final Comment comment, @NonNull final Question question) throws QuestionNotFoundException {
+    public Comment addCommentToQuestion(@NonNull final Comment comment, @NonNull final Question question) {
 
         final var questionFromDB = questionRepo.findById(question.getId())
                 .orElseThrow(() -> new QuestionNotFoundException("Question not found in DB. Can't add comment to nonexistent question"));
@@ -45,7 +45,7 @@ public class CommentServiceImpl implements CommentService {
 
     /**Members can add comments to any answer.**/
     @Override
-    public Comment addCommentToAnswer(@NonNull final Comment comment, @NonNull final Answer answer) throws AnswerNotFoundException {
+    public Comment addCommentToAnswer(@NonNull final Comment comment, @NonNull final Answer answer) {
 
         final var answerFromDB = answerRepo.findById(answer.getId())
                 .orElseThrow(() -> new AnswerNotFoundException("Answer not found in DB. Can't add comment to nonexistent answer"));

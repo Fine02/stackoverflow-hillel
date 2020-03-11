@@ -1,6 +1,6 @@
 package com.ra.course.com.stackoverflow.exception.service;
 
-public class CannotVoteOwnPostException extends Exception{
+public class CannotVoteOwnPostException extends RuntimeException{
 
     private static final long serialVersionUID = 1L;
 

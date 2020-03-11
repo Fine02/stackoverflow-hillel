@@ -28,7 +28,7 @@ public class MemberServiceImpl implements MemberService<Question> {
 
 
     @Override
-    public Question postQuestion(final Question question) throws InternalServerErrorException {
+    public Question postQuestion(final Question question) {
         Objects.requireNonNull(question, "'question' " + NULL_WARNING_MSG);
 
         final Question postedQuestion = saveQuestion(question);
@@ -37,7 +37,7 @@ public class MemberServiceImpl implements MemberService<Question> {
         return postedQuestion;
     }
 
-    private Question saveQuestion(final Question question) throws InternalServerErrorException {
+    private Question saveQuestion(final Question question) {
 
         try {
             return questionRep.save(question);
@@ -47,7 +47,7 @@ public class MemberServiceImpl implements MemberService<Question> {
         }
     }
 
-    private Member updateMember(final Question question) throws InternalServerErrorException {
+    private Member updateMember(final Question question) {
 
         final Member member = question.getAuthor();
 

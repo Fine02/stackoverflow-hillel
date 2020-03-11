@@ -88,7 +88,7 @@ public class VoteToCloseServiceTest {
     }
 
     @Test
-    public void whenMemberVotesToCloseTheQuestionThenUpdateQuestion() throws Exception {
+    public void whenMemberVotesToCloseTheQuestionThenUpdateQuestion() {
         //given
         var member = mockMember(ID1);
         var question = mockQuestion(member);

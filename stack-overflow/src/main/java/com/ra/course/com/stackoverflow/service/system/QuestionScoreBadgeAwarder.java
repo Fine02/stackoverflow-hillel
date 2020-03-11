@@ -23,7 +23,7 @@ public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
     private static final String SERVER_ERR_MSG = "Unexpected data base error occurred: ";
 
     @Override
-    public Member awardMember(@NonNull final Question question) throws InternalServerErrorException {
+    public Member awardMember(@NonNull final Question question) {
 
         final int score = question.getVoteCount();
         final Member author = question.getAuthor();

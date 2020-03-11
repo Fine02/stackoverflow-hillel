@@ -29,8 +29,7 @@ public class QuestionScoreBadgeAwarderTest {
     }
 
     @Test
-    public void whenQuestionWithGreatScorePassedThenAuthorShouldGetFourBadges() throws InternalServerErrorException,
-            DataBaseOperationException {
+    public void whenQuestionWithGreatScorePassedThenAuthorShouldGetFourBadges() {
         //given
         Badge studentBadge = Badge.STUDENT;
         Badge niceQuestionBadge = Badge.NICE_QUESTION;
@@ -70,8 +69,7 @@ public class QuestionScoreBadgeAwarderTest {
     }
 
     @Test
-    public void whenQuestionWithMoreThanGreatScorePassedThenAuthorShouldGetFourBadges() throws InternalServerErrorException,
-            DataBaseOperationException {
+    public void whenQuestionWithMoreThanGreatScorePassedThenAuthorShouldGetFourBadges() {
         //given
         Badge studentBadge = Badge.STUDENT;
         Badge niceQuestionBadge = Badge.NICE_QUESTION;
@@ -113,8 +111,7 @@ public class QuestionScoreBadgeAwarderTest {
 
 
     @Test
-    public void whenQuestionWithLessThanStudentScorePassedThenAuthorShouldGetOnlyStudentBadge() throws InternalServerErrorException,
-            DataBaseOperationException {
+    public void whenQuestionWithLessThanStudentScorePassedThenAuthorShouldGetOnlyStudentBadge() {
         //given
         Question givenQuestion = setUpQuestionBuilder(1L, setUpMemberBuilder(1L).build())
                 .voteCount(SCR_FOR_STDNT_BDG - 1)
@@ -134,8 +131,7 @@ public class QuestionScoreBadgeAwarderTest {
     }
 
     @Test
-    public void whenQuestionWithLessThanNiceScorePassedThenAuthorShouldGetOneBadge() throws InternalServerErrorException,
-            DataBaseOperationException {
+    public void whenQuestionWithLessThanNiceScorePassedThenAuthorShouldGetOneBadge() {
         //given
         Badge studentBadge = Badge.STUDENT;
         Badge niceQuestionBadge = Badge.NICE_QUESTION;
@@ -169,8 +165,7 @@ public class QuestionScoreBadgeAwarderTest {
 
 
     @Test
-    public void whenQuestionWithLessThanGoodScorePassedThenAuthorShouldGetTwoBadges() throws InternalServerErrorException,
-            DataBaseOperationException {
+    public void whenQuestionWithLessThanGoodScorePassedThenAuthorShouldGetTwoBadges() {
         //given
         Badge studentBadge = Badge.STUDENT;
         Badge niceQuestionBadge = Badge.NICE_QUESTION;
@@ -206,8 +201,7 @@ public class QuestionScoreBadgeAwarderTest {
     }
 
     @Test
-    public void whenQuestionWithLessThanGreatScorePassedThenAuthorShouldGetThreeBadges() throws InternalServerErrorException,
-            DataBaseOperationException {
+    public void whenQuestionWithLessThanGreatScorePassedThenAuthorShouldGetThreeBadges() {
         //given
         Badge studentBadge = Badge.STUDENT;
         Badge niceQuestionBadge = Badge.NICE_QUESTION;

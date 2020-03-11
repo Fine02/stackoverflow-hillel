@@ -10,4 +10,6 @@ public interface BountyRepository {
     Bounty save(Bounty bounty);
 
     Optional<Bounty> findById(long id);
+
+    void deleteById(long id);
 }
