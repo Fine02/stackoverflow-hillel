@@ -3,9 +3,7 @@ package com.ra.course.com.stackoverflow.service.system;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.enums.Badge;
-import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
-import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
-import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
+import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
@@ -20,29 +18,23 @@ public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
     private static final int SCR_FOR_NICE_BDG = 10;
     private static final int SCR_FOR_GOOD_BDG = 25;
     private static final int SCR_FOR_GREAT_BDG = 100;
-    private static final String SERVER_ERR_MSG = "Unexpected data base error occurred: ";
 
     @Override
     public Member awardMember(@NonNull final Question question) {
 
         final int score = question.getVoteCount();
         final Member author = question.getAuthor();
-        final Map<Badge, Set<Question>> memberBadges = author.getQuestionBadges();
+        @NonNull final Map<Badge, Set<Question>> memberBadges = author.getQuestionBadges();
 
         awardStudentBadge(memberBadges, score, question);
         awardNiceQuestionBadge(memberBadges, score, question);
         awardGoodQuestionBadge(memberBadges, score, question);
         awardGreatQuestionBadge(memberBadges, score, question);
 
-        try {
-            return memberRepository.update(author);
-        } catch (DataBaseOperationException e) {
-            throw (InternalServerErrorException)
-                    new InternalServerErrorException(SERVER_ERR_MSG + e.getMessage()).initCause(e.getCause());
-        }
+        return memberRepository.update(author);
     }
 
-    private void awardStudentBadge(@NonNull final Map<Badge, Set<Question>> memberBadges, final int score,
+    private void awardStudentBadge(final Map<Badge, Set<Question>> memberBadges, final int score,
                                    final Question question) {
         if (score < SCR_FOR_STDNT_BDG) {
             return;
@@ -51,7 +43,7 @@ public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
         memberBadges.putIfAbsent(Badge.STUDENT, new HashSet<>(Collections.singletonList(question)));
     }
 
-    private void awardNiceQuestionBadge(@NonNull final Map<Badge, Set<Question>> memberBadges, final int score,
+    private void awardNiceQuestionBadge(final Map<Badge, Set<Question>> memberBadges, final int score,
                                         final Question question) {
 
         if (score < SCR_FOR_NICE_BDG) {
@@ -61,7 +53,7 @@ public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
         addBadgeToMap(memberBadges, question, Badge.NICE_QUESTION);
     }
 
-    private void awardGoodQuestionBadge(@NonNull final Map<Badge, Set<Question>> memberBadges, final int score,
+    private void awardGoodQuestionBadge(final Map<Badge, Set<Question>> memberBadges, final int score,
                                         final Question question) {
 
         if (score < SCR_FOR_GOOD_BDG) {
@@ -72,7 +64,7 @@ public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
 
     }
 
-    private void awardGreatQuestionBadge(@NonNull final Map<Badge, Set<Question>> memberBadges, final int score,
+    private void awardGreatQuestionBadge(final Map<Badge, Set<Question>> memberBadges, final int score,
                                          final Question question) {
 
         if (score < SCR_FOR_GREAT_BDG) {

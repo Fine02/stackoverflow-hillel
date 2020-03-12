@@ -4,9 +4,9 @@ import com.ra.course.com.stackoverflow.entity.*;
 import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
 import com.ra.course.com.stackoverflow.exception.service.*;
 import com.ra.course.com.stackoverflow.exception.service.TagAlreadyAddedException;
-import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.TagRepository;
+import com.ra.course.com.stackoverflow.repository.AnswerRepository;
+import com.ra.course.com.stackoverflow.repository.QuestionRepository;
+import com.ra.course.com.stackoverflow.repository.TagRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

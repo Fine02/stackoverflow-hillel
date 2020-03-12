@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.repository.interfaces;
+package com.ra.course.com.stackoverflow.repository;
 
 import com.ra.course.com.stackoverflow.entity.Answer;
 import com.ra.course.com.stackoverflow.entity.Member;

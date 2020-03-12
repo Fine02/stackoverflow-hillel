@@ -3,9 +3,9 @@ package com.ra.course.com.stackoverflow.service.comment;
 import com.ra.course.com.stackoverflow.entity.*;
 import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
 
-import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.CommentRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
+import com.ra.course.com.stackoverflow.repository.AnswerRepository;
+import com.ra.course.com.stackoverflow.repository.CommentRepository;
+import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

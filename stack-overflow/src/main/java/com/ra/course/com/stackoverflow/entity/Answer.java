@@ -1,7 +1,9 @@
 package com.ra.course.com.stackoverflow.entity;
 
-import com.ra.course.com.stackoverflow.entity.interfaces.Commentable;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
@@ -11,7 +13,7 @@ import java.util.List;
 @SuperBuilder
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Answer implements Commentable {
+public class Answer {
 
     @EqualsAndHashCode.Include
     final private long id;

@@ -6,12 +6,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 
 import java.time.LocalDateTime;
-import com.ra.course.com.stackoverflow.entity.interfaces.Commentable;
 
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Photo {
+public class Photo<T> {
 
     @EqualsAndHashCode.Include
     private final long Id;
@@ -23,5 +22,5 @@ public class Photo {
     private LocalDateTime creationDate;
 
     @NonNull
-    private Commentable commentable;
+    private T commentable;
 }

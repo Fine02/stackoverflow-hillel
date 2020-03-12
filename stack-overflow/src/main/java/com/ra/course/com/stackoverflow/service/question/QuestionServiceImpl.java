@@ -8,9 +8,10 @@ import com.ra.course.com.stackoverflow.exception.repository.QuestionRepositoryEx
 import com.ra.course.com.stackoverflow.exception.service.QuestionClosedException;
 import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundException;
 import com.ra.course.com.stackoverflow.exception.service.TagAlreadyAddedException;
-import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.TagRepository;
+import com.ra.course.com.stackoverflow.repository.AnswerRepository;
+import com.ra.course.com.stackoverflow.repository.QuestionRepository;
+import com.ra.course.com.stackoverflow.repository.TagRepository;
+
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
