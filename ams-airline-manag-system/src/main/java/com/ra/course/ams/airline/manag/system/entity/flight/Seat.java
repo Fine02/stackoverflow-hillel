@@ -2,6 +2,7 @@ package com.ra.course.ams.airline.manag.system.entity.flight;
 
 public class Seat {
 
+    private Aircraft aircraft;
     private String seatNumber;
     private SeatType type;
     // set name of field seatClass because of 'class' is key word
@@ -11,6 +12,7 @@ public class Seat {
     }
 
     private Seat(Builder builder) {
+        aircraft = builder.aircraft;
         seatNumber = builder.seatNumber;
         type = builder.type;
         seatClass = builder.seatClass;
@@ -18,11 +20,17 @@ public class Seat {
 
     public static class Builder {
 
+        private transient Aircraft aircraft;
         private transient String seatNumber;
         private transient SeatType type;
         private transient SeatClass seatClass;
 
         public Builder () {}
+
+        public Builder setAircraft(Aircraft aircraft) {
+            this.aircraft = aircraft;
+            return this;
+        }
 
         public Builder setSeatNumber(String seatNumber) {
             this.seatNumber = seatNumber;
@@ -44,38 +52,44 @@ public class Seat {
         }
     }
 
+    public Aircraft getAircraft() {
+        return aircraft;
+    }
+
+    public void setAircraft(Aircraft aircraft) {
+        this.aircraft = aircraft;
+    }
+
     public String getSeatNumber() {
         return seatNumber;
     }
 
-    public Seat setSeatNumber(String seatNumber) {
+    public void setSeatNumber(String seatNumber) {
         this.seatNumber = seatNumber;
-        return this;
     }
 
     public SeatType getType() {
         return type;
     }
 
-    public Seat setType(SeatType type) {
+    public void setType(SeatType type) {
         this.type = type;
-        return this;
     }
 
     public SeatClass getSeatClass() {
         return seatClass;
     }
 
-    public Seat setSeatClass(SeatClass seatClass) {
+    public void setSeatClass(SeatClass seatClass) {
         this.seatClass = seatClass;
-        return this;
     }
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("com.ra.course.ams.airline.manag.system.entity.flight.Seat{");
-        sb.append("\"seatNumber\": \"").append(seatNumber).append('"');
-        sb.append(", \"seatType\":").append(type);
+        final StringBuffer sb = new StringBuffer("Seat{");
+        sb.append("\"aircraft\":").append(aircraft);
+        sb.append(", \"seatNumber\": \"").append(seatNumber).append('"');
+        sb.append(", \"type\":").append(type);
         sb.append(", \"seatClass\":").append(seatClass);
         sb.append('}');
         return sb.toString();

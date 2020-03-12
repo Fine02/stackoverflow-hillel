@@ -11,17 +11,25 @@ import java.util.List;
 public class FlightReservation {
 
     private String reservationNumber;
-    private FlightInstance flight;
+    private FlightInstance flightInstance;
     private HashMap <Passenger, FlightSeat> seatMap;
     private ReservationStatus status;
     private List<Notification> notifications;
     private Payment payment;
     private List<Passenger> passengers;
 
+    public FlightReservation(ReservationStatus status) {
+        this.status = status;
+    }
 
-    public FlightReservation(String reservationNumber, FlightInstance flight, HashMap<Passenger, FlightSeat> seatMap, ReservationStatus status, List<Notification> notifications, Payment payment) {
+    public FlightReservation(FlightInstance flightInstance, ReservationStatus status) {
+        this.flightInstance = flightInstance;
+        this.status = status;
+    }
+
+    public FlightReservation(String reservationNumber, FlightInstance flightInstance, HashMap<Passenger, FlightSeat> seatMap, ReservationStatus status, List<Notification> notifications, Payment payment) {
         this.reservationNumber = reservationNumber;
-        this.flight = flight;
+        this.flightInstance = flightInstance;
         this.seatMap = seatMap;
         this.status = status;
         this.notifications = notifications;
@@ -60,12 +68,12 @@ public class FlightReservation {
         this.reservationNumber = reservationNumber;
     }
 
-    public FlightInstance getFlight() {
-        return flight;
+    public FlightInstance getFlightInstance() {
+        return flightInstance;
     }
 
-    public void setFlight(FlightInstance flight) {
-        this.flight = flight;
+    public void setFlightInstance(FlightInstance flightInstance) {
+        this.flightInstance = flightInstance;
     }
 
     public HashMap<Passenger, FlightSeat> getSeatMap() {
@@ -84,4 +92,16 @@ public class FlightReservation {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "FlightReservation{" +
+                "reservationNumber='" + reservationNumber + '\'' +
+                ", flightInstance=" + flightInstance +
+                ", seatMap=" + seatMap +
+                ", status=" + status +
+                ", notifications=" + notifications +
+                ", payment=" + payment +
+                ", passengers=" + passengers +
+                '}';
+    }
 }

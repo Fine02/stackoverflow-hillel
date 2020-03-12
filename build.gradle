@@ -39,11 +39,24 @@ configure(allprojects) { project ->
         testCompile testing.junit5Api
         testCompile testing.junit5Params
         testCompile testing.mockito
+        testImplementation testing.assertJ
+        testCompile testing.hamcrestCore
     }
 }
 
 project(':ams-airline-manag-system') {
 
+}
+
+project(':aws-online-shopping') {
+
+}
+
+project (':stack-overflow') {
+    dependencies {
+        compileOnly utils.lombok
+        annotationProcessor utils.lombok
+    }
 }
 
 wrapper {

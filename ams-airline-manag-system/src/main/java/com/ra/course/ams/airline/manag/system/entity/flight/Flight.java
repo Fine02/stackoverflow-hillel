@@ -81,65 +81,57 @@ public class Flight {
         return flightNumber;
     }
 
-    public Flight setFlightNumber(String flightNumber) {
+    public void setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
-        return this;
     }
 
     public Airport getDeparture() {
         return departure;
     }
 
-    public Flight setDeparture(Airport departure) {
+    public void setDeparture(Airport departure) {
         this.departure = departure;
-        return this;
     }
 
     public Airport getArrival() {
         return arrival;
     }
 
-    public Flight setArrival(Airport arrival) {
+    public void setArrival(Airport arrival) {
         this.arrival = arrival;
-        return this;
     }
 
     public int getDurationInMinutes() {
         return durationInMinutes;
     }
 
-    public Flight setDurationInMinutes(int durationInMinutes) {
+    public void setDurationInMinutes(int durationInMinutes) {
         this.durationInMinutes = durationInMinutes;
-        return this;
     }
 
     public List<WeeklySchedule> getWeeklySchedules() {
         return weeklySchedules;
     }
 
-    public Flight setWeeklySchedules(List<WeeklySchedule> weeklySchedules) {
+    public void setWeeklySchedules(List<WeeklySchedule> weeklySchedules) {
         this.weeklySchedules = weeklySchedules;
-        return this;
     }
 
     public List<CustomSchedule> getCustomSchedules() {
         return customSchedules;
     }
 
-    public Flight setCustomSchedules(List<CustomSchedule> customSchedules) {
+    public void setCustomSchedules(List<CustomSchedule> customSchedules) {
         this.customSchedules = customSchedules;
-        return this;
     }
 
     public List<FlightInstance> getFlightInstances() {
         return flightInstances;
     }
 
-    public Flight setFlightInstances(List<FlightInstance> flightInstances) {
+    public void setFlightInstances(List<FlightInstance> flightInstances) {
         this.flightInstances = flightInstances;
-        return this;
     }
-
 
     @Override
     public String toString() {

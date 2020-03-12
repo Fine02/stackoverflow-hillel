@@ -1,9 +1,8 @@
 package com.ra.course.ams.airline.manag.system.service;
 
-import com.ra.course.ams.airline.manag.system.entity.notification.Notification;
+import com.ra.course.ams.airline.manag.system.entity.FlightReservation;
 
-public interface NotificationService<T extends Notification> {
+public interface NotificationService<T extends FlightReservation> {
 
-    boolean send(T t);
-
+    String send(T t);
 }
