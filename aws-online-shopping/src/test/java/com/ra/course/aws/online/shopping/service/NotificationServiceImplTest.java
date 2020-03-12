@@ -147,8 +147,9 @@ public class NotificationServiceImplTest {
 
     @Test
     public void whenShipmentStatusWasChangedSendSMSNotification() throws NotificationException, MemberNotFoundException {
-        String expectedContextFromMessage = "your shipment 777 has SHIPPED status";
-        var shipmentLog = mockShipmentLog("777", ShipmentStatus.SHIPPED, LocalDateTime.now());
+        String expectedContextFromMessage = "your shipment number 777 has changed status on ONHOLD";
+        //String expectedContextFromMessage = "your shipment 777 has ONHOLD status";
+        var shipmentLog = mockShipmentLog("777", ShipmentStatus.ONHOLD, LocalDateTime.now());
         var member = mockMember(mockAccount());
         when(notificationDao.isThisShipmentLogExist(shipmentLog)).thenReturn(false);
         when(notificationDao.isFoundMemberPhoneNumber(MEMBER_IN_DB.getAccount().getPhone())).thenReturn(true);
@@ -158,12 +159,23 @@ public class NotificationServiceImplTest {
 
     @Test
     public void whenShipmentStatusWasChangedSendEmailNotification() throws NotificationException, MemberNotFoundException {
-        String expectedContextFromMessage = "your shipment number 777 changed status on SHIPPED";
+        String expectedContextFromMessage = "your shipment number 777 has changed status on SHIPPED";
         var shipmentLog = mockShipmentLog("777", ShipmentStatus.SHIPPED, LocalDateTime.now());
         var member = mockMember(mockAccount());
         when(notificationDao.isThisShipmentLogExist(shipmentLog)).thenReturn(false);
         when(notificationDao.isFoundMemberEmail(MEMBER_IN_DB.getAccount().getEmail())).thenReturn(true);
         var resultOrder = notificationService.sendEmailNotificationAboutShipmentStatus(shipmentLog, member);
+        assertEquals(expectedContextFromMessage, resultOrder.getContent());
+    }
+
+    @Test
+    public void whenOrderStatusWasChangedSendSMSNotification() throws NotificationException, MemberNotFoundException {
+        String expectedContextFromMessage = "your order number 999 has changed status on COMPLETE";
+        var orderLog = mockOrderLog("999", LocalDateTime.now(), OrderStatus.COMPLETE);
+        var member = mockMember(mockAccount());
+        when(notificationDao.isThisOrderLogExist(orderLog)).thenReturn(false);
+        when(notificationDao.isFoundMemberPhoneNumber(MEMBER_IN_DB.getAccount().getPhone())).thenReturn(true);
+        var resultOrder = notificationService.sendSMSNotificationAboutOrderStatus(orderLog, member);
         assertEquals(expectedContextFromMessage, resultOrder.getContent());
     }
 
@@ -178,16 +190,6 @@ public class NotificationServiceImplTest {
         assertEquals(expectedContextFromMessage, resultOrder.getContent());
     }
 
-    @Test
-    public void whenOrderStatusWasChangedSendSMSNotification() throws NotificationException, MemberNotFoundException {
-        String expectedContextFromMessage = "your order 999 has status COMPLETE";
-        var orderLog = mockOrderLog("999", LocalDateTime.now(), OrderStatus.COMPLETE);
-        var member = mockMember(mockAccount());
-        when(notificationDao.isThisOrderLogExist(orderLog)).thenReturn(false);
-        when(notificationDao.isFoundMemberPhoneNumber(MEMBER_IN_DB.getAccount().getPhone())).thenReturn(true);
-        var resultOrder = notificationService.sendSMSNotificationAboutOrderStatus(orderLog, member);
-        assertEquals(expectedContextFromMessage, resultOrder.getContent());
-    }
 
     private ShipmentLog mockShipmentLog(String shipmentNumber, ShipmentStatus status, LocalDateTime creationDate) {
         return new ShipmentLog(shipmentNumber, status, creationDate);

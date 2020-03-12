@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 
 public class NotificationServiceImpl implements NotificationService {
     private transient final NotificationDao notificationDao;
+    private final String ORDER_MESSAGE ="your order number ";
+    private final String SHIPMENT_MESSAGE ="your shipment number ";
+    private final String END_MESSAGE =" has changed status on ";
 
     public NotificationServiceImpl(final NotificationDao notificationDao) {
         this.notificationDao = notificationDao;
@@ -27,7 +30,8 @@ public class NotificationServiceImpl implements NotificationService {
             final var foundShipment = notificationDao.findByShipmentNumber(shipmentLog.getShipmentNumber());
             final var foundShipmentList = notificationDao.findLogListByShipment(foundShipment);
             notificationDao.addShipmentLog(foundShipmentList.add(shipmentLog));
-            final String contextMessage = "your shipment " + shipmentLog.getShipmentNumber() + " has " + shipmentLog.getStatus() + " status";
+            final String contextMessage= messageMaker(SHIPMENT_MESSAGE, shipmentLog.getShipmentNumber(), shipmentLog.getStatus().toString());
+            //final String contextMessage = "your shipment " + shipmentLog.getShipmentNumber() + " has " + shipmentLog.getStatus() + " status";
             final var smsNotification = new SMSNotification(LocalDateTime.now(), contextMessage, member.getAccount().getPhone());
             notificationDao.createSMSNotification(smsNotification);
             return smsNotification;
@@ -44,7 +48,8 @@ public class NotificationServiceImpl implements NotificationService {
             final var foundShipment = notificationDao.findByShipmentNumber(shipmentLog.getShipmentNumber());
             final var foundShipmentList = notificationDao.findLogListByShipment(foundShipment);
             notificationDao.addShipmentLog(foundShipmentList.add(shipmentLog));
-            final String contextMessage = "your shipment number " + shipmentLog.getShipmentNumber() + " changed status on " + shipmentLog.getStatus();
+            final String contextMessage= messageMaker(SHIPMENT_MESSAGE, shipmentLog.getShipmentNumber(), shipmentLog.getStatus().toString());
+            //final String contextMessage = "your shipment number " + shipmentLog.getShipmentNumber() + " changed status on " + shipmentLog.getStatus();
             final var emailNotification = new EmailNotification(LocalDateTime.now(), contextMessage, member.getAccount().getEmail());
             notificationDao.createEmailNotification(emailNotification);
             return emailNotification;
@@ -62,7 +67,8 @@ public class NotificationServiceImpl implements NotificationService {
             final var foundOrder = notificationDao.findByOrderNumber(orderLog.getOrderNumber());
             final var foundOrderList = notificationDao.findLogListByOrder(foundOrder);
             notificationDao.addOrderLog(foundOrderList.add(orderLog));
-            final String contextMessage = "your order " + orderLog.getOrderNumber() + " has status " + orderLog.getStatus();
+            final String contextMessage= messageMaker(ORDER_MESSAGE, orderLog.getOrderNumber(), orderLog.getStatus().toString());
+            //final String contextMessage = "your order " + orderLog.getOrderNumber() + " has status " + orderLog.getStatus();
             final var smsNotification = new SMSNotification(LocalDateTime.now(), contextMessage, member.getAccount().getPhone());
             notificationDao.createSMSNotification(smsNotification);
             return smsNotification;
@@ -79,11 +85,16 @@ public class NotificationServiceImpl implements NotificationService {
             final var foundOrder = notificationDao.findByOrderNumber(orderLog.getOrderNumber());
             final var foundOrderList = notificationDao.findLogListByOrder(foundOrder);
             notificationDao.addOrderLog(foundOrderList.add(orderLog));
-            final String contextMessage = "your order number " + orderLog.getOrderNumber() + " has changed status on " + orderLog.getStatus();
+            final String contextMessage= messageMaker(ORDER_MESSAGE, orderLog.getOrderNumber(), orderLog.getStatus().toString());
+            //final String contextMessage = "your order number " + orderLog.getOrderNumber() + " has changed status on " + orderLog.getStatus().toString();
             final var emailNotification = new EmailNotification(LocalDateTime.now(), contextMessage, member.getAccount().getEmail());
             notificationDao.createEmailNotification(emailNotification);
             return emailNotification;
         }
         throw new MemberNotFoundException("There is not found the member's email");
+    }
+
+    public String messageMaker(String messageBegin, String orderNumber, String status){
+        return new String(messageBegin+orderNumber+END_MESSAGE+status );
     }
 }
