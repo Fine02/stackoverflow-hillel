@@ -2,14 +2,10 @@ package com.ra.course.com.stackoverflow.service.member;
 
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
-import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
-import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.QuestionRepository;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService<Question> {

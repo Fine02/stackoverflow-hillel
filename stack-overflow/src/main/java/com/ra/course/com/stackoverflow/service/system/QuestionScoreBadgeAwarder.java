@@ -3,8 +3,6 @@ package com.ra.course.com.stackoverflow.service.system;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.enums.Badge;
-import com.ra.course.com.stackoverflow.exception.repository.DataBaseOperationException;
-import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
