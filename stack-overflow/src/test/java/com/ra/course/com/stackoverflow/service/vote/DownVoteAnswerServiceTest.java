@@ -8,8 +8,8 @@ import com.ra.course.com.stackoverflow.exception.service.AnswerNotFoundException
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyVotedException;
 import com.ra.course.com.stackoverflow.exception.service.CannotVoteOwnPostException;
-import com.ra.course.com.stackoverflow.repository.interfaces.AnswerRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
+import com.ra.course.com.stackoverflow.repository.AnswerRepository;
+import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import com.ra.course.com.stackoverflow.service.vote.impl.VoteAnswerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,127 +18,99 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class DownVoteAnswerServiceTest {
-    private VoteAnswerService voteAnswerService;
-    private AnswerRepository answerData = mock(AnswerRepository.class);
-    private MemberRepository memberData = mock(MemberRepository.class);
+    private final AnswerRepository answerData = mock(AnswerRepository.class);
+    private final MemberRepository memberData = mock(MemberRepository.class);
+    private final long ID1 = 1;
+    private final long ID2 = 2;
 
-    private final long ID1 = 1L;
-    private final long ID2 = 2L;
+    private VoteAnswerService voteAnswerService;
+    private Member member;
+    private Answer answer;
+
 
     @BeforeEach
     void setUp() {
         voteAnswerService = new VoteAnswerService(answerData, memberData);
+        member = mockMember(ID1);
+        answer = mockAnswer(mockMember(ID2));
     }
 
     @Test
     public void whenAnswerIsNotFoundThenThrowsAnswerNotFoundException(){
         //given
-        var member = mockMember(ID1);
-        var answer = mockAnswer(member);
         when(answerData.findById(ID1)).thenReturn(Optional.empty());
         //when
+        //then
         assertThatThrownBy(() -> voteAnswerService.downVote(answer, member))
                 .isInstanceOf(AnswerNotFoundException.class)
                 .hasMessage("No such answer in DB");
-        //then
-        verify(answerData).findById(ID1);
-        verifyNoMoreInteractions(answerData);
-        verifyNoInteractions(memberData);
     }
 
     @Test
     public void whenMemberIsNotFoundThenThrowsMemberNotFoundException(){
         //given
-        var member = mockMember(ID1);
-        var answer = mockAnswer(member);
         when(answerData.findById(ID1)).thenReturn(Optional.of(answer));
         when(memberData.findById(ID1)).thenReturn(Optional.empty());
         //when
+        //then
         assertThatThrownBy(() -> voteAnswerService.downVote(answer, member))
                 .isInstanceOf(MemberNotFoundException.class)
                 .hasMessage("No such member in DB");
-        //then
-        verify(answerData).findById(ID1);
-        verify(memberData).findById(ID1);
-        verifyNoMoreInteractions(answerData, memberData);
     }
 
     @Test
     public void whenMemberTryToVoteOwnAnswerThenThrowsCannotVoteOwnPostException() {
         //given
-        var member = mockMember(ID1);
-        var answer = mockAnswer(member);
-        when(answerData.findById(ID1)).thenReturn(Optional.of(answer));
+        var answerWithTheSameAuthor = mockAnswer(member);
+        when(answerData.findById(ID1)).thenReturn(Optional.of(answerWithTheSameAuthor));
         when(memberData.findById(ID1)).thenReturn(Optional.of(member));
         //when
-        assertThatThrownBy(() -> voteAnswerService.downVote(answer, member))
+        //then
+        assertThatThrownBy(() -> voteAnswerService.downVote(answerWithTheSameAuthor, member))
                 .isInstanceOf(CannotVoteOwnPostException.class)
                 .hasMessage("Can't vote your own answer");
-        //then
-        verify(answerData).findById(ID1);
-        verify(memberData).findById(ID1);
-        verifyNoMoreInteractions(answerData, memberData);
     }
 
     @Test
     public void whenMemberIsAlreadyVotedTheAnswerThenThrowsAlreadyVotedException() {
         //given
-        var wantToVoteMember = mockMember(ID1);
-        wantToVoteMember.getDownVotedAnswersId().add(ID1);
-        var author = mockMember(ID2);
-        var answer = mockAnswer(author);
+        member.getDownVotedAnswersId().add(answer.getId());
         when(answerData.findById(ID1)).thenReturn(Optional.of(answer));
-        when(memberData.findById(ID1)).thenReturn(Optional.of(wantToVoteMember));
+        when(memberData.findById(ID1)).thenReturn(Optional.of(member));
         //when
-        assertThatThrownBy(() -> voteAnswerService.downVote(answer, wantToVoteMember))
+        //then
+        assertThatThrownBy(() -> voteAnswerService.downVote(answer, member))
                 .isInstanceOf(AlreadyVotedException.class)
                 .hasMessage("This answer is already voted");
-        //then
-        verify(answerData).findById(ID1);
-        verify(memberData).findById(ID1);
-        verifyNoMoreInteractions(answerData, memberData);
     }
     @Test
-    public void whenMemberVotesTheAnswerThenVoteCountDecrementAndAddReputation() {
+    public void whenMemberVotesTheAnswerThenAnswerVoteCountDecrementAndAddMemberReputation() {
         //given
-        var wantToVoteMember = mockMember(ID1);
-        var author = mockMember(ID2);
-        var answer = mockAnswer(author);
         when(answerData.findById(ID1)).thenReturn(Optional.of(answer));
-        when(memberData.findById(ID1)).thenReturn(Optional.of(wantToVoteMember));
+        when(memberData.findById(ID1)).thenReturn(Optional.of(member));
         //when
-        var answerAfterVoting = voteAnswerService.downVote(answer, wantToVoteMember);
+        var answerAfterVoting = voteAnswerService.downVote(answer, member);
         //then
         assertEquals(-1, answerAfterVoting.getVoteCount());
-        assertEquals(10, wantToVoteMember.getReputation());
-        assertTrue(wantToVoteMember.getDownVotedAnswersId().contains(ID1));
-
-        verify(answerData).findById(ID1);
-        verify(memberData).findById(ID1);
-        verify(answerData).update(any());
-        verify(memberData).update(any());
-        verifyNoMoreInteractions(answerData, memberData);
+        assertEquals(10, member.getReputation());
+        assertTrue(member.getDownVotedAnswersId().contains(answer.getId()));
     }
 
-
-
     private Answer mockAnswer(Member member){
+        var question = Question.builder()
+                .id(ID2)
+                .title("title")
+                .author(member).build();
         return Answer.builder()
                 .id(ID1)
                 .author(member)
-                .question(mockQuestion(member)).build();
+                .question(question).build();
     }
-    private Question mockQuestion(Member member){
-        return Question.builder()
-                .id(ID1)
-                .title("title")
-                .author(member).build();
-    }
-    private Member mockMember(long idMember){
+
+    private Member mockMember(long idMember) {
         var account = Account.builder()
                 .id(idMember)
                 .password("password")
