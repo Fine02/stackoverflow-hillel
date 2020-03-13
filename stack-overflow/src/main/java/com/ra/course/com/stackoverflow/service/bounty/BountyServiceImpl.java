@@ -8,11 +8,13 @@ import com.ra.course.com.stackoverflow.repository.BountyRepository;
 import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @AllArgsConstructor
 @Slf4j
+@Service
 public class BountyServiceImpl implements BountyService {
     private final QuestionRepository questionRepo;
     private final BountyRepository bountyRepo;
