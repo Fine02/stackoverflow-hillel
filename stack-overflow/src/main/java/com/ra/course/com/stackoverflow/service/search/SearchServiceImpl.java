@@ -6,11 +6,13 @@ import com.ra.course.com.stackoverflow.exception.service.TagNotFoundException;
 import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import com.ra.course.com.stackoverflow.repository.TagRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 
 @AllArgsConstructor
+@Service
 public class SearchServiceImpl implements SearchService {
 
     private final QuestionRepository questionRepo;
