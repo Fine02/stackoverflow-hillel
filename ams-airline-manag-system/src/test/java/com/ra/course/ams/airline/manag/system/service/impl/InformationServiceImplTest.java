@@ -1,6 +1,7 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.*;
+import com.ra.course.ams.airline.manag.system.exception.ScheduleNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,6 +75,16 @@ public class InformationServiceImplTest {
     }
 
     @Test
+    public void whenFlightNumberIsActualButNoSheduleinDBCheckFlightCustomScheduleThrowIllegalArgumentException() {
+        CustomSchedule existedCustSched = new CustomSchedule.Builder().setId("2").build();
+        Mockito.when(customScheduleRepo.getInstances())
+                .thenReturn(Collections.singleton(existedCustSched));
+
+        Assertions.assertThrows(ScheduleNotExistException.class, () ->
+                informationService.checkFlightCustomSchedule("1"));
+    }
+
+    @Test
     public void whenFlightNumberIsActualThenCheckFlightCustomScheduleReturnWeeklySchedule() {
         CustomSchedule existedCustSched = new CustomSchedule.Builder().setId("1").build();
         Mockito.when(customScheduleRepo.getInstances())
@@ -99,7 +110,6 @@ public class InformationServiceImplTest {
 //
 //        assertThat(informationService.checkAvailableSeats(flightInstance)).isEqualTo(time);
     }
-
 
     @Test
     public void whenFlightInstanceIsNullThenCheckDepartureTimeThrowIllegalArgumentException() {
