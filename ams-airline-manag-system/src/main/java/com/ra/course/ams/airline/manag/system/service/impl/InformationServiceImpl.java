@@ -1,6 +1,7 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.*;
+import com.ra.course.ams.airline.manag.system.exception.WeeklyScheduleNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 import com.ra.course.ams.airline.manag.system.service.InformationService;
 
@@ -9,22 +10,30 @@ import java.util.*;
 
 public class InformationServiceImpl implements InformationService {
 
-    private Repository<WeeklySchedule, String> weeklyScheduleRepo;
-    private Repository<CustomSchedule, String> customScheduleRepo;
-    private Repository<FlightInstance, String> flightInstRepo;
-    private Repository<Flight, String> flightRepository;
+    transient private final Repository<WeeklySchedule, String> weeklyScheduleRepo;
+    transient private final Repository<CustomSchedule, String> customScheduleRepo;
+    transient private final Repository<FlightInstance, String> flightInstRepo;
+    transient private final Repository<Flight, String> flightRepository;
 
-    final private Collection<FlightInstance> flightInstances = flightInstRepo.getInstances();
+    public InformationServiceImpl(Repository<WeeklySchedule, String> weeklyScheduleRepo, Repository<CustomSchedule, String> customScheduleRepo, Repository<FlightInstance, String> flightInstRepo, Repository<Flight, String> flightRepository) {
+        this.weeklyScheduleRepo = weeklyScheduleRepo;
+        this.customScheduleRepo = customScheduleRepo;
+        this.flightInstRepo = flightInstRepo;
+        this.flightRepository = flightRepository;
+    }
+
+    //final private Collection<FlightInstance> flightInstances = flightInstRepo.getInstances();
 
     @Override
     public WeeklySchedule checkFlightWeeklySchedule(String flightNumber) {
         if (flightNumber == null || flightNumber.isBlank()) {
             throw new IllegalArgumentException("FlightNumber for search cannot be null, empty or blank");
         }
-        final WeeklySchedule fidedWeeklySched = weeklyScheduleRepo.getInstances().stream()
+        final Collection<WeeklySchedule> weeklyScheds = weeklyScheduleRepo.getInstances();
+        final WeeklySchedule fidedWeeklySched = weeklyScheds.stream()
                 .filter(i -> flightNumber.equals(i.getId()))
                 .findAny()
-                .orElse((WeeklySchedule) Collections.EMPTY_LIST);
+                .orElseThrow(() -> new WeeklyScheduleNotExistException("There no WeeklySchedule with this number") );
 
         return fidedWeeklySched;
     }
@@ -99,7 +108,7 @@ public class InformationServiceImpl implements InformationService {
 
     private FlightInstance getNecessaryFlightInstanse(FlightInstance flightInstance) {
         if (Optional.ofNullable(flightInstance).isPresent()) {
-            final FlightInstance findedFlightInst = flightInstances.stream()
+            final FlightInstance findedFlightInst = flightInstRepo.getInstances().stream()
                     .filter(i -> (flightInstance).equals(i))
                     .findAny()
                     .orElse((FlightInstance) Collections.EMPTY_LIST);

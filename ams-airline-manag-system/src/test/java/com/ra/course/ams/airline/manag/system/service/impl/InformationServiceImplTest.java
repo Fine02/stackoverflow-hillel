@@ -1,10 +1,13 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
+import com.ra.course.ams.airline.manag.system.entity.flight.CustomSchedule;
+import com.ra.course.ams.airline.manag.system.entity.flight.Flight;
+import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.flight.WeeklySchedule;
 import com.ra.course.ams.airline.manag.system.entity.person.Person;
-import com.ra.course.ams.airline.manag.system.exception.ReservationWasNotModifiedException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
-import com.ra.course.ams.airline.manag.system.service.impl.notification.EmailNotificationService;
+import com.ra.course.ams.airline.manag.system.repository.flight.WeeklyScheduleRepository;
+import com.ra.course.ams.airline.manag.system.service.InformationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,38 +21,40 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class InformationServiceImplTest {
 
-    private InformationServiceImpl informationServiceImpl;
+    InformationServiceImpl informationService;
 
     @Mock
     private Repository<WeeklySchedule, String> weeklyScheduleRepo;
-    private Repository<Person, String> personRepository;
-    private PersonManagementServiceImpl personManagenentService;
+    private Repository<CustomSchedule, String> customScheduleRepo;
+    private Repository<FlightInstance, String> flightInstRepo;
+    private Repository<Flight, String> flightRepository;
 
     @BeforeEach
-    public void setUp () {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
-        informationServiceImpl = new InformationServiceImpl();
+        informationService = new InformationServiceImpl(weeklyScheduleRepo, customScheduleRepo, flightInstRepo, flightRepository);
     }
 
     @Test
-    public void whenFlightNumberIsNullCheckFlightWeeklyScheduleThrowIllegalArgumentException () {
+    public void whenFlightNumberIsNullCheckFlightWeeklyScheduleThrowIllegalArgumentException() {
 
         Assertions.assertThrows(IllegalArgumentException.class, () ->
-                informationServiceImpl.checkFlightWeeklySchedule(null));
+                informationService.checkFlightWeeklySchedule(null));
     }
 
     @Test
-    public void whenFlightNumberIsEmptyCheckFlightWeeklyScheduleThrowIllegalArgumentException () {
+    public void whenFlightNumberIsEmptyCheckFlightWeeklyScheduleThrowIllegalArgumentException() {
 
         Assertions.assertThrows(IllegalArgumentException.class, () ->
-                informationServiceImpl.checkFlightWeeklySchedule(" "));
+                informationService.checkFlightWeeklySchedule(" "));
     }
 
     @Test
-    public void whenFlightNumberIsActualThenCheckFlightWeeklyScheduleReturnWeeklySchedule () {
+    public void whenFlightNumberIsActualThenCheckFlightWeeklyScheduleReturnWeeklySchedule() {
         WeeklySchedule existedWeeklySchedule = new WeeklySchedule.Builder().setId("1").build();
-        Mockito.when(weeklyScheduleRepo.getInstances()).thenReturn(Collections.singleton(existedWeeklySchedule));
+        Mockito.when(weeklyScheduleRepo.getInstances())
+                .thenReturn(Collections.singleton(existedWeeklySchedule));
 
-        assertThat(informationServiceImpl.checkFlightWeeklySchedule("1")).isEqualTo(existedWeeklySchedule);
+        assertThat(informationService.checkFlightWeeklySchedule("1")).isEqualTo(existedWeeklySchedule);
     }
 }
