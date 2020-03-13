@@ -6,7 +6,6 @@ import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import java.util.List;
 
 public interface OrderDao {
-    //Order findByOrderNumber(String orderNumber);
 
     void updateOrder(Order orderNumber);
 
@@ -21,7 +20,5 @@ public interface OrderDao {
     void addOrderLog(boolean add);
 
     OrderLog findOrderLogById(Long orderLogId);
-
-   // void updateOrder(Order order);
 
 }

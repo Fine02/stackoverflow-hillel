@@ -25,4 +25,6 @@ public interface ShippingDao {
 
     void addShipmentLog(boolean add);
 
+    Address findThatShippingAddress(Address shippingAddress);
+
 }

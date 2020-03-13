@@ -22,18 +22,19 @@ public class OrderServiceImplTest {
     private OrderDao orderDao = mock(OrderDao.class);
     private final String ORDER_IN_DB = "Ref123";
     private final Long MEMBER_ID_IN_DB = 10L;
+    private Order searchOrder;
+    private Member searchMember;
 
 
     @BeforeEach
     public void before() {
         orderService = new OrderServiceImpl(orderDao);
-
-
+        searchOrder=mockOrder(ORDER_IN_DB, LocalDateTime.now());
+        searchMember =mockMember(MEMBER_ID_IN_DB);
     }
 
     @Test()
     public void shouldThrowMemberNotFoundException() {
-        var searchOrder = mockOrder(ORDER_IN_DB, LocalDateTime.now());
         var searchInDbMemberID = mockMember(5L);
 
         when(orderDao.isFoundMemberID(searchInDbMemberID.getMemberID())).thenReturn(false);
@@ -50,15 +51,13 @@ public class OrderServiceImplTest {
 
     @Test()
     public void shouldThrowOrderNotFoundException(){
-        var searchOrder = mockOrder(ORDER_IN_DB, LocalDateTime.now());
         var InDbOrder = mockOrder(ORDER_IN_DB, LocalDateTime.now().plusDays(8));
-        var searchInDbMemberID = mockMember(5L);
 
-        when(orderDao.isFoundMemberID(searchInDbMemberID.getMemberID())).thenReturn(true);
+        when(orderDao.isFoundMemberID(searchMember.getMemberID())).thenReturn(true);
         when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(InDbOrder);
 
         Throwable exception = Assertions.assertThrows(OrderNotFoundException.class, () -> {
-            orderService.cancelOrder(searchOrder, searchInDbMemberID);;
+            orderService.cancelOrder(searchOrder, searchMember);;
         });
 
         assertEquals(exception.getMessage(), "There is not found the Order by this number");
@@ -67,14 +66,12 @@ public class OrderServiceImplTest {
 
     @Test
     public void whenOrderDateIsAfterCurrentThenOrderCanBeCanceled()  {
-        var searchOrder = mockOrder(ORDER_IN_DB, LocalDateTime.now());
         var InDbOrder = mockOrder(ORDER_IN_DB, LocalDateTime.now().minusDays(1));
-        var searchInDbMemberID = mockMember(MEMBER_ID_IN_DB);
-        when(orderDao.isFoundMemberID(searchInDbMemberID.getMemberID())).thenReturn(true);
+        when(orderDao.isFoundMemberID(searchMember.getMemberID())).thenReturn(true);
         when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(InDbOrder);
-        var resultOrder = orderService.cancelOrder(searchOrder, searchInDbMemberID);
+        var resultOrder = orderService.cancelOrder(searchOrder, searchMember);
         Assertions.assertSame(resultOrder.getStatus(), OrderStatus.CANCELED);
-        assertEquals(10L, searchInDbMemberID.getMemberID());
+        assertEquals(10L, searchMember.getMemberID());
     }
 
 

@@ -25,33 +25,38 @@ public class ShippingServiceImplTest {
     private ShippingDao shippingAddressDao = mock(ShippingDao.class);
     private Address ADDRESS_IN_DB ;
     private final Long MEMBER_ID_IN_DB = 10L;
+    private Account accountInDB;
+    private Member memberInDB ;
+    private Address shipmentAddress;
 
     @BeforeEach
     public void before() {
         shippingService = new ShippingServiceImpl(shippingAddressDao);
         ADDRESS_IN_DB=new Address("Mira", "Kiyv", "Kyiv", "04114", "Ukraine");
+        accountInDB = mockAccount(ADDRESS_IN_DB);
+        memberInDB = mockMember(MEMBER_ID_IN_DB, accountInDB);
+        shipmentAddress = memberInDB.getAccount().getShippingAddress();
+        when (shippingAddressDao.findThatShippingAddress(memberInDB.getAccount().getShippingAddress())).thenReturn(ADDRESS_IN_DB);
     }
 
     @Test
     public void whenMemberShouldSpecifyShippingAddress()  {
-        var accountInDB = mockAccount(ADDRESS_IN_DB);
-        var memberInDB = mockMember(MEMBER_ID_IN_DB, accountInDB);
-        var shipmentAddress = memberInDB.getAccount().getShippingAddress();
         when(shippingAddressDao.isFoundMemberID(memberInDB.getMemberID())).thenReturn(true);
         when(shippingAddressDao.findShippingAddress(shipmentAddress)).thenReturn(true);
+
         var resultOfSpecifyShippingAddress = shippingService.specifyShippingAddress(memberInDB, ADDRESS_IN_DB);
         Assertions.assertSame(resultOfSpecifyShippingAddress, shipmentAddress);
+
         assertEquals(10L, memberInDB.getMemberID());
         assertEquals(ADDRESS_IN_DB, shipmentAddress);
     }
 
     @Test
     public void shouldThrowMemberNotFoundException()  {
-        var accountInDB = mockAccount(ADDRESS_IN_DB);
-        var memberInDB = mockMember(MEMBER_ID_IN_DB, accountInDB);
-        var shipmentAddress = memberInDB.getAccount().getShippingAddress();
+
         when(shippingAddressDao.isFoundMemberID(memberInDB.getMemberID())).thenReturn(false);
         when(shippingAddressDao.findShippingAddress(shipmentAddress)).thenReturn(true);
+
         Throwable exception = Assertions.assertThrows(MemberNotFoundException.class, () -> {
             shippingService.specifyShippingAddress(memberInDB, ADDRESS_IN_DB);;;
         });
@@ -62,9 +67,7 @@ public class ShippingServiceImplTest {
 
     @Test
     public void shouldThrowShippingAddressNotFoundException() {
-        var accountInDB = mockAccount(ADDRESS_IN_DB);
-        var memberInDB = mockMember(MEMBER_ID_IN_DB, accountInDB);
-        var shipmentAddress = memberInDB.getAccount().getShippingAddress();
+
         when(shippingAddressDao.isFoundMemberID(memberInDB.getMemberID())).thenReturn(true);
         when(shippingAddressDao.findShippingAddress(shipmentAddress)).thenReturn(false);
 
