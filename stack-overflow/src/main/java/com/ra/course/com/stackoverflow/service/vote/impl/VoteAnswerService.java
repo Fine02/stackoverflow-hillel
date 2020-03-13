@@ -10,10 +10,12 @@ import com.ra.course.com.stackoverflow.repository.AnswerRepository;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import com.ra.course.com.stackoverflow.service.vote.VoteService;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @AllArgsConstructor
+@Service
 public class VoteAnswerService implements VoteService<Answer> {
 
     private transient final AnswerRepository answerData;

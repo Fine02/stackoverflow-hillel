@@ -5,8 +5,10 @@ import com.ra.course.com.stackoverflow.entity.Notification;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
+@Service
 public class NotificationServiceImpl implements NotificationService {
 
     private transient final MemberRepository memberData;
