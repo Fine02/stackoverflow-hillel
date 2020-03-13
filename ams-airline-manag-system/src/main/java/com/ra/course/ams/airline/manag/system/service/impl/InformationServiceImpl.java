@@ -12,7 +12,7 @@ public class InformationServiceImpl implements InformationService {
     private Repository<WeeklySchedule, String> weeklyScheduleRepo;
     private Repository<CustomSchedule, String> customScheduleRepo;
     private Repository<FlightInstance, String> flightInstanceStringRepository;
-
+    final private Collection<FlightInstance> flightInstances = flightInstanceStringRepository.getInstances();
 
     @Override
     public WeeklySchedule checkFlightWeeklySchedule(String flightNumber) {
@@ -43,28 +43,21 @@ public class InformationServiceImpl implements InformationService {
     }
 
     @Override
-    public Time checkDepartureTime(FlightInstance flightInstance) {
-        if (Optional.ofNullable(flightInstance).isPresent()) {
-            final Collection<FlightInstance> flightInstances = flightInstanceStringRepository.getInstances();
-            final FlightInstance findedFlightInst = flightInstances.stream()
-                    .filter(i -> (flightInstance).equals(i))
-                    .findAny()
-                    .orElse((FlightInstance) Collections.EMPTY_LIST);
+    public List<FlightSeat> checkAvailableSeats(FlightInstance flightInstance) {
 
-            return findedFlightInst.getDepartureTime();
-        }
-        throw new IllegalArgumentException("FlightInstance cannot be null, empty or blank");
+        return getNecessaryFlightInstanse(flightInstance).getSeats();
     }
 
     @Override
-    public List<FlightSeat> checkAvailableSeats(FlightInstance flightInstance) {
-        if (Optional.ofNullable(flightInstance).isPresent()) {
-        return null;
-    } return null; }
+    public Time checkDepartureTime(FlightInstance flightInstance) {
+
+        return getNecessaryFlightInstanse(flightInstance).getDepartureTime();
+    }
 
     @Override
     public Time checkArrivalTime(FlightInstance flightInstance) {
-        return null;
+
+        return getNecessaryFlightInstanse(flightInstance).getArrivalTime();
     }
 
     @Override
@@ -80,5 +73,16 @@ public class InformationServiceImpl implements InformationService {
     @Override
     public Flight searchFlightByDestinationAirport(String airportCode) {
         return null;
+    }
+
+    private FlightInstance getNecessaryFlightInstanse(FlightInstance flightInstance) {
+        if (Optional.ofNullable(flightInstance).isPresent()) {
+            final FlightInstance findedFlightInst = flightInstances.stream()
+                    .filter(i -> (flightInstance).equals(i))
+                    .findAny()
+                    .orElse((FlightInstance) Collections.EMPTY_LIST);
+            return findedFlightInst;
+        }
+        throw new IllegalArgumentException("FlightInstance cannot be null, empty or blank");
     }
 }

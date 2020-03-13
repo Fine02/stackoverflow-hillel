@@ -5,12 +5,14 @@ import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
 
 import java.sql.Time;
 import java.util.List;
+import java.util.Objects;
 
 public class FlightInstance {
 
     private String id;
     private Flight flight;
     private Time departureTime;
+    private Time arrivalTime;
     private String gate;
     private FlightStatus status;
     private List<FlightSeat> seats;
@@ -25,6 +27,7 @@ public class FlightInstance {
         id = builder.id;
         flight = builder.flight;
         departureTime = builder.departureTime;
+        arrivalTime = builder.arrivalTime;
         gate = builder.gate;
         status = builder.status;
         seats = builder.seats;
@@ -38,6 +41,7 @@ public class FlightInstance {
         private transient String id;
         private transient Flight flight;
         private transient Time departureTime;
+        private transient Time arrivalTime;
         private transient String gate;
         private transient FlightStatus status;
         private transient List<FlightSeat> seats;
@@ -45,7 +49,8 @@ public class FlightInstance {
         private transient List<Crew> crews;
         private transient List<Pilot> pilots;
 
-        public Builder () {}
+        public Builder() {
+        }
 
         public Builder setId(String id) {
             this.id = id;
@@ -59,6 +64,10 @@ public class FlightInstance {
 
         public Builder setDepartureTime(Time departureTime) {
             this.departureTime = departureTime;
+            return this;
+        }
+        public Builder setArrivalTime(Time arrivalTime) {
+            this.arrivalTime = arrivalTime;
             return this;
         }
 
@@ -167,6 +176,35 @@ public class FlightInstance {
 
     public void setPilots(List<Pilot> pilots) {
         this.pilots = pilots;
+    }
+
+    public Time getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(Time arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FlightInstance that = (FlightInstance) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(flight, that.flight) &&
+                Objects.equals(departureTime, that.departureTime) &&
+                Objects.equals(gate, that.gate) &&
+                status == that.status &&
+                Objects.equals(seats, that.seats) &&
+                Objects.equals(aircraft, that.aircraft) &&
+                Objects.equals(crews, that.crews) &&
+                Objects.equals(pilots, that.pilots);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, flight, departureTime, gate, status, seats, aircraft, crews, pilots);
     }
 
     @Override
