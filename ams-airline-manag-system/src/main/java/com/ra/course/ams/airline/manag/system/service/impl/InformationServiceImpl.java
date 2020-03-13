@@ -1,7 +1,7 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.*;
-import com.ra.course.ams.airline.manag.system.exception.WeeklyScheduleNotExistException;
+import com.ra.course.ams.airline.manag.system.exception.ScheduleNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 import com.ra.course.ams.airline.manag.system.service.InformationService;
 
@@ -22,18 +22,15 @@ public class InformationServiceImpl implements InformationService {
         this.flightRepository = flightRepository;
     }
 
-    //final private Collection<FlightInstance> flightInstances = flightInstRepo.getInstances();
-
     @Override
     public WeeklySchedule checkFlightWeeklySchedule(String flightNumber) {
         if (flightNumber == null || flightNumber.isBlank()) {
             throw new IllegalArgumentException("FlightNumber for search cannot be null, empty or blank");
         }
-        final Collection<WeeklySchedule> weeklyScheds = weeklyScheduleRepo.getInstances();
-        final WeeklySchedule fidedWeeklySched = weeklyScheds.stream()
+        final WeeklySchedule fidedWeeklySched = weeklyScheduleRepo.getInstances().stream()
                 .filter(i -> flightNumber.equals(i.getId()))
                 .findAny()
-                .orElseThrow(() -> new WeeklyScheduleNotExistException("There no WeeklySchedule with this number") );
+                .orElseThrow(() -> new ScheduleNotExistException("There are no WeeklySchedule with this number") );
 
         return fidedWeeklySched;
     }
@@ -46,7 +43,7 @@ public class InformationServiceImpl implements InformationService {
         final CustomSchedule findedCustomSched = customScheduleRepo.getInstances().stream()
                 .filter(i -> flightNumber.equals(i.getId()))
                 .findAny()
-                .orElse((CustomSchedule) Collections.EMPTY_LIST);
+                .orElseThrow(() -> new ScheduleNotExistException("There are no CustomSchedule with this number") );
 
         return findedCustomSched;
     }

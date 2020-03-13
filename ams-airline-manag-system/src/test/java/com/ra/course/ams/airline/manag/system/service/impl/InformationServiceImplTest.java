@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class InformationServiceImplTest {
 
-    InformationServiceImpl informationService;
+    private InformationServiceImpl informationService;
 
     @Mock
     private Repository<WeeklySchedule, String> weeklyScheduleRepo;
@@ -56,5 +56,28 @@ public class InformationServiceImplTest {
                 .thenReturn(Collections.singleton(existedWeeklySchedule));
 
         assertThat(informationService.checkFlightWeeklySchedule("1")).isEqualTo(existedWeeklySchedule);
+    }
+
+    @Test
+    public void whenFlightNumberIsNullCheckFlightCustomScheduleThrowIllegalArgumentException() {
+
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                informationService.checkFlightCustomSchedule(null));
+    }
+
+    @Test
+    public void whenFlightNumberIsEmptyCheckFlightCustomScheduleThrowIllegalArgumentException() {
+
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                informationService.checkFlightCustomSchedule(" "));
+    }
+
+    @Test
+    public void whenFlightNumberIsActualThenCheckFlightCustomScheduleReturnWeeklySchedule() {
+        CustomSchedule existedCustSched = new CustomSchedule.Builder().setId("1").build();
+        Mockito.when(customScheduleRepo.getInstances())
+                .thenReturn(Collections.singleton(existedCustSched));
+
+        assertThat(informationService.checkFlightWeeklySchedule("1")).isEqualTo(existedCustSched);
     }
 }
