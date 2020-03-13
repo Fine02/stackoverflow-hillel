@@ -9,7 +9,6 @@ import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundExcepti
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

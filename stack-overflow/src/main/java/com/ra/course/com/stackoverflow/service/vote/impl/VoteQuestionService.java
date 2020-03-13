@@ -11,7 +11,6 @@ import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import com.ra.course.com.stackoverflow.service.system.BadgeAwardService;
 import com.ra.course.com.stackoverflow.service.vote.VoteService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
