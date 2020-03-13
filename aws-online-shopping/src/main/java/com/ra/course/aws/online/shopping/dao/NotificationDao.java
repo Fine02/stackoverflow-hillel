@@ -14,13 +14,15 @@ public interface NotificationDao {
 
     Order findByOrderNumber(String orderNumber);
 
-    List<OrderLog> findLogListByOrder(Order order);
+    List<OrderLog> findLogListByOrder(List<OrderLog> orderLogList);
 
     SMSNotification createSMSNotification(SMSNotification smsNotification);
 
     EmailNotification createEmailNotification(EmailNotification emailNotification);
 
-    List<ShipmentLog> findLogListByShipment(Shipment shipment);
+    List<ShipmentLog> findLogListByShipment(List<ShipmentLog> shipmentLogList);
+
+    boolean isThisOrderExist(OrderLog orderLog);
 
     boolean isThisOrderLogExist(OrderLog orderLog);
 
@@ -33,4 +35,11 @@ public interface NotificationDao {
     boolean isFoundMemberPhoneNumber(String string);
 
     boolean isFoundMemberEmail(String string);
+
+    OrderLog findOrderLogById(Long orderLogId);
+
+    void updateOrder(Order order);
+    void updateShipment(Shipment shipment);
+
+    ShipmentLog findShipmentLogById (Long shipmentLogId);
 }

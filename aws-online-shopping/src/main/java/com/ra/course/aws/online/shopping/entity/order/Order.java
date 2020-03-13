@@ -3,6 +3,7 @@ package com.ra.course.aws.online.shopping.entity.order;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 public class Order {
     private String orderNumber;
@@ -64,5 +65,21 @@ public class Order {
 
     public void setOrderLog(List<OrderLog> orderLog) {
         this.orderLog = orderLog;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return Objects.equals(orderNumber, order.orderNumber) &&
+                status == order.status &&
+                Objects.equals(orderDate, order.orderDate) &&
+                Objects.equals(orderLog, order.orderLog);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderNumber, status, orderDate, orderLog);
     }
 }

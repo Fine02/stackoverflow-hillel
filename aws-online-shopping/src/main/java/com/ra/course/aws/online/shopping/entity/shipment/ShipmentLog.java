@@ -3,6 +3,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ShipmentLog {
+    private long id;
     private String shipmentNumber;
     private ShipmentStatus status;
     private LocalDateTime creationDate;
@@ -11,6 +12,13 @@ public class ShipmentLog {
     }
 
     public ShipmentLog(String shipmentNumber, ShipmentStatus status, LocalDateTime creationDate) {
+        this.shipmentNumber = shipmentNumber;
+        this.status = status;
+        this.creationDate = creationDate;
+    }
+
+    public ShipmentLog(long id, String shipmentNumber, ShipmentStatus status, LocalDateTime creationDate) {
+        this.id = id;
         this.shipmentNumber = shipmentNumber;
         this.status = status;
         this.creationDate = creationDate;
@@ -38,5 +46,13 @@ public class ShipmentLog {
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

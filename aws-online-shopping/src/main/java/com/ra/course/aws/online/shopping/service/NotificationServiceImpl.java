@@ -23,15 +23,16 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public SMSNotification sendSMSNotificationAboutShipmentStatus(final ShipmentLog shipmentLog, final Member member) throws NotificationException, MemberNotFoundException {
-        if (notificationDao.isThisShipmentLogExist(shipmentLog)) {
+        final var foundShipmentLog =notificationDao.findShipmentLogById(shipmentLog.getId());
+        final var foundShipment = notificationDao.findByShipmentNumber(shipmentLog.getShipmentNumber());
+        final var foundShipmentList = notificationDao.findLogListByShipment(foundShipment.getShipmentLogs());
+        if (notificationDao.isThisShipmentLogExist(foundShipmentLog)) {
             throw new NotificationException("SMS-notification about shipment status can not be sent");
         }
-        if (notificationDao.isFoundMemberPhoneNumber(member.getAccount().getPhone())) {
-            final var foundShipment = notificationDao.findByShipmentNumber(shipmentLog.getShipmentNumber());
-            final var foundShipmentList = notificationDao.findLogListByShipment(foundShipment);
+        if (notificationDao.isFoundMemberEmail(member.getAccount().getEmail())) {
             notificationDao.addShipmentLog(foundShipmentList.add(shipmentLog));
+            notificationDao.updateShipment(foundShipment);
             final String contextMessage= messageMaker(SHIPMENT_MESSAGE, shipmentLog.getShipmentNumber(), shipmentLog.getStatus().toString());
-            //final String contextMessage = "your shipment " + shipmentLog.getShipmentNumber() + " has " + shipmentLog.getStatus() + " status";
             final var smsNotification = new SMSNotification(LocalDateTime.now(), contextMessage, member.getAccount().getPhone());
             notificationDao.createSMSNotification(smsNotification);
             return smsNotification;
@@ -41,15 +42,16 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public EmailNotification sendEmailNotificationAboutShipmentStatus(final ShipmentLog shipmentLog, final Member member) throws NotificationException, MemberNotFoundException {
-        if (notificationDao.isThisShipmentLogExist(shipmentLog)) {
+        final var foundShipmentLog =notificationDao.findShipmentLogById(shipmentLog.getId());
+        final var foundShipment = notificationDao.findByShipmentNumber(shipmentLog.getShipmentNumber());
+        final var foundShipmentList = notificationDao.findLogListByShipment(foundShipment.getShipmentLogs());
+        if (notificationDao.isThisShipmentLogExist(foundShipmentLog)) {
             throw new NotificationException("Email-notification about shipment status can not be sent");
         }
         if (notificationDao.isFoundMemberEmail(member.getAccount().getEmail())) {
-            final var foundShipment = notificationDao.findByShipmentNumber(shipmentLog.getShipmentNumber());
-            final var foundShipmentList = notificationDao.findLogListByShipment(foundShipment);
             notificationDao.addShipmentLog(foundShipmentList.add(shipmentLog));
+            notificationDao.updateShipment(foundShipment);
             final String contextMessage= messageMaker(SHIPMENT_MESSAGE, shipmentLog.getShipmentNumber(), shipmentLog.getStatus().toString());
-            //final String contextMessage = "your shipment number " + shipmentLog.getShipmentNumber() + " changed status on " + shipmentLog.getStatus();
             final var emailNotification = new EmailNotification(LocalDateTime.now(), contextMessage, member.getAccount().getEmail());
             notificationDao.createEmailNotification(emailNotification);
             return emailNotification;
@@ -60,15 +62,17 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public SMSNotification sendSMSNotificationAboutOrderStatus(final OrderLog orderLog, final Member member) throws NotificationException, MemberNotFoundException {
-        if (notificationDao.isThisOrderLogExist(orderLog)) {
+        final var foundOrderLog = notificationDao.findOrderLogById(orderLog.getId());
+        final var foundOrder = notificationDao.findByOrderNumber(orderLog.getOrderNumber());
+        final var foundOrderList = notificationDao.findLogListByOrder(foundOrder.getOrderLog());
+        if (notificationDao.isThisOrderLogExist(foundOrderLog)) {
             throw new NotificationException("SMS-notification about order status can not be sent");
         }
-        if (notificationDao.isFoundMemberPhoneNumber(member.getAccount().getPhone())) {
-            final var foundOrder = notificationDao.findByOrderNumber(orderLog.getOrderNumber());
-            final var foundOrderList = notificationDao.findLogListByOrder(foundOrder);
+        if (notificationDao.isFoundMemberEmail(member.getAccount().getEmail())) {
             notificationDao.addOrderLog(foundOrderList.add(orderLog));
+            foundOrder.setStatus(orderLog.getStatus());
+            notificationDao.updateOrder(foundOrder);
             final String contextMessage= messageMaker(ORDER_MESSAGE, orderLog.getOrderNumber(), orderLog.getStatus().toString());
-            //final String contextMessage = "your order " + orderLog.getOrderNumber() + " has status " + orderLog.getStatus();
             final var smsNotification = new SMSNotification(LocalDateTime.now(), contextMessage, member.getAccount().getPhone());
             notificationDao.createSMSNotification(smsNotification);
             return smsNotification;
@@ -78,15 +82,17 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public EmailNotification sendEmailNotificationAboutOrderStatus(final OrderLog orderLog, final Member member) throws NotificationException, MemberNotFoundException {
-        if (notificationDao.isThisOrderLogExist(orderLog)) {
+        final var foundOrderLog = notificationDao.findOrderLogById(orderLog.getId());
+        final var foundOrder = notificationDao.findByOrderNumber(orderLog.getOrderNumber());
+        final var foundOrderList = notificationDao.findLogListByOrder(foundOrder.getOrderLog());
+        if (notificationDao.isThisOrderLogExist(foundOrderLog)) {
             throw new NotificationException("Email-notification about order status can not be sent");
         }
         if (notificationDao.isFoundMemberEmail(member.getAccount().getEmail())) {
-            final var foundOrder = notificationDao.findByOrderNumber(orderLog.getOrderNumber());
-            final var foundOrderList = notificationDao.findLogListByOrder(foundOrder);
             notificationDao.addOrderLog(foundOrderList.add(orderLog));
+            foundOrder.setStatus(orderLog.getStatus());
+            notificationDao.updateOrder(foundOrder);
             final String contextMessage= messageMaker(ORDER_MESSAGE, orderLog.getOrderNumber(), orderLog.getStatus().toString());
-            //final String contextMessage = "your order number " + orderLog.getOrderNumber() + " has changed status on " + orderLog.getStatus().toString();
             final var emailNotification = new EmailNotification(LocalDateTime.now(), contextMessage, member.getAccount().getEmail());
             notificationDao.createEmailNotification(emailNotification);
             return emailNotification;
@@ -94,7 +100,8 @@ public class NotificationServiceImpl implements NotificationService {
         throw new MemberNotFoundException("There is not found the member's email");
     }
 
+
     public String messageMaker(String messageBegin, String orderNumber, String status){
-        return new String(messageBegin+orderNumber+END_MESSAGE+status );
+        return messageBegin+orderNumber+END_MESSAGE+status;
     }
 }
