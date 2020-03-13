@@ -14,7 +14,7 @@ public class ShippingServiceImpl implements ShippingService {
     }
 
     @Override
-    public Address specifyShippingAddress(final Member member, final Address address) throws MemberNotFoundException, ShippingAddressNotFoundException {
+    public Address specifyShippingAddress(final Member member, final Address address)  {
         if (shippingDao.isFoundMemberID(member.getMemberID())) {
             final var shipmentAddress = member.getAccount().getShippingAddress();
             if (shippingDao.findShippingAddress(shipmentAddress)) {
