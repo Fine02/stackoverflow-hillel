@@ -19,11 +19,9 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class VoteQuestionService implements VoteService<Question> {
-    @Autowired
+
     private transient final QuestionRepository questionData;
-    @Autowired
     private transient final MemberRepository memberData;
-    @Autowired
     private transient final BadgeAwardService<Question> badgeAwardService;
     private static final int ADDED_REPUTATION = 5;
 

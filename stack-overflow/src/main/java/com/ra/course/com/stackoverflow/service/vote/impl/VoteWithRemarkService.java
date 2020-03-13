@@ -17,9 +17,8 @@ import java.util.Map;
 @AllArgsConstructor
 @Service
 public class VoteWithRemarkService {
-    @Autowired
+
     private transient final QuestionRepository questionData;
-    @Autowired
     private transient final MemberRepository memberData;
 
     public Question voteToClose(final Question question, final Member member, final QuestionClosingRemark remark) {

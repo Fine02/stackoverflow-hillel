@@ -14,7 +14,7 @@ import java.util.*;
 @AllArgsConstructor
 @Service
 public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
-    @Autowired
+
     private transient final MemberRepository memberRepository;
 
     private static final int SCR_FOR_STDNT_BDG = 1;

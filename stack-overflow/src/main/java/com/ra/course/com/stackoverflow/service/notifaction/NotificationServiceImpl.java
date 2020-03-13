@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Service
 public class NotificationServiceImpl implements NotificationService {
-    @Autowired
+
     private transient final MemberRepository memberData;
 
     @Override

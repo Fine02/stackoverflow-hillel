@@ -18,9 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class VoteCommentService implements VoteService<Comment> {
-    @Autowired
+
     private transient final CommentRepository commentData;
-    @Autowired
     private transient final MemberRepository memberData;
     private transient final static int ADDED_REPUTATION = 5;
 
