@@ -6,10 +6,12 @@ import com.ra.course.com.stackoverflow.entity.enums.Badge;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @AllArgsConstructor
+@Service
 public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
 
     private transient final MemberRepository memberRepository;
