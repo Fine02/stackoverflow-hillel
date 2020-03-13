@@ -14,8 +14,10 @@ import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
+@Service
 public class CommentServiceImpl implements CommentService {
 
     private final transient CommentRepository commentRepo;
