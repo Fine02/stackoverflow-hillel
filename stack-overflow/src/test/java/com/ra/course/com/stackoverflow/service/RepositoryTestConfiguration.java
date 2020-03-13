@@ -1,12 +1,12 @@
 package com.ra.course.com.stackoverflow.service;
 
 import com.ra.course.com.stackoverflow.repository.*;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import static org.mockito.Mockito.mock;
 
-@SpringBootTest
+@TestConfiguration
 public class RepositoryTestConfiguration {
 
     @Bean
