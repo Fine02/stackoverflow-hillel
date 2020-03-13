@@ -1,13 +1,7 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
-import com.ra.course.ams.airline.manag.system.entity.flight.CustomSchedule;
-import com.ra.course.ams.airline.manag.system.entity.flight.Flight;
-import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
-import com.ra.course.ams.airline.manag.system.entity.flight.WeeklySchedule;
-import com.ra.course.ams.airline.manag.system.entity.person.Person;
+import com.ra.course.ams.airline.manag.system.entity.flight.*;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
-import com.ra.course.ams.airline.manag.system.repository.flight.WeeklyScheduleRepository;
-import com.ra.course.ams.airline.manag.system.service.InformationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +9,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,9 +22,12 @@ public class InformationServiceImplTest {
     private InformationServiceImpl informationService;
 
     @Mock
-    private Repository<WeeklySchedule, String> weeklyScheduleRepo;
     private Repository<CustomSchedule, String> customScheduleRepo;
+    @Mock
+    private Repository<WeeklySchedule, String> weeklyScheduleRepo;
+    @Mock
     private Repository<FlightInstance, String> flightInstRepo;
+    @Mock
     private Repository<Flight, String> flightRepository;
 
     @BeforeEach
@@ -78,6 +79,115 @@ public class InformationServiceImplTest {
         Mockito.when(customScheduleRepo.getInstances())
                 .thenReturn(Collections.singleton(existedCustSched));
 
-        assertThat(informationService.checkFlightWeeklySchedule("1")).isEqualTo(existedCustSched);
+        assertThat(informationService.checkFlightCustomSchedule("1")).isEqualTo(existedCustSched);
+    }
+
+    @Test
+    public void whenFlightInstanceIsNullThenCheckAvailableSeatsThrowIllegalArgumentException() {
+
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                informationService.checkAvailableSeats(null));
+    }
+
+    @Test
+    public void whenFlightInstanceIsActualThenCheckAvailableSeatsReturnSeatsList() {
+
+//        Time time = new Time(1);
+//        FlightInstance flightInstance = new FlightInstance.Builder().setDepartureTime(time).build();
+//        Mockito.when(flightInstRepo.getInstances())
+//                .thenReturn(Collections.singleton(flightInstance));
+//
+//        assertThat(informationService.checkAvailableSeats(flightInstance)).isEqualTo(time);
+    }
+
+
+    @Test
+    public void whenFlightInstanceIsNullThenCheckDepartureTimeThrowIllegalArgumentException() {
+
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                informationService.checkDepartureTime(null));
+    }
+
+    @Test
+    public void whenFlightInstanceIsActualThenCheckDepartureTimeReturnFlight() {
+        Time time = new Time(1);
+        FlightInstance flightInstance = new FlightInstance.Builder().setDepartureTime(time).build();
+        Mockito.when(flightInstRepo.getInstances())
+                .thenReturn(Collections.singleton(flightInstance));
+
+        assertThat(informationService.checkDepartureTime(flightInstance)).isEqualTo(time);
+    }
+
+    @Test
+    public void whenFlightInstanceIsNullThenCheckArrivalTimeThrowIllegalArgumentException() {
+
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                informationService.checkArrivalTime(null));
+    }
+
+    @Test
+    public void whenFlightInstanceIsActualThenCheckArrivalTimeReturnFlight() {
+        Time time = new Time(1);
+        FlightInstance flightInstance = new FlightInstance.Builder().setArrivalTime(time).build();
+        Mockito.when(flightInstRepo.getInstances())
+                .thenReturn(Collections.singleton(flightInstance));
+
+        assertThat(informationService.checkArrivalTime(flightInstance)).isEqualTo(time);
+    }
+
+    @Test
+    public void whenDateIsNullThenSearchFlightByDateThrowIllegalArgumentException() {
+
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                informationService.searchFlightByDate(null));
+    }
+
+    @Test
+    public void whenDateIsActualThenSearchFlightByDateReturnListFlight() {
+        Date date = new Date();
+        Flight flight = new Flight.Builder().setDate(date).build();
+        List<Flight> flights = new ArrayList<>();
+        flights.add(flight);
+        Mockito.when(flightRepository.getInstances())
+                .thenReturn(Collections.singleton(flight));
+
+        assertThat(informationService.searchFlightByDate(date)).isEqualTo(flights);
+    }
+
+    @Test
+    public void whenAirportIsNullThenSearchFlightByDepartureAirportThrowIllegalArgumentException() {
+
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                informationService.searchFlightByDepartureAirport(null));
+    }
+
+    @Test
+    public void whenDepartureAirportIsActualThenSearchFlightByDepartureAirportReturnListFlight() {
+        Airport airport = new Airport();
+        Flight flight = new Flight.Builder().setArrival(airport).build();
+        List<Flight> flights = new ArrayList<>();
+        flights.add(flight);
+        Mockito.when(flightRepository.getInstances())
+                .thenReturn(Collections.singleton(flight));
+
+        assertThat(informationService.searchFlightByDepartureAirport(airport)).isEqualTo(flights);
+    }
+
+    @Test
+    public void whenAirportIsNullThenSearchFlightByArrivalAirportThrowIllegalArgumentException() {
+
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                informationService.searchFlightByArrivalAirport(null));
+    }
+
+    @Test
+    public void whenArrivalAirportIsActualThenSearchFlightByArrivalAirportReturnListFlight() {
+        Airport airport = new Airport();
+        Flight flight = new Flight.Builder().setDeparture(airport).build();
+        List<Flight> flights = new ArrayList<>();
+        flights.add(flight);
+        Mockito.when(flightRepository.getInstances()).thenReturn(Collections.singleton(flight));
+
+        assertThat(informationService.searchFlightByArrivalAirport(airport)).isEqualTo(flights);
     }
 }

@@ -1,12 +1,14 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.*;
+import com.ra.course.ams.airline.manag.system.exception.FlightNotExistException;
 import com.ra.course.ams.airline.manag.system.exception.ScheduleNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 import com.ra.course.ams.airline.manag.system.service.InformationService;
 
 import java.sql.Time;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InformationServiceImpl implements InformationService {
 
@@ -71,8 +73,8 @@ public class InformationServiceImpl implements InformationService {
         if (Optional.ofNullable(date).isPresent()) {
             final List<Flight> findedFlight = (List<Flight>) flightRepository.getInstances().stream()
                     .filter(i -> (date).equals(i.getDate()))
-                    .findAny()
-                    .orElse((Flight) Collections.EMPTY_LIST);
+                    .collect(Collectors.toList());
+
             return findedFlight;
         }
         throw new IllegalArgumentException("Date cannot be null, empty or blank");
@@ -84,8 +86,8 @@ public class InformationServiceImpl implements InformationService {
         if (Optional.ofNullable(airport).isPresent()) {
             final List<Flight> findedFlight = (List<Flight>) flightRepository.getInstances().stream()
                     .filter(i -> (airport).equals(i.getArrival()))
-                    .findAny()
-                    .orElse((Flight) Collections.EMPTY_LIST);
+                    .collect(Collectors.toList());
+
             return findedFlight;
         }
         throw new IllegalArgumentException("Airport cannot be null, empty or blank");
@@ -96,8 +98,8 @@ public class InformationServiceImpl implements InformationService {
         if (Optional.ofNullable(airport).isPresent()) {
             final List<Flight> findedFlight = (List<Flight>) flightRepository.getInstances().stream()
                     .filter(i -> (airport).equals(i.getDeparture()))
-                    .findAny()
-                    .orElse((Flight) Collections.EMPTY_LIST);
+                    .collect(Collectors.toList());
+
             return findedFlight;
         }
         throw new IllegalArgumentException("Airport cannot be null, empty or blank");
@@ -108,7 +110,7 @@ public class InformationServiceImpl implements InformationService {
             final FlightInstance findedFlightInst = flightInstRepo.getInstances().stream()
                     .filter(i -> (flightInstance).equals(i))
                     .findAny()
-                    .orElse((FlightInstance) Collections.EMPTY_LIST);
+                    .orElseThrow( () -> new FlightNotExistException("There are no neccessory Flight instanse : ("));
             return findedFlightInst;
         }
         throw new IllegalArgumentException("FlightInstance cannot be null, empty or blank");
