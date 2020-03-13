@@ -1,5 +1,4 @@
 package com.ra.course.aws.online.shopping.dao;
-
 import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 
@@ -8,5 +7,5 @@ public interface ShippingDao {
 
     boolean isFoundMemberID(Long id);
 
-    void addShippingAddress(Member address);
+    void updateShippingAddress(Member address);
 }

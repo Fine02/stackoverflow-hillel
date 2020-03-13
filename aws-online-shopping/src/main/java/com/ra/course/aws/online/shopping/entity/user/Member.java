@@ -1,7 +1,5 @@
 package com.ra.course.aws.online.shopping.entity.user;
 
-import com.ra.course.aws.online.shopping.entity.ShoppingCart;
-import com.ra.course.aws.online.shopping.entity.order.Order;
 
 public class Member extends Customer {
     private Account account;
@@ -12,6 +10,11 @@ public class Member extends Customer {
 
     public Member(Account account) {
         this.account = account;
+    }
+
+    public Member(Account account, long memberID) {
+        this.account = account;
+        this.memberID = memberID;
     }
 
 

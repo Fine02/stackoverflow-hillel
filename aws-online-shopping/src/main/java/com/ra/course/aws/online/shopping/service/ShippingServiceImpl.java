@@ -21,7 +21,7 @@ public class ShippingServiceImpl implements ShippingService {
                 return shipmentAddress;
             } else {
                 member.getAccount().setShippingAddress(address);
-                shippingDao.addShippingAddress(member);
+                shippingDao.updateShippingAddress(member);
             }
             throw new ShippingAddressNotFoundException("There is not found shipping address");
         }

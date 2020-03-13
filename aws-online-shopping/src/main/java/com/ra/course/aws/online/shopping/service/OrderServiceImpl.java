@@ -17,7 +17,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order cancelOrder(final Order order, final Member member) throws MemberNotFoundException, OrderNotFoundException {
+    public Order cancelOrder(final Order order, final Member member) {
         if ( orderDao.isFoundMemberID(member.getMemberID())){
             final var  foundOrder = orderDao.findByOrderNumber(order.getOrderNumber());
             if (foundOrder.getOrderDate().isBefore(LocalDateTime.now())) {

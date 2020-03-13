@@ -17,24 +17,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ShippingServiceImplTest {
     private ShippingServiceImpl shippingService;
     private ShippingDao shippingAddressDao = mock(ShippingDao.class);
-    private final Address ADDRESS_IN_DB = new Address("Mira", "Kiyv", "Kyiv", "04114", "Ukraine");
+    private Address ADDRESS_IN_DB ;
     private final Long MEMBER_ID_IN_DB = 10L;
-    private Exception exception;
 
     @BeforeEach
     public void before() {
         shippingService = new ShippingServiceImpl(shippingAddressDao);
+        ADDRESS_IN_DB=new Address("Mira", "Kiyv", "Kyiv", "04114", "Ukraine");
     }
 
     @Test
-    public void whenMemberShouldSpecifyShippingAddress() throws MemberNotFoundException, ShippingAddressNotFoundException {
+    public void whenMemberShouldSpecifyShippingAddress()  {
         var accountInDB = mockAccount(ADDRESS_IN_DB);
         var memberInDB = mockMember(MEMBER_ID_IN_DB, accountInDB);
         var shipmentAddress = memberInDB.getAccount().getShippingAddress();
@@ -47,35 +46,35 @@ public class ShippingServiceImplTest {
     }
 
     @Test
-    public void shouldThrowMemberNotFoundException() throws ShippingAddressNotFoundException {
+    public void shouldThrowMemberNotFoundException()  {
         var accountInDB = mockAccount(ADDRESS_IN_DB);
         var memberInDB = mockMember(MEMBER_ID_IN_DB, accountInDB);
         var shipmentAddress = memberInDB.getAccount().getShippingAddress();
         when(shippingAddressDao.isFoundMemberID(memberInDB.getMemberID())).thenReturn(false);
         when(shippingAddressDao.findShippingAddress(shipmentAddress)).thenReturn(true);
-        try {
-            shippingService.specifyShippingAddress(memberInDB, ADDRESS_IN_DB);
-        } catch (MemberNotFoundException e) {
-            exception = e;
-        }
-        assertTrue(exception instanceof MemberNotFoundException);
-        assertEquals("There is not found the Member by this ID", exception.getMessage());
+        Throwable exception = Assertions.assertThrows(MemberNotFoundException.class, () -> {
+            shippingService.specifyShippingAddress(memberInDB, ADDRESS_IN_DB);;;
+        });
+
+        assertEquals(exception.getMessage(), "There is not found the Member by this ID");
+        assertEquals(exception.getClass(), MemberNotFoundException.class);
     }
 
     @Test
-    public void shouldThrowShippingAddressNotFoundException() throws MemberNotFoundException {
+    public void shouldThrowShippingAddressNotFoundException() {
         var accountInDB = mockAccount(ADDRESS_IN_DB);
         var memberInDB = mockMember(MEMBER_ID_IN_DB, accountInDB);
         var shipmentAddress = memberInDB.getAccount().getShippingAddress();
         when(shippingAddressDao.isFoundMemberID(memberInDB.getMemberID())).thenReturn(true);
         when(shippingAddressDao.findShippingAddress(shipmentAddress)).thenReturn(false);
-        try {
+
+        Throwable exception = Assertions.assertThrows(ShippingAddressNotFoundException.class, () -> {
             shippingService.specifyShippingAddress(memberInDB, ADDRESS_IN_DB);
-        } catch (ShippingAddressNotFoundException e) {
-            exception = e;
-        }
-        assertTrue(exception instanceof ShippingAddressNotFoundException);
-        assertEquals("There is not found shipping address", exception.getMessage());
+        });
+
+        assertEquals(exception.getMessage(), "There is not found shipping address");
+        assertEquals(exception.getClass(), ShippingAddressNotFoundException.class);
+
     }
 
     private Member mockMember(long id, Account account) {
