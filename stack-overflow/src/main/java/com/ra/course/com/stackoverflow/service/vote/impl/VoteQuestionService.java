@@ -11,6 +11,7 @@ import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import com.ra.course.com.stackoverflow.service.system.BadgeAwardService;
 import com.ra.course.com.stackoverflow.service.vote.VoteService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +19,11 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class VoteQuestionService implements VoteService<Question> {
-
+    @Autowired
     private transient final QuestionRepository questionData;
+    @Autowired
     private transient final MemberRepository memberData;
+    @Autowired
     private transient final BadgeAwardService<Question> badgeAwardService;
     private static final int ADDED_REPUTATION = 5;
 

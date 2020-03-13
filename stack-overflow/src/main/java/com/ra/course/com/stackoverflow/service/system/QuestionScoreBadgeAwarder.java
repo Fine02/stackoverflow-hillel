@@ -6,6 +6,7 @@ import com.ra.course.com.stackoverflow.entity.enums.Badge;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -13,7 +14,7 @@ import java.util.*;
 @AllArgsConstructor
 @Service
 public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
-
+    @Autowired
     private transient final MemberRepository memberRepository;
 
     private static final int SCR_FOR_STDNT_BDG = 1;

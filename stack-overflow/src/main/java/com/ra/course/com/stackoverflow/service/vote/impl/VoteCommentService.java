@@ -10,6 +10,7 @@ import com.ra.course.com.stackoverflow.repository.CommentRepository;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import com.ra.course.com.stackoverflow.service.vote.VoteService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +18,9 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class VoteCommentService implements VoteService<Comment> {
-
+    @Autowired
     private transient final CommentRepository commentData;
+    @Autowired
     private transient final MemberRepository memberData;
     private transient final static int ADDED_REPUTATION = 5;
 
