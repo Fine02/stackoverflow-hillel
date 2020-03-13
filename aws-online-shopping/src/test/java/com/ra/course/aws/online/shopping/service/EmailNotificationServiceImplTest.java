@@ -15,7 +15,6 @@ import com.ra.course.aws.online.shopping.entity.shipment.ShipmentStatus;
 import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.entity.user.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.user.Member;
-
 import com.ra.course.aws.online.shopping.exceptions.MemberNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.NotificationException;
 import org.junit.jupiter.api.Assertions;
@@ -23,30 +22,29 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
-public class NotificationServiceImplTest {
-    private NotificationServiceImpl notificationService;
+public class EmailNotificationServiceImplTest {
+    private EmailNotificationServiceImpl notificationService;
     private NotificationDao notificationDao = mock(NotificationDao.class);
     private OrderDao orderDao = mock(OrderDao.class);
     private ShippingDao shippingDao = mock(ShippingDao.class);
     private Address ADDRESS_IN_DB;
-    private  Member MEMBER = mockMember(mockAccount());
+    private Member MEMBER = mockMember(mockAccount());
 
-    private  ShipmentLog SHIPMENT_LOG = mockShipmentLog();
-    private  List <ShipmentLog> SHIPMENT_LOG_LIST = mockListOfShipmentLog(SHIPMENT_LOG);
-    private  Shipment SHIPMENT =mockShipment();
+    private ShipmentLog SHIPMENT_LOG = mockShipmentLog();
+    private List<ShipmentLog> SHIPMENT_LOG_LIST = mockListOfShipmentLog(SHIPMENT_LOG);
+    private Shipment SHIPMENT =mockShipment();
 
 
-    private  OrderLog ORDER_LOG = mockOrderLog();
+    private OrderLog ORDER_LOG = mockOrderLog();
     private  List<OrderLog> ORDER_LOG_LIST = mockOrderLogList(ORDER_LOG);
-    private  Order ORDER = mockOrder();
+    private Order ORDER = mockOrder();
 
     private  String EXPECTED_MESSAGE_ABOUT_ORDER_STATUS ="your order number 888 has changed status on PENDING";
     private  String EXPECTED_MESSAGE_ABOUT_SHIPMENT_STATUS ="your shipment number 777 has changed status on SHIPPED";
@@ -54,7 +52,7 @@ public class NotificationServiceImplTest {
     @BeforeEach
     public void before() {
         ADDRESS_IN_DB=new Address("Mira", "Kiyv", "Kyiv", "04114", "Ukraine");
-        notificationService = new NotificationServiceImpl(notificationDao, orderDao, shippingDao);
+        notificationService = new EmailNotificationServiceImpl(notificationDao, orderDao, shippingDao);
 
         when(orderDao.findOrderLogById(ORDER_LOG.getId())).thenReturn(ORDER_LOG);
         when(orderDao.findByOrderNumber(ORDER_LOG.getOrderNumber())).thenReturn(ORDER);
@@ -63,20 +61,6 @@ public class NotificationServiceImplTest {
         when(shippingDao.findShipmentLogById(SHIPMENT_LOG.getId())).thenReturn(SHIPMENT_LOG);
         when(shippingDao.findByShipmentNumber(SHIPMENT_LOG.getShipmentNumber())).thenReturn(SHIPMENT);
         when(shippingDao.findLogListByShipment(SHIPMENT.getShipmentLogs())).thenReturn(SHIPMENT_LOG_LIST);
-    }
-
-    @Test
-    public void whenSMSNotificationAboutShipmentStatusWasNotSentThanThrowNotificationException()  {
-
-        when(shippingDao.isThisShipmentLogExist(SHIPMENT_LOG)).thenReturn(true);
-
-        Throwable exception = Assertions.assertThrows(NotificationException.class, () -> {
-            notificationService.sendSMSNotificationAboutShipmentStatus(SHIPMENT, SHIPMENT_LOG, MEMBER);
-        });
-
-        assertEquals(exception.getMessage(), "SMS-notification about shipment status can not be sent");
-        assertEquals(exception.getClass(), NotificationException.class);
-
     }
 
     @Test
@@ -104,32 +88,6 @@ public class NotificationServiceImplTest {
     }
 
     @Test
-    public void whenSMSNotificationAboutOrderStatusWasNotSentThanThrowNotificationException()  {
-        when(orderDao.isThisOrderLogExist(ORDER_LOG)).thenReturn(true);
-
-        Throwable exception = Assertions.assertThrows(NotificationException.class, () -> {
-            notificationService.sendSMSNotificationAboutOrderStatus(ORDER, ORDER_LOG, MEMBER);
-        });
-
-        assertEquals(exception.getMessage(), "SMS-notification about order status can not be sent");
-        assertEquals(exception.getClass(), NotificationException.class);
-    }
-
-    @Test
-    public void whenNotFoundPhoneOfMemberThanSMSNotificationAboutShipmentStatusWillNotBeSentThanThrowMemberNotFoundException() throws NotificationException {
-        when(shippingDao.isThisShipmentLogExist(SHIPMENT_LOG)).thenReturn(false);
-        when(notificationDao.isFoundMemberEmail(MEMBER.getAccount().getEmail())).thenReturn(false);
-
-        Throwable exception = Assertions.assertThrows(MemberNotFoundException.class, () -> {
-            notificationService.sendSMSNotificationAboutShipmentStatus(SHIPMENT,SHIPMENT_LOG, MEMBER);
-        });
-
-        assertEquals(exception.getMessage(), "There is not found the phone number");
-        assertEquals(exception.getClass(), MemberNotFoundException.class);
-
-    }
-
-    @Test
     public void whenNotFoundEmailOfMemberThanEmailNotificationAboutShipmentStatusWillNotBeSentThanThrowMemberNotFoundException() throws NotificationException {
         when(shippingDao.isThisShipmentLogExist(SHIPMENT_LOG)).thenReturn(false);
         when(notificationDao.isFoundMemberEmail(MEMBER.getAccount().getEmail())).thenReturn(false);
@@ -141,7 +99,6 @@ public class NotificationServiceImplTest {
         assertEquals(exception.getMessage(), "There is not found the email");
         assertEquals(exception.getClass(), MemberNotFoundException.class);
     }
-
 
     @Test
     public void whenNotFoundEmailOfMemberThanEmailNotificationAboutOrderStatusWillNotBeSentThanThrowMemberNotFoundException() {
@@ -157,33 +114,6 @@ public class NotificationServiceImplTest {
     }
 
     @Test
-    public void whenNotFoundPhoneNumberOfMemberThanSMSNotificationAboutOrderStatusWillNotBeSentThanThrowMemberNotFoundException(){
-        when(orderDao.isThisOrderLogExist(ORDER_LOG)).thenReturn(false);
-        when(notificationDao.isFoundMemberEmail(MEMBER.getAccount().getEmail())).thenReturn(false);
-
-        Throwable exception = Assertions.assertThrows(MemberNotFoundException.class, () -> {
-            notificationService.sendSMSNotificationAboutOrderStatus(ORDER, ORDER_LOG, MEMBER);
-        });
-
-        assertEquals(exception.getMessage(), "There is not found the member's phone number");
-        assertEquals(exception.getClass(), MemberNotFoundException.class);
-    }
-
-
-    @Test
-    public void whenShipmentStatusWasChangedSendSMSNotification() {
-        when(shippingDao.isThisShipmentLogExist(SHIPMENT_LOG)).thenReturn(false);
-        when(notificationDao.isFoundMemberEmail(MEMBER.getAccount().getEmail())).thenReturn(true);
-
-        var resultOrder = notificationService.sendSMSNotificationAboutShipmentStatus(SHIPMENT, SHIPMENT_LOG, MEMBER);
-
-        assertEquals(EXPECTED_MESSAGE_ABOUT_SHIPMENT_STATUS, resultOrder.getContent());
-        verify(shippingDao).addShipmentLog(SHIPMENT_LOG_LIST.add(SHIPMENT_LOG));
-        verify(shippingDao).updateShipment(SHIPMENT);
-    }
-
-
-    @Test
     public void whenShipmentStatusWasChangedSendEmailNotification()  {
         when(shippingDao.isThisShipmentLogExist(SHIPMENT_LOG)).thenReturn(false);
         when(notificationDao.isFoundMemberEmail(MEMBER.getAccount().getEmail())).thenReturn(true);
@@ -194,20 +124,6 @@ public class NotificationServiceImplTest {
         verify(shippingDao).addShipmentLog(SHIPMENT_LOG_LIST.add(SHIPMENT_LOG));
         verify(shippingDao).updateShipment(SHIPMENT);
     }
-
-    @Test
-    public void whenOrderStatusWasChangedSendSMSNotification()  {
-
-        when(orderDao.isThisOrderLogExist(ORDER_LOG)).thenReturn(false);
-        when(notificationDao.isFoundMemberEmail(MEMBER.getAccount().getEmail())).thenReturn(true);
-
-        var resultOrder = notificationService.sendSMSNotificationAboutOrderStatus(ORDER, ORDER_LOG, MEMBER);
-
-        assertEquals(EXPECTED_MESSAGE_ABOUT_ORDER_STATUS, resultOrder.getContent());
-        verify(orderDao).addOrderLog(ORDER.getOrderLog().add(ORDER_LOG));
-        verify(orderDao).updateOrder(ORDER);
-    }
-
 
     @Test
     public void whenOrderStatusWasChangedSendEmailNotification()  {
@@ -273,5 +189,4 @@ public class NotificationServiceImplTest {
         Member member = new Member(account);
         return member;
     }
-
 }
