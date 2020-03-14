@@ -1,36 +1,28 @@
 package com.ra.course.com.stackoverflow;
 
-import com.ra.course.com.stackoverflow.repository.MemberRepository;
-import com.ra.course.com.stackoverflow.repository.QuestionRepository;
+import com.ra.course.com.stackoverflow.configuration.SpringBootContextTestConfiguration;
 import com.ra.course.com.stackoverflow.service.member.MemberServiceImpl;
 import com.ra.course.com.stackoverflow.service.system.QuestionScoreBadgeAwarder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
-public class ServiceContextTest {
+@SpringBootTest(classes = SpringBootContextTestConfiguration.class)
+public class SpringBootContextTest {
 
     @Autowired
     ApplicationContext context;
 
-    @MockBean
-    QuestionRepository mockedQuestionRepository;
-
-    @MockBean
-    MemberRepository mockedMemberRepository;
-
     @Test
-    public void whenMemberServiceImplAddedToContextThenReturnItsBean() {
+    public void ifMemberServiceImplAddedToContextThenReturnItsBean() {
         assertEquals(MemberServiceImpl.class, context.getBean(MemberServiceImpl.class).getClass());
     }
 
     @Test
-    public void whenQuestionScoreBadgeAwarderAddedToContextThenReturnItsBean() {
+    public void ifQuestionScoreBadgeAwarderAddedToContextThenReturnItsBean() {
         assertEquals(QuestionScoreBadgeAwarder.class, context.getBean(QuestionScoreBadgeAwarder.class).getClass());
     }
 }
