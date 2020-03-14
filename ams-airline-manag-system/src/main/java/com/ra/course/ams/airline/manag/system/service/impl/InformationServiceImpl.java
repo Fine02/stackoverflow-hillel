@@ -15,19 +15,19 @@ public class InformationServiceImpl implements InformationService {
     public static String flightNumerErrMes = "FlightNumber for search cannot be null, empty or blank";
     public static String airportErMes = "Airport cannot be null, empty or blank";
 
-    transient private final Repository<WeeklySchedule, String> weeklySchedRepo;
-    transient private final Repository<CustomSchedule, String> customSchedRepo;
-    transient private final Repository<FlightInstance, String> flightInstRepo;
-    transient private final Repository<Flight, String> flightRepository;
+     transient private Repository<WeeklySchedule, String> weeklySchedRepo;
+     transient private Repository<CustomSchedule, String> customSchedRepo;
+     transient private Repository<FlightInstance, String> flightInstRepo;
+     transient private Repository<Flight, String> flightRepository;
 
-    public InformationServiceImpl(final Repository<WeeklySchedule, String> weeklySchedRepo,
-                                  final Repository<CustomSchedule, String> customSchedRepo,
-                                  final Repository<FlightInstance, String> flightInstRepo,
-                                  final Repository<Flight, String> flightRepository) {
-        this.weeklySchedRepo = weeklySchedRepo;
-        this.customSchedRepo = customSchedRepo;
+    public InformationServiceImpl(final Repository<FlightInstance, String> flightInstRepo, final Repository<Flight, String> flightRepository, final Repository<WeeklySchedule, String> weeklySchedRepo) {
         this.flightInstRepo = flightInstRepo;
         this.flightRepository = flightRepository;
+        this.weeklySchedRepo = weeklySchedRepo;
+    }
+
+    public InformationServiceImpl(final Repository<CustomSchedule, String> customSchedRepo) {
+        this.customSchedRepo = customSchedRepo;
     }
 
     @Override

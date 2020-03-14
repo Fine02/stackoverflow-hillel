@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class InformationServiceImplTest {
 
     private InformationServiceImpl informationService;
+    private InformationServiceImpl informationServicC;
 
     @Mock
     private Repository<CustomSchedule, String> customScheduleRepo;
@@ -34,7 +35,7 @@ public class InformationServiceImplTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        informationService = new InformationServiceImpl(weeklyScheduleRepo, customScheduleRepo, flightInstRepo, flightRepository);
+        informationService = new InformationServiceImpl(flightInstRepo, flightRepository, weeklyScheduleRepo);
     }
 
     @Test
@@ -76,21 +77,23 @@ public class InformationServiceImplTest {
 
     @Test
     public void whenFlightNumberIsActualButNoSheduleinDBCheckFlightCustomScheduleThrowIllegalArgumentException() {
+        informationServicC = new InformationServiceImpl(customScheduleRepo);
         CustomSchedule existedCustSched = new CustomSchedule.Builder().setId("2").build();
         Mockito.when(customScheduleRepo.getInstances())
                 .thenReturn(Collections.singleton(existedCustSched));
 
         Assertions.assertThrows(ScheduleNotExistException.class, () ->
-                informationService.checkFlightCustomSchedule("1"));
+                informationServicC.checkFlightCustomSchedule("1"));
     }
 
     @Test
     public void whenFlightNumberIsActualThenCheckFlightCustomScheduleReturnWeeklySchedule() {
+        informationServicC = new InformationServiceImpl(customScheduleRepo);
         CustomSchedule existedCustSched = new CustomSchedule.Builder().setId("1").build();
         Mockito.when(customScheduleRepo.getInstances())
                 .thenReturn(Collections.singleton(existedCustSched));
 
-        assertThat(informationService.checkFlightCustomSchedule("1")).isEqualTo(existedCustSched);
+        assertThat(informationServicC.checkFlightCustomSchedule("1")).isEqualTo(existedCustSched);
     }
 
     @Test
@@ -103,7 +106,7 @@ public class InformationServiceImplTest {
     @Test
     public void whenFlightInstanceIsActualThenCheckAvailableSeatsReturnSeatsList() {
         FlightSeat flightSeat = new FlightSeat.Builder().setReservationNumber("1").build();
-        List <FlightSeat> flightSeatList = new ArrayList<FlightSeat>();
+        List <FlightSeat> flightSeatList = new ArrayList<>();
         flightSeatList.add(flightSeat);
         FlightInstance flightInstance = new FlightInstance.Builder().setSeats(flightSeatList).build();
         Mockito.when(flightInstRepo.getInstances())
