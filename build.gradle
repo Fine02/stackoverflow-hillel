@@ -61,9 +61,6 @@ project(':stack-overflow-integration-test') {
     bootJar {
         enabled = false
     }
-    jar {
-        enabled = true
-    }
 }
 
 wrapper {
