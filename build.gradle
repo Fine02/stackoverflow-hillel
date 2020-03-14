@@ -48,10 +48,18 @@ project(':aws-online-shopping') {
 
 }
 
-project (':stack-overflow') {
+project(':stack-overflow') {
     dependencies {
         compileOnly utils.lombok
         annotationProcessor utils.lombok
+    }
+}
+project(':stack-overflow-integration-test') {
+    dependencies {
+        testCompile project(':stack-overflow').sourceSets.main.output
+    }
+    bootJar {
+        enabled = false
     }
 }
 
