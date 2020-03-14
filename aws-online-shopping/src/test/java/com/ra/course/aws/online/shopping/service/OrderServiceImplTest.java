@@ -33,6 +33,9 @@ public class OrderServiceImplTest {
         searchMember =mockMember(MEMBER_ID_IN_DB);
     }
 
+
+
+
     @Test()
     public void shouldThrowMemberNotFoundException() {
         var searchInDbMemberID = mockMember(5L);

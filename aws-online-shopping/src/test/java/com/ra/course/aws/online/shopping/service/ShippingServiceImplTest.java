@@ -2,8 +2,12 @@ package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.dao.ShippingDao;
 import com.ra.course.aws.online.shopping.entity.Address;
+import com.ra.course.aws.online.shopping.entity.order.OrderStatus;
 import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
+import com.ra.course.aws.online.shopping.entity.shipment.Shipment;
+import com.ra.course.aws.online.shopping.entity.shipment.ShipmentLog;
+import com.ra.course.aws.online.shopping.entity.shipment.ShipmentStatus;
 import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.entity.user.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.user.Member;
@@ -13,36 +17,59 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ShippingServiceImplTest {
     private ShippingServiceImpl shippingService;
-    private ShippingDao shippingAddressDao = mock(ShippingDao.class);
+    private ShippingDao shippingDao = mock(ShippingDao.class);
     private Address ADDRESS_IN_DB ;
     private final Long MEMBER_ID_IN_DB = 10L;
     private Account accountInDB;
     private Member memberInDB ;
     private Address shipmentAddress;
+    private String shippingNumber ="101010";
+
+    private ShipmentLog SHIPMENT_LOG = mockShipmentLog();
+    private List<ShipmentLog> SHIPMENT_LOG_LIST = mockListOfShipmentLog(SHIPMENT_LOG);
+    private Shipment SHIPMENT =mockShipment();
+
 
     @BeforeEach
     public void before() {
-        shippingService = new ShippingServiceImpl(shippingAddressDao);
+        shippingService = new ShippingServiceImpl(shippingDao);
         ADDRESS_IN_DB=new Address("Mira", "Kiyv", "Kyiv", "04114", "Ukraine");
         accountInDB = mockAccount(ADDRESS_IN_DB);
         memberInDB = mockMember(MEMBER_ID_IN_DB, accountInDB);
         shipmentAddress = memberInDB.getAccount().getShippingAddress();
-        when (shippingAddressDao.findThatShippingAddress(memberInDB.getAccount().getShippingAddress())).thenReturn(ADDRESS_IN_DB);
+        when (shippingDao.findThatShippingAddress(memberInDB.getAccount().getShippingAddress())).thenReturn(ADDRESS_IN_DB);
+    }
+
+    @Test
+    public void shouldGetShippingTrack(){
+     when(shippingDao.findByShipmentNumber(shippingNumber)).thenReturn(SHIPMENT);
+     List<ShipmentLog> expectedResult = shippingDao.findLogListByShipment(SHIPMENT.getShipmentLogs());
+
+     List<ShipmentLog> actualResponse = shippingService.getShipmentTrack(shippingNumber);
+
+     assertEquals(actualResponse, expectedResult);
+    }
+
+    @Test
+
+    public void shouldReturnEmptyListIfShippingNumberNotFound() {
+        assertEquals(shippingService.getShipmentTrack(null), Collections.emptyList());
     }
 
     @Test
     public void whenMemberShouldSpecifyShippingAddress()  {
-        when(shippingAddressDao.isFoundMemberID(memberInDB.getMemberID())).thenReturn(true);
-        when(shippingAddressDao.findShippingAddress(shipmentAddress)).thenReturn(true);
+        when(shippingDao.isFoundMemberID(memberInDB.getMemberID())).thenReturn(true);
+        when(shippingDao.findShippingAddress(shipmentAddress)).thenReturn(true);
 
         var resultOfSpecifyShippingAddress = shippingService.specifyShippingAddress(memberInDB, ADDRESS_IN_DB);
         Assertions.assertSame(resultOfSpecifyShippingAddress, shipmentAddress);
@@ -54,8 +81,8 @@ public class ShippingServiceImplTest {
     @Test
     public void shouldThrowMemberNotFoundException()  {
 
-        when(shippingAddressDao.isFoundMemberID(memberInDB.getMemberID())).thenReturn(false);
-        when(shippingAddressDao.findShippingAddress(shipmentAddress)).thenReturn(true);
+        when(shippingDao.isFoundMemberID(memberInDB.getMemberID())).thenReturn(false);
+        when(shippingDao.findShippingAddress(shipmentAddress)).thenReturn(true);
 
         Throwable exception = Assertions.assertThrows(MemberNotFoundException.class, () -> {
             shippingService.specifyShippingAddress(memberInDB, ADDRESS_IN_DB);;;
@@ -68,8 +95,8 @@ public class ShippingServiceImplTest {
     @Test
     public void shouldThrowShippingAddressNotFoundException() {
 
-        when(shippingAddressDao.isFoundMemberID(memberInDB.getMemberID())).thenReturn(true);
-        when(shippingAddressDao.findShippingAddress(shipmentAddress)).thenReturn(false);
+        when(shippingDao.isFoundMemberID(memberInDB.getMemberID())).thenReturn(true);
+        when(shippingDao.findShippingAddress(shipmentAddress)).thenReturn(false);
 
         Throwable exception = Assertions.assertThrows(ShippingAddressNotFoundException.class, () -> {
             shippingService.specifyShippingAddress(memberInDB, ADDRESS_IN_DB);
@@ -104,5 +131,19 @@ public class ShippingServiceImplTest {
                 electronicBankTransfers
         );
         return account;
+    }
+
+    private ShipmentLog mockShipmentLog() {
+        return new ShipmentLog("101010", ShipmentStatus.SHIPPED, LocalDateTime.now());
+    }
+
+    private List<ShipmentLog> mockListOfShipmentLog(ShipmentLog shipmentLog) {
+        List<ShipmentLog> shipmentLogs = new ArrayList<>();
+        shipmentLogs.add(shipmentLog);
+        return shipmentLogs;
+    }
+
+    private Shipment mockShipment (){
+        return new Shipment("101010", LocalDateTime.now(), LocalDateTime.now().minusDays(2),"byAir", SHIPMENT_LOG_LIST);
     }
 }

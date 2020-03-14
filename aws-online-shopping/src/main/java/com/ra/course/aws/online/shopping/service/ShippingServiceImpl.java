@@ -2,9 +2,13 @@ package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.dao.ShippingDao;
 import com.ra.course.aws.online.shopping.entity.Address;
+import com.ra.course.aws.online.shopping.entity.shipment.ShipmentLog;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.ShippingAddressNotFoundException;
+
+import java.util.Collections;
+import java.util.List;
 
 public class ShippingServiceImpl implements ShippingService {
     private transient final ShippingDao shippingDao;
@@ -14,7 +18,7 @@ public class ShippingServiceImpl implements ShippingService {
     }
 
     @Override
-    public Address specifyShippingAddress(final Member member, final Address address)  {
+    public Address specifyShippingAddress(final Member member, final Address address) {
         if (shippingDao.isFoundMemberID(member.getMemberID())) {
             final var shipmentAddress = member.getAccount().getShippingAddress();
             if (shippingDao.findShippingAddress(shipmentAddress)) {
@@ -27,4 +31,16 @@ public class ShippingServiceImpl implements ShippingService {
         }
         throw new MemberNotFoundException("There is not found the Member by this ID");
     }
+
+    @Override
+    public List<ShipmentLog> getShipmentTrack(final String shipmentNumber) {
+
+        final var foundShipment = shippingDao.findByShipmentNumber(shipmentNumber);
+        if (foundShipment != null) {
+            return shippingDao.findLogListByShipment(foundShipment.getShipmentLogs());
+        }
+        return Collections.emptyList();
+    }
 }
+
+
