@@ -1,6 +1,7 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.*;
+import com.ra.course.ams.airline.manag.system.entity.person.Person;
 import com.ra.course.ams.airline.manag.system.exception.ScheduleNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 import org.junit.jupiter.api.Assertions;
@@ -21,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class InformationServiceImplTest {
 
     private InformationServiceImpl informationService;
-    private InformationServiceImpl informationServicC;
 
     @Mock
     private Repository<CustomSchedule, String> customScheduleRepo;
@@ -35,7 +35,9 @@ public class InformationServiceImplTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        informationService = new InformationServiceImpl(flightInstRepo, flightRepository, weeklyScheduleRepo);
+        informationService = new InformationServiceImpl();
+        informationService.setFligRepos(flightInstRepo, flightRepository);
+        informationService.setShedRepos(weeklyScheduleRepo, customScheduleRepo);
     }
 
     @Test
@@ -61,7 +63,7 @@ public class InformationServiceImplTest {
         assertThat(informationService.checkFlightWeeklySchedule("1")).isEqualTo(existedWeeklySchedule);
     }
 
-    @Test
+        @Test
     public void whenFlightNumberIsNullCheckFlightCustomScheduleThrowIllegalArgumentException() {
 
         Assertions.assertThrows(IllegalArgumentException.class, () ->
@@ -77,23 +79,23 @@ public class InformationServiceImplTest {
 
     @Test
     public void whenFlightNumberIsActualButNoSheduleinDBCheckFlightCustomScheduleThrowIllegalArgumentException() {
-        informationServicC = new InformationServiceImpl(customScheduleRepo);
+       // informationServicC = new InformationServiceImpl(customScheduleRepo);
         CustomSchedule existedCustSched = new CustomSchedule.Builder().setId("2").build();
         Mockito.when(customScheduleRepo.getInstances())
                 .thenReturn(Collections.singleton(existedCustSched));
 
         Assertions.assertThrows(ScheduleNotExistException.class, () ->
-                informationServicC.checkFlightCustomSchedule("1"));
+                informationService.checkFlightCustomSchedule("1"));
     }
 
     @Test
     public void whenFlightNumberIsActualThenCheckFlightCustomScheduleReturnWeeklySchedule() {
-        informationServicC = new InformationServiceImpl(customScheduleRepo);
+     //   informationServicC = new InformationServiceImpl(customScheduleRepo);
         CustomSchedule existedCustSched = new CustomSchedule.Builder().setId("1").build();
         Mockito.when(customScheduleRepo.getInstances())
                 .thenReturn(Collections.singleton(existedCustSched));
 
-        assertThat(informationServicC.checkFlightCustomSchedule("1")).isEqualTo(existedCustSched);
+        assertThat(informationService.checkFlightCustomSchedule("1")).isEqualTo(existedCustSched);
     }
 
     @Test

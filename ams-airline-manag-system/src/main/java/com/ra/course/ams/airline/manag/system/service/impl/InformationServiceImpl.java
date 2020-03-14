@@ -12,23 +12,26 @@ import java.util.stream.Collectors;
 
 public class InformationServiceImpl implements InformationService {
 
+    transient private Repository<WeeklySchedule, String> weeklySchedRepo;
+    transient private Repository<CustomSchedule, String> customSchedRepo;
+    transient private Repository<FlightInstance, String> flightInstRepo;
+    transient private Repository<Flight, String> flightRepository;
+
     public static String flightNumerErrMes = "FlightNumber for search cannot be null, empty or blank";
     public static String airportErMes = "Airport cannot be null, empty or blank";
 
-     transient private Repository<WeeklySchedule, String> weeklySchedRepo;
-     transient private Repository<CustomSchedule, String> customSchedRepo;
-     transient private Repository<FlightInstance, String> flightInstRepo;
-     transient private Repository<Flight, String> flightRepository;
 
-    public InformationServiceImpl(final Repository<FlightInstance, String> flightInstRepo, final Repository<Flight, String> flightRepository, final Repository<WeeklySchedule, String> weeklySchedRepo) {
-        this.flightInstRepo = flightInstRepo;
-        this.flightRepository = flightRepository;
-        this.weeklySchedRepo = weeklySchedRepo;
-    }
-
-    public InformationServiceImpl(final Repository<CustomSchedule, String> customSchedRepo) {
-        this.customSchedRepo = customSchedRepo;
-    }
+//    public InformationServiceImpl(
+//            final Repository<FlightInstance, String> flightInstRepo, final Repository<Flight, String> flightRepository,
+//            final Repository<WeeklySchedule, String> weeklySchedRepo) {
+//        this.flightInstRepo = flightInstRepo;
+//        this.flightRepository = flightRepository;
+//        this.weeklySchedRepo = weeklySchedRepo;
+//    }
+//
+////    public InformationServiceImpl(final Repository<CustomSchedule, String> customSchedRepo) {
+////        this.customSchedRepo = customSchedRepo;
+////    }
 
     @Override
     public WeeklySchedule checkFlightWeeklySchedule(final String flightNumber) {
@@ -117,4 +120,16 @@ public class InformationServiceImpl implements InformationService {
         }
         throw new IllegalArgumentException("FlightInstance cannot be null, empty or blank");
     }
+
+    public void setShedRepos(final Repository<WeeklySchedule, String> weeklySchedRepo, final Repository<CustomSchedule, String> customSchedRepo) {
+        this.weeklySchedRepo = weeklySchedRepo;
+        this.customSchedRepo = customSchedRepo;
+    }
+
+    public void setFligRepos(final Repository<FlightInstance, String> flightInstRepo,
+                             final Repository<Flight, String> flightRepository) {
+        this.flightInstRepo = flightInstRepo;
+        this.flightRepository = flightRepository;
+    }
 }
+
