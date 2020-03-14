@@ -3,4 +3,5 @@ rootProject.name = 'mercury'
 include 'ams-airline-manag-system'
 include 'stack-overflow'
 include 'aws-online-shopping'
+include 'stack-overflow-integration-test'
 
