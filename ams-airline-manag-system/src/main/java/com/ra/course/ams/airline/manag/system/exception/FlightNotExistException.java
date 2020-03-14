@@ -4,7 +4,7 @@ public class FlightNotExistException extends RuntimeException {
 
     private static final long serialVersionUID = 4L;
 
-    public FlightNotExistException(String message) {
+    public FlightNotExistException(final String message) {
         super(message);
     }
 }

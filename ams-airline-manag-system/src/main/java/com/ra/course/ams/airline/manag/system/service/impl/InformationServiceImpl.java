@@ -12,106 +12,108 @@ import java.util.stream.Collectors;
 
 public class InformationServiceImpl implements InformationService {
 
-    transient private final Repository<WeeklySchedule, String> weeklyScheduleRepo;
-    transient private final Repository<CustomSchedule, String> customScheduleRepo;
+    public static String FlightNumerErrMes = "FlightNumber for search cannot be null, empty or blank";
+    public static String AIRPORTERMES = "Airport cannot be null, empty or blank";
+
+    transient private final Repository<WeeklySchedule, String> weeklySchedRepo;
+    transient private final Repository<CustomSchedule, String> customSchedRepo;
     transient private final Repository<FlightInstance, String> flightInstRepo;
     transient private final Repository<Flight, String> flightRepository;
 
-    public InformationServiceImpl(Repository<WeeklySchedule, String> weeklyScheduleRepo, Repository<CustomSchedule, String> customScheduleRepo, Repository<FlightInstance, String> flightInstRepo, Repository<Flight, String> flightRepository) {
-        this.weeklyScheduleRepo = weeklyScheduleRepo;
-        this.customScheduleRepo = customScheduleRepo;
+    public InformationServiceImpl(final Repository<WeeklySchedule, String> weeklySchedRepo,
+                                  final Repository<CustomSchedule, String> customSchedRepo,
+                                  final Repository<FlightInstance, String> flightInstRepo,
+                                  final Repository<Flight, String> flightRepository) {
+        this.weeklySchedRepo = weeklySchedRepo;
+        this.customSchedRepo = customSchedRepo;
         this.flightInstRepo = flightInstRepo;
         this.flightRepository = flightRepository;
     }
 
     @Override
-    public WeeklySchedule checkFlightWeeklySchedule(String flightNumber) {
+    public WeeklySchedule checkFlightWeeklySchedule(final String flightNumber) {
         if (flightNumber == null || flightNumber.isBlank()) {
-            throw new IllegalArgumentException("FlightNumber for search cannot be null, empty or blank");
+            throw new IllegalArgumentException(FlightNumerErrMes);
         }
-        final WeeklySchedule fidedWeeklySched = weeklyScheduleRepo.getInstances().stream()
+
+        return weeklySchedRepo.getInstances().stream()
                 .filter(i -> flightNumber.equals(i.getId()))
                 .findAny()
-                .orElseThrow(() -> new ScheduleNotExistException("There are no WeeklySchedule with this number") );
-
-        return fidedWeeklySched;
+                .orElseThrow(() -> new ScheduleNotExistException("There are no WeeklySchedule with this number"));
     }
 
     @Override
-    public CustomSchedule checkFlightCustomSchedule(String flightNumber) {
+    public CustomSchedule checkFlightCustomSchedule(final String flightNumber) {
         if (flightNumber == null || flightNumber.isBlank()) {
-            throw new IllegalArgumentException("FlightNumber for search cannot be null, empty or blank");
+            throw new IllegalArgumentException(FlightNumerErrMes);
         }
-        final CustomSchedule findedCustomSched = customScheduleRepo.getInstances().stream()
+
+        return customSchedRepo.getInstances().stream()
                 .filter(i -> flightNumber.equals(i.getId()))
                 .findAny()
-                .orElseThrow(() -> new ScheduleNotExistException("There are no CustomSchedule with this number") );
-
-        return findedCustomSched;
+                .orElseThrow(() -> new ScheduleNotExistException("There are no CustomSchedule with this number"));
     }
 
     @Override
-    public List<FlightSeat> checkAvailableSeats(FlightInstance flightInstance) {
+    public List<FlightSeat> checkAvailableSeats(final FlightInstance flightInstance) {
 
         return getNecessaryFlightInstanse(flightInstance).getSeats();
     }
 
     @Override
-    public Time checkDepartureTime(FlightInstance flightInstance) {
+    public Time checkDepartureTime(final FlightInstance flightInstance) {
 
         return getNecessaryFlightInstanse(flightInstance).getDepartureTime();
     }
 
     @Override
-    public Time checkArrivalTime(FlightInstance flightInstance) {
+    public Time checkArrivalTime(final FlightInstance flightInstance) {
 
         return getNecessaryFlightInstanse(flightInstance).getArrivalTime();
     }
 
     @Override
-    public List<Flight> searchFlightByDate(Date date) {
+    public List<Flight> searchFlightByDate(final Date date) {
         if (Optional.ofNullable(date).isPresent()) {
-            final List<Flight> findedFlight = (List<Flight>) flightRepository.getInstances().stream()
-                    .filter(i -> (date).equals(i.getDate()))
+
+            return flightRepository.getInstances().stream()
+                    .filter(i -> date.equals(i.getDate()))
                     .collect(Collectors.toList());
 
-            return findedFlight;
         }
         throw new IllegalArgumentException("Date cannot be null, empty or blank");
     }
 
     @Override
-    public List<Flight> searchFlightByDepartureAirport(Airport airport) {
+    public List<Flight> searchFlightByDepartureAirport(final Airport airport) {
 
         if (Optional.ofNullable(airport).isPresent()) {
-            final List<Flight> findedFlight = (List<Flight>) flightRepository.getInstances().stream()
-                    .filter(i -> (airport).equals(i.getArrival()))
-                    .collect(Collectors.toList());
 
-            return findedFlight;
+            return flightRepository.getInstances().stream()
+                    .filter(i -> airport.equals(i.getArrival()))
+                    .collect(Collectors.toList());
         }
-        throw new IllegalArgumentException("Airport cannot be null, empty or blank");
+        throw new IllegalArgumentException(AIRPORTERMES);
     }
 
     @Override
-    public List<Flight> searchFlightByArrivalAirport(Airport airport) {
+    public List<Flight> searchFlightByArrivalAirport(final Airport airport) {
         if (Optional.ofNullable(airport).isPresent()) {
-            final List<Flight> findedFlight = (List<Flight>) flightRepository.getInstances().stream()
-                    .filter(i -> (airport).equals(i.getDeparture()))
-                    .collect(Collectors.toList());
 
-            return findedFlight;
+            return flightRepository.getInstances().stream()
+                    .filter(i -> airport.equals(i.getDeparture()))
+                    .collect(Collectors.toList());
         }
-        throw new IllegalArgumentException("Airport cannot be null, empty or blank");
+        throw new IllegalArgumentException(AIRPORTERMES);
     }
 
-    private FlightInstance getNecessaryFlightInstanse(FlightInstance flightInstance) {
+    private FlightInstance getNecessaryFlightInstanse(final FlightInstance flightInstance) {
         if (Optional.ofNullable(flightInstance).isPresent()) {
-            final FlightInstance findedFlightInst = flightInstRepo.getInstances().stream()
-                    .filter(i -> (flightInstance).equals(i))
+
+            return flightInstRepo.getInstances().stream()
+                    .filter(i -> flightInstance.equals(i))
                     .findAny()
-                    .orElseThrow( () -> new FlightNotExistException("There are no neccessory Flight instanse : ("));
-            return findedFlightInst;
+                    .orElseThrow(() -> new FlightNotExistException("There are no neccessory Flight instanse : ("));
         }
         throw new IllegalArgumentException("FlightInstance cannot be null, empty or blank");
     }

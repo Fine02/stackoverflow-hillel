@@ -102,13 +102,14 @@ public class InformationServiceImplTest {
 
     @Test
     public void whenFlightInstanceIsActualThenCheckAvailableSeatsReturnSeatsList() {
+        FlightSeat flightSeat = new FlightSeat.Builder().setReservationNumber("1").build();
+        List <FlightSeat> flightSeatList = new ArrayList<FlightSeat>();
+        flightSeatList.add(flightSeat);
+        FlightInstance flightInstance = new FlightInstance.Builder().setSeats(flightSeatList).build();
+        Mockito.when(flightInstRepo.getInstances())
+                .thenReturn(Collections.singleton(flightInstance));
 
-//        Time time = new Time(1);
-//        FlightInstance flightInstance = new FlightInstance.Builder().setDepartureTime(time).build();
-//        Mockito.when(flightInstRepo.getInstances())
-//                .thenReturn(Collections.singleton(flightInstance));
-//
-//        assertThat(informationService.checkAvailableSeats(flightInstance)).isEqualTo(time);
+        assertThat(informationService.checkAvailableSeats(flightInstance)).isEqualTo(flightSeatList);
     }
 
     @Test
