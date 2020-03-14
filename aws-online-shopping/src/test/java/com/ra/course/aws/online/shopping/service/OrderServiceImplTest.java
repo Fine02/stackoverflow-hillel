@@ -2,6 +2,7 @@ package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.dao.OrderDao;
 import com.ra.course.aws.online.shopping.entity.order.Order;
+import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import com.ra.course.aws.online.shopping.entity.order.OrderStatus;
 import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.entity.user.Member;
@@ -12,6 +13,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -24,6 +28,11 @@ public class OrderServiceImplTest {
     private final Long MEMBER_ID_IN_DB = 10L;
     private Order searchOrder;
     private Member searchMember;
+    private String orderNumber ="101010";
+
+    private OrderLog ORDER_LOG = mockOrderLog();
+    private  List<OrderLog> ORDER_LOG_LIST = mockOrderLogList(ORDER_LOG);
+    private Order ORDER = mockOrder();
 
 
     @BeforeEach
@@ -35,6 +44,21 @@ public class OrderServiceImplTest {
 
 
 
+    @Test
+    public void shouldGetOrderTrack(){
+        when(orderDao.findByOrderNumber(orderNumber)).thenReturn(ORDER);
+        List<OrderLog> expectedResult = orderDao.findLogListByOrder(ORDER.getOrderLog());
+
+        List<OrderLog> actualResponse = orderService.getOrderTrack(orderNumber);
+
+        assertEquals(actualResponse, expectedResult);
+    }
+
+    @Test
+
+    public void shouldReturnEmptyListIfOrderNumberNotFound() {
+        assertEquals(orderService.getOrderTrack(null), Collections.emptyList());
+    }
 
     @Test()
     public void shouldThrowMemberNotFoundException() {
@@ -86,6 +110,20 @@ public class OrderServiceImplTest {
         Member member = new Member(new Account());
         member.setMemberID(id);
         return member;
+    }
+
+    private OrderLog mockOrderLog() {
+        return new OrderLog("101010", LocalDateTime.now(), OrderStatus.PENDING);
+    }
+
+    private List<OrderLog> mockOrderLogList(OrderLog orderLog){
+        List<OrderLog> orderLogList = new ArrayList<>();
+        orderLogList.add(orderLog);
+        return orderLogList;
+    }
+
+    private Order mockOrder(){
+        return new Order("101010",OrderStatus.PENDING, LocalDateTime.now(), ORDER_LOG_LIST);
     }
 
 }
