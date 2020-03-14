@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 
 public class InformationServiceImpl implements InformationService {
 
-    public static String FlightNumerErrMes = "FlightNumber for search cannot be null, empty or blank";
-    public static String AIRPORTERMES = "Airport cannot be null, empty or blank";
+    public static String flightNumerErrMes = "FlightNumber for search cannot be null, empty or blank";
+    public static String airportErMes = "Airport cannot be null, empty or blank";
 
     transient private final Repository<WeeklySchedule, String> weeklySchedRepo;
     transient private final Repository<CustomSchedule, String> customSchedRepo;
@@ -33,7 +33,7 @@ public class InformationServiceImpl implements InformationService {
     @Override
     public WeeklySchedule checkFlightWeeklySchedule(final String flightNumber) {
         if (flightNumber == null || flightNumber.isBlank()) {
-            throw new IllegalArgumentException(FlightNumerErrMes);
+            throw new IllegalArgumentException(flightNumerErrMes);
         }
 
         return weeklySchedRepo.getInstances().stream()
@@ -45,7 +45,7 @@ public class InformationServiceImpl implements InformationService {
     @Override
     public CustomSchedule checkFlightCustomSchedule(final String flightNumber) {
         if (flightNumber == null || flightNumber.isBlank()) {
-            throw new IllegalArgumentException(FlightNumerErrMes);
+            throw new IllegalArgumentException(flightNumerErrMes);
         }
 
         return customSchedRepo.getInstances().stream()
@@ -93,7 +93,7 @@ public class InformationServiceImpl implements InformationService {
                     .filter(i -> airport.equals(i.getArrival()))
                     .collect(Collectors.toList());
         }
-        throw new IllegalArgumentException(AIRPORTERMES);
+        throw new IllegalArgumentException(airportErMes);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class InformationServiceImpl implements InformationService {
                     .filter(i -> airport.equals(i.getDeparture()))
                     .collect(Collectors.toList());
         }
-        throw new IllegalArgumentException(AIRPORTERMES);
+        throw new IllegalArgumentException(airportErMes);
     }
 
     private FlightInstance getNecessaryFlightInstanse(final FlightInstance flightInstance) {
