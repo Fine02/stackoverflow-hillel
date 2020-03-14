@@ -1,7 +1,6 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.*;
-import com.ra.course.ams.airline.manag.system.entity.person.Person;
 import com.ra.course.ams.airline.manag.system.exception.ScheduleNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.Repository;
 import org.junit.jupiter.api.Assertions;
@@ -79,7 +78,6 @@ public class InformationServiceImplTest {
 
     @Test
     public void whenFlightNumberIsActualButNoSheduleinDBCheckFlightCustomScheduleThrowIllegalArgumentException() {
-       // informationServicC = new InformationServiceImpl(customScheduleRepo);
         CustomSchedule existedCustSched = new CustomSchedule.Builder().setId("2").build();
         Mockito.when(customScheduleRepo.getInstances())
                 .thenReturn(Collections.singleton(existedCustSched));
@@ -90,7 +88,6 @@ public class InformationServiceImplTest {
 
     @Test
     public void whenFlightNumberIsActualThenCheckFlightCustomScheduleReturnWeeklySchedule() {
-     //   informationServicC = new InformationServiceImpl(customScheduleRepo);
         CustomSchedule existedCustSched = new CustomSchedule.Builder().setId("1").build();
         Mockito.when(customScheduleRepo.getInstances())
                 .thenReturn(Collections.singleton(existedCustSched));
