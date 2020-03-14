@@ -4,12 +4,14 @@ import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundException;
 import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import static com.ra.course.com.stackoverflow.entity.enums.QuestionStatus.CLOSE;
 import static com.ra.course.com.stackoverflow.entity.enums.QuestionStatus.ON_HOLD;
 import static com.ra.course.com.stackoverflow.entity.enums.QuestionStatus.OPEN;
 
 @AllArgsConstructor
+@Service
 public class ModerateServiceImpl implements ModerateService {
 
     private final QuestionRepository questionRepo;
