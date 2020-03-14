@@ -5,8 +5,9 @@ import com.ra.course.com.stackoverflow.entity.Bounty;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.repository.QuestionRepositoryException;
-import com.ra.course.com.stackoverflow.repository.interfaces.BountyRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
+import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
+import com.ra.course.com.stackoverflow.repository.BountyRepository;
+import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,92 +18,78 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 class BountyServiceImplTest {
     private QuestionRepository questionRepository;
     private BountyRepository bountyRepository;
     private BountyService bountyService;
+    private Question questionWithBounty ;
+    private Question questionWithoutBounty ;
     private long id = 1L;
     private int reputation = 10;
-
+    private Bounty bounty;
     private Account account = Account.builder()
                                      .password("password")
                                      .email("email")
                                      .name("name")
                                      .build();
 
-    private Member member = Member.builder()
-                                  .id(id)
-                                  .account(account)
-                                  .build();
-
-
-    private Bounty bounty = new Bounty(id, reputation, LocalDateTime.now(), member);
-
     @BeforeEach
     void setUp() {
         questionRepository = mock(QuestionRepository.class);
         bountyRepository = mock(BountyRepository.class);
         bountyService = new BountyServiceImpl(questionRepository, bountyRepository);
+        bounty = new Bounty(id, reputation, LocalDateTime.now(), Member.builder().account(account).build());
+        questionWithBounty = constructQuestionWithBounty();
+        questionWithoutBounty = constructQuestionWithoutBounty();
     }
 
     @Test
-    public void shouldAddBounty() throws QuestionRepositoryException {
-        Question questionWithoutBounty = constructQuestionWithoutBounty();
-        Question questionWithBounty = constructQuestionWithBounty();
-
+    public void shouldCreateAndAddBounty() {
+        when(questionRepository.findById(questionWithoutBounty.getId())).thenReturn(Optional.of(questionWithoutBounty));
         when(bountyRepository.findById(bounty.getId())).thenReturn(Optional.empty());
         when(bountyRepository.save(bounty)).thenReturn(bounty);
-        when(questionRepository.findById(questionWithoutBounty.getId())).thenReturn(Optional.of(questionWithoutBounty));
         when(questionRepository.update(questionWithBounty)).thenReturn(questionWithBounty);
 
-        Bounty actualResult = bountyService.addBounty(questionWithoutBounty, bounty);
+        Optional<Bounty> actualResult = bountyService.addBounty(questionWithoutBounty, bounty);
 
-        assertThat(actualResult).isEqualTo(bounty);
+        assertThat(actualResult.get()).isEqualTo(bounty);
 
-        verify(questionRepository).findById(questionWithoutBounty.getId());
         verify(questionRepository).update(questionWithBounty);
-        verify(bountyRepository).save(bounty);
-        verify(bountyRepository).findById(bounty.getId());
-
-        verifyNoMoreInteractions(questionRepository, bountyRepository);
     }
 
     @Test
-    public void shouldCreateAndAddBounty() throws QuestionRepositoryException {
-        Question questionWithoutBounty = constructQuestionWithoutBounty();
-        Question questionWithBounty = constructQuestionWithBounty();
-
+    public void shouldAddExistingBountyToQuestion() {
         when(bountyRepository.findById(bounty.getId())).thenReturn(Optional.of(bounty));
         when(questionRepository.findById(questionWithoutBounty.getId())).thenReturn(Optional.of(questionWithoutBounty));
         when(questionRepository.update(questionWithBounty)).thenReturn(questionWithBounty);
 
-        Bounty actualResult = bountyService.addBounty(questionWithoutBounty, bounty);
+        Optional<Bounty> actualResult = bountyService.addBounty(questionWithoutBounty, bounty);
 
-        assertThat(actualResult).isEqualTo(bounty);
+        assertThat(actualResult.get()).isEqualTo(bounty);
 
-        verify(questionRepository).findById(questionWithoutBounty.getId());
         verify(questionRepository).update(questionWithBounty);
-        verify(bountyRepository).findById(bounty.getId());
-
-        verifyNoMoreInteractions(questionRepository, bountyRepository);
     }
 
     @Test
-    public void shouldThrowExceptionIfQuestionNotFound() throws QuestionRepositoryException {
-        Question questionWithoutBounty = constructQuestionWithoutBounty();
-
-        when(bountyRepository.findById(bounty.getId())).thenReturn(Optional.of(bounty));
+    public void shouldThrowExceptionIfQuestionNotFound() {
         when(questionRepository.findById(questionWithoutBounty.getId())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(()-> bountyService.addBounty(questionWithoutBounty, bounty)).isInstanceOf(QuestionRepositoryException.class);
+        assertThatThrownBy(() -> bountyService.addBounty(questionWithoutBounty, bounty)).isInstanceOf(QuestionRepositoryException.class);
+    }
 
-        verify(questionRepository).findById(questionWithoutBounty.getId());
-        verify(bountyRepository).findById(bounty.getId());
+    @Test
+    public void shouldDeleteBountyIfQuestionUpdateThrowException() {
+        when(bountyRepository.findById(bounty.getId())).thenReturn(Optional.of(bounty));
+        when(questionRepository.findById(questionWithoutBounty.getId())).thenReturn(Optional.of(questionWithoutBounty));
+        when(questionRepository.update(questionWithBounty)).thenThrow(new InternalServerErrorException(""));
 
-        verifyNoMoreInteractions(questionRepository, bountyRepository);
+        Optional<Bounty> actualResult = bountyService.addBounty(questionWithoutBounty, bounty);
+
+        assertThat(actualResult).isEmpty();
+
+        verify(questionRepository).update(questionWithBounty);
     }
 
     private Question constructQuestionWithBounty() {
@@ -115,7 +102,10 @@ class BountyServiceImplTest {
         return Question.builder()
                        .id(id)
                        .title("title")
-                       .author(member)
+                       .author(Member.builder()
+                                     .id(id)
+                                     .account(account)
+                                     .build())
                        .build();
     }
 }

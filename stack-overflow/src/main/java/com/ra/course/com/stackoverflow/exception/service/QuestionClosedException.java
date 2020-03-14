@@ -1,6 +1,6 @@
 package com.ra.course.com.stackoverflow.exception.service;
 
-public class QuestionClosedException extends Exception {
+public class QuestionClosedException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 

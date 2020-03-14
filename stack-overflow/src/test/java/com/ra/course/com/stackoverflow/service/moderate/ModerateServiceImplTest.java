@@ -6,9 +6,7 @@ import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.Tag;
 import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
 import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundException;
-import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
-import com.ra.course.com.stackoverflow.service.moderate.ModerateService;
-import com.ra.course.com.stackoverflow.service.moderate.ModerateServiceImpl;
+import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +49,7 @@ public class ModerateServiceImplTest {
     }
 
     @Test
-    public void shouldCloseQuestion() throws QuestionNotFoundException {
+    public void shouldCloseQuestion() {
         Question expectedResponse = constructCloseQuestion(question);
         when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
         when(questionRepository.update(question)).thenReturn(expectedResponse);
@@ -77,7 +75,7 @@ public class ModerateServiceImplTest {
     }
 
     @Test
-    public void shouldReopenQuestion() throws QuestionNotFoundException {
+    public void shouldReopenQuestion() {
         when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
         when(questionRepository.update(question)).thenReturn(question);
 
@@ -102,7 +100,7 @@ public class ModerateServiceImplTest {
     }
 
     @Test
-    public void shouldUnDeleteQuestion() throws QuestionNotFoundException {
+    public void shouldUnDeleteQuestion() {
         Question expectedResponse = constructUnDeleteQuestion(question);
         when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
         when(questionRepository.update(question)).thenReturn(question);

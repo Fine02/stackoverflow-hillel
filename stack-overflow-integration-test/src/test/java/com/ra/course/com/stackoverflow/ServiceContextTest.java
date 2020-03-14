@@ -1,7 +1,7 @@
 package com.ra.course.com.stackoverflow;
 
-import com.ra.course.com.stackoverflow.repository.interfaces.MemberRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
+import com.ra.course.com.stackoverflow.repository.MemberRepository;
+import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import com.ra.course.com.stackoverflow.service.member.MemberServiceImpl;
 import com.ra.course.com.stackoverflow.service.system.QuestionScoreBadgeAwarder;
 import org.junit.jupiter.api.Test;

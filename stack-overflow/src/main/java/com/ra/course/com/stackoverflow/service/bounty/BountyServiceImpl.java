@@ -3,32 +3,37 @@ package com.ra.course.com.stackoverflow.service.bounty;
 import com.ra.course.com.stackoverflow.entity.Bounty;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.repository.QuestionRepositoryException;
-import com.ra.course.com.stackoverflow.repository.interfaces.BountyRepository;
-import com.ra.course.com.stackoverflow.repository.interfaces.QuestionRepository;
+import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
+import com.ra.course.com.stackoverflow.repository.BountyRepository;
+import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 
 @AllArgsConstructor
+@Slf4j
 public class BountyServiceImpl implements BountyService {
     private final QuestionRepository questionRepo;
     private final BountyRepository bountyRepo;
 
     @Override
-    public Bounty addBounty(final Question question, final Bounty bounty) throws QuestionRepositoryException {
-        final Bounty savedBounty = bountyRepo.findById(bounty.getId())
-                                       .orElseGet(() -> createBounty(bounty));
-
+    public Optional<Bounty> addBounty(final Question question, final Bounty bounty) {
         final Question questionById = questionRepo.findById(question.getId())
-                                            .orElseThrow(() -> new QuestionRepositoryException("Question with id " + question.getId() + " not found in DB"));
+                                                  .orElseThrow(() -> new QuestionRepositoryException("Question with id " + question.getId() + " not found in DB"));
+
+        final Bounty savedBounty = bountyRepo.findById(bounty.getId())
+                                             .orElseGet(() -> bountyRepo.save(bounty));
 
         questionById.setBounty(Optional.of(savedBounty));
-        questionRepo.update(questionById);
 
-        return savedBounty;
-    }
+        try {
+            questionRepo.update(questionById);
+        } catch (InternalServerErrorException e) {
+            bountyRepo.deleteById(savedBounty.getId());
+            return Optional.empty();
+        }
 
-    private Bounty createBounty(final Bounty bounty) {
-        return bountyRepo.save(bounty);
+        return Optional.of(savedBounty);
     }
 }

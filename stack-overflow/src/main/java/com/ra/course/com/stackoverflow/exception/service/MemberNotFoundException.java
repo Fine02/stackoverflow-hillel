@@ -1,6 +1,6 @@
 package com.ra.course.com.stackoverflow.exception.service;
 
-public class MemberNotFoundException extends Exception {
+public class MemberNotFoundException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public MemberNotFoundException(final String message) {
