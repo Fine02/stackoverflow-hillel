@@ -7,6 +7,7 @@ import com.ra.course.aws.online.shopping.entity.order.OrderStatus;
 import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberNotFoundException;
+import com.ra.course.aws.online.shopping.exceptions.OrderLogIsAlreadyExistException;
 import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,9 +18,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class OrderServiceImplTest {
     private OrderServiceImpl orderService;
@@ -30,9 +30,9 @@ public class OrderServiceImplTest {
     private Member searchMember;
     private String orderNumber ="101010";
 
-    private OrderLog ORDER_LOG = mockOrderLog();
-    private  List<OrderLog> ORDER_LOG_LIST = mockOrderLogList(ORDER_LOG);
-    private Order ORDER = mockOrder();
+    private final OrderLog ORDER_LOG = mockOrderLog("101010", LocalDateTime.now(), OrderStatus.PENDING);
+    private final List<OrderLog> ORDER_LOG_LIST = mockOrderLogList(ORDER_LOG);
+    private final Order ORDER = mockOrder();
 
 
     @BeforeEach
@@ -40,9 +40,31 @@ public class OrderServiceImplTest {
         orderService = new OrderServiceImpl(orderDao);
         searchOrder=mockOrder(ORDER_IN_DB, LocalDateTime.now());
         searchMember =mockMember(MEMBER_ID_IN_DB);
+        when(orderDao.findByOrderNumber(ORDER.getOrderNumber())).thenReturn(ORDER);
+        when(orderDao.findLogListByOrder(ORDER.getOrderLog())).thenReturn(ORDER_LOG_LIST);
     }
 
+    @Test
+    public void whenAddOrderLogToOrderLogListThenReturnTrue() {
+        OrderLog newOrderLog = mockOrderLog("55", LocalDateTime.now().minusDays(1), OrderStatus.PENDING);
 
+        boolean actualResponse = orderService.addOrderLogToOrder(ORDER, newOrderLog);
+
+        assertEquals(actualResponse, true);
+        verify(orderDao).addOrderLog(ORDER.getOrderLog().add(newOrderLog));
+        verify(orderDao).updateOrder(ORDER);
+    }
+
+    @Test
+    public void shouldThrowExceptionIfOrderLogIsAlreadyExist()  {
+
+        Throwable exception = Assertions.assertThrows(OrderLogIsAlreadyExistException.class, () -> {
+            orderService.addOrderLogToOrder(ORDER, ORDER_LOG);
+        });
+
+        assertEquals(exception.getMessage(), "This OrderLog is already exist");
+        assertEquals(exception.getClass(), OrderLogIsAlreadyExistException.class);
+    }
 
     @Test
     public void shouldGetOrderTrack(){
@@ -112,8 +134,12 @@ public class OrderServiceImplTest {
         return member;
     }
 
-    private OrderLog mockOrderLog() {
-        return new OrderLog("101010", LocalDateTime.now(), OrderStatus.PENDING);
+//    private OrderLog mockOrderLog() {
+//        return new OrderLog("101010", LocalDateTime.now(), OrderStatus.PENDING);
+//    }
+
+    private OrderLog mockOrderLog(String orderNumber, LocalDateTime creationDate, OrderStatus status) {
+        return new OrderLog(orderNumber, creationDate, status);
     }
 
     private List<OrderLog> mockOrderLogList(OrderLog orderLog){

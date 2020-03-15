@@ -6,6 +6,7 @@ import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import com.ra.course.aws.online.shopping.entity.order.OrderStatus;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberNotFoundException;
+import com.ra.course.aws.online.shopping.exceptions.OrderLogIsAlreadyExistException;
 import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
 
 import java.time.LocalDateTime;
@@ -41,5 +42,18 @@ public class OrderServiceImpl implements OrderService {
             return orderDao.findLogListByOrder(foundOrder.getOrderLog());
         }
         return Collections.emptyList();
+    }
+
+    @Override
+    public boolean addOrderLogToOrder(final Order order, final OrderLog orderLog) {
+        final var  foundOrder = orderDao.findByOrderNumber(order.getOrderNumber());
+        if (foundOrder.getOrderLog().contains(orderLog)){
+            throw new OrderLogIsAlreadyExistException("This OrderLog is already exist");
+        }
+        final var foundOrderList = orderDao.findLogListByOrder(order.getOrderLog());
+        orderDao.addOrderLog(foundOrderList.add(orderLog));
+        foundOrder.setStatus(orderLog.getStatus());
+        orderDao.updateOrder(foundOrder);
+        return true;
     }
 }
