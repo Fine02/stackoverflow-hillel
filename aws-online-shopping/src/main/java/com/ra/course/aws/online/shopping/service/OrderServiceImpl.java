@@ -6,6 +6,7 @@ import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import com.ra.course.aws.online.shopping.entity.order.OrderStatus;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
+import com.ra.course.aws.online.shopping.exceptions.OrderIsAlreadyShippedException;
 import com.ra.course.aws.online.shopping.exceptions.OrderLogIsAlreadyExistException;
 import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
 
@@ -55,5 +56,15 @@ public class OrderServiceImpl implements OrderService {
         foundOrder.setStatus(orderLog.getStatus());
         orderDao.updateOrder(foundOrder);
         return true;
+    }
+
+    @Override
+    public boolean sendForShipment(final Order order) {
+        if (order.getStatus() != OrderStatus.SHIPPED) {
+            order.setStatus(OrderStatus.SHIPPED);
+            orderDao.updateOrder(order);
+            return true;
+        }
+        throw new OrderIsAlreadyShippedException("This Order is already shipped");
     }
 }

@@ -12,4 +12,6 @@ public interface OrderService {
     List<OrderLog> getOrderTrack(String orderNumber);
 
     boolean addOrderLogToOrder(Order order, OrderLog orderLog);
+
+    boolean sendForShipment(Order Order);
 }

@@ -7,6 +7,7 @@ import com.ra.course.aws.online.shopping.entity.order.OrderStatus;
 import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
+import com.ra.course.aws.online.shopping.exceptions.OrderIsAlreadyShippedException;
 import com.ra.course.aws.online.shopping.exceptions.OrderLogIsAlreadyExistException;
 import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
 import org.junit.jupiter.api.Assertions;
@@ -25,24 +26,44 @@ public class OrderServiceImplTest {
     private OrderServiceImpl orderService;
     private OrderDao orderDao = mock(OrderDao.class);
     private final String ORDER_IN_DB = "Ref123";
-    private final Long MEMBER_ID_IN_DB = 10L;
+    private final Long MEMBER_ID = 10L;
     private Order searchOrder;
     private Member searchMember;
     private String orderNumber = "101010";
 
     private final OrderLog ORDER_LOG = mockOrderLog("101010", LocalDateTime.now(), OrderStatus.PENDING);
     private final List<OrderLog> ORDER_LOG_LIST = mockOrderLogList(ORDER_LOG);
-    private final Order ORDER = mockOrder();
+    private final Order ORDER = mockOrder("855", OrderStatus.PENDING, LocalDateTime.now(), ORDER_LOG_LIST);
 
 
     @BeforeEach
     public void before() {
         orderService = new OrderServiceImpl(orderDao);
-        searchOrder = mockOrder(ORDER_IN_DB, LocalDateTime.now());
-        searchMember = mockMember(MEMBER_ID_IN_DB);
+        searchOrder = mockOrder(ORDER_IN_DB, OrderStatus.COMPLETE, LocalDateTime.now(),ORDER_LOG_LIST);
+        searchMember = mockMember(MEMBER_ID);
         when(orderDao.findByOrderNumber(ORDER.getOrderNumber())).thenReturn(ORDER);
         when(orderDao.findLogListByOrder(ORDER.getOrderLog())).thenReturn(ORDER_LOG_LIST);
     }
+
+    @Test
+    public void whenSendForShipmentOrderThanOrderStatusChange(){
+        when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(searchOrder);
+        orderService.sendForShipment(ORDER);
+        assertEquals(ORDER.getStatus(), OrderStatus.SHIPPED);
+    }
+
+    @Test
+    public void shouldThrowExceptionIfOrderIsAlreadyShipped(){
+        var alreadyShippedOrder = mockOrder("8554", OrderStatus.SHIPPED, LocalDateTime.now(), ORDER_LOG_LIST);
+
+        Throwable exception = Assertions.assertThrows(OrderIsAlreadyShippedException.class, () -> {
+            orderService.sendForShipment(alreadyShippedOrder);
+        });
+
+        assertEquals(exception.getMessage(), "This Order is already shipped");
+        assertEquals(exception.getClass(), OrderIsAlreadyShippedException.class);
+    }
+
 
     @Test
     public void whenAddOrderLogToOrderLogListThenReturnTrue() {
@@ -100,7 +121,7 @@ public class OrderServiceImplTest {
 
     @Test()
     public void shouldThrowOrderNotFoundException() {
-        var InDbOrder = mockOrder(ORDER_IN_DB, LocalDateTime.now().plusDays(8));
+        var InDbOrder = mockOrder(ORDER_IN_DB, OrderStatus.PENDING, LocalDateTime.now().plusDays(8),ORDER_LOG_LIST);
 
         when(orderDao.isFoundMemberID(searchMember.getMemberID())).thenReturn(true);
         when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(InDbOrder);
@@ -115,17 +136,12 @@ public class OrderServiceImplTest {
 
     @Test
     public void whenOrderDateIsAfterCurrentThenOrderCanBeCanceled() {
-        var InDbOrder = mockOrder(ORDER_IN_DB, LocalDateTime.now().minusDays(1));
+        var InDbOrder = mockOrder(ORDER_IN_DB,OrderStatus.PENDING, LocalDateTime.now().minusDays(1),ORDER_LOG_LIST );
         when(orderDao.isFoundMemberID(searchMember.getMemberID())).thenReturn(true);
         when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(InDbOrder);
         var resultOrder = orderService.cancelOrder(searchOrder, searchMember);
         Assertions.assertSame(resultOrder.getStatus(), OrderStatus.CANCELED);
         assertEquals(10L, searchMember.getMemberID());
-    }
-
-
-    private Order mockOrder(String orderNum, LocalDateTime dateTime) {
-        return new Order(orderNum, OrderStatus.PENDING, dateTime);
     }
 
     private Member mockMember(long id) {
@@ -145,8 +161,7 @@ public class OrderServiceImplTest {
         return orderLogList;
     }
 
-    private Order mockOrder() {
-        return new Order("101010", OrderStatus.PENDING, LocalDateTime.now(), ORDER_LOG_LIST);
+    private Order mockOrder(String orderNumber, OrderStatus status, LocalDateTime orderDate, List<OrderLog> orderLog) {
+        return new Order(orderNumber, status, orderDate, orderLog);
     }
-
 }
