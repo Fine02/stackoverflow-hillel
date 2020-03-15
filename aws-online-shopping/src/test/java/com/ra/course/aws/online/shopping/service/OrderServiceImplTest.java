@@ -90,7 +90,6 @@ public class OrderServiceImplTest {
 
         Throwable exception = Assertions.assertThrows(MemberNotFoundException.class, () -> {
             orderService.cancelOrder(searchOrder, searchInDbMemberID);
-            ;
         });
 
         assertEquals(exception.getMessage(), "There is not found the Member by this ID");
@@ -108,7 +107,6 @@ public class OrderServiceImplTest {
 
         Throwable exception = Assertions.assertThrows(OrderNotFoundException.class, () -> {
             orderService.cancelOrder(searchOrder, searchMember);
-            ;
         });
 
         assertEquals(exception.getMessage(), "There is not found the Order by this number");
@@ -136,9 +134,6 @@ public class OrderServiceImplTest {
         return member;
     }
 
-//    private OrderLog mockOrderLog() {
-//        return new OrderLog("101010", LocalDateTime.now(), OrderStatus.PENDING);
-//    }
 
     private OrderLog mockOrderLog(String orderNumber, LocalDateTime creationDate, OrderStatus status) {
         return new OrderLog(orderNumber, creationDate, status);

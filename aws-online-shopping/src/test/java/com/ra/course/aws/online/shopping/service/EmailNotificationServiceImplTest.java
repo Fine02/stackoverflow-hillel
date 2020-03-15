@@ -4,12 +4,10 @@ import com.ra.course.aws.online.shopping.dao.NotificationDao;
 import com.ra.course.aws.online.shopping.dao.OrderDao;
 import com.ra.course.aws.online.shopping.dao.ShippingDao;
 import com.ra.course.aws.online.shopping.entity.Address;
-import com.ra.course.aws.online.shopping.entity.order.Order;
 import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import com.ra.course.aws.online.shopping.entity.order.OrderStatus;
 import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
-import com.ra.course.aws.online.shopping.entity.shipment.Shipment;
 import com.ra.course.aws.online.shopping.entity.shipment.ShipmentLog;
 import com.ra.course.aws.online.shopping.entity.shipment.ShipmentStatus;
 import com.ra.course.aws.online.shopping.entity.user.Account;
@@ -27,7 +25,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
 
 public class EmailNotificationServiceImplTest {
     private EmailNotificationServiceImpl notificationService;
@@ -35,32 +32,23 @@ public class EmailNotificationServiceImplTest {
     private OrderDao orderDao = mock(OrderDao.class);
     private ShippingDao shippingDao = mock(ShippingDao.class);
     private Address ADDRESS_IN_DB;
-    private Member MEMBER = mockMember(mockAccount());
 
-    private ShipmentLog SHIPMENT_LOG = mockShipmentLog();
-    private List<ShipmentLog> SHIPMENT_LOG_LIST = mockListOfShipmentLog(SHIPMENT_LOG);
-    private Shipment SHIPMENT =mockShipment();
+    private final OrderLog ORDER_LOG = mockOrderLog("101010", LocalDateTime.now(), OrderStatus.PENDING);
+    private final ShipmentLog SHIPMENT_LOG = mockShipmentLog("101010", ShipmentStatus.SHIPPED, LocalDateTime.now());
 
+    private String email = "hhhhh@gmail.com";
+    private String phone = "456522";
 
-    private OrderLog ORDER_LOG = mockOrderLog();
-    private  List<OrderLog> ORDER_LOG_LIST = mockOrderLogList(ORDER_LOG);
-    private Order ORDER = mockOrder();
-
-    private  String EXPECTED_MESSAGE_ABOUT_ORDER_STATUS ="your order number 888 has changed status on PENDING";
-    private  String EXPECTED_MESSAGE_ABOUT_SHIPMENT_STATUS ="your shipment number 777 has changed status on SHIPPED";
+    private Account account = mockAccount(email, phone);
+    private Member member = mockMember(account);
 
     @BeforeEach
     public void before() {
-        ADDRESS_IN_DB=new Address("Mira", "Kiyv", "Kyiv", "04114", "Ukraine");
+        ADDRESS_IN_DB = new Address("Mira", "Kiyv", "Kyiv", "04114", "Ukraine");
         notificationService = new EmailNotificationServiceImpl(notificationDao, orderDao, shippingDao);
-
+        when(notificationDao.foundMemberEmail(member.getAccount().getEmail())).thenReturn(email);
         when(orderDao.findOrderLogById(ORDER_LOG.getId())).thenReturn(ORDER_LOG);
-        when(orderDao.findByOrderNumber(ORDER_LOG.getOrderNumber())).thenReturn(ORDER);
-        when(orderDao.findLogListByOrder(ORDER.getOrderLog())).thenReturn(ORDER_LOG_LIST);
-
         when(shippingDao.findShipmentLogById(SHIPMENT_LOG.getId())).thenReturn(SHIPMENT_LOG);
-        when(shippingDao.findByShipmentNumber(SHIPMENT_LOG.getShipmentNumber())).thenReturn(SHIPMENT);
-        when(shippingDao.findLogListByShipment(SHIPMENT.getShipmentLogs())).thenReturn(SHIPMENT_LOG_LIST);
     }
 
     @Test
@@ -68,7 +56,7 @@ public class EmailNotificationServiceImplTest {
         when(shippingDao.isThisShipmentLogExist(SHIPMENT_LOG)).thenReturn(true);
 
         Throwable exception = Assertions.assertThrows(NotificationException.class, () -> {
-            notificationService.sendEmailNotificationAboutShipmentStatus(SHIPMENT, SHIPMENT_LOG, MEMBER);
+            notificationService.sendEmailNotificationAboutShipmentStatus(SHIPMENT_LOG, member);
         });
 
         assertEquals(exception.getMessage(), "Email-notification about shipment status can not be sent");
@@ -80,7 +68,7 @@ public class EmailNotificationServiceImplTest {
         when(orderDao.isThisOrderLogExist(ORDER_LOG)).thenReturn(true);
 
         Throwable exception = Assertions.assertThrows(NotificationException.class, () -> {
-            notificationService.sendEmailNotificationAboutOrderStatus(ORDER,ORDER_LOG, MEMBER);
+            notificationService.sendEmailNotificationAboutOrderStatus(ORDER_LOG, member);
         });
 
         assertEquals(exception.getMessage(), "Email-notification about order status can not be sent");
@@ -88,25 +76,14 @@ public class EmailNotificationServiceImplTest {
     }
 
     @Test
-    public void whenNotFoundEmailOfMemberThanEmailNotificationAboutShipmentStatusWillNotBeSentThanThrowMemberNotFoundException() throws NotificationException {
-        when(shippingDao.isThisShipmentLogExist(SHIPMENT_LOG)).thenReturn(false);
-        when(notificationDao.isFoundMemberEmail(MEMBER.getAccount().getEmail())).thenReturn(false);
-
-        Throwable exception = Assertions.assertThrows(MemberNotFoundException.class, () -> {
-            notificationService.sendEmailNotificationAboutShipmentStatus(SHIPMENT,SHIPMENT_LOG, MEMBER);
-        });
-
-        assertEquals(exception.getMessage(), "There is not found the email");
-        assertEquals(exception.getClass(), MemberNotFoundException.class);
-    }
-
-    @Test
     public void whenNotFoundEmailOfMemberThanEmailNotificationAboutOrderStatusWillNotBeSentThanThrowMemberNotFoundException() {
-        when(orderDao.isThisOrderLogExist(ORDER_LOG)).thenReturn(false);
-        when(notificationDao.isFoundMemberEmail(MEMBER.getAccount().getEmail())).thenReturn(false);
+        Account account = mockAccount("", "456522");
+        var member = mockMember(account);
 
+        when(notificationDao.foundMemberEmail(member.getAccount().getEmail())).thenReturn(" ");
         Throwable exception = Assertions.assertThrows(MemberNotFoundException.class, () -> {
-            notificationService.sendEmailNotificationAboutOrderStatus(ORDER, ORDER_LOG, MEMBER);
+            notificationService.sendEmailNotificationAboutOrderStatus(ORDER_LOG, member);
+            notificationService.sendEmailNotificationAboutShipmentStatus(SHIPMENT_LOG, member);
         });
 
         assertEquals(exception.getMessage(), "There is not found the member's email");
@@ -114,58 +91,34 @@ public class EmailNotificationServiceImplTest {
     }
 
     @Test
-    public void whenShipmentStatusWasChangedSendEmailNotification()  {
-        when(shippingDao.isThisShipmentLogExist(SHIPMENT_LOG)).thenReturn(false);
-        when(notificationDao.isFoundMemberEmail(MEMBER.getAccount().getEmail())).thenReturn(true);
+    public void whenShipmentStatusWasChangedSendEmailNotification() {
+        ShipmentLog newShipmentLog = mockShipmentLog("55785", ShipmentStatus.ONHOLD, LocalDateTime.now().minusDays(1));
+        String expectedResult = "your shipment number 55785 has changed status on ONHOLD";
 
-        var resultOrder = notificationService.sendEmailNotificationAboutShipmentStatus(SHIPMENT,SHIPMENT_LOG, MEMBER);
+        var resultOrder = notificationService.sendEmailNotificationAboutShipmentStatus(newShipmentLog, member);
 
-        assertEquals(EXPECTED_MESSAGE_ABOUT_SHIPMENT_STATUS, resultOrder.getContent());
-        verify(shippingDao).addShipmentLog(SHIPMENT_LOG_LIST.add(SHIPMENT_LOG));
-        verify(shippingDao).updateShipment(SHIPMENT);
+        assertEquals(expectedResult, resultOrder.getContent());
     }
 
     @Test
-    public void whenOrderStatusWasChangedSendEmailNotification()  {
-        when(orderDao.isThisOrderLogExist(ORDER_LOG)).thenReturn(false);
-        when(notificationDao.isFoundMemberEmail(MEMBER.getAccount().getEmail())).thenReturn(true);
+    public void whenOrderStatusWasChangedSendEmailNotification() {
+        OrderLog newOrderLog = mockOrderLog("5548541", LocalDateTime.now().minusDays(1), OrderStatus.PENDING);
+        String expectedResult = "your order number 5548541 has changed status on PENDING";
 
-        var resultOrder = notificationService.sendEmailNotificationAboutOrderStatus(ORDER, ORDER_LOG, MEMBER);
+        var resultOrder = notificationService.sendEmailNotificationAboutOrderStatus(newOrderLog, member);
 
-        assertEquals(EXPECTED_MESSAGE_ABOUT_ORDER_STATUS, resultOrder.getContent());
-        verify(orderDao).addOrderLog(ORDER.getOrderLog().add(ORDER_LOG));
-        verify(orderDao).updateOrder(ORDER);
+        assertEquals(expectedResult, resultOrder.getContent());
     }
 
-    private ShipmentLog mockShipmentLog() {
-        return new ShipmentLog("777", ShipmentStatus.SHIPPED, LocalDateTime.now());
+    private ShipmentLog mockShipmentLog(String shipmentNumber, ShipmentStatus status, LocalDateTime creationDate) {
+        return new ShipmentLog(shipmentNumber, status, creationDate);
     }
 
-    private List<ShipmentLog> mockListOfShipmentLog(ShipmentLog shipmentLog) {
-        List<ShipmentLog> shipmentLogs = new ArrayList<>();
-        shipmentLogs.add(shipmentLog);
-        return shipmentLogs;
+    private OrderLog mockOrderLog(String orderNumber, LocalDateTime creationDate, OrderStatus status) {
+        return new OrderLog(orderNumber, creationDate, status);
     }
 
-    private Shipment mockShipment (){
-        return new Shipment("777", LocalDateTime.now(), LocalDateTime.now().plusDays(5),"byAir", SHIPMENT_LOG_LIST);
-    }
-
-    private OrderLog mockOrderLog() {
-        return new OrderLog("888", LocalDateTime.now(), OrderStatus.PENDING);
-    }
-
-    private List<OrderLog> mockOrderLogList(OrderLog orderLog){
-        List<OrderLog> orderLogList = new ArrayList<>();
-        orderLogList.add(orderLog);
-        return orderLogList;
-    }
-
-    private Order mockOrder(){
-        return new Order("888",OrderStatus.PENDING, LocalDateTime.now(), ORDER_LOG_LIST);
-    }
-
-    private Account mockAccount() {
+    private Account mockAccount(String email, String phoneNumber) {
         List<CreditCard> creditCardList = new ArrayList<>();
         creditCardList.add(new CreditCard("VISA", "77", 44, ADDRESS_IN_DB));
         List<ElectronicBankTransfer> electronicBankTransfers = new ArrayList<>();
@@ -176,8 +129,8 @@ public class EmailNotificationServiceImplTest {
                 AccountStatus.ACTIVE,
                 "Ann",
                 ADDRESS_IN_DB,
-                "sbwbw@sbsb.com",
-                "10101010",
+                email,
+                phoneNumber,
                 creditCardList,
                 electronicBankTransfers
         );
