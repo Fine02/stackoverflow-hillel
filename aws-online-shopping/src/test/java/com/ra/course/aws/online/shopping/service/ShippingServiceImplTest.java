@@ -10,7 +10,7 @@ import com.ra.course.aws.online.shopping.entity.shipment.ShipmentStatus;
 import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.entity.user.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.user.Member;
-import com.ra.course.aws.online.shopping.exceptions.MemberNotFoundException;
+import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.ShipmentLogIsAlreadyExistException;
 import com.ra.course.aws.online.shopping.exceptions.ShippingAddressNotFoundException;
 import org.junit.jupiter.api.Assertions;
@@ -109,12 +109,12 @@ public class ShippingServiceImplTest {
         when(shippingDao.isFoundMemberID(memberInDB.getMemberID())).thenReturn(false);
         when(shippingDao.findShippingAddress(shipmentAddress)).thenReturn(true);
 
-        Throwable exception = Assertions.assertThrows(MemberNotFoundException.class, () -> {
+        Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {
             shippingService.specifyShippingAddress(memberInDB, ADDRESS_IN_DB);
         });
 
         assertEquals(exception.getMessage(), "There is not found the Member by this ID");
-        assertEquals(exception.getClass(), MemberNotFoundException.class);
+        assertEquals(exception.getClass(), MemberDataNotFoundException.class);
     }
 
     @Test

@@ -6,7 +6,7 @@ import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import com.ra.course.aws.online.shopping.entity.order.OrderStatus;
 import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.entity.user.Member;
-import com.ra.course.aws.online.shopping.exceptions.MemberNotFoundException;
+import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.OrderLogIsAlreadyExistException;
 import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
 import org.junit.jupiter.api.Assertions;
@@ -88,12 +88,12 @@ public class OrderServiceImplTest {
 
         when(orderDao.isFoundMemberID(searchInDbMemberID.getMemberID())).thenReturn(false);
 
-        Throwable exception = Assertions.assertThrows(MemberNotFoundException.class, () -> {
+        Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {
             orderService.cancelOrder(searchOrder, searchInDbMemberID);
         });
 
         assertEquals(exception.getMessage(), "There is not found the Member by this ID");
-        assertEquals(exception.getClass(), MemberNotFoundException.class);
+        assertEquals(exception.getClass(), MemberDataNotFoundException.class);
 
 
     }

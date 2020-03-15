@@ -5,7 +5,7 @@ import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.shipment.Shipment;
 import com.ra.course.aws.online.shopping.entity.shipment.ShipmentLog;
 import com.ra.course.aws.online.shopping.entity.user.Member;
-import com.ra.course.aws.online.shopping.exceptions.MemberNotFoundException;
+import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.ShipmentLogIsAlreadyExistException;
 import com.ra.course.aws.online.shopping.exceptions.ShippingAddressNotFoundException;
 
@@ -31,7 +31,7 @@ public class ShippingServiceImpl implements ShippingService {
             }
             throw new ShippingAddressNotFoundException("There is not found shipping address");
         }
-        throw new MemberNotFoundException("There is not found the Member by this ID");
+        throw new MemberDataNotFoundException("There is not found the Member by this ID");
     }
 
     @Override

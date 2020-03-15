@@ -20,7 +20,4 @@ public interface OrderDao {
     void addOrderLog(boolean add);
 
     OrderLog findOrderLogById(Long orderLogId);
-
-
-
 }

@@ -13,7 +13,7 @@ import com.ra.course.aws.online.shopping.entity.shipment.ShipmentStatus;
 import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.entity.user.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.user.Member;
-import com.ra.course.aws.online.shopping.exceptions.MemberNotFoundException;
+import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.NotificationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,8 +26,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class EmailNotificationServiceImplTest {
-    private EmailNotificationServiceImpl notificationService;
+public class NotificationServiceImplTest {
+    private NotificationServiceImpl notificationService;
     private NotificationDao notificationDao = mock(NotificationDao.class);
     private OrderDao orderDao = mock(OrderDao.class);
     private ShippingDao shippingDao = mock(ShippingDao.class);
@@ -45,70 +45,110 @@ public class EmailNotificationServiceImplTest {
     @BeforeEach
     public void before() {
         ADDRESS_IN_DB = new Address("Mira", "Kiyv", "Kyiv", "04114", "Ukraine");
-        notificationService = new EmailNotificationServiceImpl(notificationDao, orderDao, shippingDao);
+        notificationService = new NotificationServiceImpl(notificationDao, orderDao, shippingDao);
+
+        when(notificationDao.foundMemberPhoneNumber(member.getAccount().getPhone())).thenReturn(phone);
+        when(orderDao.findOrderLogById(ORDER_LOG.getId())).thenReturn(ORDER_LOG);
+        when(shippingDao.findShipmentLogById(SHIPMENT_LOG.getId())).thenReturn(SHIPMENT_LOG);
+
         when(notificationDao.foundMemberEmail(member.getAccount().getEmail())).thenReturn(email);
         when(orderDao.findOrderLogById(ORDER_LOG.getId())).thenReturn(ORDER_LOG);
         when(shippingDao.findShipmentLogById(SHIPMENT_LOG.getId())).thenReturn(SHIPMENT_LOG);
     }
 
     @Test
-    public void whenEmailNotificationAboutShipmentStatusWasNotSentThanThrowNotificationException() {
+    public void whenNotificationAboutShipmentStatusWasNotSentThanThrowNotificationException() {
         when(shippingDao.isThisShipmentLogExist(SHIPMENT_LOG)).thenReturn(true);
 
-        Throwable exception = Assertions.assertThrows(NotificationException.class, () -> {
+        Throwable exceptionEmail = Assertions.assertThrows(NotificationException.class, () -> {
             notificationService.sendEmailNotificationAboutShipmentStatus(SHIPMENT_LOG, member);
         });
 
-        assertEquals(exception.getMessage(), "Email-notification about shipment status can not be sent");
-        assertEquals(exception.getClass(), NotificationException.class);
+        Throwable exceptionSMS = Assertions.assertThrows(NotificationException.class, () -> {
+            notificationService.sendSMSNotificationAboutShipmentStatus(SHIPMENT_LOG, member);
+        });
+
+        assertEquals(exceptionEmail.getMessage(), "Email-notification about shipment status can not be sent");
+
+        assertEquals(exceptionSMS.getMessage(), "SMS-notification about shipment status can not be sent");
+
     }
 
     @Test
-    public void whenEmailNotificationAboutOrderStatusWasNotSentThanThrowNotificationException()  {
+    public void whenNotificationAboutOrderStatusWasNotSentThanThrowNotificationException() {
         when(orderDao.isThisOrderLogExist(ORDER_LOG)).thenReturn(true);
 
-        Throwable exception = Assertions.assertThrows(NotificationException.class, () -> {
+        Throwable exceptionEmail = Assertions.assertThrows(NotificationException.class, () -> {
             notificationService.sendEmailNotificationAboutOrderStatus(ORDER_LOG, member);
         });
 
-        assertEquals(exception.getMessage(), "Email-notification about order status can not be sent");
-        assertEquals(exception.getClass(), NotificationException.class);
+        Throwable exceptionSMS = Assertions.assertThrows(NotificationException.class, () -> {
+            notificationService.sendSMSNotificationAboutOrderStatus(ORDER_LOG, member);
+        });
+
+        assertEquals(exceptionSMS.getMessage(), "SMS-notification about order status can not be sent");
+
+        assertEquals(exceptionEmail.getMessage(), "Email-notification about order status can not be sent");
     }
 
     @Test
     public void whenNotFoundEmailOfMemberThanEmailNotificationAboutOrderStatusWillNotBeSentThanThrowMemberNotFoundException() {
-        Account account = mockAccount("", "456522");
+        Account account = mockAccount("", phone);
         var member = mockMember(account);
 
         when(notificationDao.foundMemberEmail(member.getAccount().getEmail())).thenReturn(" ");
-        Throwable exception = Assertions.assertThrows(MemberNotFoundException.class, () -> {
+        Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {
             notificationService.sendEmailNotificationAboutOrderStatus(ORDER_LOG, member);
             notificationService.sendEmailNotificationAboutShipmentStatus(SHIPMENT_LOG, member);
         });
 
         assertEquals(exception.getMessage(), "There is not found the member's email");
-        assertEquals(exception.getClass(), MemberNotFoundException.class);
+        assertEquals(exception.getClass(), MemberDataNotFoundException.class);
     }
 
+
     @Test
-    public void whenShipmentStatusWasChangedSendEmailNotification() {
+    public void whenShipmentStatusWasChangedSendSMSNotification() {
+        Account account = mockAccount(email, " ");
+        var member = mockMember(account);
+
+        when(notificationDao.foundMemberPhoneNumber(member.getAccount().getPhone())).thenReturn(" ");
+
+        Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {
+            notificationService.sendSMSNotificationAboutOrderStatus(ORDER_LOG, member);
+            notificationService.sendSMSNotificationAboutShipmentStatus(SHIPMENT_LOG, member);
+        });
+
+        assertEquals(exception.getMessage(), "There is not found the phone number");
+        assertEquals(exception.getClass(), MemberDataNotFoundException.class);
+    }
+
+
+    @Test
+    public void whenShipmentStatusWasChangedSendNotification() {
+
         ShipmentLog newShipmentLog = mockShipmentLog("55785", ShipmentStatus.ONHOLD, LocalDateTime.now().minusDays(1));
         String expectedResult = "your shipment number 55785 has changed status on ONHOLD";
 
-        var resultOrder = notificationService.sendEmailNotificationAboutShipmentStatus(newShipmentLog, member);
+        var resultSMS = notificationService.sendSMSNotificationAboutShipmentStatus(newShipmentLog, member);
+        var resultEmail = notificationService.sendEmailNotificationAboutShipmentStatus(newShipmentLog, member);
 
-        assertEquals(expectedResult, resultOrder.getContent());
+        assertEquals(expectedResult, resultSMS.getContent());
+        assertEquals(expectedResult, resultEmail.getContent());
     }
 
     @Test
-    public void whenOrderStatusWasChangedSendEmailNotification() {
+    public void whenOrderStatusWasChangedSendNotification() {
         OrderLog newOrderLog = mockOrderLog("5548541", LocalDateTime.now().minusDays(1), OrderStatus.PENDING);
         String expectedResult = "your order number 5548541 has changed status on PENDING";
 
-        var resultOrder = notificationService.sendEmailNotificationAboutOrderStatus(newOrderLog, member);
+        var resultSMS = notificationService.sendSMSNotificationAboutOrderStatus(newOrderLog, member);
+        var resultEmail = notificationService.sendEmailNotificationAboutOrderStatus(newOrderLog, member);
 
-        assertEquals(expectedResult, resultOrder.getContent());
+        assertEquals(expectedResult, resultSMS.getContent());
+        assertEquals(expectedResult, resultEmail.getContent());
     }
+
 
     private ShipmentLog mockShipmentLog(String shipmentNumber, ShipmentStatus status, LocalDateTime creationDate) {
         return new ShipmentLog(shipmentNumber, status, creationDate);

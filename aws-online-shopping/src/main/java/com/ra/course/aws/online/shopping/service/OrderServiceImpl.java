@@ -5,7 +5,7 @@ import com.ra.course.aws.online.shopping.entity.order.Order;
 import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import com.ra.course.aws.online.shopping.entity.order.OrderStatus;
 import com.ra.course.aws.online.shopping.entity.user.Member;
-import com.ra.course.aws.online.shopping.exceptions.MemberNotFoundException;
+import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.OrderLogIsAlreadyExistException;
 import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
 
@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService {
             }
             throw new OrderNotFoundException("There is not found the Order by this number");
         }
-        throw new MemberNotFoundException("There is not found the Member by this ID");
+        throw new MemberDataNotFoundException("There is not found the Member by this ID");
     }
 
     @Override
