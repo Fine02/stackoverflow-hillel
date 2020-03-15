@@ -27,5 +27,4 @@ public interface ShippingDao {
 
     Address findThatShippingAddress(Address shippingAddress);
 
-
 }

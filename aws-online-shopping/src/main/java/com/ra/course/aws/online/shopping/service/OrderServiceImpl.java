@@ -22,15 +22,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order cancelOrder(final Order order, final Member member) {
-        if ( orderDao.isFoundMemberID(member.getMemberID())){
-            final var  foundOrder = orderDao.findByOrderNumber(order.getOrderNumber());
+        if (orderDao.isFoundMemberID(member.getMemberID())) {
+            final var foundOrder = orderDao.findByOrderNumber(order.getOrderNumber());
             if (foundOrder.getOrderDate().isBefore(LocalDateTime.now())) {
                 foundOrder.setStatus(OrderStatus.CANCELED);
                 order.setStatus(OrderStatus.CANCELED);
                 orderDao.updateOrder(foundOrder);
                 return order;
             }
-            throw new OrderNotFoundException( "There is not found the Order by this number" );
+            throw new OrderNotFoundException("There is not found the Order by this number");
         }
         throw new MemberNotFoundException("There is not found the Member by this ID");
     }
@@ -46,8 +46,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean addOrderLogToOrder(final Order order, final OrderLog orderLog) {
-        final var  foundOrder = orderDao.findByOrderNumber(order.getOrderNumber());
-        if (foundOrder.getOrderLog().contains(orderLog)){
+        final var foundOrder = orderDao.findByOrderNumber(order.getOrderNumber());
+        if (foundOrder.getOrderLog().contains(orderLog)) {
             throw new OrderLogIsAlreadyExistException("This OrderLog is already exist");
         }
         final var foundOrderList = orderDao.findLogListByOrder(order.getOrderLog());

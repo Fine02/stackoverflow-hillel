@@ -28,7 +28,7 @@ public class OrderServiceImplTest {
     private final Long MEMBER_ID_IN_DB = 10L;
     private Order searchOrder;
     private Member searchMember;
-    private String orderNumber ="101010";
+    private String orderNumber = "101010";
 
     private final OrderLog ORDER_LOG = mockOrderLog("101010", LocalDateTime.now(), OrderStatus.PENDING);
     private final List<OrderLog> ORDER_LOG_LIST = mockOrderLogList(ORDER_LOG);
@@ -38,8 +38,8 @@ public class OrderServiceImplTest {
     @BeforeEach
     public void before() {
         orderService = new OrderServiceImpl(orderDao);
-        searchOrder=mockOrder(ORDER_IN_DB, LocalDateTime.now());
-        searchMember =mockMember(MEMBER_ID_IN_DB);
+        searchOrder = mockOrder(ORDER_IN_DB, LocalDateTime.now());
+        searchMember = mockMember(MEMBER_ID_IN_DB);
         when(orderDao.findByOrderNumber(ORDER.getOrderNumber())).thenReturn(ORDER);
         when(orderDao.findLogListByOrder(ORDER.getOrderLog())).thenReturn(ORDER_LOG_LIST);
     }
@@ -56,7 +56,7 @@ public class OrderServiceImplTest {
     }
 
     @Test
-    public void shouldThrowExceptionIfOrderLogIsAlreadyExist()  {
+    public void shouldThrowExceptionIfOrderLogIsAlreadyExist() {
 
         Throwable exception = Assertions.assertThrows(OrderLogIsAlreadyExistException.class, () -> {
             orderService.addOrderLogToOrder(ORDER, ORDER_LOG);
@@ -67,7 +67,7 @@ public class OrderServiceImplTest {
     }
 
     @Test
-    public void shouldGetOrderTrack(){
+    public void shouldGetOrderTrack() {
         when(orderDao.findByOrderNumber(orderNumber)).thenReturn(ORDER);
         List<OrderLog> expectedResult = orderDao.findLogListByOrder(ORDER.getOrderLog());
 
@@ -89,7 +89,8 @@ public class OrderServiceImplTest {
         when(orderDao.isFoundMemberID(searchInDbMemberID.getMemberID())).thenReturn(false);
 
         Throwable exception = Assertions.assertThrows(MemberNotFoundException.class, () -> {
-            orderService.cancelOrder(searchOrder, searchInDbMemberID);;
+            orderService.cancelOrder(searchOrder, searchInDbMemberID);
+            ;
         });
 
         assertEquals(exception.getMessage(), "There is not found the Member by this ID");
@@ -99,14 +100,15 @@ public class OrderServiceImplTest {
     }
 
     @Test()
-    public void shouldThrowOrderNotFoundException(){
+    public void shouldThrowOrderNotFoundException() {
         var InDbOrder = mockOrder(ORDER_IN_DB, LocalDateTime.now().plusDays(8));
 
         when(orderDao.isFoundMemberID(searchMember.getMemberID())).thenReturn(true);
         when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(InDbOrder);
 
         Throwable exception = Assertions.assertThrows(OrderNotFoundException.class, () -> {
-            orderService.cancelOrder(searchOrder, searchMember);;
+            orderService.cancelOrder(searchOrder, searchMember);
+            ;
         });
 
         assertEquals(exception.getMessage(), "There is not found the Order by this number");
@@ -114,7 +116,7 @@ public class OrderServiceImplTest {
     }
 
     @Test
-    public void whenOrderDateIsAfterCurrentThenOrderCanBeCanceled()  {
+    public void whenOrderDateIsAfterCurrentThenOrderCanBeCanceled() {
         var InDbOrder = mockOrder(ORDER_IN_DB, LocalDateTime.now().minusDays(1));
         when(orderDao.isFoundMemberID(searchMember.getMemberID())).thenReturn(true);
         when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(InDbOrder);
@@ -142,14 +144,14 @@ public class OrderServiceImplTest {
         return new OrderLog(orderNumber, creationDate, status);
     }
 
-    private List<OrderLog> mockOrderLogList(OrderLog orderLog){
+    private List<OrderLog> mockOrderLogList(OrderLog orderLog) {
         List<OrderLog> orderLogList = new ArrayList<>();
         orderLogList.add(orderLog);
         return orderLogList;
     }
 
-    private Order mockOrder(){
-        return new Order("101010",OrderStatus.PENDING, LocalDateTime.now(), ORDER_LOG_LIST);
+    private Order mockOrder() {
+        return new Order("101010", OrderStatus.PENDING, LocalDateTime.now(), ORDER_LOG_LIST);
     }
 
 }
