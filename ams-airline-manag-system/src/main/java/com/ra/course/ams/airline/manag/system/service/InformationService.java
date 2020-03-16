@@ -18,10 +18,10 @@ public interface InformationService {
 
     Time checkArrivalTime(FlightInstance flightInstance);
 
-    Flight searchFlightByDate(Date date);
+    List<Flight> searchFlightByDate(Date date);
 
-    Flight searchFlightBySourceAirport(String airportCode);
+    List<Flight> searchFlightByDepartureAirport(Airport airport);
 
-    Flight searchFlightByDestinationAirport(String airportCode);
+    List<Flight> searchFlightByArrivalAirport(Airport airport);
 
 }

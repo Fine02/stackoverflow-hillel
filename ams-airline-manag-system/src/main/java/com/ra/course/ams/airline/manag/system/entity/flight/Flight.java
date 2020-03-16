@@ -1,10 +1,12 @@
 package com.ra.course.ams.airline.manag.system.entity.flight;
 
+import java.util.Date;
 import java.util.List;
 
 public class Flight {
 
     private String flightNumber;
+    private Date date;
     private Airport departure;
     private Airport arrival;
     private int durationInMinutes;
@@ -17,6 +19,7 @@ public class Flight {
 
     private Flight(Builder builder) {
         flightNumber = builder.flightNumber;
+        date = builder.date;
         departure = builder.departure;
         arrival = builder.arrival;
         durationInMinutes = builder.durationInMinutes;
@@ -28,6 +31,7 @@ public class Flight {
     public static class Builder {
 
         private transient String flightNumber;
+        private transient Date date;
         private transient Airport departure;
         private transient Airport arrival;
         private transient int durationInMinutes;
@@ -39,6 +43,10 @@ public class Flight {
 
         public Builder setFlightNumber(String flightNumber) {
             this.flightNumber = flightNumber;
+            return this;
+        }
+        public Builder setDate(Date date) {
+            this.date = date;
             return this;
         }
 
@@ -77,69 +85,69 @@ public class Flight {
         }
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public String getFlightNumber() {
         return flightNumber;
     }
 
-    public Flight setFlightNumber(String flightNumber) {
+    public void setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
-        return this;
     }
 
     public Airport getDeparture() {
         return departure;
     }
 
-    public Flight setDeparture(Airport departure) {
+    public void setDeparture(Airport departure) {
         this.departure = departure;
-        return this;
     }
 
     public Airport getArrival() {
         return arrival;
     }
 
-    public Flight setArrival(Airport arrival) {
+    public void setArrival(Airport arrival) {
         this.arrival = arrival;
-        return this;
     }
 
     public int getDurationInMinutes() {
         return durationInMinutes;
     }
 
-    public Flight setDurationInMinutes(int durationInMinutes) {
+    public void setDurationInMinutes(int durationInMinutes) {
         this.durationInMinutes = durationInMinutes;
-        return this;
     }
 
     public List<WeeklySchedule> getWeeklySchedules() {
         return weeklySchedules;
     }
 
-    public Flight setWeeklySchedules(List<WeeklySchedule> weeklySchedules) {
+    public void setWeeklySchedules(List<WeeklySchedule> weeklySchedules) {
         this.weeklySchedules = weeklySchedules;
-        return this;
     }
 
     public List<CustomSchedule> getCustomSchedules() {
         return customSchedules;
     }
 
-    public Flight setCustomSchedules(List<CustomSchedule> customSchedules) {
+    public void setCustomSchedules(List<CustomSchedule> customSchedules) {
         this.customSchedules = customSchedules;
-        return this;
     }
 
     public List<FlightInstance> getFlightInstances() {
         return flightInstances;
     }
 
-    public Flight setFlightInstances(List<FlightInstance> flightInstances) {
+    public void setFlightInstances(List<FlightInstance> flightInstances) {
         this.flightInstances = flightInstances;
-        return this;
     }
-
 
     @Override
     public String toString() {

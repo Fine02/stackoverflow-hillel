@@ -2,23 +2,28 @@ package com.ra.course.ams.airline.manag.system.entity.person;
 
 public class Account {
 
-    private String id;
+    private final String id;
     private String password;
     private AccountStatus accountStatus;
-    private Person person;
+    private final Person person;
 
-    public Account() {
+    public Account(String id, Person person) {
+        this.id = id;
+        this.person = person;
     }
 
-    public Account(String id) {
-        this.id = id;
+    public Account(Account account) {
+        this.id = account.getId();
+        this.password = account.getPassword();
+        this.accountStatus = account.getAccountStatus();
+        this.person = account.getPerson();
     }
 
     private Account(Builder builder) {
-        this.id = id;
-        this.password = password;
-        this.accountStatus = accountStatus;
-        this.person = person;
+        this.id = builder.id;
+        this.password = builder.password;
+        this.accountStatus = builder.accountStatus;
+        this.person = builder.person;
     }
 
     public static class Builder {
@@ -26,6 +31,11 @@ public class Account {
         private transient String password;
         private transient AccountStatus accountStatus;
         private transient Person person;
+
+        public Builder(String id, Person person) {
+            this.id = id;
+            this.person = person;
+        }
 
         public Account build(){
             return new Account(this);
@@ -46,7 +56,7 @@ public class Account {
             return this;
         }
 
-        public Builder setPerson(Person person) {
+        public Builder setPerson(Pilot person) {
             this.person = person;
             return this;
         }
@@ -56,9 +66,6 @@ public class Account {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getPassword() {
         return password;
@@ -78,10 +85,6 @@ public class Account {
 
     public Person getPerson() {
         return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
     }
 
     @Override
