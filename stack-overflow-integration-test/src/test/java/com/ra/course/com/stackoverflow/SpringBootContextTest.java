@@ -1,8 +1,10 @@
 package com.ra.course.com.stackoverflow;
 
 import com.ra.course.com.stackoverflow.repository.*;
+import com.ra.course.com.stackoverflow.service.member.MemberServiceImpl;
 import com.ra.course.com.stackoverflow.service.comment.CommentService;
 import com.ra.course.com.stackoverflow.service.notifaction.NotificationService;
+import com.ra.course.com.stackoverflow.service.system.QuestionScoreBadgeAwarder;
 import com.ra.course.com.stackoverflow.service.question.QuestionService;
 import com.ra.course.com.stackoverflow.service.bounty.BountyService;
 import com.ra.course.com.stackoverflow.service.moderate.ModerateService;
@@ -19,6 +21,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
@@ -63,6 +66,16 @@ public class SpringBootContextTest {
     @Test
     public void checkContextForAvailabilityOfBountyService() {
         assertNotNull(context.getBean(BountyService.class));
+    }
+
+    @Test
+    public void ifMemberServiceImplAddedToContextThenReturnItsBean() {
+        assertEquals(MemberServiceImpl.class, context.getBean(MemberServiceImpl.class).getClass());
+    }
+
+    @Test
+    public void ifQuestionScoreBadgeAwarderAddedToContextThenReturnItsBean() {
+        assertEquals(QuestionScoreBadgeAwarder.class, context.getBean(QuestionScoreBadgeAwarder.class).getClass());
     }
 
     @TestConfiguration

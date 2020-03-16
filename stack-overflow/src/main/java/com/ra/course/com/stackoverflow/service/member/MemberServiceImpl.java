@@ -6,8 +6,10 @@ import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
+@Service
 public class MemberServiceImpl implements MemberService<Question> {
 
     @NonNull

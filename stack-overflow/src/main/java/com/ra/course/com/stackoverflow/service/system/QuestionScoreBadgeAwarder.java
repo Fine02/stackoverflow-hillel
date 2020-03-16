@@ -4,16 +4,17 @@ import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.enums.Badge;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
 
+    @NonNull
     private transient final MemberRepository memberRepository;
 
     private static final int SCR_FOR_STDNT_BDG = 1;
