@@ -13,5 +13,4 @@ public interface AuthenticationService {
     Account login(String id, String password);
 
     void logout(Account account);
-
 }
