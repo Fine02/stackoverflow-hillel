@@ -23,7 +23,6 @@ public interface OrderDao {
     OrderLog findOrderLogById(Long orderLogId);
 
      Order addOrder();
-     Order findByOrderNumber(String orderNumber);
      OrderStatus removeOrder(String orderNumber);
      Order updateOrder(String orderNumber);
 }

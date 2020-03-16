@@ -1,7 +1,6 @@
 package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.entity.order.Order;
-import com.ra.course.aws.online.shopping.entity.shipment.ShipmentStatus;
 import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 
@@ -16,8 +15,8 @@ public interface OrderService {
 
     boolean sendForShipment(Order Order);
 
-    Order placeOrder();
-    void cancelOrder();
-    ShipmentStatus trackShipmentStatus();
+//    Order placeOrder();
+//    void cancelOrder();
+//    ShipmentStatus trackShipmentStatus();
 
 }
