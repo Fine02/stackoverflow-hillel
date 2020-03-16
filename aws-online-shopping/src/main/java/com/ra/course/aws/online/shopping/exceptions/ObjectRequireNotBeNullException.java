@@ -1,4 +1,4 @@
-package com.ra.course.aws.online.shopping.exception;
+package com.ra.course.aws.online.shopping.exceptions;
 
 public class ObjectRequireNotBeNullException extends NullPointerException{
     private static final long serialVersionUID = 1L;

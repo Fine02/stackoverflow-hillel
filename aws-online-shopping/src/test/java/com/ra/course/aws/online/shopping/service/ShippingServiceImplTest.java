@@ -13,6 +13,7 @@ import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.ShipmentLogIsAlreadyExistException;
 import com.ra.course.aws.online.shopping.exceptions.ShippingAddressNotFoundException;
+import com.ra.course.aws.online.shopping.service.impl.ShippingServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

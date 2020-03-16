@@ -1,4 +1,4 @@
-package com.ra.course.aws.online.shopping.service;
+package com.ra.course.aws.online.shopping.service.impl;
 
 import com.ra.course.aws.online.shopping.dao.ShippingDao;
 import com.ra.course.aws.online.shopping.entity.Address;
@@ -8,6 +8,7 @@ import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.ShipmentLogIsAlreadyExistException;
 import com.ra.course.aws.online.shopping.exceptions.ShippingAddressNotFoundException;
+import com.ra.course.aws.online.shopping.service.ShippingService;
 
 import java.util.Collections;
 import java.util.List;

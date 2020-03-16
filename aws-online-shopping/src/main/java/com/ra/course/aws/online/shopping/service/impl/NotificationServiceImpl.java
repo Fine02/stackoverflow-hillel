@@ -1,4 +1,4 @@
-package com.ra.course.aws.online.shopping.service;
+package com.ra.course.aws.online.shopping.service.impl;
 
 import com.ra.course.aws.online.shopping.dao.NotificationDao;
 import com.ra.course.aws.online.shopping.dao.OrderDao;
@@ -10,6 +10,7 @@ import com.ra.course.aws.online.shopping.entity.shipment.ShipmentLog;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.NotificationException;
+import com.ra.course.aws.online.shopping.service.NotificationService;
 
 import java.time.LocalDateTime;
 

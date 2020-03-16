@@ -2,31 +2,30 @@ package com.ra.course.aws.online.shopping.entity;
 import com.ra.course.aws.online.shopping.entity.product.Product;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 public class Catalog  {
-    private LocalDate lastUpdated;
+    private LocalDateTime lastUpdated;
     private Map<String, List<Product>> productNames;
     private Map<String, List<Product>> productCategories;
-    private String name;
 
     public Catalog() {
     }
 
-    public Catalog(LocalDate lastUpdated, Map<String, List<Product>> productNames,
-                   Map<String, List<Product>> productCategories, String name) {
+    public Catalog(LocalDateTime lastUpdated, Map<String, List<Product>> productNames,
+                   Map<String, List<Product>> productCategories) {
         this.lastUpdated = lastUpdated;
         this.productNames = productNames;
         this.productCategories = productCategories;
-        this.name = name;
     }
 
-    public LocalDate getLastUpdated() {
+    public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }
 
-    public void setLastUpdated(LocalDate lastUpdated) {
+    public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
@@ -46,12 +45,5 @@ public class Catalog  {
         this.productCategories = productCategories;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
 }

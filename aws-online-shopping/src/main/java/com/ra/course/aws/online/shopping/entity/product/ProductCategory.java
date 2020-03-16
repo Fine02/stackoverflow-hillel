@@ -10,6 +10,11 @@ public class ProductCategory {
     public ProductCategory() {
     }
 
+    public ProductCategory(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public ProductCategory(Long categoryID, String name, String description) {
         this.categoryID = categoryID;
         this.name = name;
@@ -41,7 +46,7 @@ public class ProductCategory {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductCategory that = (ProductCategory) o;
-        return categoryID.equals(that.categoryID) &&
+        return /*categoryID.equals(that.categoryID) &&*/
                 name.equals(that.name) &&
                 description.equals(that.description);
     }

@@ -1,4 +1,4 @@
-package com.ra.course.aws.online.shopping.exception;
+package com.ra.course.aws.online.shopping.exceptions;
 
 public class ElementNotFoundException extends IllegalArgumentException{
     private static final long serialVersionUID = -1L;

@@ -10,6 +10,7 @@ import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.OrderIsAlreadyShippedException;
 import com.ra.course.aws.online.shopping.exceptions.OrderLogIsAlreadyExistException;
 import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
+import com.ra.course.aws.online.shopping.service.impl.OrderServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
