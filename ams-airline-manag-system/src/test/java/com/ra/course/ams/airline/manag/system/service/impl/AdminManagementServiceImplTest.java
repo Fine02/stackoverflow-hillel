@@ -41,9 +41,6 @@ public class AdminManagementServiceImplTest {
                 assertThat(admin).isNotNull();
                 assertThat(admin.getName()).isEqualTo("Ivanov Ivan");
                 assertThat(admin.getEmail()).isEqualTo("ivanov@example.com");
-
-                verify(adminRepository, times(1)).getInstances();
-                verifyNoMoreInteractions(adminRepository);
         }
 
         @Test
@@ -54,7 +51,6 @@ public class AdminManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(adminRepository);
         }
 
         @Test
@@ -65,7 +61,6 @@ public class AdminManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(adminRepository);
         }
 
         @Test
@@ -78,8 +73,6 @@ public class AdminManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(AdminNotExistException.class);
                 }
-                verify(adminRepository, times(1)).getInstances();
-                verifyNoMoreInteractions(adminRepository);
         }
 
         @Test
@@ -89,7 +82,6 @@ public class AdminManagementServiceImplTest {
 
                 Admin admin = adminManagementService.findByPhoneNumber("11111");
                 assertThat(admin).isEqualToComparingFieldByField(adminGiven);
-                verify(adminRepository, times(1)).getInstance("11111");
         }
 
         @Test
@@ -102,8 +94,6 @@ public class AdminManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(AdminNotExistException.class);
                 }
-
-                verify(adminRepository, times(1)).getInstance(any());
         }
 
         @Test
@@ -114,7 +104,6 @@ public class AdminManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(adminRepository);
         }
 
         @Test
@@ -125,7 +114,6 @@ public class AdminManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(adminRepository);
         }
 
         @Test
@@ -136,9 +124,6 @@ public class AdminManagementServiceImplTest {
                 Admin admin = adminManagementService.add(adminToAdd);
 
                 assertThat(admin).isEqualToComparingFieldByField(adminToAdd);
-                verify(adminRepository, times(1)).getInstance(any());
-                verify(adminRepository, times(1)).addInstance(any());
-                verifyNoMoreInteractions(adminRepository);
         }
 
         @Test
@@ -153,9 +138,6 @@ public class AdminManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(AdminAlreadyExistException.class);
                 }
-
-                verify(adminRepository, times(1)).getInstance(any());
-                verifyNoMoreInteractions(adminRepository);
         }
 
         @Test
@@ -166,7 +148,6 @@ public class AdminManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(adminRepository);
         }
 
         @Test
@@ -179,10 +160,6 @@ public class AdminManagementServiceImplTest {
 
                 assertThat(updatedAdmin).isEqualTo(admin);
                 assertThat(updatedAdmin.getPhone()).isEqualTo("55285");
-
-                verify(adminRepository, times(1)).updateInstance(eq(adminInRepo));
-                verify(adminRepository, times(1)).getInstance(any());
-                verifyNoMoreInteractions(adminRepository);
         }
 
         @Test
@@ -193,7 +170,6 @@ public class AdminManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(adminRepository);
         }
 
         @Test
@@ -206,8 +182,6 @@ public class AdminManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(AdminNotExistException.class);
                 }
-                verify(adminRepository, times(1)).getInstance(any());
-                verifyNoMoreInteractions(adminRepository);
         }
 
         @Test
@@ -220,10 +194,6 @@ public class AdminManagementServiceImplTest {
 
                 assertThat(updatedAdmin).isEqualTo(admin);
                 assertThat(updatedAdmin.getEmail()).isEqualTo("ivanov@test.com");
-
-                verify(adminRepository, times(1)).updateInstance(eq(adminInRepo));
-                verify(adminRepository, times(1)).getInstance(any());
-                verifyNoMoreInteractions(adminRepository);
         }
 
         @Test
@@ -234,7 +204,6 @@ public class AdminManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(adminRepository);
         }
 
         @Test
@@ -247,8 +216,6 @@ public class AdminManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(AdminNotExistException.class);
                 }
-                verify(adminRepository, times(1)).getInstance(any());
-                verifyNoMoreInteractions(adminRepository);
         }
 
         @Test
@@ -261,7 +228,6 @@ public class AdminManagementServiceImplTest {
 
                 verify(adminRepository, times(1)).removeInstance(eq(adminInRepo));
                 verify(adminRepository, times(1)).getInstance(any());
-                verifyNoMoreInteractions(adminRepository);
         }
 
         @Test
@@ -272,7 +238,6 @@ public class AdminManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(adminRepository);
         }
 
         @Test
@@ -286,8 +251,6 @@ public class AdminManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(AdminNotExistException.class);
                 }
-                verify(adminRepository, times(1)).getInstance(any());
-                verifyNoMoreInteractions(adminRepository);
         }
 
         private static Collection<Admin> getAdmin() {

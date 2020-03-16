@@ -40,10 +40,6 @@ public class CrewManagementServiceImplTest {
         assertThat(updatedCrew).isEqualTo(crew);
         assertThat(updatedCrew.getFlightInstances()).hasSize(1);
         assertThat(updatedCrew.getFlightInstances().get(0)).isEqualTo(flightInstanceToAdd);
-
-        verify(crewRepository, times(1)).updateInstance(eq(crewInRepo));
-        verify(crewRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(crewRepository);
     }
 
     @Test
@@ -54,7 +50,6 @@ public class CrewManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(crewRepository);
     }
 
     @Test
@@ -74,8 +69,6 @@ public class CrewManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(CrewNotExistException.class);
         }
-        verify(crewRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(crewRepository);
     }
 
     @Test
@@ -91,10 +84,6 @@ public class CrewManagementServiceImplTest {
         assertThat(updatedCrew).isEqualTo(crew);
         assertThat(updatedCrew.getFlightInstances()).isEmpty();
         assertThat(crewInRepo.getFlightInstances()).isEmpty();
-
-        verify(crewRepository, times(1)).updateInstance(eq(crewInRepo));
-        verify(crewRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(crewRepository);
     }
 
     @Test
@@ -105,7 +94,6 @@ public class CrewManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(crewRepository);
     }
 
         @Test
@@ -125,8 +113,5 @@ public class CrewManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(CrewNotExistException.class);
         }
-        verify(crewRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(crewRepository);
     }
-
 }

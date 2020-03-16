@@ -21,6 +21,8 @@ import static org.mockito.Mockito.*;
 
 public class FlightInstanceServiceImplTest {
 
+    FlightInstance testFlightInst;
+
     @Mock
     private Repository<FlightInstance, String> flightInstanceRepository;
 
@@ -29,19 +31,18 @@ public class FlightInstanceServiceImplTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        testFlightInst = new FlightInstance.Builder().setId("0001").build();
         flightInstanceService = new FlightInstSerImpl(flightInstanceRepository);
     }
 
     @Test
     public void testThatIfPassValidObjectInArgumentAddMethodReturnsFlightInstance() {
-        FlightInstance flightInstanceToAdd = new FlightInstance.Builder().setId("0001").build();
+        FlightInstance flightInstanceToAdd = testFlightInst;
         when(flightInstanceRepository.addInstance(flightInstanceToAdd)).thenReturn(flightInstanceToAdd);
         FlightInstance returnedFlightInstance = flightInstanceService.add(flightInstanceToAdd);
 
         assertThat(returnedFlightInstance).isNotNull();
         assertThat(returnedFlightInstance.getId()).isEqualTo("0001");
-
-        verify(flightInstanceRepository, times(1)).addInstance(flightInstanceToAdd);
     }
 
     @Test
@@ -52,19 +53,17 @@ public class FlightInstanceServiceImplTest {
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(flightInstanceRepository);
     }
 
     @Test
     public void testThatIfPassValidObjectInArgumentUpdateMethodReturnsFlightNoErrorThrows() {
-        FlightInstance flightInstanceToUpdate = new FlightInstance.Builder().setId("0001").build();
+        FlightInstance flightInstanceToUpdate = testFlightInst;
         doNothing().when(flightInstanceRepository).updateInstance(flightInstanceToUpdate);
         try {
             flightInstanceService.updateStatus(flightInstanceToUpdate, FlightStatus.ACTIVE);
         } catch (Exception e) {
             fail("Expected that no error will be throws");
         }
-        verify(flightInstanceRepository, times(1)).updateInstance(flightInstanceToUpdate);
     }
 
     @Test
@@ -75,7 +74,6 @@ public class FlightInstanceServiceImplTest {
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(flightInstanceRepository);
     }
 
     @Test
@@ -86,14 +84,12 @@ public class FlightInstanceServiceImplTest {
 
     @Test
     public void testThatIfPassValidObjectInArgumentCancelMethodReturnsTrue() {
-        FlightInstance flightInstanceToCancel = new FlightInstance.Builder().setId("0001").build();
+        FlightInstance flightInstanceToCancel = testFlightInst;
         doNothing().when(flightInstanceRepository).removeInstance(flightInstanceToCancel);
         boolean result = flightInstanceService.cancel(flightInstanceToCancel);
 
         assertThat(result).isNotNull();
         assertThat(result).isEqualTo(true);
-
-        verify(flightInstanceRepository, times(1)).removeInstance(flightInstanceToCancel);
     }
 
     @Test
@@ -104,12 +100,11 @@ public class FlightInstanceServiceImplTest {
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(flightInstanceRepository);
     }
 
     @Test
     public void testThatIfPassValidObjectInArgumentAssignPilotMethodCallRepositoryWithRightObjectAndReturnsTrue() {
-        FlightInstance flightInstanceToUpdate = new FlightInstance.Builder().setId("0001").build();
+        FlightInstance flightInstanceToUpdate = testFlightInst;
         doNothing().when(flightInstanceRepository).updateInstance(flightInstanceToUpdate);
         Pilot pilot = new Pilot();
         try {
@@ -117,12 +112,11 @@ public class FlightInstanceServiceImplTest {
         } catch (Exception e) {
             fail("Expected that no error will be throws");
         }
-        verify(flightInstanceRepository, times(1)).updateInstance(flightInstanceToUpdate);
     }
 
     @Test
     public void testThatIfPassValidObjectInArgumentAssignCrewMethodCallRepositoryWithRightObjectAndReturnsTrue() {
-        FlightInstance flightInstanceToUpdate = new FlightInstance.Builder().setId("0001").build();
+        FlightInstance flightInstanceToUpdate = testFlightInst;
         doNothing().when(flightInstanceRepository).updateInstance(flightInstanceToUpdate);
         Crew crew = new Crew();
         try {
@@ -130,7 +124,6 @@ public class FlightInstanceServiceImplTest {
         } catch (Exception e) {
             fail("Expected that no error will be throws");
         }
-        verify(flightInstanceRepository, times(1)).updateInstance(flightInstanceToUpdate);
     }
 
     @Test
@@ -142,7 +135,6 @@ public class FlightInstanceServiceImplTest {
         } catch (Exception e) {
             fail("Expected that list of flights will be returned");
         }
-        verifyZeroInteractions(flightInstanceRepository);
     }
 
     @Test
@@ -154,34 +146,33 @@ public class FlightInstanceServiceImplTest {
         } catch (Exception e) {
             fail("Expected that list of flights will be returned");
         }
-        verifyZeroInteractions(flightInstanceRepository);
     }
 
     @Test
     public void whenAssignPilotWithflightInstanceNullThenThrowIllegalArgumentException() {
-        FlightInstance flightInstance = null;
+
         Assertions.assertThrows(IllegalArgumentException.class, () ->
-                flightInstanceService.assignPilot(flightInstance, new Pilot()));
+                flightInstanceService.assignPilot(null, new Pilot()));
     }
 
     @Test
     public void whenAssignCrewWithCrewNullThenThrowIllegalArgumentException() {
-        Crew crew = null;
+
         Assertions.assertThrows(IllegalArgumentException.class, () ->
-                flightInstanceService.assignCrew(new FlightInstance(), crew));
+                flightInstanceService.assignCrew(new FlightInstance(), null));
     }
 
     @Test
     public void whenAssignCrewWithflightInstanceNullThenThrowIllegalArgumentException() {
-        FlightInstance flightInstance = null;
+
         Assertions.assertThrows(IllegalArgumentException.class, () ->
-                flightInstanceService.assignCrew(flightInstance, new Crew()));
+                flightInstanceService.assignCrew(null, new Crew()));
     }
 
     @Test
     public void whenAssignPilotWithPilotNullThenThrowIllegalArgumentException() {
-        Crew crew = null;
+
         Assertions.assertThrows(IllegalArgumentException.class, () ->
-                flightInstanceService.assignPilot(new FlightInstance(), crew));
+                flightInstanceService.assignPilot(new FlightInstance(), null));
     }
 }

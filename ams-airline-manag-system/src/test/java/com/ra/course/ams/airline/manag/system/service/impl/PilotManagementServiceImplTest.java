@@ -40,10 +40,6 @@ public class PilotManagementServiceImplTest {
         assertThat(updatedPilot).isEqualTo(pilot);
         assertThat(updatedPilot.getFlightInstances()).hasSize(1);
         assertThat(updatedPilot.getFlightInstances().get(0)).isEqualTo(flightInstanceToAdd);
-
-        verify(pilotRepository, times(1)).updateInstance(eq(pilotInRepo));
-        verify(pilotRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(pilotRepository);
     }
 
     @Test
@@ -54,7 +50,6 @@ public class PilotManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(pilotRepository);
     }
 
     @Test
@@ -75,8 +70,6 @@ public class PilotManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(PilotNotExistException.class);
         }
-        verify(pilotRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(pilotRepository);
     }
 
     @Test
@@ -92,10 +85,6 @@ public class PilotManagementServiceImplTest {
         assertThat(updatedPilot).isEqualTo(pilot);
         assertThat(updatedPilot.getFlightInstances()).isEmpty();
         assertThat(pilotInRepo.getFlightInstances()).isEmpty();
-
-        verify(pilotRepository, times(1)).updateInstance(eq(pilotInRepo));
-        verify(pilotRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(pilotRepository);
     }
 
     @Test
@@ -106,7 +95,6 @@ public class PilotManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(pilotRepository);
     }
 
     @Test
@@ -126,8 +114,5 @@ public class PilotManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(PilotNotExistException.class);
         }
-        verify(pilotRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(pilotRepository);
     }
-
 }

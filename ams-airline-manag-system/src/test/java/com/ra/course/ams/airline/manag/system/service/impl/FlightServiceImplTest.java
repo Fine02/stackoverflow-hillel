@@ -16,6 +16,8 @@ import static org.mockito.Mockito.times;
 
 public class FlightServiceImplTest {
 
+    private Flight flightToAdd;
+
     @Mock
     private Repository<Flight, String> flightRepository;
 
@@ -24,77 +26,64 @@ public class FlightServiceImplTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-//        flightRepository = new FlightRepository(new ArrayList<>());
         flightService = new FlightServiceImpl(flightRepository);
+        flightToAdd = new Flight.Builder().setFlightNumber("0001").build();
     }
 
     @Test
-    public void testThatIfPassValidFlightObjectInArgumentAddMethodReturnsFlight(){
-        Flight flightToAdd = new Flight.Builder().setFlightNumber("0001").build();
+    public void testThatIfPassValidFlightObjectInArgumentAddMethodReturnsFlight() {
         when(flightRepository.addInstance(any(Flight.class))).thenReturn(flightToAdd);
         Flight returnedFlight = flightService.add(flightToAdd);
 
         assertThat(returnedFlight).isNotNull();
         assertThat(returnedFlight.getFlightNumber()).isEqualTo("0001");
-
-        verify(flightRepository, times(1)).addInstance(flightToAdd);
     }
 
     @Test
-    public void testThatIfPassNullInArgumentAddMethodThrowsError(){
+    public void testThatIfPassNullInArgumentAddMethodThrowsError() {
         try {
             flightService.add(null);
             fail("Expected that IllegalArgumentException will be throws");
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(flightRepository);
     }
 
     @Test
-    public void testThatIfPassValidFlightObjectInArgumentUpdateMethodReturnsFlight(){
-        Flight flightToAdd = new Flight.Builder().setFlightNumber("0001").build();
+    public void testThatIfPassValidFlightObjectInArgumentUpdateMethodReturnsFlight() {
         doNothing().when(flightRepository).updateInstance(any(Flight.class));
         Flight returnedFlight = flightService.update(flightToAdd);
 
         assertThat(returnedFlight).isNotNull();
         assertThat(returnedFlight.getFlightNumber()).isEqualTo("0001");
-
-        verify(flightRepository, times(1)).updateInstance(flightToAdd);
     }
 
     @Test
-    public void testThatIfPassNullInArgumentUpdateMethodThrowsError(){
+    public void testThatIfPassNullInArgumentUpdateMethodThrowsError() {
         try {
             flightService.update(null);
             fail("Expected that IllegalArgumentException will be throws");
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(flightRepository);
     }
 
     @Test
-    public void testThatIfPassValidFlightObjectInArgumentCancelMethodReturnsTrue(){
-        Flight flightToAdd = new Flight.Builder().setFlightNumber("0001").build();
+    public void testThatIfPassValidFlightObjectInArgumentCancelMethodReturnsTrue() {
         doNothing().when(flightRepository).removeInstance(any(Flight.class));
         boolean result = flightService.cancel(flightToAdd);
 
         assertThat(result).isNotNull();
         assertThat(result).isEqualTo(true);
-
-        verify(flightRepository, times(1)).removeInstance(flightToAdd);
     }
 
     @Test
-    public void testThatIfPassNullInArgumentCancelMethodThrowsError(){
+    public void testThatIfPassNullInArgumentCancelMethodThrowsError() {
         try {
             flightService.cancel(null);
             fail("Expected that IllegalArgumentException will be throws");
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(flightRepository);
     }
-
 }
