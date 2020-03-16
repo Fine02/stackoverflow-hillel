@@ -1,9 +1,11 @@
 package com.ra.course.com.stackoverflow;
 
 import com.ra.course.com.stackoverflow.repository.*;
+import com.ra.course.com.stackoverflow.service.comment.CommentService;
+import com.ra.course.com.stackoverflow.service.notifaction.NotificationService;
+import com.ra.course.com.stackoverflow.service.question.QuestionService;
 import com.ra.course.com.stackoverflow.service.bounty.BountyService;
 import com.ra.course.com.stackoverflow.service.moderate.ModerateService;
-import com.ra.course.com.stackoverflow.service.notifaction.NotificationService;
 import com.ra.course.com.stackoverflow.service.search.SearchService;
 import com.ra.course.com.stackoverflow.service.vote.impl.VoteAnswerService;
 import com.ra.course.com.stackoverflow.service.vote.impl.VoteCommentService;
@@ -36,6 +38,16 @@ public class SpringBootContextTest {
     @Test
     void checkContextForAvailabilityOfNotificationServices() {
         assertNotNull(context.getBean(NotificationService.class));
+    }
+
+    @Test
+    public void checkContextForAvailabilityOfCommentService() {
+        assertNotNull(context.getBean(CommentService.class));
+    }
+
+    @Test
+    public void checkContextForAvailabilityOfQuestionService() {
+        assertNotNull(context.getBean(QuestionService.class));
     }
 
     @Test
