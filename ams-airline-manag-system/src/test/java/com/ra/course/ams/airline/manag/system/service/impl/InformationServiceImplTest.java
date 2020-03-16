@@ -21,6 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class InformationServiceImplTest {
 
     private InformationServiceImpl informationService;
+    private Airport airport;
+    private Time time;
 
     @Mock
     private Repository<CustomSchedule, String> customScheduleRepo;
@@ -33,6 +35,9 @@ public class InformationServiceImplTest {
 
     @BeforeEach
     public void setUp() {
+        airport = new Airport();
+        time = new Time(1);
+
         MockitoAnnotations.initMocks(this);
         informationService = new InformationServiceImpl();
         informationService.setFligRepos(flightInstRepo, flightRepository);
@@ -62,7 +67,7 @@ public class InformationServiceImplTest {
         assertThat(informationService.checkFlightWeeklySchedule("1")).isEqualTo(existedWeeklySchedule);
     }
 
-        @Test
+    @Test
     public void whenFlightNumberIsNullCheckFlightCustomScheduleThrowIllegalArgumentException() {
 
         Assertions.assertThrows(IllegalArgumentException.class, () ->
@@ -105,7 +110,7 @@ public class InformationServiceImplTest {
     @Test
     public void whenFlightInstanceIsActualThenCheckAvailableSeatsReturnSeatsList() {
         FlightSeat flightSeat = new FlightSeat.Builder().setReservationNumber("1").build();
-        List <FlightSeat> flightSeatList = new ArrayList<>();
+        List<FlightSeat> flightSeatList = new ArrayList<>();
         flightSeatList.add(flightSeat);
         FlightInstance flightInstance = new FlightInstance.Builder().setSeats(flightSeatList).build();
         Mockito.when(flightInstRepo.getInstances())
@@ -123,7 +128,6 @@ public class InformationServiceImplTest {
 
     @Test
     public void whenFlightInstanceIsActualThenCheckDepartureTimeReturnFlight() {
-        Time time = new Time(1);
         FlightInstance flightInstance = new FlightInstance.Builder().setDepartureTime(time).build();
         Mockito.when(flightInstRepo.getInstances())
                 .thenReturn(Collections.singleton(flightInstance));
@@ -140,7 +144,6 @@ public class InformationServiceImplTest {
 
     @Test
     public void whenFlightInstanceIsActualThenCheckArrivalTimeReturnFlight() {
-        Time time = new Time(1);
         FlightInstance flightInstance = new FlightInstance.Builder().setArrivalTime(time).build();
         Mockito.when(flightInstRepo.getInstances())
                 .thenReturn(Collections.singleton(flightInstance));
@@ -176,7 +179,6 @@ public class InformationServiceImplTest {
 
     @Test
     public void whenDepartureAirportIsActualThenSearchFlightByDepartureAirportReturnListFlight() {
-        Airport airport = new Airport();
         Flight flight = new Flight.Builder().setArrival(airport).build();
         List<Flight> flights = new ArrayList<>();
         flights.add(flight);
@@ -195,7 +197,6 @@ public class InformationServiceImplTest {
 
     @Test
     public void whenArrivalAirportIsActualThenSearchFlightByArrivalAirportReturnListFlight() {
-        Airport airport = new Airport();
         Flight flight = new Flight.Builder().setDeparture(airport).build();
         List<Flight> flights = new ArrayList<>();
         flights.add(flight);

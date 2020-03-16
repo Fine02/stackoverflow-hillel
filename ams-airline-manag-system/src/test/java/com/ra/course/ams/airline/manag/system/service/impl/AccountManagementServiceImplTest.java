@@ -58,7 +58,6 @@ public class AccountManagementServiceImplTest {
         verify(accountRepository, times(1)).getInstance(any());
         verify(accountRepository, times(1)).addInstance(accountArgumentCaptor.capture());
         assertThat(accountArgumentCaptor.getValue()).isEqualToComparingFieldByField(account);
-        verifyNoMoreInteractions(accountRepository);
     }
 
     @Test()
@@ -72,8 +71,6 @@ public class AccountManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(AccountAlreadyExistException.class);
         }
-        verify(accountRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(accountRepository);
     }
 
     @Test
@@ -82,9 +79,6 @@ public class AccountManagementServiceImplTest {
         List<Account> accounts = accountManagementService.getAccounts();
 
         assertThat(accounts).hasSize(4);
-
-        verify(accountRepository, times(1)).getInstances();
-        verifyNoMoreInteractions(accountRepository);
     }
 
     @Test
@@ -99,7 +93,6 @@ public class AccountManagementServiceImplTest {
         verify(accountRepository, times(1)).getInstance(any());
         verify(accountRepository, times(1)).removeInstance(accountArgumentCaptor.capture());
         assertThat(accountArgumentCaptor.getValue()).isEqualTo(account);
-        verifyNoMoreInteractions(accountRepository);
     }
 
     @Test
@@ -114,10 +107,6 @@ public class AccountManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(AccountNotExistException.class);
         }
-
-        verify(authorizationService, times(1)).checkGrantsForDeleteAccountOperation(eq(account), eq(admin));
-        verify(accountRepository, times(1)).getInstance(eq(account.getId()));
-        verifyNoMoreInteractions(accountRepository);
     }
 
     @Test
@@ -132,9 +121,6 @@ public class AccountManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(UnauthorizedOperationException.class);
         }
-
-        verify(authorizationService, times(1)).checkGrantsForDeleteAccountOperation(eq(account), eq(admin));
-        verifyZeroInteractions(accountRepository);
     }
 
     @Test
@@ -153,7 +139,6 @@ public class AccountManagementServiceImplTest {
         verify(accountRepository, times(1)).getInstance(any());
         verify(accountRepository, times(1)).updateInstance(accountArgumentCaptor.capture());
         assertThat(accountArgumentCaptor.getValue().getAccountStatus()).isEqualTo(AccountStatus.BLOCKED);
-        verifyNoMoreInteractions(accountRepository);
     }
 
     @Test
@@ -168,10 +153,6 @@ public class AccountManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(AccountNotExistException.class);
         }
-
-        verify(authorizationService, times(1)).checkGrantsForUpdateAccountOperation(eq(account), eq(admin));
-        verify(accountRepository, times(1)).getInstance(eq(account.getId()));
-        verifyNoMoreInteractions(accountRepository);
     }
 
     @Test
@@ -186,9 +167,6 @@ public class AccountManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(UnauthorizedOperationException.class);
         }
-
-        verify(authorizationService, times(1)).checkGrantsForUpdateAccountOperation(eq(account), eq(admin));
-        verifyZeroInteractions(accountRepository);
     }
 
     @Test
@@ -203,7 +181,6 @@ public class AccountManagementServiceImplTest {
         verify(accountRepository, times(1)).getInstance(any());
         verify(accountRepository, times(1)).updateInstance(accountArgumentCaptor.capture());
         assertThat(accountArgumentCaptor.getValue().getAccountStatus()).isEqualTo(AccountStatus.BLOCKED);
-        verifyNoMoreInteractions(accountRepository);
     }
 
     @Test
@@ -218,10 +195,6 @@ public class AccountManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(AccountNotExistException.class);
         }
-
-        verify(authorizationService, times(1)).checkGrantsForBlockAccountOperation(eq(account), eq(admin));
-        verify(accountRepository, times(1)).getInstance(eq(account.getId()));
-        verifyNoMoreInteractions(accountRepository);
     }
 
     @Test
@@ -236,9 +209,6 @@ public class AccountManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(UnauthorizedOperationException.class);
         }
-
-        verify(authorizationService, times(1)).checkGrantsForBlockAccountOperation(eq(account), eq(admin));
-        verifyZeroInteractions(accountRepository);
     }
 
     @Test
@@ -254,7 +224,6 @@ public class AccountManagementServiceImplTest {
         verify(accountRepository, times(1)).getInstance(any());
         verify(accountRepository, times(1)).updateInstance(accountArgumentCaptor.capture());
         assertThat(accountArgumentCaptor.getValue().getPassword()).isEqualTo("newpswd");
-        verifyNoMoreInteractions(accountRepository);
     }
 
     @Test
@@ -269,10 +238,6 @@ public class AccountManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(AccountNotExistException.class);
         }
-
-        verify(authorizationService, times(1)).checkGrantsForResetPasswordOperation(eq(account), eq(admin));
-        verify(accountRepository, times(1)).getInstance(eq(account.getId()));
-        verifyNoMoreInteractions(accountRepository);
     }
 
     @Test
@@ -287,9 +252,6 @@ public class AccountManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(UnauthorizedOperationException.class);
         }
-
-        verify(authorizationService, times(1)).checkGrantsForResetPasswordOperation(eq(account), eq(admin));
-        verifyZeroInteractions(accountRepository);
     }
 
     @Test
@@ -303,7 +265,6 @@ public class AccountManagementServiceImplTest {
         verify(authenticationService, times(1)).login(eq("1"), eq("qazwsx"));
         verify(accountRepository, times(1)).updateInstance(accountArgumentCaptor.capture());
         assertThat(accountArgumentCaptor.getValue().getPassword()).isEqualTo("newpswd");
-        verifyNoMoreInteractions(accountRepository);
     }
 
     @Test
@@ -318,9 +279,6 @@ public class AccountManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(BadCredentialsException.class);
         }
-
-        verify(authenticationService, times(1)).login(eq("1"), eq("qazwsx"));
-        verifyZeroInteractions(accountRepository);
     }
 
     private static Admin getAdminSample() {

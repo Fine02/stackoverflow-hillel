@@ -41,9 +41,6 @@ public class CrewPersonManagementServiceImplTest {
         assertThat(crew).isNotNull();
         assertThat(crew.getName()).isEqualTo("Ivanov Ivan");
         assertThat(crew.getEmail()).isEqualTo("ivanov@example.com");
-
-        verify(crewRepository, times(1)).getInstances();
-        verifyNoMoreInteractions(crewRepository);
     }
 
     @Test
@@ -54,8 +51,8 @@ public class CrewPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(crewRepository);
     }
+
     @Test
     public void testThatFindByEmailThrowsIllegalArgumentExceptionWhenCallingWithNullArgument() {
         try {
@@ -64,7 +61,6 @@ public class CrewPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(crewRepository);
     }
 
 
@@ -78,8 +74,6 @@ public class CrewPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(CrewNotExistException.class);
         }
-        verify(crewRepository, times(1)).getInstances();
-        verifyNoMoreInteractions(crewRepository);
     }
 
     @Test
@@ -89,7 +83,6 @@ public class CrewPersonManagementServiceImplTest {
 
         Crew crew = crewPersonManagementService.findByPhoneNumber("11111");
         assertThat(crew).isEqualToComparingFieldByField(crewGiven);
-        verify(crewRepository, times(1)).getInstance("11111");
     }
 
     @Test
@@ -102,8 +95,6 @@ public class CrewPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(CrewNotExistException.class);
         }
-
-        verify(crewRepository, times(1)).getInstance(any());
     }
 
     @Test
@@ -114,7 +105,6 @@ public class CrewPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(crewRepository);
     }
 
     @Test
@@ -125,7 +115,6 @@ public class CrewPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(crewRepository);
     }
 
     @Test
@@ -136,9 +125,6 @@ public class CrewPersonManagementServiceImplTest {
         Crew crew = crewPersonManagementService.add(crewToAdd);
 
         assertThat(crew).isEqualToComparingFieldByField(crewToAdd);
-        verify(crewRepository, times(1)).getInstance(any());
-        verify(crewRepository, times(1)).addInstance(any());
-        verifyNoMoreInteractions(crewRepository);
     }
 
     @Test
@@ -153,9 +139,6 @@ public class CrewPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(CrewAlreadyExistException.class);
         }
-
-        verify(crewRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(crewRepository);
     }
 
     @Test
@@ -166,7 +149,6 @@ public class CrewPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(crewRepository);
     }
 
     @Test
@@ -179,10 +161,6 @@ public class CrewPersonManagementServiceImplTest {
 
         assertThat(updatedCrew).isEqualTo(crew);
         assertThat(updatedCrew.getPhone()).isEqualTo("55285");
-
-        verify(crewRepository, times(1)).updateInstance(eq(crewInRepo));
-        verify(crewRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(crewRepository);
     }
 
     @Test
@@ -193,7 +171,6 @@ public class CrewPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(crewRepository);
     }
 
     @Test
@@ -206,8 +183,6 @@ public class CrewPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(CrewNotExistException.class);
         }
-        verify(crewRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(crewRepository);
     }
 
     @Test
@@ -220,10 +195,6 @@ public class CrewPersonManagementServiceImplTest {
 
         assertThat(updatedCrew).isEqualTo(crew);
         assertThat(updatedCrew.getEmail()).isEqualTo("ivanov@test.com");
-
-        verify(crewRepository, times(1)).updateInstance(eq(crewInRepo));
-        verify(crewRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(crewRepository);
     }
 
     @Test
@@ -234,7 +205,6 @@ public class CrewPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(crewRepository);
     }
 
     @Test
@@ -247,8 +217,6 @@ public class CrewPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(CrewNotExistException.class);
         }
-        verify(crewRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(crewRepository);
     }
 
     @Test
@@ -261,7 +229,6 @@ public class CrewPersonManagementServiceImplTest {
 
         verify(crewRepository, times(1)).removeInstance(eq(crewInRepo));
         verify(crewRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(crewRepository);
     }
 
     @Test
@@ -272,7 +239,6 @@ public class CrewPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(crewRepository);
     }
 
     @Test
@@ -286,8 +252,6 @@ public class CrewPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(CrewNotExistException.class);
         }
-        verify(crewRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(crewRepository);
     }
 
     private static Collection<Crew> getCrew() {

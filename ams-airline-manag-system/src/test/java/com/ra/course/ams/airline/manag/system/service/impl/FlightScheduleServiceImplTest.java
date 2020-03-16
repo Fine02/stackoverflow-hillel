@@ -16,6 +16,8 @@ import static org.mockito.Mockito.*;
 
 public class FlightScheduleServiceImplTest {
 
+    private Flight testFlight;
+
     @Mock
     private Repository<WeeklySchedule, String> weeklyScheduleRepository;
     @Mock
@@ -26,20 +28,18 @@ public class FlightScheduleServiceImplTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        testFlight = new Flight.Builder().setFlightNumber("0001").build();
         flightScheduleService = new FlightScheduleServiceImpl(weeklyScheduleRepository, customScheduleRepository);
     }
 
     @Test
     public void testThatIfPassValidWeeklyScheduleObjectInArgumentAddScheduleMethodReturnsWeeklySchedule(){
-        Flight testFlight = new Flight.Builder().setFlightNumber("0001").build();
         WeeklySchedule weeklyScheduleToAdd = new WeeklySchedule.Builder().setFlight(testFlight).build();
         when(weeklyScheduleRepository.addInstance(weeklyScheduleToAdd)).thenReturn(weeklyScheduleToAdd);
         WeeklySchedule returnedWeeklySchedule = flightScheduleService.addSchedule(weeklyScheduleToAdd);
 
         assertThat(returnedWeeklySchedule).isNotNull();
         assertThat(returnedWeeklySchedule.getFlight()).isEqualTo(testFlight);
-
-        verify(weeklyScheduleRepository, times(1)).addInstance(weeklyScheduleToAdd);
     }
 
     @Test
@@ -50,20 +50,16 @@ public class FlightScheduleServiceImplTest {
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(weeklyScheduleRepository);
     }
 
     @Test
     public void testThatIfPassValidCustomScheduleObjectInArgumentAddScheduleMethodReturnsWeeklySchedule(){
-        Flight testFlight = new Flight.Builder().setFlightNumber("0001").build();
         CustomSchedule customScheduleToAdd = new CustomSchedule.Builder().setFlight(testFlight).build();
         when(customScheduleRepository.addInstance(customScheduleToAdd)).thenReturn(customScheduleToAdd);
         CustomSchedule returnedCustomSchedule = flightScheduleService.addSchedule(customScheduleToAdd);
 
         assertThat(returnedCustomSchedule).isNotNull();
         assertThat(returnedCustomSchedule.getFlight()).isEqualTo(testFlight);
-
-        verify(customScheduleRepository, times(1)).addInstance(customScheduleToAdd);
     }
 
     @Test
@@ -74,20 +70,16 @@ public class FlightScheduleServiceImplTest {
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(customScheduleRepository);
     }
 
     @Test
     public void testThatIfPassValidObjectInArgumentUpdateWeeklyScheduleMethodReturnsWeeklySchedule(){
-        Flight testFlight = new Flight.Builder().setFlightNumber("0001").build();
         WeeklySchedule weeklyScheduleToUpdate = new WeeklySchedule.Builder().setFlight(testFlight).build();
         doNothing().when(weeklyScheduleRepository).updateInstance(weeklyScheduleToUpdate);
         WeeklySchedule returnedWeeklySchedule = flightScheduleService.updateSchedule(weeklyScheduleToUpdate);
 
         assertThat(returnedWeeklySchedule).isNotNull();
         assertThat(returnedWeeklySchedule.getFlight()).isEqualTo(testFlight);
-
-        verify(weeklyScheduleRepository, times(1)).updateInstance(weeklyScheduleToUpdate);
     }
 
     @Test
@@ -98,20 +90,16 @@ public class FlightScheduleServiceImplTest {
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(weeklyScheduleRepository);
     }
 
     @Test
     public void testThatIfPassValidObjectInArgumentUpdateCustomScheduleMethodReturnsCustomSchedule(){
-        Flight testFlight = new Flight.Builder().setFlightNumber("0001").build();
         CustomSchedule customScheduleToUpdate = new CustomSchedule.Builder().setFlight(testFlight).build();
         doNothing().when(customScheduleRepository).updateInstance(customScheduleToUpdate);
         CustomSchedule returnedCustomSchedule = flightScheduleService.updateSchedule(customScheduleToUpdate);
 
         assertThat(returnedCustomSchedule).isNotNull();
         assertThat(returnedCustomSchedule.getFlight()).isEqualTo(testFlight);
-
-        verify(customScheduleRepository, times(1)).updateInstance(customScheduleToUpdate);
     }
 
     @Test
@@ -122,7 +110,6 @@ public class FlightScheduleServiceImplTest {
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(customScheduleRepository);
     }
 
     private WeeklySchedule returnWeeklyScheduleNull() {

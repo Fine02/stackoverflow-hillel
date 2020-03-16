@@ -37,8 +37,6 @@ public class AircraftManagementServiceImplTest {
 
         assertThat(returnedAircraft).isNotNull();
         assertThat(returnedAircraft.getId()).isEqualTo("0001");
-
-        verify(aircraftRepository, times(1)).addInstance(aircraftToAdd);
     }
 
     @Test
@@ -49,7 +47,6 @@ public class AircraftManagementServiceImplTest {
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(aircraftRepository);
     }
 
     @Test
@@ -60,8 +57,6 @@ public class AircraftManagementServiceImplTest {
 
         assertThat(returnedAircraft).isNotNull();
         assertThat(returnedAircraft.getId()).isEqualTo("0001");
-
-        verify(aircraftRepository, times(1)).updateInstance(aircraftToUpdate);
     }
 
     @Test
@@ -72,7 +67,6 @@ public class AircraftManagementServiceImplTest {
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(aircraftRepository);
     }
 
     @Test
@@ -84,7 +78,6 @@ public class AircraftManagementServiceImplTest {
         } catch (Exception e) {
             fail("Expected that list of flights will be returned");
         }
-        verifyZeroInteractions(aircraftRepository);
     }
 
     private List<Flight> getFlights() {
@@ -95,5 +88,4 @@ public class AircraftManagementServiceImplTest {
         };
         return Arrays.asList(flights);
     }
-
 }

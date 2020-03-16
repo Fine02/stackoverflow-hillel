@@ -275,8 +275,6 @@ public class PilotPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(PilotNotExistException.class);
         }
-        verify(pilotRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(pilotRepository);
     }
 
     private static Collection<Pilot> getPilot() {

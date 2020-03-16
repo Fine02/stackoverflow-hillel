@@ -41,9 +41,6 @@ public class PersonManagementServiceImplTest {
                 assertThat(person).isNotNull();
                 assertThat(person.getName()).isEqualTo("Ivanov Ivan");
                 assertThat(person.getEmail()).isEqualTo("ivanov@example.com");
-
-                verify(personRepository, times(1)).getInstances();
-                verifyNoMoreInteractions(personRepository);
         }
 
         @Test
@@ -54,7 +51,6 @@ public class PersonManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(personRepository);
         }
 
         @Test
@@ -65,7 +61,6 @@ public class PersonManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(personRepository);
         }
 
         @Test
@@ -78,8 +73,6 @@ public class PersonManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(PersonNotExistException.class);
                 }
-                verify(personRepository, times(1)).getInstances();
-                verifyNoMoreInteractions(personRepository);
         }
 
         @Test
@@ -89,7 +82,6 @@ public class PersonManagementServiceImplTest {
 
                 Person person = personManagenentService.findByPhoneNumber("11111");
                 assertThat(person).isEqualToComparingFieldByField(personGiven);
-                verify(personRepository, times(1)).getInstance("11111");
         }
 
         @Test
@@ -102,8 +94,6 @@ public class PersonManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(PersonNotExistException.class);
                 }
-
-                verify(personRepository, times(1)).getInstance(any());
         }
 
         @Test
@@ -114,7 +104,6 @@ public class PersonManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(personRepository);
         }
 
         @Test
@@ -125,7 +114,6 @@ public class PersonManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(personRepository);
         }
 
         @Test
@@ -136,9 +124,6 @@ public class PersonManagementServiceImplTest {
                 Person person = personManagenentService.add(personToAdd);
 
                 assertThat(person).isEqualToComparingFieldByField(personToAdd);
-                verify(personRepository, times(1)).getInstance(any());
-                verify(personRepository, times(1)).addInstance(any());
-                verifyNoMoreInteractions(personRepository);
         }
 
         @Test
@@ -153,9 +138,6 @@ public class PersonManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(PersonAlreadyExistException.class);
                 }
-
-                verify(personRepository, times(1)).getInstance(any());
-                verifyNoMoreInteractions(personRepository);
         }
 
         @Test
@@ -166,7 +148,6 @@ public class PersonManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(personRepository);
         }
 
         @Test
@@ -179,10 +160,6 @@ public class PersonManagementServiceImplTest {
 
                 assertThat(updatedPerson).isEqualTo(person);
                 assertThat(updatedPerson.getPhone()).isEqualTo("55285");
-
-                verify(personRepository, times(1)).updateInstance(eq(personInRepo));
-                verify(personRepository, times(1)).getInstance(any());
-                verifyNoMoreInteractions(personRepository);
         }
 
         @Test
@@ -193,7 +170,6 @@ public class PersonManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(personRepository);
         }
 
         @Test
@@ -206,8 +182,6 @@ public class PersonManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(PersonNotExistException.class);
                 }
-                verify(personRepository, times(1)).getInstance(any());
-                verifyNoMoreInteractions(personRepository);
         }
 
         @Test
@@ -220,10 +194,6 @@ public class PersonManagementServiceImplTest {
 
                 assertThat(updatedCrew).isEqualTo(person);
                 assertThat(updatedCrew.getEmail()).isEqualTo("ivanov@test.com");
-
-                verify(personRepository, times(1)).updateInstance(eq(personInRepo));
-                verify(personRepository, times(1)).getInstance(any());
-                verifyNoMoreInteractions(personRepository);
         }
 
         @Test
@@ -234,7 +204,6 @@ public class PersonManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(personRepository);
         }
 
         @Test
@@ -247,8 +216,6 @@ public class PersonManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(PersonNotExistException.class);
                 }
-                verify(personRepository, times(1)).getInstance(any());
-                verifyNoMoreInteractions(personRepository);
         }
 
         @Test
@@ -258,10 +225,6 @@ public class PersonManagementServiceImplTest {
 
                 Person personToRemove = new Person.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
                 personManagenentService.remove(personToRemove);
-
-                verify(personRepository, times(1)).removeInstance(eq(personInRepo));
-                verify(personRepository, times(1)).getInstance(any());
-                verifyNoMoreInteractions(personRepository);
         }
 
         @Test
@@ -272,7 +235,6 @@ public class PersonManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(IllegalArgumentException.class);
                 }
-                verifyZeroInteractions(personRepository);
         }
 
         @Test
@@ -286,8 +248,6 @@ public class PersonManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(PersonNotExistException.class);
                 }
-                verify(personRepository, times(1)).getInstance(any());
-                verifyNoMoreInteractions(personRepository);
         }
 
         @Test
