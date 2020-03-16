@@ -52,9 +52,11 @@ public class AccountManagementServiceImplTest {
         when(accountRepository.getInstance(any())).thenReturn(null);
         Account account = new Account.Builder("1", getPersonSample())
                 .setPassword("qazwsx").setAccountStatus(AccountStatus.ACTIVE).build();
-        Account accountOpened = accountManagementService.createAccount(account);
 
+        Account accountOpened = accountManagementService.createAccount(account);
         assertThat(accountOpened).isEqualToComparingFieldByField(account);
+        verify(accountRepository, times(1)).getInstance(any());
+        verify(accountRepository, times(1)).addInstance(accountArgumentCaptor.capture());
         assertThat(accountArgumentCaptor.getValue()).isEqualToComparingFieldByField(account);
     }
 
@@ -87,6 +89,9 @@ public class AccountManagementServiceImplTest {
         Admin admin = getAdminSample();
         accountManagementService.deleteAccount(account, admin);
 
+        verify(authorizationService, times(1)).checkGrantsForDeleteAccountOperation(eq(account), eq(admin));
+        verify(accountRepository, times(1)).getInstance(any());
+        verify(accountRepository, times(1)).removeInstance(accountArgumentCaptor.capture());
         assertThat(accountArgumentCaptor.getValue()).isEqualTo(account);
     }
 
@@ -130,6 +135,9 @@ public class AccountManagementServiceImplTest {
         assertThat(accountUpdated).isEqualTo(account);
         assertThat(accountUpdated.getAccountStatus()).isEqualTo(AccountStatus.BLOCKED);
 
+        verify(authorizationService, times(1)).checkGrantsForUpdateAccountOperation(eq(account), eq(admin));
+        verify(accountRepository, times(1)).getInstance(any());
+        verify(accountRepository, times(1)).updateInstance(accountArgumentCaptor.capture());
         assertThat(accountArgumentCaptor.getValue().getAccountStatus()).isEqualTo(AccountStatus.BLOCKED);
     }
 
@@ -169,6 +177,9 @@ public class AccountManagementServiceImplTest {
         Admin admin = getAdminSample();
         accountManagementService.blockAccount(account, admin);
 
+        verify(authorizationService, times(1)).checkGrantsForBlockAccountOperation(eq(account), eq(admin));
+        verify(accountRepository, times(1)).getInstance(any());
+        verify(accountRepository, times(1)).updateInstance(accountArgumentCaptor.capture());
         assertThat(accountArgumentCaptor.getValue().getAccountStatus()).isEqualTo(AccountStatus.BLOCKED);
     }
 
@@ -209,6 +220,9 @@ public class AccountManagementServiceImplTest {
 
         accountManagementService.resetPassword(account, "newpswd", admin);
 
+        verify(authorizationService, times(1)).checkGrantsForResetPasswordOperation(eq(account), eq(admin));
+        verify(accountRepository, times(1)).getInstance(any());
+        verify(accountRepository, times(1)).updateInstance(accountArgumentCaptor.capture());
         assertThat(accountArgumentCaptor.getValue().getPassword()).isEqualTo("newpswd");
     }
 
@@ -248,6 +262,8 @@ public class AccountManagementServiceImplTest {
 
         accountManagementService.resetPassword(account, "qazwsx", "newpswd");
 
+        verify(authenticationService, times(1)).login(eq("1"), eq("qazwsx"));
+        verify(accountRepository, times(1)).updateInstance(accountArgumentCaptor.capture());
         assertThat(accountArgumentCaptor.getValue().getPassword()).isEqualTo("newpswd");
     }
 
