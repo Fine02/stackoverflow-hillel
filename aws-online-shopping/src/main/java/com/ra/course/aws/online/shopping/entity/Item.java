@@ -1,7 +1,9 @@
 package com.ra.course.aws.online.shopping.entity;
 
+import java.util.Objects;
+
 public class Item {
-    private String productID;
+    private Long productID;
     private int quantity;
     private double price;
 
@@ -13,17 +15,17 @@ public class Item {
         this.price = price;
     }
 
-    public Item(String productID, int quantity, double price) {
+    public Item(Long productID, int quantity, double price) {
         this.productID = productID;
         this.quantity = quantity;
         this.price = price;
     }
 
-    public String getProductID() {
+    public Long getProductID() {
         return productID;
     }
 
-    public void setProductID(String productID) {
+    public void setProductID(Long productID) {
         this.productID = productID;
     }
 
@@ -41,5 +43,29 @@ public class Item {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return quantity == item.quantity &&
+                Double.compare(item.price, price) == 0 &&
+                Objects.equals(productID, item.productID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productID, quantity, price);
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "productID=" + productID +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                '}';
     }
 }
