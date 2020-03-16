@@ -10,6 +10,7 @@ import com.ra.course.aws.online.shopping.exception.ObjectRequireNotBeNullExcepti
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.ThrowingSupplier;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
@@ -23,43 +24,40 @@ class ShoppingCartServiceImplTest {
     private ShoppingCartServiceImpl shoppingCartService;
     private ShoppingCartDao shoppingCartDao = mock(ShoppingCartDao.class);
     private final Long productID = 1L;
+    Product newProduct;
+    Item newItem;
 
 
 
     @BeforeEach
     public void before(){
         shoppingCartService = new ShoppingCartServiceImpl(shoppingCartDao);
+        newProduct = mockProduct(productID);
+        newItem = mockItem(1L,1);
     }
 
     @Test
     public void WhenAddProductShouldBeMinOneNumberOfInvocation(){
-        //given
-        Product mockProduct = mockProduct(productID);
         //when
-        shoppingCartService.addProductToCart(mockProduct);
+        shoppingCartService.addProductToCart(newProduct);
         //then
         verify(shoppingCartDao).addItemToCart(Mockito.any());
 
     }
     @Test
     public void WhenAddProductGivenProductMustNotBeNull(){
-        //given
-        Product productForDel = null;
         //when
-        Throwable exception = Assertions.assertThrows(NullPointerException.class, () -> {
-            shoppingCartService.addProductToCart(productForDel);
-        });
+        Product productForDel = null;
         //then
+        Throwable exception = Assertions.assertThrows(NullPointerException.class, () -> shoppingCartService.addProductToCart(productForDel));
         assertEquals(exception.getMessage(), "given product must not be Null!");
-        assertEquals(exception.getClass(), ObjectRequireNotBeNullException.class);
+
     }
 
     @Test
     public void WhenAddProductToCartThenReturnProductID(){
         //given
         Long expectedID = 1L;
-        Item newItem = mockItem(1L,1);
-        Product newProduct = mockProduct(productID);
         when(shoppingCartDao.addItemToCart(newItem)).thenReturn(expectedID);
         //when
         Long productIDActual = shoppingCartService.addProductToCart(newProduct);
@@ -71,8 +69,7 @@ class ShoppingCartServiceImplTest {
     public void RemoveProductFromCartShouldBeMinOneNumberOfInvocation(){
         //given
         Product mockProduct = mockProduct(productID);
-        Item itemFromDB = mockItem(1L,1);
-        when(shoppingCartDao.getItemFromCart(mockProduct.getProductID())).thenReturn(itemFromDB);
+        when(shoppingCartDao.getItemFromCart(mockProduct.getProductID())).thenReturn(newItem);
         //when
         shoppingCartService.removeProductFromCart(mockProduct);
         //then
@@ -83,44 +80,35 @@ class ShoppingCartServiceImplTest {
     @Test
     public void WhenRemoveProductFromCartWhenQuantityMoreThenOneShouldBeMinOneNumberOfInvocation(){
         //given
-        Product productForDel = mockProduct(productID);
         Item itemFromDB2 = new Item(1L, 2, 12.5);
-        when(shoppingCartDao.getItemFromCart(productForDel.getProductID())).thenReturn(itemFromDB2);
+        when(shoppingCartDao.getItemFromCart(newProduct.getProductID())).thenReturn(itemFromDB2);
         //when
-        shoppingCartService.removeProductFromCart(productForDel);
+        shoppingCartService.removeProductFromCart(newProduct);
         //then
         verify(shoppingCartDao, atLeastOnce()).updateItemInCart(itemFromDB2);
     }
     @Test
-    public void WhenRemoveProductFromCartGivenProductMustNotBeNull(){
-        //given
-        Product productForDel = null;
+    public void WhenRemoveProductFromCartGivenProductMustNotBeNull() {
         //when
-        Throwable exception = Assertions.assertThrows(NullPointerException.class, () -> {
-            shoppingCartService.removeProductFromCart(productForDel);
-        });
+        shoppingCartService.removeProductFromCart(null);
         //then
-        assertEquals(exception.getMessage(), "given productToRemove must not be Null!");
-        assertEquals(exception.getClass(), ObjectRequireNotBeNullException.class);
+        Assertions.assertDoesNotThrow((ThrowingSupplier<NullPointerException>) NullPointerException::new);
     }
+
     @Test
     public void WhenRemoveProductFromCartIfCatchExceptionThenThrowsElementNotFoundException(){
         //given
-        Product productForDel = mockProduct(productID);
-        when(shoppingCartDao.getItemFromCart(productForDel.getProductID())).thenThrow(new IllegalArgumentException());
+        when(shoppingCartDao.getItemFromCart(newProduct.getProductID())).thenThrow(new IllegalArgumentException());
         //when
-        Throwable exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            shoppingCartService.removeProductFromCart(productForDel);
-        });
+        Throwable exception = Assertions.assertThrows(IllegalArgumentException.class, () -> shoppingCartService.removeProductFromCart(newProduct));
         //then
         assertEquals(exception.getClass(), ElementNotFoundException.class);
     }
     @Test
     public void WhenCheckoutItemInCartIfPresentsThenReturnTrue(){
         //given
-        Item itemFromDB = mockItem(1L, 1);
         Item searchItem = mockItem(1L, 1);
-        when(shoppingCartDao.getItemFromCart(1L)).thenReturn(itemFromDB);
+        when(shoppingCartDao.getItemFromCart(1L)).thenReturn(newItem);
         //when
         boolean actualResult = shoppingCartService.checkoutItemInCart(searchItem);
         //then
@@ -131,7 +119,6 @@ class ShoppingCartServiceImplTest {
         //given
         Item itemFromDB = mockItem(5L, 0);
         Item searchItem = mockItem(5L, 1);
-        List<Item> items = mockItems();
         when(shoppingCartDao.getItemFromCart(searchItem.getProductID())).thenReturn(itemFromDB);
         //when
         boolean actualResult = shoppingCartService.checkoutItemInCart(searchItem);
@@ -143,39 +130,23 @@ class ShoppingCartServiceImplTest {
     public void WhenCheckoutItemInCartShouldBeMinOneNumberOfInvocation(){
         //given
         Item itemToCheck = mockItem(1L, 1);
-        Item itemFromDB = mockItem(1L, 1);
-        when(shoppingCartDao.getItemFromCart(1L)).thenReturn(itemFromDB);
+        when(shoppingCartDao.getItemFromCart(1L)).thenReturn(newItem);
         //when
         shoppingCartService.checkoutItemInCart(itemToCheck);
         //then
         verify(shoppingCartDao,atLeast(1)).getItemFromCart(Mockito.any());
 
     }
+
     @Test
     public void WhenCheckoutItemInCartGivenItemMustNotBeNull(){
-        //given
+        //when
         Item itemToCheck = null;
-        //when
-        Throwable exception = Assertions.assertThrows(NullPointerException.class, () -> {
-            shoppingCartService.checkoutItemInCart(itemToCheck);
-        });
         //then
-        assertEquals(exception.getMessage(), "given item must not be Null!");
-
+        Assertions.assertThrows(NullPointerException.class, () -> shoppingCartService.checkoutItemInCart(itemToCheck));
 
     }
-    @Test
-    public void WhenCheckoutItemInCartIfCatchExceptionThenThrowsElementNotFoundException(){
-        //given
-        Item item = mockItem(5L, 2);
-        when(shoppingCartDao.getItemFromCart(item.getProductID())).thenThrow(new IllegalArgumentException());
-        //when
-        Throwable exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            shoppingCartService.checkoutItemInCart(item);
-        });
-        //then
-        assertEquals(exception.getClass(), ElementNotFoundException.class);
-    }
+
     @Test
     public void WhenBuyItemsInCartShouldBeMinOneNumberOfInvocation(){
         //given
@@ -200,11 +171,9 @@ class ShoppingCartServiceImplTest {
     }
 
     private Product mockProduct(Long productID){
-        return new Product(productID,"pen", "device", 12.5,5, new ProductCategory("office", "office aquipment"));
+        return new Product(productID,"pen", "device", 12.5,5, new ProductCategory(1L, "office", "office aquipment"));
     }
-    private Product mockProduct2(Long productID_InDB2){
-        return new Product(productID_InDB2,"pencil", "device", 5,5, new ProductCategory("office", "office aquipment"));
-    }
+
     private Item mockItem(Long ID , int quantity){
         return new Item(ID, quantity, 12.5);
     }

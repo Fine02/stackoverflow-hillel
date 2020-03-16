@@ -3,16 +3,22 @@ package com.ra.course.aws.online.shopping.entity.product;
 import java.util.Objects;
 
 public class ProductCategory {
+    private Long categoryID;
     private String name;
     private String description;
 
     public ProductCategory() {
     }
 
-    public ProductCategory(String name, String description) {
+    public ProductCategory(Long categoryID, String name, String description) {
+        this.categoryID = categoryID;
         this.name = name;
         this.description = description;
     }
+
+    public Long getCategoryID() {return categoryID;}
+
+    public void setCategoryID(Long categoryID) {this.categoryID = categoryID;}
 
     public String getName() {
         return name;
@@ -35,19 +41,21 @@ public class ProductCategory {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductCategory that = (ProductCategory) o;
-        return Objects.equals(name, that.name) &&
-                Objects.equals(description, that.description);
+        return categoryID.equals(that.categoryID) &&
+                name.equals(that.name) &&
+                description.equals(that.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description);
+        return Objects.hash(categoryID, name, description);
     }
 
     @Override
     public String toString() {
         return "ProductCategory{" +
-                "name='" + name + '\'' +
+                "categoryID=" + categoryID +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }

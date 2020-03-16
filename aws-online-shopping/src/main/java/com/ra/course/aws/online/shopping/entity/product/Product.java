@@ -20,6 +20,7 @@ public class Product {
         this.price = price;
         this.availableItemCount = availableItemCount;
         this.category = category;
+
     }
 
     public Product(Long productID, String name, String description, double price, int availableItemCount, ProductCategory category) {
@@ -29,6 +30,7 @@ public class Product {
         this.price = price;
         this.availableItemCount = availableItemCount;
         this.category = category;
+
     }
 
     public Long getProductID() {

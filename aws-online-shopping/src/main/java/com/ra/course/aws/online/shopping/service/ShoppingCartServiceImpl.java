@@ -8,6 +8,7 @@ import com.ra.course.aws.online.shopping.exception.ElementNotFoundException;
 import com.ra.course.aws.online.shopping.exception.ObjectRequireNotBeNullException;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class ShoppingCartServiceImpl implements ShoppingCartService {
@@ -31,35 +32,27 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void removeProductFromCart(final Product product) {
-        if(product == null){
-            throw new ObjectRequireNotBeNullException("given productToRemove must not be Null!");
-        }
-        try{
-            final Item itemFromDB = shoppingCartDao.getItemFromCart(product.getProductID());
-            if(itemFromDB.getQuantity() > MIN_QUANTITY){
-                itemFromDB.setQuantity(itemFromDB.getQuantity() - MIN_QUANTITY);
-                itemFromDB.setPrice(itemFromDB.getPrice() - product.getPrice());
-                shoppingCartDao.updateItemInCart(itemFromDB);
+        if(product != null){
+            try{
+                final Item itemFromDB = shoppingCartDao.getItemFromCart(product.getProductID());
+                if(itemFromDB.getQuantity() > MIN_QUANTITY){
+                    itemFromDB.setQuantity(itemFromDB.getQuantity() - MIN_QUANTITY);
+                    itemFromDB.setPrice(itemFromDB.getPrice() - product.getPrice());
+                    shoppingCartDao.updateItemInCart(itemFromDB);
+                }
+                shoppingCartDao.removeItemFromCart(itemFromDB);
+            }catch (IllegalArgumentException e){
+                throw new ElementNotFoundException(e.getMessage() + "\n element not found!" , e);
             }
-            shoppingCartDao.removeItemFromCart(itemFromDB);
-        }catch (IllegalArgumentException e){
-            throw new ElementNotFoundException(e.getMessage() + "\n element not found!" , e);
         }
     }
 
     @Override
     public boolean checkoutItemInCart(final Item item) {
-        if(item == null){
-            throw new ObjectRequireNotBeNullException("given item must not be Null!");
-        }
-
-        try{
-            final Item itemFromDB = shoppingCartDao.getItemFromCart(item.getProductID());
+       Objects.requireNonNull(item);
+          final Item itemFromDB = shoppingCartDao.getItemFromCart(item.getProductID());
             return item.equals(itemFromDB);
-        } catch (IllegalArgumentException e){
-            throw new ElementNotFoundException(e.getMessage(), e);
 
-        }
     }
 
     @Override
