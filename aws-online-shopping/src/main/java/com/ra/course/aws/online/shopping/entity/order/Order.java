@@ -1,19 +1,34 @@
 package com.ra.course.aws.online.shopping.entity.order;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 public class Order {
     private String orderNumber;
     private OrderStatus status;
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
     private List<OrderLog> orderLog;
 
     public Order() {
     }
 
-    public Order(String orderNumber, OrderStatus status, LocalDate orderDate, List<OrderLog> orderLog) {
+    public Order(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public Order(List<OrderLog> orderLog) {
+        this.orderLog = orderLog;
+    }
+
+    public Order(String orderNumber, OrderStatus status, LocalDateTime orderDate) {
+        this.orderNumber = orderNumber;
+        this.status = status;
+        this.orderDate = orderDate;
+    }
+
+    public Order(String orderNumber, OrderStatus status, LocalDateTime orderDate, List<OrderLog> orderLog) {
         this.orderNumber = orderNumber;
         this.status = status;
         this.orderDate = orderDate;
@@ -36,11 +51,11 @@ public class Order {
         this.status = status;
     }
 
-    public LocalDate getOrderDate() {
+    public LocalDateTime getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(LocalDate orderDate) {
+    public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -50,5 +65,21 @@ public class Order {
 
     public void setOrderLog(List<OrderLog> orderLog) {
         this.orderLog = orderLog;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return Objects.equals(orderNumber, order.orderNumber) &&
+                status == order.status &&
+                Objects.equals(orderDate, order.orderDate) &&
+                Objects.equals(orderLog, order.orderLog);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderNumber, status, orderDate, orderLog);
     }
 }
