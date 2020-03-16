@@ -56,20 +56,13 @@ project(':stack-overflow') {
 }
 project(':stack-overflow-integration-test') {
     dependencies {
-        testCompile project(':stack-overflow').sourceSets.main.output
+        testCompile project(':stack-overflow'){
+            bootJar.enabled = false
+            jar.enabled = true
+        }
     }
     bootJar {
         enabled = false
-    }
-}
-
-project(':stack-overflow-integration-test') {
-    bootJar {
-        enabled = false
-    }
-
-    dependencies {
-        testCompile project(':stack-overflow').sourceSets.main.output
     }
 }
 
