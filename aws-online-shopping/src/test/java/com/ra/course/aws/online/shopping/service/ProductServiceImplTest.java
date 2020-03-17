@@ -25,7 +25,7 @@ class ProductServiceImplTest {
     private ProductDao productDao = mock(ProductDao.class);
     private Product newProduct;
     private List<Product> mockProductsListFromDao;
- private Product productWithReview;
+    private Product productWithReview;
     private Product productFromDb;
 
     @BeforeEach
@@ -41,7 +41,7 @@ class ProductServiceImplTest {
                 new Product(3L, "Sunglasses", "RayBan Clubmaster", 249.9,
                         5, new ProductCategory("Accessories", "Accessories description"))
         ));
-        productWithReview  = getMockProductWithReview(5L);
+        productWithReview = getMockProductWithReview(5L);
         productFromDb = getMockProductFromDbt(5L);
     }
 
@@ -119,9 +119,7 @@ class ProductServiceImplTest {
         Assertions.assertEquals(expectedAllProducts.size(), mockProductsListFromDao.size());
     }
 
-/*------------------------------------*/
-
-
+    /*------------------------------------*/
 
 
     @Test
@@ -134,6 +132,7 @@ class ProductServiceImplTest {
         verify(productDao, times(1)).updateProduct(productFromDb);
 
     }
+
     @Test
     void WhenAddProductReviewGivenProductShouldNotBeNull() {
         //when
@@ -142,6 +141,7 @@ class ProductServiceImplTest {
         Assertions.assertDoesNotThrow((ThrowingSupplier<NullPointerException>) NullPointerException::new);
 
     }
+
     @Test
     void WhenAddProductReviewShouldBeAnyInvocationForMethod() {
         //given
@@ -151,6 +151,7 @@ class ProductServiceImplTest {
         //then
         verify(productDao).searchProductById(Mockito.any());
     }
+
     @Test
     void WhenAddProductReviewProductInDBShouldBeWithNewReview() {
         //given
@@ -172,6 +173,7 @@ class ProductServiceImplTest {
         verify(productDao, times(1)).updateProduct(productFromDb);
 
     }
+
     @Test
     void WhenAddProductRatingShouldBeMinOneNumberOfInvocationForUpdateProduct() {
         //given
@@ -182,6 +184,7 @@ class ProductServiceImplTest {
         verify(productDao, times(1)).updateProduct(productWithReview);
 
     }
+
     @Test
     void WhenAddProductRatingGivenProductShouldNotBeNull() {
         //when
@@ -190,6 +193,7 @@ class ProductServiceImplTest {
         Assertions.assertDoesNotThrow((ThrowingSupplier<NullPointerException>) NullPointerException::new);
 
     }
+
     @Test
     void WhenAddProductRatingShouldBeSavedWithNewRating() {
         //given
@@ -200,10 +204,11 @@ class ProductServiceImplTest {
         Assertions.assertEquals(9, productWithReview.getProductReview().getRating());
 
     }
+
     @Test
     void WhenAddProductRatingIfReturnedProductHasNoReviewAddingDefaultReviewWithNewRating() {
         //given
-        ProductReview defaultProductReview = new ProductReview(5L, 9,"");
+        ProductReview defaultProductReview = new ProductReview(5L, 9, "");
         when(productDao.searchProductById(5L)).thenReturn(productFromDb);
         //when
         productService.addProductRating(productFromDb, 9);
@@ -213,13 +218,14 @@ class ProductServiceImplTest {
     }
 
     private Product getMockProductWithReview(Long productID) {
-        Product productWithReview = new Product(productID, "pen", "device", 12.5, 5, new ProductCategory(1L,"office", "office aquipment"));
-        productWithReview.setProductReview(new ProductReview(1L,10, "someReview"));
+        Product productWithReview = new Product(productID, "pen", "device", 12.5, 5, new ProductCategory(1L, "office", "office aquipment"));
+        productWithReview.setProductReview(new ProductReview(1L, 10, "someReview"));
 
         return productWithReview;
     }
+
     private Product getMockProductFromDbt(Long productID) {
-        return new Product(productID, "pen", "device", 12.5, 5, new ProductCategory(1L,"office", "office aquipment"));
+        return new Product(productID, "pen", "device", 12.5, 5, new ProductCategory(1L, "office", "office aquipment"));
 
     }
 

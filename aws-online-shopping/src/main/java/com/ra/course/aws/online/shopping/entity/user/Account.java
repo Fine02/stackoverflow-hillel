@@ -1,4 +1,5 @@
 package com.ra.course.aws.online.shopping.entity.user;
+
 import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
@@ -7,6 +8,7 @@ import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
 import java.util.List;
 
 public class Account {
+    private Long id;
     private String userName;
     private String password;
     private AccountStatus status;
@@ -30,6 +32,14 @@ public class Account {
         this.phone = phone;
         this.creditCardList = creditCardList;
         this.electronicBankTransferList = electronicBankTransferList;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUserName() {
