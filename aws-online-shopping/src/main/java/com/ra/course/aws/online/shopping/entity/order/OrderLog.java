@@ -1,5 +1,7 @@
 package com.ra.course.aws.online.shopping.entity.order;
 
+import com.ra.course.aws.online.shopping.entity.enums.OrderStatus;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 

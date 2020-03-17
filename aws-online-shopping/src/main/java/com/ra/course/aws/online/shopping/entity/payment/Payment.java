@@ -1,5 +1,7 @@
 package com.ra.course.aws.online.shopping.entity.payment;
 
+import com.ra.course.aws.online.shopping.entity.enums.PaymentStatus;
+
 public class Payment {
     private PaymentStatus status;
     private double amount;

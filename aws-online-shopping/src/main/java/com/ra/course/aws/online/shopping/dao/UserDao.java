@@ -1,6 +1,6 @@
 package com.ra.course.aws.online.shopping.dao;
 
-import com.ra.course.aws.online.shopping.entity.user.AccountStatus;
+import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.user.Admin;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 

@@ -1,5 +1,6 @@
 package com.ra.course.aws.online.shopping.entity.shipment;
-import java.time.LocalDate;
+import com.ra.course.aws.online.shopping.entity.enums.ShipmentStatus;
+
 import java.time.LocalDateTime;
 
 public class ShipmentLog {

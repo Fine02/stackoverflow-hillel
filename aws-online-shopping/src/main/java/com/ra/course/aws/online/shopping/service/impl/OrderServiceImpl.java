@@ -3,7 +3,7 @@ package com.ra.course.aws.online.shopping.service.impl;
 import com.ra.course.aws.online.shopping.dao.OrderDao;
 import com.ra.course.aws.online.shopping.entity.order.Order;
 import com.ra.course.aws.online.shopping.entity.order.OrderLog;
-import com.ra.course.aws.online.shopping.entity.order.OrderStatus;
+import com.ra.course.aws.online.shopping.entity.enums.OrderStatus;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.OrderIsAlreadyShippedException;
