@@ -15,8 +15,4 @@ public interface OrderService {
 
     boolean sendForShipment(Order Order);
 
-//    Order placeOrder();
-//    void cancelOrder();
-//    ShipmentStatus trackShipmentStatus();
-
 }
