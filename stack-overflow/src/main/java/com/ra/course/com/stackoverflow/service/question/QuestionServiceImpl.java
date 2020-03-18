@@ -14,9 +14,11 @@ import com.ra.course.com.stackoverflow.repository.TagRepository;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.stereotype.Service;
 
 
 @AllArgsConstructor
+@Service
 public class QuestionServiceImpl implements QuestionService {
 
     private final transient AnswerRepository answerRepo;
