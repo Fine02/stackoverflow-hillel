@@ -7,17 +7,17 @@ import java.util.List;
 
 public interface ProductDao {
 
-    Long addNewProduct(Product product);
+    Long save(Product product);
 
-    void updateProduct(Product product);
+    void update(Product product);
 
-    void removeProduct(Long productID);
+    void remove(Long productID);
 
-    Product searchProductById(Long ID);
+    Product findById(Long ID);
 
     List<Product> searchProductsByName(String productName);
 
     List<Product> searchProductsByCategory(ProductCategory productCategory);
 
-    List<Product> getAllProducts();
+    List<Product> getAll();
 }

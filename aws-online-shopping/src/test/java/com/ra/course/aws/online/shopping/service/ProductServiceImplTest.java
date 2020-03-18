@@ -49,7 +49,7 @@ class ProductServiceImplTest {
     void shouldAddNewProduct() {
         Long expectedNewProductId = 4L;
         //given
-        when(productDao.addNewProduct(newProduct)).thenReturn(expectedNewProductId);
+        when(productDao.save(newProduct)).thenReturn(expectedNewProductId);
         //when
         Long addedProductID = productService.addNewProduct(newProduct);
         //then
@@ -62,7 +62,7 @@ class ProductServiceImplTest {
         //when
         productService.updateProduct(newProduct);
         //then
-        verify(productDao).updateProduct(newProduct);
+        verify(productDao).update(newProduct);
     }
 
     @Test
@@ -71,7 +71,7 @@ class ProductServiceImplTest {
         //when
         productService.removeProduct(1L);
         //then
-        verify(productDao).removeProduct(productID);
+        verify(productDao).remove(productID);
     }
 
     @Test
@@ -80,7 +80,7 @@ class ProductServiceImplTest {
         //when
         productService.searchProductById(1L);
         //then
-        verify(productDao).searchProductById(productID);
+        verify(productDao).findById(productID);
     }
 
     @Test
@@ -112,7 +112,7 @@ class ProductServiceImplTest {
     @Test
     void shouldReturnAllProductsList() {
         //given
-        when(productDao.getAllProducts()).thenReturn(mockProductsListFromDao);
+        when(productDao.getAll()).thenReturn(mockProductsListFromDao);
         //when
         List<Product> expectedAllProducts = productService.getAllProducts();
         //then
@@ -125,11 +125,11 @@ class ProductServiceImplTest {
     @Test
     void WhenAddProductReviewShouldBeMinOneNumberOfInvocationForUpdateProduct() {
         //given
-        when(productDao.searchProductById(5L)).thenReturn(productFromDb);
+        when(productDao.findById(5L)).thenReturn(productFromDb);
         //when
         productService.addProductReview(productWithReview);
         //then
-        verify(productDao, times(1)).updateProduct(productFromDb);
+        verify(productDao, times(1)).update(productFromDb);
 
     }
 
@@ -145,17 +145,17 @@ class ProductServiceImplTest {
     @Test
     void WhenAddProductReviewShouldBeAnyInvocationForMethod() {
         //given
-        when(productDao.searchProductById(5L)).thenReturn(productFromDb);
+        when(productDao.findById(5L)).thenReturn(productFromDb);
         //when
         productService.addProductReview(productWithReview);
         //then
-        verify(productDao).searchProductById(Mockito.any());
+        verify(productDao).findById(Mockito.any());
     }
 
     @Test
     void WhenAddProductReviewProductInDBShouldBeWithNewReview() {
         //given
-        when(productDao.searchProductById(5L)).thenReturn(productFromDb);
+        when(productDao.findById(5L)).thenReturn(productFromDb);
         //when
         productService.addProductReview(productWithReview);
         //then
@@ -165,23 +165,23 @@ class ProductServiceImplTest {
     @Test
     void WhenAddProductReviewShouldReturnNothing() {
         //given
-        when(productDao.searchProductById(productWithReview.getProductID())).thenReturn(productFromDb);
-        doNothing().when(productDao).updateProduct(isA(Product.class));
+        when(productDao.findById(productWithReview.getId())).thenReturn(productFromDb);
+        doNothing().when(productDao).update(isA(Product.class));
         //when
         productService.addProductReview(productWithReview);
         //then
-        verify(productDao, times(1)).updateProduct(productFromDb);
+        verify(productDao, times(1)).update(productFromDb);
 
     }
 
     @Test
     void WhenAddProductRatingShouldBeMinOneNumberOfInvocationForUpdateProduct() {
         //given
-        when(productDao.searchProductById(5L)).thenReturn(productWithReview);
+        when(productDao.findById(5L)).thenReturn(productWithReview);
         //when
         productService.addProductRating(productWithReview, 9);
         //then
-        verify(productDao, times(1)).updateProduct(productWithReview);
+        verify(productDao, times(1)).update(productWithReview);
 
     }
 
@@ -197,7 +197,7 @@ class ProductServiceImplTest {
     @Test
     void WhenAddProductRatingShouldBeSavedWithNewRating() {
         //given
-        when(productDao.searchProductById(5L)).thenReturn(productWithReview);
+        when(productDao.findById(5L)).thenReturn(productWithReview);
         //when
         productService.addProductRating(productWithReview, 9);
         //then
@@ -209,7 +209,7 @@ class ProductServiceImplTest {
     void WhenAddProductRatingIfReturnedProductHasNoReviewAddingDefaultReviewWithNewRating() {
         //given
         ProductReview defaultProductReview = new ProductReview(5L, 9, "");
-        when(productDao.searchProductById(5L)).thenReturn(productFromDb);
+        when(productDao.findById(5L)).thenReturn(productFromDb);
         //when
         productService.addProductRating(productFromDb, 9);
         //then

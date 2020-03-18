@@ -3,7 +3,7 @@ package com.ra.course.aws.online.shopping.entity.product;
 import java.util.Objects;
 
 public class ProductCategory {
-    private Long categoryID;
+    private Long id;
     private String name;
     private String description;
 
@@ -15,15 +15,15 @@ public class ProductCategory {
         this.description = description;
     }
 
-    public ProductCategory(Long categoryID, String name, String description) {
-        this.categoryID = categoryID;
+    public ProductCategory(Long id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
 
-    public Long getCategoryID() {return categoryID;}
+    public Long getId() {return id;}
 
-    public void setCategoryID(Long categoryID) {this.categoryID = categoryID;}
+    public void setId(Long id) {this.id = id;}
 
     public String getName() {
         return name;
@@ -53,13 +53,13 @@ public class ProductCategory {
 
     @Override
     public int hashCode() {
-        return Objects.hash(categoryID, name, description);
+        return Objects.hash(id, name, description);
     }
 
     @Override
     public String toString() {
         return "ProductCategory{" +
-                "categoryID=" + categoryID +
+                "categoryID=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 '}';

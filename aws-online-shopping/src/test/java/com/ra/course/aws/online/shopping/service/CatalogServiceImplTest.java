@@ -45,7 +45,7 @@ class CatalogServiceImplTest {
                 new Product(9L, "Trainers", "Asics Gel Lyte V", 139.9,
                         161, new ProductCategory("Shoes", "Shoes description"))
         ));
-        when(productDao.getAllProducts()).thenReturn(mockProductsListFromDao);
+        when(productDao.getAll()).thenReturn(mockProductsListFromDao);
         catalogService = new CatalogServiceImpl(productDao);
     }
 
@@ -65,9 +65,9 @@ class CatalogServiceImplTest {
         //given
         Product newProduct = new Product(10L, "Jeans", "Levis 501", 119.9,
                 10, new ProductCategory("Clothes", "Clothes description"));
-        when(productDao.searchProductById(newProduct.getProductID())).thenReturn(newProduct);
+        when(productDao.findById(newProduct.getId())).thenReturn(newProduct);
         //when
-        catalogService.updateCatalogWithNewProduct(newProduct.getProductID());
+        catalogService.updateCatalogWithNewProduct(newProduct.getId());
         //then
         Assertions.assertAll(
                 () -> assertTrue(catalogService.getCatalog().getProductNames().containsKey(newProduct.getName())),
@@ -82,23 +82,23 @@ class CatalogServiceImplTest {
         Product modifiedProduct = new Product(1L, "Polarized Sunglasses", "RayBan Wayfarer P", 225.9,
                 29, new ProductCategory("Accessories", "Accessories description"));
         //given
-        when(productDao.searchProductById(modifiedProduct.getProductID())).thenReturn(modifiedProduct);
+        when(productDao.findById(modifiedProduct.getId())).thenReturn(modifiedProduct);
         //when
-        catalogService.updateCatalogWithModifiedProduct(modifiedProduct.getProductID());
+        catalogService.updateCatalogWithModifiedProduct(modifiedProduct.getId());
         //then
         Product updatedProductInProductNamesMap = catalogService.getCatalog()
                 .getProductNames()
                 .values()
                 .stream()
                 .flatMap(Collection::stream)
-                .filter(product -> product.getProductID().equals(modifiedProduct.getProductID())).findAny().orElse(null);
+                .filter(product -> product.getId().equals(modifiedProduct.getId())).findAny().orElse(null);
 
         Product updatedProductInProductCategoriesMap = catalogService.getCatalog()
                 .getProductCategories()
                 .values()
                 .stream()
                 .flatMap(Collection::stream)
-                .filter(product -> product.getProductID().equals(modifiedProduct.getProductID())).findAny().orElse(null);
+                .filter(product -> product.getId().equals(modifiedProduct.getId())).findAny().orElse(null);
         Assertions.assertAll(
                 () -> assertEquals(updatedProductInProductNamesMap, modifiedProduct),
                 () -> assertEquals(updatedProductInProductCategoriesMap, modifiedProduct)
@@ -117,14 +117,14 @@ class CatalogServiceImplTest {
                         .values()
                         .stream()
                         .flatMap(Collection::stream)
-                        .filter(product -> product.getProductID().equals(productToRemoveId)).findAny().orElse(null)),
+                        .filter(product -> product.getId().equals(productToRemoveId)).findAny().orElse(null)),
 
                 () -> assertNull(catalogService.getCatalog()
                         .getProductCategories()
                         .values()
                         .stream()
                         .flatMap(Collection::stream)
-                        .filter(product -> product.getProductID().equals(productToRemoveId)).findAny().orElse(null))
+                        .filter(product -> product.getId().equals(productToRemoveId)).findAny().orElse(null))
         );
     }
 

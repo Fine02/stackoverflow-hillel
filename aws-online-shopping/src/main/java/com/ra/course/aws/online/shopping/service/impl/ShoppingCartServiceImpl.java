@@ -27,7 +27,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         if(product == null){
             throw new ObjectRequireNotBeNullException("given product must not be Null!");
         }
-        final Item itemToSave = new Item(product.getProductID(), MIN_QUANTITY, product.getPrice());
+        final Item itemToSave = new Item(product.getId(), MIN_QUANTITY, product.getPrice());
         return shoppingCartDao.addItemToCart(itemToSave);
     }
 
@@ -35,7 +35,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public void removeProductFromCart(final Product product) {
         if(product != null){
             try{
-                final Item itemFromDB = shoppingCartDao.getItemFromCart(product.getProductID());
+                final Item itemFromDB = shoppingCartDao.getItemFromCart(product.getId());
                 if(itemFromDB.getQuantity() > MIN_QUANTITY){
                     itemFromDB.setQuantity(itemFromDB.getQuantity() - MIN_QUANTITY);
                     itemFromDB.setPrice(itemFromDB.getPrice() - product.getPrice());

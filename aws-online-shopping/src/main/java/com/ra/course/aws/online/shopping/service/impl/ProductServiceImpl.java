@@ -19,22 +19,22 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Long addNewProduct(final Product newProduct) {
-        return productDao.addNewProduct(newProduct);
+        return productDao.save(newProduct);
     }
 
     @Override
     public void updateProduct(final Product productToUpdate) {
-        productDao.updateProduct(productToUpdate);
+        productDao.update(productToUpdate);
     }
 
     @Override
     public void removeProduct(final Long productId) {
-        productDao.removeProduct(productId);
+        productDao.remove(productId);
     }
 
     @Override
     public Product searchProductById(final Long productID) {
-        return  productDao.searchProductById(productID);
+        return  productDao.findById(productID);
     }
 
     @Override
@@ -49,16 +49,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getAllProducts() {
-        return productDao.getAllProducts();
+        return productDao.getAll();
     }
 
     @Override
     public void addProductReview(final Product product) {
         if(product != null){
-            final Product productFromDao = productDao.searchProductById(product.getProductID());
+            final Product productFromDao = productDao.findById(product.getId());
             Objects.requireNonNull(productFromDao);
             productFromDao.setProductReview(product.getProductReview());
-            productDao.updateProduct(productFromDao);
+            productDao.update(productFromDao);
         }
 
     }
@@ -66,12 +66,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void addProductRating(final Product product, final int rating) {
         if(product != null){
-            final Product productFromDao = productDao.searchProductById(product.getProductID());
+            final Product productFromDao = productDao.findById(product.getId());
             Objects.requireNonNull(productFromDao);
-            final ProductReview productReview = productFromDao.getProductReview() == null ? new ProductReview(productFromDao.getProductID(), rating, "") : productFromDao.getProductReview();
+            final ProductReview productReview = productFromDao.getProductReview() == null ? new ProductReview(productFromDao.getId(), rating, "") : productFromDao.getProductReview();
             productReview.setRating(rating);
             productFromDao.setProductReview(productReview);
-            productDao.updateProduct(productFromDao);
+            productDao.update(productFromDao);
         }
     }
 }

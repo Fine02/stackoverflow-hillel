@@ -33,7 +33,7 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public void updateCatalogWithNewProduct(final Long newProductId) {
-        final Product newProduct = productDao.searchProductById(newProductId);
+        final Product newProduct = productDao.findById(newProductId);
 
         /*Putting new product into productNames map*/
         catalog.getProductNames().computeIfAbsent(newProduct.getName(),
@@ -62,7 +62,7 @@ public class CatalogServiceImpl implements CatalogService {
                 .values()
                 .stream()
                 .flatMap(Collection::stream)
-                .filter(product -> product.getProductID().equals(productId))
+                .filter(product -> product.getId().equals(productId))
                 .findAny();
         /*Removing product from maps*/
         if (optProduct.isPresent()) {
@@ -77,14 +77,14 @@ public class CatalogServiceImpl implements CatalogService {
 
     private Map<String, List<Product>> getProductNamesMap() {
         return productDao
-                .getAllProducts()
+                .getAll()
                 .stream()
                 .collect(Collectors.groupingBy(Product::getName));
     }
 
     private Map<String, List<Product>> getProductCategoriesMap() {
         return productDao
-                .getAllProducts()
+                .getAll()
                 .stream()
                 .collect(Collectors.groupingBy(pr -> pr.getCategory().getName()));
     }

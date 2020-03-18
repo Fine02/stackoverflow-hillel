@@ -3,7 +3,7 @@ package com.ra.course.aws.online.shopping.entity.product;
 import java.util.Objects;
 
 public class Product {
-    private Long productID;
+    private Long id;
     private String name;
     private String description;
     private double price;
@@ -23,8 +23,8 @@ public class Product {
 
     }
 
-    public Product(Long productID, String name, String description, double price, int availableItemCount, ProductCategory category) {
-        this.productID = productID;
+    public Product(Long id, String name, String description, double price, int availableItemCount, ProductCategory category) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
@@ -33,12 +33,12 @@ public class Product {
 
     }
 
-    public Long getProductID() {
-        return productID;
+    public Long getId() {
+        return id;
     }
 
-    public void setProductID(Long productID) {
-        this.productID = productID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -96,7 +96,7 @@ public class Product {
         Product product = (Product) o;
         return Double.compare(product.price, price) == 0 &&
                 availableItemCount == product.availableItemCount &&
-                Objects.equals(productID, product.productID) &&
+                Objects.equals(id, product.id) &&
                 Objects.equals(name, product.name) &&
                 Objects.equals(description, product.description) &&
                 Objects.equals(category, product.category) &&
@@ -105,13 +105,13 @@ public class Product {
 
     @Override
     public int hashCode() {
-        return Objects.hash(productID, name, description, price, availableItemCount, category, productReview);
+        return Objects.hash(id, name, description, price, availableItemCount, category, productReview);
     }
 
     @Override
     public String toString() {
         return "Product{" +
-                "productID=" + productID +
+                "productID=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +

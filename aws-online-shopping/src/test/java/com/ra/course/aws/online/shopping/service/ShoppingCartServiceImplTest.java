@@ -69,7 +69,7 @@ class ShoppingCartServiceImplTest {
     public void RemoveProductFromCartShouldBeMinOneNumberOfInvocation(){
         //given
         Product mockProduct = mockProduct(productID);
-        when(shoppingCartDao.getItemFromCart(mockProduct.getProductID())).thenReturn(newItem);
+        when(shoppingCartDao.getItemFromCart(mockProduct.getId())).thenReturn(newItem);
         //when
         shoppingCartService.removeProductFromCart(mockProduct);
         //then
@@ -81,7 +81,7 @@ class ShoppingCartServiceImplTest {
     public void WhenRemoveProductFromCartWhenQuantityMoreThenOneShouldBeMinOneNumberOfInvocation(){
         //given
         Item itemFromDB2 = new Item(1L, 2, 12.5);
-        when(shoppingCartDao.getItemFromCart(newProduct.getProductID())).thenReturn(itemFromDB2);
+        when(shoppingCartDao.getItemFromCart(newProduct.getId())).thenReturn(itemFromDB2);
         //when
         shoppingCartService.removeProductFromCart(newProduct);
         //then
@@ -98,7 +98,7 @@ class ShoppingCartServiceImplTest {
     @Test
     public void WhenRemoveProductFromCartIfCatchExceptionThenThrowsElementNotFoundException(){
         //given
-        when(shoppingCartDao.getItemFromCart(newProduct.getProductID())).thenThrow(new IllegalArgumentException());
+        when(shoppingCartDao.getItemFromCart(newProduct.getId())).thenThrow(new IllegalArgumentException());
         //when
         Throwable exception = Assertions.assertThrows(IllegalArgumentException.class, () -> shoppingCartService.removeProductFromCart(newProduct));
         //then
