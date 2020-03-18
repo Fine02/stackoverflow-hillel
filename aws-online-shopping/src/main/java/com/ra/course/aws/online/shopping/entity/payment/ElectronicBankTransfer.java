@@ -1,5 +1,7 @@
 package com.ra.course.aws.online.shopping.entity.payment;
 
+import java.util.Objects;
+
 public class ElectronicBankTransfer {
     private String bankName;
     private String routingNumber;
@@ -36,5 +38,20 @@ public class ElectronicBankTransfer {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ElectronicBankTransfer that = (ElectronicBankTransfer) o;
+        return Objects.equals(bankName, that.bankName) &&
+                Objects.equals(routingNumber, that.routingNumber) &&
+                Objects.equals(accountNumber, that.accountNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bankName, routingNumber, accountNumber);
     }
 }

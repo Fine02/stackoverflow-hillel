@@ -1,7 +1,6 @@
 package com.ra.course.aws.online.shopping.dao;
 
 import com.ra.course.aws.online.shopping.entity.order.Order;
-import com.ra.course.aws.online.shopping.entity.enums.OrderStatus;
 import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 
 import java.util.List;
@@ -22,7 +21,4 @@ public interface OrderDao {
 
     OrderLog findOrderLogById(Long orderLogId);
 
-     Order addOrder();
-     OrderStatus removeOrder(String orderNumber);
-     Order updateOrder(String orderNumber);
 }

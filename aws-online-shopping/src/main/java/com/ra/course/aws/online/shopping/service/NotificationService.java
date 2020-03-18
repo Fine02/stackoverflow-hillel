@@ -8,7 +8,10 @@ import com.ra.course.aws.online.shopping.entity.user.Member;
 
 public interface NotificationService {
     SMSNotification sendSMSNotificationAboutOrderStatus(OrderLog orderLog, Member member);
+
     SMSNotification sendSMSNotificationAboutShipmentStatus(ShipmentLog shipmentLog, Member member);
+
     EmailNotification sendEmailNotificationAboutOrderStatus(OrderLog orderLog, Member member);
+
     EmailNotification sendEmailNotificationAboutShipmentStatus(ShipmentLog shipmentLog, Member member);
 }

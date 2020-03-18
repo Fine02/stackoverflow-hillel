@@ -1,6 +1,8 @@
 package com.ra.course.aws.online.shopping.entity.payment;
 import com.ra.course.aws.online.shopping.entity.Address;
 
+import java.util.Objects;
+
 public class CreditCard {
     private String nameOnCard;
     private String cardNumber;
@@ -47,6 +49,22 @@ public class CreditCard {
 
     public void setBillingAddress(Address billingAddress) {
         this.billingAddress = billingAddress;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CreditCard that = (CreditCard) o;
+        return code == that.code &&
+                Objects.equals(nameOnCard, that.nameOnCard) &&
+                Objects.equals(cardNumber, that.cardNumber) &&
+                Objects.equals(billingAddress, that.billingAddress);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nameOnCard, cardNumber, code, billingAddress);
     }
 }
 

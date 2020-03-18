@@ -11,5 +11,4 @@ public interface AccountDao {
     boolean update (Account account);
 
     boolean delete (Long id);
-
 }

@@ -14,5 +14,4 @@ public interface OrderService {
     boolean addOrderLogToOrder(Order order, OrderLog orderLog);
 
     boolean sendForShipment(Order Order);
-
 }
