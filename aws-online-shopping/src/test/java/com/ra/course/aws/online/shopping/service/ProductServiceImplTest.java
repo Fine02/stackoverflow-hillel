@@ -51,7 +51,7 @@ class ProductServiceImplTest {
         //given
         when(productDao.save(newProduct)).thenReturn(expectedNewProductId);
         //when
-        Long addedProductID = productService.addNewProduct(newProduct);
+        Long addedProductID = productService.save(newProduct);
         //then
         assertEquals(expectedNewProductId, addedProductID);
     }
@@ -60,7 +60,7 @@ class ProductServiceImplTest {
     void shouldUpdateProduct() {
         newProduct.setAvailableItemCount(0);
         //when
-        productService.updateProduct(newProduct);
+        productService.update(newProduct);
         //then
         verify(productDao).update(newProduct);
     }
@@ -69,7 +69,7 @@ class ProductServiceImplTest {
     void shouldRemoveProduct() {
         Long productID = 1L;
         //when
-        productService.removeProduct(1L);
+        productService.remove(1L);
         //then
         verify(productDao).remove(productID);
     }
@@ -78,7 +78,7 @@ class ProductServiceImplTest {
     void shouldSearchProductsByID() {
         Long productID = 1L;
         //when
-        productService.searchProductById(1L);
+        productService.findByID(1L);
         //then
         verify(productDao).findById(productID);
     }
@@ -89,7 +89,7 @@ class ProductServiceImplTest {
         String productName = "Sunglasses";
         when(productDao.searchProductsByName(productName)).thenReturn(mockProductsListFromDao);
         //when
-        List<Product> expectedProductsList = productService.searchProductsByName(productName);
+        List<Product> expectedProductsList = productService.searchByName(productName);
         //then
         for (Product pr : expectedProductsList) {
             Assertions.assertTrue(pr.getName().contains(productName));
@@ -102,7 +102,7 @@ class ProductServiceImplTest {
         ProductCategory productCategory = new ProductCategory("Accessories", "Accessories description");
         when(productDao.searchProductsByCategory(productCategory)).thenReturn(mockProductsListFromDao);
         //when
-        List<Product> expectedProductsList = productService.searchProductsByCategory(productCategory);
+        List<Product> expectedProductsList = productService.searchByCategory(productCategory);
         //then
         for (Product pr : expectedProductsList) {
             Assertions.assertEquals(pr.getCategory(), productCategory);
@@ -114,7 +114,7 @@ class ProductServiceImplTest {
         //given
         when(productDao.getAll()).thenReturn(mockProductsListFromDao);
         //when
-        List<Product> expectedAllProducts = productService.getAllProducts();
+        List<Product> expectedAllProducts = productService.getAll();
         //then
         Assertions.assertEquals(expectedAllProducts.size(), mockProductsListFromDao.size());
     }

@@ -1,25 +1,24 @@
 package com.ra.course.aws.online.shopping.service;
 
-import com.ra.course.aws.online.shopping.entity.product.Product;
 import com.ra.course.aws.online.shopping.entity.product.ProductCategory;
-
+import com.ra.course.aws.online.shopping.entity.product.Product;
 import java.util.List;
 
 public interface ProductService {
 
-    Long addNewProduct(Product product);
+    Long save(Product product);
 
-    void updateProduct(Product product);
+    void update(Product product);
 
-    void removeProduct(Long productId);
+    void remove(Long productId);
 
-    Product searchProductById(Long productID);
+    Product findByID(Long productID);
 
-    List<Product> searchProductsByName(String productName);
+    List<Product> searchByName(String productName);
 
-    List<Product> searchProductsByCategory(ProductCategory productCategory);
+    List<Product> searchByCategory(ProductCategory productCategory);
 
-    List<Product> getAllProducts();
+    List<Product> getAll();
 
     void addProductReview(Product product);
 
