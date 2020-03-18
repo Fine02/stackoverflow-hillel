@@ -17,7 +17,6 @@ public class Member extends Customer {
         this.memberID = memberID;
     }
 
-
     public Account getAccount() {
         return account;
     }

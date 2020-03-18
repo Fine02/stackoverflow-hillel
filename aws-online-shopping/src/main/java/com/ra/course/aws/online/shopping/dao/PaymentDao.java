@@ -1,14 +1,21 @@
 package com.ra.course.aws.online.shopping.dao;
 
-import com.ra.course.aws.online.shopping.entity.payment.Payment;
+import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
+import com.ra.course.aws.online.shopping.entity.payment.CreditCardTransaction;
+import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransaction;
+import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
+import com.ra.course.aws.online.shopping.entity.user.Member;
 
-public interface PaymentDao<T extends Payment> {
+import java.util.List;
 
-    Long save (T t);
+public interface PaymentDao {
+    Member foundMemberById(Long memberId);
 
-    Payment findByID (Long id);
+    List<ElectronicBankTransfer> foundListOfBankTransfer(List<ElectronicBankTransfer> bankTransfers);
 
-    boolean update (T t);
+    List<CreditCard> foundListOfCreditCard(List<CreditCard> creditCards);
 
-    boolean delete (Long id);
+    void update(ElectronicBankTransaction bankTransaction);
+
+    void update(CreditCardTransaction cardTransaction);
 }
