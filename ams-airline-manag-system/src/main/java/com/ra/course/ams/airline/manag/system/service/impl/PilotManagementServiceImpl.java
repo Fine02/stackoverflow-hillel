@@ -3,7 +3,7 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
 import com.ra.course.ams.airline.manag.system.exception.PilotNotExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.person.PilotsRepository;
 import com.ra.course.ams.airline.manag.system.service.PilotManagementService;
 
 import java.util.LinkedList;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PilotManagementServiceImpl implements PilotManagementService {
 
-    private Repository<Pilot, String> pilotRepo;
+    private PilotsRepository pilotRepo;
 
     @Override
     public Pilot addFlightInstance(final Pilot pilot, final FlightInstance flightInstance) {
@@ -60,11 +60,11 @@ public class PilotManagementServiceImpl implements PilotManagementService {
         }
     }
 
-    public Repository<Pilot, String> getPilotRepo() {
+    public PilotsRepository getPilotRepo() {
         return pilotRepo;
     }
 
-    public void setPilotRepo(final Repository<Pilot, String> pilotRepo) {
+    public void setPilotRepo(final PilotsRepository pilotRepo) {
         this.pilotRepo = pilotRepo;
     }
 }

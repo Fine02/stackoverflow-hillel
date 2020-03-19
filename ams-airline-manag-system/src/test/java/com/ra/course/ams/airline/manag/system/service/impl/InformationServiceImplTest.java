@@ -2,7 +2,10 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.*;
 import com.ra.course.ams.airline.manag.system.exception.ScheduleNotExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.flight.CustomScheduleRepository;
+import com.ra.course.ams.airline.manag.system.repository.flight.FlightInstanceRepository;
+import com.ra.course.ams.airline.manag.system.repository.flight.FlightRepository;
+import com.ra.course.ams.airline.manag.system.repository.flight.WeeklyScheduleRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,13 +28,13 @@ public class InformationServiceImplTest {
     private Time time;
 
     @Mock
-    private Repository<CustomSchedule, String> customScheduleRepo;
+    private CustomScheduleRepository customScheduleRepo;
     @Mock
-    private Repository<WeeklySchedule, String> weeklyScheduleRepo;
+    private WeeklyScheduleRepository weeklyScheduleRepo;
     @Mock
-    private Repository<FlightInstance, String> flightInstRepo;
+    private FlightInstanceRepository flightInstRepo;
     @Mock
-    private Repository<Flight, String> flightRepository;
+    private FlightRepository flightRepository;
 
     @BeforeEach
     public void setUp() {

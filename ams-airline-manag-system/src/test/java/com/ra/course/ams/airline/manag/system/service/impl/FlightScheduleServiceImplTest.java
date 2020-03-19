@@ -3,7 +3,8 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 import com.ra.course.ams.airline.manag.system.entity.flight.CustomSchedule;
 import com.ra.course.ams.airline.manag.system.entity.flight.Flight;
 import com.ra.course.ams.airline.manag.system.entity.flight.WeeklySchedule;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.flight.CustomScheduleRepository;
+import com.ra.course.ams.airline.manag.system.repository.flight.WeeklyScheduleRepository;
 import com.ra.course.ams.airline.manag.system.service.FlightScheduleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,9 +20,9 @@ public class FlightScheduleServiceImplTest {
     private Flight testFlight;
 
     @Mock
-    private Repository<WeeklySchedule, String> weeklyScheduleRepository;
+    private WeeklyScheduleRepository weeklyScheduleRepository;
     @Mock
-    private Repository<CustomSchedule, String> customScheduleRepository;
+    private CustomScheduleRepository customScheduleRepository;
 
     private FlightScheduleService flightScheduleService;
 

@@ -1,49 +1,23 @@
 package com.ra.course.ams.airline.manag.system.repository.person;
 
 import com.ra.course.ams.airline.manag.system.entity.person.Admin;
-import com.ra.course.ams.airline.manag.system.exception.InstanceAlreadyExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
 
 import java.util.Collection;
 import java.util.Map;
 
-public class AdminsRepository implements Repository<Admin, String> {
+public interface AdminsRepository {
 
-    private Map<String, Admin> admins;
+    Admin getInstance(final String phoneNumber);
 
-    @Override
-    public Admin getInstance(final String phoneNumber) {
-        return admins.get(phoneNumber);
-    }
+    Collection<Admin> getInstances();
 
-    @Override
-    public Collection<Admin> getInstances() {
-        return admins.values();
-    }
+    Admin addInstance(final Admin admin);
 
-    @Override
-    public Admin addInstance(final Admin admin) {
-        if (admins.containsKey(admin.getPhone())){
-            throw new InstanceAlreadyExistException();
-        }
-        return admins.put(admin.getPhone(), admin);
-    }
+    void updateInstance(final Admin admin);
 
-    @Override
-    public void updateInstance(final Admin admin) {
-        admins.put(admin.getPhone(), admin);
-    }
+    void removeInstance(final Admin admin);
 
-    @Override
-    public void removeInstance(final Admin admin) {
-        admins.remove(admin.getPhone());
-    }
+    Map<String, Admin> getAdmins();
 
-    public Map<String, Admin> getAdmins() {
-        return admins;
-    }
-
-    public void setAdmins( final Map<String, Admin> admins) {
-        this.admins = admins;
-    }
+    void setAdmins(final Map<String, Admin> admins);
 }

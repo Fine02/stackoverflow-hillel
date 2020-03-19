@@ -8,7 +8,7 @@ import com.ra.course.ams.airline.manag.system.exception.AccountAlreadyExistExcep
 import com.ra.course.ams.airline.manag.system.exception.AccountNotExistException;
 import com.ra.course.ams.airline.manag.system.exception.BadCredentialsException;
 import com.ra.course.ams.airline.manag.system.exception.UnauthorizedOperationException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.person.AccountsRepository;
 import com.ra.course.ams.airline.manag.system.service.AuthenticationService;
 import com.ra.course.ams.airline.manag.system.service.AuthorizationService;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ public class AccountManagementServiceImplTest {
 
     AccountManagementServiceImpl accountManagementService;
     @Mock
-    private Repository<Account, String> accountRepository;
+    private AccountsRepository accountRepository;
     @Mock
     private AuthorizationService authorizationService;
     @Mock

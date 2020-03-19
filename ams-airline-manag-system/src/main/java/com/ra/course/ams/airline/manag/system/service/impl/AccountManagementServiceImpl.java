@@ -5,7 +5,7 @@ import com.ra.course.ams.airline.manag.system.entity.person.AccountStatus;
 import com.ra.course.ams.airline.manag.system.entity.person.Admin;
 import com.ra.course.ams.airline.manag.system.exception.AccountAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.AccountNotExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.person.AccountsRepository;
 import com.ra.course.ams.airline.manag.system.service.AccountManagementService;
 import com.ra.course.ams.airline.manag.system.service.AuthenticationService;
 import com.ra.course.ams.airline.manag.system.service.AuthorizationService;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class AccountManagementServiceImpl implements AccountManagementService {
 
-    private Repository<Account, String> accountRepository;
+    private AccountsRepository accountRepository;
     private AuthorizationService authorizationSvc;
     private AuthenticationService authenticationSvc;
 
@@ -91,11 +91,11 @@ public class AccountManagementServiceImpl implements AccountManagementService {
         accountRepository.updateInstance(accountFromRepo);
     }
 
-    public Repository<Account, String> getAccountRepository() {
+    public AccountsRepository getAccountRepository() {
         return accountRepository;
     }
 
-    public void setAccountRepository(final Repository<Account, String> accountRepository) {
+    public void setAccountRepository(final AccountsRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 

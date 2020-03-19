@@ -4,14 +4,14 @@ import com.ra.course.ams.airline.manag.system.entity.Address;
 import com.ra.course.ams.airline.manag.system.entity.person.Admin;
 import com.ra.course.ams.airline.manag.system.exception.AdminAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.AdminNotExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.person.AdminsRepository;
 import com.ra.course.ams.airline.manag.system.service.PersonManagementService;
 
 import java.util.Collection;
 
 public class AdminManagementServiceImpl implements PersonManagementService<Admin> {
 
-    private Repository<Admin, String> adminRepository;
+    private AdminsRepository adminRepository;
 
 
     @Override
@@ -110,11 +110,11 @@ public class AdminManagementServiceImpl implements PersonManagementService<Admin
         adminRepository.removeInstance(adminFromRepo);
     }
 
-    public Repository<Admin, String> getAdminRepository() {
+    public AdminsRepository getAdminRepository() {
         return adminRepository;
     }
 
-    public void setAdminRepository(final Repository<Admin, String> adminRepository) {
+    public void setAdminRepository(final AdminsRepository  adminRepository) {
         this.adminRepository = adminRepository;
     }
 }

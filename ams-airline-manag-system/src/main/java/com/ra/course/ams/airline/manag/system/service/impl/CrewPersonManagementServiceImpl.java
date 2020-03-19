@@ -4,14 +4,14 @@ import com.ra.course.ams.airline.manag.system.entity.Address;
 import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.exception.CrewAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.CrewNotExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.person.CrewRepository;
 import com.ra.course.ams.airline.manag.system.service.PersonManagementService;
 
 import java.util.Collection;
 
 public class CrewPersonManagementServiceImpl implements PersonManagementService<Crew> {
 
-    private Repository<Crew, String> crewRepository;
+    private CrewRepository crewRepository;
 
     @Override
     public Crew findByEmail(final String email) {
@@ -109,11 +109,11 @@ public class CrewPersonManagementServiceImpl implements PersonManagementService<
         crewRepository.removeInstance(crewFromRepo);
     }
 
-    public Repository<Crew, String> getCrewRepository() {
+    public CrewRepository getCrewRepository() {
         return crewRepository;
     }
 
-    public void setCrewRepository(final Repository<Crew, String> crewRepository) {
+    public void setCrewRepository(final CrewRepository crewRepository) {
         this.crewRepository = crewRepository;
     }
 }

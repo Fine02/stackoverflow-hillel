@@ -4,7 +4,7 @@ import com.ra.course.ams.airline.manag.system.entity.Address;
 import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
 import com.ra.course.ams.airline.manag.system.exception.PilotAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.PilotNotExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.person.PilotsRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 public class PilotPersonManagementServiceImplTest {
 
     @Mock
-    private Repository<Pilot, String> pilotRepository;
+    private PilotsRepository pilotRepository;
 
     private PilotPersonManagementServiceImpl pilotPersonManagementService;
 
@@ -40,9 +40,6 @@ public class PilotPersonManagementServiceImplTest {
         assertThat(pilot).isNotNull();
         assertThat(pilot.getName()).isEqualTo("Ivanov Ivan");
         assertThat(pilot.getEmail()).isEqualTo("ivanov@example.com");
-
-        verify(pilotRepository, times(1)).getInstances();
-        verifyNoMoreInteractions(pilotRepository);
     }
 
     @Test
@@ -53,7 +50,6 @@ public class PilotPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(pilotRepository);
     }
 
     @Test
@@ -72,8 +68,6 @@ public class PilotPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(PilotNotExistException.class);
         }
-        verify(pilotRepository, times(1)).getInstances();
-        verifyNoMoreInteractions(pilotRepository);
     }
 
     @Test
@@ -83,7 +77,6 @@ public class PilotPersonManagementServiceImplTest {
 
         Pilot pilot = pilotPersonManagementService.findByPhoneNumber("11111");
         assertThat(pilot).isEqualToComparingFieldByField(pilotGiven);
-        verify(pilotRepository, times(1)).getInstance("11111");
     }
 
     @Test
@@ -96,8 +89,6 @@ public class PilotPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(PilotNotExistException.class);
         }
-
-        verify(pilotRepository, times(1)).getInstance(any());
     }
 
     @Test
@@ -108,7 +99,6 @@ public class PilotPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(pilotRepository);
     }
 
     @Test
@@ -127,7 +117,6 @@ public class PilotPersonManagementServiceImplTest {
         assertThat(pilot).isEqualToComparingFieldByField(pilotToAdd);
         verify(pilotRepository, times(1)).getInstance(any());
         verify(pilotRepository, times(1)).addInstance(any());
-        verifyNoMoreInteractions(pilotRepository);
     }
 
     @Test
@@ -144,7 +133,6 @@ public class PilotPersonManagementServiceImplTest {
         }
 
         verify(pilotRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(pilotRepository);
     }
 
     @Test
@@ -155,7 +143,6 @@ public class PilotPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(pilotRepository);
     }
 
     @Test
@@ -171,7 +158,6 @@ public class PilotPersonManagementServiceImplTest {
 
         verify(pilotRepository, times(1)).updateInstance(eq(pilotInRepo));
         verify(pilotRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(pilotRepository);
     }
 
     @Test
@@ -182,7 +168,6 @@ public class PilotPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(pilotRepository);
     }
 
     @Test
@@ -196,7 +181,6 @@ public class PilotPersonManagementServiceImplTest {
             assertThat(e).isInstanceOf(PilotNotExistException.class);
         }
         verify(pilotRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(pilotRepository);
     }
 
     @Test
@@ -212,7 +196,6 @@ public class PilotPersonManagementServiceImplTest {
 
         verify(pilotRepository, times(1)).updateInstance(eq(pilotInRepo));
         verify(pilotRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(pilotRepository);
     }
 
     @Test
@@ -223,7 +206,6 @@ public class PilotPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(pilotRepository);
     }
 
     @Test
@@ -236,8 +218,6 @@ public class PilotPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(PilotNotExistException.class);
         }
-        verify(pilotRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(pilotRepository);
     }
 
     @Test
@@ -250,7 +230,6 @@ public class PilotPersonManagementServiceImplTest {
 
         verify(pilotRepository, times(1)).removeInstance(eq(pilotInRepo));
         verify(pilotRepository, times(1)).getInstance(any());
-        verifyNoMoreInteractions(pilotRepository);
     }
 
     @Test
@@ -261,7 +240,6 @@ public class PilotPersonManagementServiceImplTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
-        verifyZeroInteractions(pilotRepository);
     }
 
     @Test

@@ -3,7 +3,7 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.exception.CrewNotExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.person.CrewRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 public class CrewManagementServiceImplTest {
 
     @Mock
-    private Repository<Crew, String> crewRepository;
+    private CrewRepository crewRepository;
 
     private CrewManagementServiceImpl crewManagementService;
 

@@ -4,7 +4,8 @@ import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightStatus;
 import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.flight.FlightInstanceRepository;
+import com.ra.course.ams.airline.manag.system.repository.flight.FlightRepository;
 import com.ra.course.ams.airline.manag.system.service.FlightInstanceService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +25,7 @@ public class FlightInstanceServiceImplTest {
     FlightInstance testFlightInst;
 
     @Mock
-    private Repository<FlightInstance, String> flightInstanceRepository;
+    private FlightInstanceRepository flightInstanceRepository;
 
     private FlightInstanceService flightInstanceService;
 

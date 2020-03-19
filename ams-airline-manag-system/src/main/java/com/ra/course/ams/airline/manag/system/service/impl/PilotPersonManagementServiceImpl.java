@@ -4,14 +4,14 @@ import com.ra.course.ams.airline.manag.system.entity.Address;
 import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
 import com.ra.course.ams.airline.manag.system.exception.PilotAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.PilotNotExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.person.PilotsRepository;
 import com.ra.course.ams.airline.manag.system.service.PersonManagementService;
 
 import java.util.Collection;
 
 public class PilotPersonManagementServiceImpl implements PersonManagementService<Pilot> {
 
-    private Repository<Pilot, String> pilotRepo;
+    private PilotsRepository pilotRepo;
 
 
     @Override
@@ -110,11 +110,11 @@ public class PilotPersonManagementServiceImpl implements PersonManagementService
         pilotRepo.removeInstance(pilotFromRepo);
     }
 
-    public Repository<Pilot, String> getPilotRepo() {
+    public PilotsRepository getPilotRepo() {
         return pilotRepo;
     }
 
-    public void setPilotRepo(final Repository<Pilot, String> pilotRepo) {
+    public void setPilotRepo(final PilotsRepository pilotRepo) {
         this.pilotRepo = pilotRepo;
     }
 }

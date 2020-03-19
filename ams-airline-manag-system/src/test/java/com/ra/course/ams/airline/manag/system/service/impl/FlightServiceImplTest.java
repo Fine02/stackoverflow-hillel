@@ -2,7 +2,7 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.Flight;
 
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.flight.FlightRepository;
 import com.ra.course.ams.airline.manag.system.service.FlightService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,14 +12,13 @@ import org.mockito.MockitoAnnotations;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 public class FlightServiceImplTest {
 
     private Flight flightToAdd;
 
     @Mock
-    private Repository<Flight, String> flightRepository;
+    private FlightRepository flightRepository;
 
     private FlightService flightService;
 

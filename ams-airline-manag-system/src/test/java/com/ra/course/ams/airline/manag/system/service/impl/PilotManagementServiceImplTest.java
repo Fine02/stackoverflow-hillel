@@ -3,7 +3,7 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
 import com.ra.course.ams.airline.manag.system.exception.PilotNotExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.person.PilotsRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 public class PilotManagementServiceImplTest {
 
     @Mock
-    private Repository<Pilot, String> pilotRepository;
+    private PilotsRepository pilotRepository;
 
     private PilotManagementServiceImpl pilotManagenentService;
 

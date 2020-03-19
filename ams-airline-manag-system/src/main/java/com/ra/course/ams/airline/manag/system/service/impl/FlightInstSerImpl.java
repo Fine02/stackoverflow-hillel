@@ -4,7 +4,7 @@ import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightStatus;
 import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.flight.FlightInstanceRepository;
 import com.ra.course.ams.airline.manag.system.service.FlightInstanceService;
 
 import java.util.ArrayList;
@@ -12,9 +12,9 @@ import java.util.List;
 
 public class FlightInstSerImpl implements FlightInstanceService {
 
-    transient private final Repository<FlightInstance, String> flightInstRepo;
+    transient private final FlightInstanceRepository flightInstRepo;
 
-    public FlightInstSerImpl(final Repository<FlightInstance, String> flightInstRepo) {
+    public FlightInstSerImpl(final FlightInstanceRepository flightInstRepo) {
         this.flightInstRepo = flightInstRepo;
     }
 
@@ -61,7 +61,7 @@ public class FlightInstSerImpl implements FlightInstanceService {
         if (flightInstance == null || crew == null) {
             throw new IllegalArgumentException("Cannot process assign crew operation for null value argument.");
         }
-final         List<Crew> crews = flightInstance.getCrews() != null ? flightInstance.getCrews() : new ArrayList<>();
+        final List<Crew> crews = flightInstance.getCrews() != null ? flightInstance.getCrews() : new ArrayList<>();
         crews.add(crew);
         flightInstance.setCrews(crews);
         this.flightInstRepo.updateInstance(flightInstance);

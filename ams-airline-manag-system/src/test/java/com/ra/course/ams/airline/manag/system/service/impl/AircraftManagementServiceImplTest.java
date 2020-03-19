@@ -2,7 +2,7 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.Aircraft;
 import com.ra.course.ams.airline.manag.system.entity.flight.Flight;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.flight.AircraftRepository;
 import com.ra.course.ams.airline.manag.system.service.AircraftManagementService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 public class AircraftManagementServiceImplTest {
 
     @Mock
-    private Repository<Aircraft, String> aircraftRepository;
+    private AircraftRepository aircraftRepository;
 
     private AircraftManagementService aircraftManagementService;
 

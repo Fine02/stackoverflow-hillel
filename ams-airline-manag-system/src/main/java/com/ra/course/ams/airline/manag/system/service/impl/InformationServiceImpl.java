@@ -3,7 +3,10 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 import com.ra.course.ams.airline.manag.system.entity.flight.*;
 import com.ra.course.ams.airline.manag.system.exception.FlightNotExistException;
 import com.ra.course.ams.airline.manag.system.exception.ScheduleNotExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.flight.CustomScheduleRepository;
+import com.ra.course.ams.airline.manag.system.repository.flight.FlightInstanceRepository;
+import com.ra.course.ams.airline.manag.system.repository.flight.FlightRepository;
+import com.ra.course.ams.airline.manag.system.repository.flight.WeeklyScheduleRepository;
 import com.ra.course.ams.airline.manag.system.service.InformationService;
 
 import java.sql.Time;
@@ -15,10 +18,10 @@ public class InformationServiceImpl implements InformationService {
     transient public String flightNumerErrMes = "FlightNumber for search cannot be null, empty or blank";
     transient public String airportErMes = "Airport cannot be null, empty or blank";
 
-    transient private Repository<WeeklySchedule, String> weeklySchedRepo;
-    transient private Repository<CustomSchedule, String> customSchedRepo;
-    transient private Repository<FlightInstance, String> flightInstRepo;
-    transient private Repository<Flight, String> flightRepository;
+    transient private WeeklyScheduleRepository weeklySchedRepo;
+    transient private CustomScheduleRepository customSchedRepo;
+    transient private FlightInstanceRepository flightInstRepo;
+    transient private FlightRepository flightRepository;
 
     @Override
     public WeeklySchedule checkFlightWeeklySchedule(final String flightNumber) {
@@ -108,13 +111,13 @@ public class InformationServiceImpl implements InformationService {
         throw new IllegalArgumentException("FlightInstance cannot be null, empty or blank");
     }
 
-    public void setShedRepos(final Repository<WeeklySchedule, String> weeklySchedRepo, final Repository<CustomSchedule, String> customSchedRepo) {
+    public void setShedRepos(final WeeklyScheduleRepository weeklySchedRepo, final CustomScheduleRepository customSchedRepo) {
         this.weeklySchedRepo = weeklySchedRepo;
         this.customSchedRepo = customSchedRepo;
     }
 
-    public void setFligRepos(final Repository<FlightInstance, String> flightInstRepo,
-                             final Repository<Flight, String> flightRepository) {
+    public void setFligRepos(final FlightInstanceRepository flightInstRepo,
+                             final FlightRepository flightRepository) {
         this.flightInstRepo = flightInstRepo;
         this.flightRepository = flightRepository;
     }

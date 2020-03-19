@@ -2,10 +2,9 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.Address;
 import com.ra.course.ams.airline.manag.system.entity.person.Admin;
-import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.exception.AdminAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.AdminNotExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.person.AdminsRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,7 @@ import static org.mockito.Mockito.*;
 public class AdminManagementServiceImplTest {
 
         @Mock
-        private Repository<Admin, String> adminRepository;
+        private AdminsRepository adminRepository;
 
         private AdminManagementServiceImpl adminManagementService;
 

@@ -2,16 +2,16 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.Flight;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.flight.FlightRepository;
 import com.ra.course.ams.airline.manag.system.service.FlightService;
 
 import java.util.List;
 
 public class FlightServiceImpl implements FlightService {
 
-    transient private final Repository<Flight, String> flightRepository;
+    transient private final FlightRepository flightRepository;
 
-    public FlightServiceImpl(final Repository<Flight, String> flightRepository) {
+    public FlightServiceImpl(final FlightRepository flightRepository) {
         this.flightRepository = flightRepository;
     }
 

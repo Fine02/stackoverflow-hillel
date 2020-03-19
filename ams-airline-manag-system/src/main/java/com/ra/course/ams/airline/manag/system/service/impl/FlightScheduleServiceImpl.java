@@ -2,15 +2,16 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.CustomSchedule;
 import com.ra.course.ams.airline.manag.system.entity.flight.WeeklySchedule;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.flight.CustomScheduleRepository;
+import com.ra.course.ams.airline.manag.system.repository.flight.WeeklyScheduleRepository;
 import com.ra.course.ams.airline.manag.system.service.FlightScheduleService;
 
 public class FlightScheduleServiceImpl implements FlightScheduleService {
 
-    transient private final Repository<WeeklySchedule, String> weeklySchedRepo;
-    transient private final Repository<CustomSchedule, String> customSchedRepo;
+    transient private final WeeklyScheduleRepository weeklySchedRepo;
+    transient private final CustomScheduleRepository customSchedRepo;
 
-    public FlightScheduleServiceImpl(final Repository<WeeklySchedule, String> weeklySchedRepo, final Repository<CustomSchedule, String> customSchedRepo) {
+    public FlightScheduleServiceImpl(final WeeklyScheduleRepository weeklySchedRepo, final CustomScheduleRepository customSchedRepo) {
         this.weeklySchedRepo = weeklySchedRepo;
         this.customSchedRepo = customSchedRepo;
     }
