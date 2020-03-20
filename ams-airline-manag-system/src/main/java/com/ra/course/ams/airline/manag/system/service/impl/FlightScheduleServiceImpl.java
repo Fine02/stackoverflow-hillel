@@ -6,6 +6,8 @@ import com.ra.course.ams.airline.manag.system.repository.flight.CustomScheduleRe
 import com.ra.course.ams.airline.manag.system.repository.flight.WeeklyScheduleRepository;
 import com.ra.course.ams.airline.manag.system.service.FlightScheduleService;
 
+import java.util.Optional;
+
 public class FlightScheduleServiceImpl implements FlightScheduleService {
 
     transient private final WeeklyScheduleRepository weeklySchedRepo;
@@ -17,36 +19,28 @@ public class FlightScheduleServiceImpl implements FlightScheduleService {
     }
 
     @Override
-    public WeeklySchedule addSchedule(final WeeklySchedule weeklySchedule) {
-        if (weeklySchedule == null) {
-            throw new IllegalArgumentException("Cannot procss add operation for null value argument.");
-        }
-        return weeklySchedRepo.addInstance(weeklySchedule);
+    public Optional<WeeklySchedule> addSchedule(final WeeklySchedule weeklySchedule) {
+
+        return Optional.of(weeklySchedRepo.addInstance(weeklySchedule));
     }
 
     @Override
-    public WeeklySchedule updateSchedule(final WeeklySchedule weeklySchedule) {
-        if (weeklySchedule == null) {
-            throw new IllegalArgumentException("Cannot process update operation for null value argment.");
-        }
+    public  Optional <WeeklySchedule> updateSchedule(final WeeklySchedule weeklySchedule) {
         weeklySchedRepo.updateInstance(weeklySchedule);
-        return weeklySchedule;
+
+        return Optional.of(weeklySchedule);
     }
 
     @Override
-    public CustomSchedule addSchedule(final CustomSchedule customSchedule) {
-        if (customSchedule == null) {
-            throw new IllegalArgumentException("Cannot process add operation for null value argument.");
-        }
-        return customSchedRepo.addInstance(customSchedule);
+    public  Optional <CustomSchedule> addSchedule(final CustomSchedule customSchedule) {
+
+        return Optional.of(customSchedRepo.addInstance(customSchedule));
     }
 
     @Override
-    public CustomSchedule updateSchedule(final CustomSchedule customSchedule) {
-        if (customSchedule == null) {
-            throw new IllegalArgumentException("Cannot process update operation for null value argument.");
-        }
+    public  Optional <CustomSchedule> updateSchedule(final CustomSchedule customSchedule) {
         customSchedRepo.updateInstance(customSchedule);
-        return customSchedule;
+
+        return Optional.of(customSchedule);
     }
 }

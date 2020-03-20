@@ -34,6 +34,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     @Override
     public List<Account> getAccounts() {
         final Collection<Account> accounts = accountRepository.getInstances();
+
         return new LinkedList<>(accounts);
     }
 

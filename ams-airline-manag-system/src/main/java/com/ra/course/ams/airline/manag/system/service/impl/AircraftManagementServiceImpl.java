@@ -6,6 +6,7 @@ import com.ra.course.ams.airline.manag.system.repository.flight.AircraftReposito
 import com.ra.course.ams.airline.manag.system.service.AircraftManagementService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class AircraftManagementServiceImpl implements AircraftManagementService {
 
@@ -16,25 +17,21 @@ public class AircraftManagementServiceImpl implements AircraftManagementService 
     }
 
     @Override
-    public Aircraft addAircraft(final Aircraft aircraft) {
-        if (aircraft == null) {
-            throw new IllegalArgumentException("Cannot process add aircraft operation for null value argument.");
-        }
+    public Optional <Aircraft> addAircraft(final Aircraft aircraft) {
         aircraftRepo.addInstance(aircraft);
-        return aircraft;
+
+        return Optional.of(aircraft);
     }
 
     @Override
-    public Aircraft updateAircraft(final Aircraft aircraft) {
-        if (aircraft == null) {
-            throw new IllegalArgumentException("Cannot process update aircraft operation for null value argument.");
-        }
+    public Optional <Aircraft> updateAircraft(final Aircraft aircraft) {
         aircraftRepo.updateInstance(aircraft);
-        return aircraft;
+
+        return Optional.of(aircraft);
     }
 
     @Override
-    public List<Flight> getFlights(final Aircraft aircraft) {
-        return aircraft.getFlights();
+    public Optional <List<Flight>> getFlights(final Aircraft aircraft) {
+        return Optional.of(aircraft.getFlights());
     }
 }

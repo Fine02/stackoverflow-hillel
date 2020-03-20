@@ -4,12 +4,16 @@ import com.ra.course.ams.airline.manag.system.entity.flight.Flight;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FlightService {
 
     List<FlightInstance> getFlightInstances(Flight flight);
-    Flight add(Flight flight);
-    Flight update(Flight flight);
+
+    Optional<Flight> add(Flight flight);
+
+    Optional<Flight> update(Flight flight);
+
     boolean cancel(Flight flight);
 
 }

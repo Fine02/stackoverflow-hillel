@@ -8,55 +8,42 @@ import com.ra.course.ams.airline.manag.system.repository.person.CrewRepository;
 import com.ra.course.ams.airline.manag.system.service.PersonManagementService;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public class CrewPersonManagementServiceImpl implements PersonManagementService<Crew> {
 
     private CrewRepository crewRepository;
 
     @Override
-    public Crew findByEmail(final String email) {
-        if (email == null || email.isBlank()) {
-            throw new IllegalArgumentException("Email address for search cannot be null, empty or blank");
-        }
+    public Optional<Crew> findByEmail(final String email) {
         final Collection<Crew> crews = crewRepository.getInstances();
         final Crew findedCrew = crews.stream()
                 .filter(crew -> email.equals(crew.getEmail()))
                 .findAny()
                 .orElseThrow(() -> new CrewNotExistException("No crew found for given email"));
-        return new Crew(findedCrew);
+        return Optional.of(new Crew(findedCrew));
     }
 
     @Override
-    public Crew findByPhoneNumber(final String phone) {
-        if (phone == null || phone.isBlank()) {
-            throw new IllegalArgumentException("Phone for search cannot be null, empty or blank");
-        }
+    public Optional<Crew> findByPhoneNumber(final String phone) {
         final Crew crew = crewRepository.getInstance(phone);
-        if (crew == null) {
-            throw new CrewNotExistException("No crew found for given phone number");
-        }
-        return new Crew(crew);
+
+        return Optional.of(new Crew(crew));
     }
 
     @Override
-    public Crew add(final Crew crew) {
-        if (crew == null) {
-            throw new IllegalArgumentException("Cannot process add operation for null value argument.");
-        }
+    public Optional<Crew> add(final Crew crew) {
         Crew crewFromRepo = crewRepository.getInstance(crew.getPhone());
         if (crewFromRepo != null) {
             throw new CrewAlreadyExistException();
         }
         crewFromRepo = new Crew(crew);
         crewRepository.addInstance(crewFromRepo);
-        return crew;
+        return Optional.of(crew);
     }
 
     @Override
-    public Crew updatePhone(final Crew crew, final String phone) {
-        if (crew == null) {
-            throw new IllegalArgumentException("Cannot proces updatePhone operation for null value argument.");
-        }
+    public Optional<Crew> updatePhone(final Crew crew, final String phone) {
         final Crew crewFromRepo = crewRepository.getInstance(crew.getPhone());
         if (crewFromRepo == null) {
             throw new CrewNotExistException();
@@ -64,14 +51,11 @@ public class CrewPersonManagementServiceImpl implements PersonManagementService<
         crewFromRepo.setPhone(phone);
         crewRepository.updateInstance(crewFromRepo);
         crew.setPhone(phone);
-        return crew;
+        return Optional.of(crew);
     }
 
     @Override
-    public Crew updateEmail(final Crew crew, final String email) {
-        if (crew == null) {
-            throw new IllegalArgumentException("Cannot process updatePhone operation for null value argument.");
-        }
+    public Optional<Crew> updateEmail(final Crew crew, final String email) {
         final Crew crewFromRepo = crewRepository.getInstance(crew.getPhone());
         if (crewFromRepo == null) {
             throw new CrewNotExistException();
@@ -79,14 +63,11 @@ public class CrewPersonManagementServiceImpl implements PersonManagementService<
         crewFromRepo.setEmail(email);
         crewRepository.updateInstance(crewFromRepo);
         crew.setEmail(email);
-        return crew;
+        return Optional.of(crew);
     }
 
     @Override
-    public Crew updateAddress(final Crew crew, final Address address) {
-        if (crew == null) {
-            throw new IllegalArgumentException("Cannot process updateAddress operation for null value argument.");
-        }
+    public Optional<Crew> updateAddress(final Crew crew, final Address address) {
         final Crew crewFromRepo = crewRepository.getInstance(crew.getPhone());
         if (crewFromRepo == null) {
             throw new CrewNotExistException();
@@ -94,7 +75,7 @@ public class CrewPersonManagementServiceImpl implements PersonManagementService<
         crewFromRepo.setAddress(address);
         crewRepository.updateInstance(crewFromRepo);
         crew.setAddress(address);
-        return crew;
+        return Optional.of(crew);
     }
 
     @Override

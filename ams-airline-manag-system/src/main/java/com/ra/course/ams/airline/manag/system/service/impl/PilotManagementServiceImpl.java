@@ -8,16 +8,14 @@ import com.ra.course.ams.airline.manag.system.service.PilotManagementService;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class PilotManagementServiceImpl implements PilotManagementService {
 
-    private PilotsRepository pilotRepo;
+    transient private PilotsRepository pilotRepo;
 
     @Override
-    public Pilot addFlightInstance(final Pilot pilot, final FlightInstance flightInstance) {
-        if (pilot == null || flightInstance == null) {
-            throw new IllegalArgumentException("Cannot process addFlightInstanc operation with null value arguments");
-        }
+    public Optional<Pilot> addFlightInstance(final Pilot pilot, final FlightInstance flightInstance) {
         final Pilot pilotFromRepo = pilotRepo.getInstance(pilot.getPhone());
         if (pilotFromRepo == null) {
             throw new PilotNotExistException();
@@ -26,7 +24,7 @@ public class PilotManagementServiceImpl implements PilotManagementService {
         pilotRepo.updateInstance(pilotFromRepo);
 
         addNewFlightInstance(pilot, flightInstance);
-        return pilot;
+        return Optional.of(pilot);
     }
 
     private static void addNewFlightInstance(final Pilot pilot, final FlightInstance flightInstance) {
@@ -38,10 +36,7 @@ public class PilotManagementServiceImpl implements PilotManagementService {
     }
 
     @Override
-    public Pilot removeFlightInstance(final Pilot pilot, final FlightInstance flightInstance) {
-        if (pilot == null || flightInstance == null) {
-            throw new IllegalArgumentException("Cannot process addFlightInstance operation with null value arguments");
-        }
+    public Optional<Pilot> removeFlightInstance(final Pilot pilot, final FlightInstance flightInstance) {
         final Pilot pilotFromRepo = pilotRepo.getInstance(pilot.getPhone());
         if (pilotFromRepo == null) {
             throw new PilotNotExistException();
@@ -50,7 +45,7 @@ public class PilotManagementServiceImpl implements PilotManagementService {
         pilotRepo.updateInstance(pilotFromRepo);
 
         deleteFlightInstance(pilot, flightInstance);
-        return pilot;
+        return Optional.of(pilot);
     }
 
     private static void deleteFlightInstance(final Pilot pilot, final FlightInstance flightInstance) {
@@ -60,9 +55,9 @@ public class PilotManagementServiceImpl implements PilotManagementService {
         }
     }
 
-    public PilotsRepository getPilotRepo() {
-        return pilotRepo;
-    }
+//    public PilotsRepository getPilotRepo() {
+//        return pilotRepo;
+//    }
 
     public void setPilotRepo(final PilotsRepository pilotRepo) {
         this.pilotRepo = pilotRepo;

@@ -4,6 +4,7 @@ import com.ra.course.ams.airline.manag.system.entity.flight.Flight;
 
 import com.ra.course.ams.airline.manag.system.repository.flight.FlightRepository;
 import com.ra.course.ams.airline.manag.system.service.FlightService;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -32,40 +33,40 @@ public class FlightServiceImplTest {
     @Test
     public void testThatIfPassValidFlightObjectInArgumentAddMethodReturnsFlight() {
         when(flightRepository.addInstance(any(Flight.class))).thenReturn(flightToAdd);
-        Flight returnedFlight = flightService.add(flightToAdd);
+        Flight returnedFlight = flightService.add(flightToAdd).get();
 
         assertThat(returnedFlight).isNotNull();
         assertThat(returnedFlight.getFlightNumber()).isEqualTo("0001");
     }
 
-    @Test
-    public void testThatIfPassNullInArgumentAddMethodThrowsError() {
-        try {
-            flightService.add(null);
-            fail("Expected that IllegalArgumentException will be throws");
-        } catch (IllegalArgumentException e) {
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
-    }
+//    @Test
+//    public void testThatIfPassNullInArgumentAddMethodThrowsError() {
+//        try {
+//            flightService.add(null);
+//            fail("Expected that IllegalArgumentException will be throws");
+//        } catch (IllegalArgumentException e) {
+//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+//        }
+//    }
 
     @Test
     public void testThatIfPassValidFlightObjectInArgumentUpdateMethodReturnsFlight() {
         doNothing().when(flightRepository).updateInstance(any(Flight.class));
-        Flight returnedFlight = flightService.update(flightToAdd);
+        Flight returnedFlight = flightService.update(flightToAdd).get();
 
         assertThat(returnedFlight).isNotNull();
         assertThat(returnedFlight.getFlightNumber()).isEqualTo("0001");
     }
 
-    @Test
-    public void testThatIfPassNullInArgumentUpdateMethodThrowsError() {
-        try {
-            flightService.update(null);
-            fail("Expected that IllegalArgumentException will be throws");
-        } catch (IllegalArgumentException e) {
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
-    }
+//    @Test
+//    public void testThatIfPassNullInArgumentUpdateMethodThrowsError() {
+//        try {
+//            flightService.update(null);
+//            fail("Expected that IllegalArgumentException will be throws");
+//        } catch (IllegalArgumentException e) {
+//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+//        }
+//    }
 
     @Test
     public void testThatIfPassValidFlightObjectInArgumentCancelMethodReturnsTrue() {
@@ -77,12 +78,8 @@ public class FlightServiceImplTest {
     }
 
     @Test
-    public void testThatIfPassNullInArgumentCancelMethodThrowsError() {
-        try {
-            flightService.cancel(null);
-            fail("Expected that IllegalArgumentException will be throws");
-        } catch (IllegalArgumentException e) {
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+    public void testThatIfPassNullInArgumentCancelReturnFalse() {
+
+            Assert.assertFalse(flightService.cancel(null));
     }
 }
