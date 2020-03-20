@@ -1,25 +1,23 @@
 package com.ra.course.ams.airline.manag.system.repository.person;
 
-import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
+import com.ra.course.ams.airline.manag.system.entity.person.Person;
 
 import java.util.Collection;
 import java.util.Map;
 
 public interface PersonsRepository {
 
-    Pilot getInstance(final String phoneNumber);
+    Person getInstance(final String phoneNumber);
 
-    Collection<Pilot> getInstances();
+    Collection<Person> getInstances();
 
-    Pilot addInstance(final Pilot person);
+    Person addInstance(final Person person);
 
+    void updateInstance(final Person person);
 
-    void updateInstance(final Pilot person);
+    void removeInstance(final Person person);
 
+    Map<String, Person> getPersons();
 
-    void removeInstance(final Pilot person);
-
-    Map<String, Pilot> getPersons();
-
-    void setPersons(final Map<String, Pilot> persons);
+    void setPersons(final Map<String, Person> persons);
 }
