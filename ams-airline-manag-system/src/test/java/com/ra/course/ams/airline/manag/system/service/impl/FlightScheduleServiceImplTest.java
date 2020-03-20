@@ -44,16 +44,6 @@ public class FlightScheduleServiceImplTest {
         assertThat(returnedWeeklySchedule.get().getFlight()).isEqualTo(testFlight);
     }
 
-//    @Test
-//    public void testThatIfPassNullInArgumentAddWeeklyScheduleMethodThrowsError(){
-//        try {
-//            flightScheduleService.addSchedule(this.returnWeeklyScheduleNull());
-//            fail("Expected that IllegalArgumentException will be throws");
-//        } catch (IllegalArgumentException e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
     @Test
     public void testThatIfPassValidCustomScheduleObjectInArgumentAddScheduleMethodReturnsWeeklySchedule(){
         CustomSchedule customScheduleToAdd = new CustomSchedule.Builder().setFlight(testFlight).build();
@@ -63,16 +53,6 @@ public class FlightScheduleServiceImplTest {
         assertThat(returnedCustomSchedule).isNotNull();
         assertThat(returnedCustomSchedule.getFlight()).isEqualTo(testFlight);
     }
-
-//    @Test
-//    public void testThatIfPassNullInArgumentAddCustomScheduleMethodThrowsError(){
-//        try {
-//            flightScheduleService.addSchedule(this.returnCustomScheduleNull());
-//            fail("Expected that IllegalArgumentException will be throws");
-//        } catch (IllegalArgumentException e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
 
     @Test
     public void testThatIfPassValidObjectInArgumentUpdateWeeklyScheduleMethodReturnsWeeklySchedule(){
@@ -84,16 +64,6 @@ public class FlightScheduleServiceImplTest {
         assertThat(returnedWeeklySchedule.getFlight()).isEqualTo(testFlight);
     }
 
-//    @Test
-//    public void testThatIfPassNullInArgumentUpdateWeeklyScheduleMethodThrowsError(){
-//        try {
-//            flightScheduleService.updateSchedule(this.returnWeeklyScheduleNull());
-//            fail("Expected that IllegalArgumentException will be throws");
-//        } catch (IllegalArgumentException e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
     @Test
     public void testThatIfPassValidObjectInArgumentUpdateCustomScheduleMethodReturnsCustomSchedule(){
         CustomSchedule customScheduleToUpdate = new CustomSchedule.Builder().setFlight(testFlight).build();
@@ -103,16 +73,6 @@ public class FlightScheduleServiceImplTest {
         assertThat(returnedCustomSchedule).isNotNull();
         assertThat(returnedCustomSchedule.getFlight()).isEqualTo(testFlight);
     }
-
-//    @Test
-//    public void testThatIfPassNullInArgumentUpdateCustomScheduleMethodThrowsError(){
-//        try {
-//            flightScheduleService.updateSchedule(this.returnCustomScheduleNull());
-//            fail("Expected that IllegalArgumentException will be throws");
-//        } catch (IllegalArgumentException e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
 
     private WeeklySchedule returnWeeklyScheduleNull() {
         return null;

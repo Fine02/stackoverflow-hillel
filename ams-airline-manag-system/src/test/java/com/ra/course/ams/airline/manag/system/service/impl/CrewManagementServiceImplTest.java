@@ -42,23 +42,6 @@ public class CrewManagementServiceImplTest {
         assertThat(updatedCrew.getFlightInstances().get(0)).isEqualTo(flightInstanceToAdd);
     }
 
-//    @Test
-//    public void testThatAddFlightInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            crewManagementService.addFlightInstance(null, null);
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
-//    @Test
-//    public void whenAddFlightInstanceWithFlightInstanceNullThenThrowIllegalArgumentException() {
-//
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                crewManagementService.addFlightInstance(new Crew(), null));
-//    }
-
     @Test
     public void testThatAddFlightInstanceThrowCrewNotExistExceptionIfNoSuchCrewFind() {
         when(crewRepository.getInstance(any())).thenReturn(null);
@@ -86,22 +69,6 @@ public class CrewManagementServiceImplTest {
         assertThat(updatedCrew.getFlightInstances()).isEmpty();
         assertThat(crewInRepo.getFlightInstances()).isEmpty();
     }
-
-//    @Test
-//    public void testThatRemoveFlightInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            crewManagementService.removeFlightInstance(null, null);
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
-//        @Test
-//        public void whenRemoveFlightInstanceWithFlightInstanceNullThenThrowIllegalArgumentException() {
-//                Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                        crewManagementService.removeFlightInstance(new Crew(), null));
-//        }
 
     @Test
     public void testThatRemoveFlightInstanceThrowCrewNotExistExceptionIfNoSuchCrewFind() {

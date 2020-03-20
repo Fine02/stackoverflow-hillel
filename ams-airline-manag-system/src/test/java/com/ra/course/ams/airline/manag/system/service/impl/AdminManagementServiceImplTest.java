@@ -5,7 +5,6 @@ import com.ra.course.ams.airline.manag.system.entity.person.Admin;
 import com.ra.course.ams.airline.manag.system.exception.AdminAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.AdminNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.person.AdminsRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -42,26 +41,6 @@ public class AdminManagementServiceImplTest {
         assertThat(admin.get().getEmail()).isEqualTo("ivanov@example.com");
     }
 
-//    @Test
-//    public void testThatFindByEmailThrowsIllegalArgumentExceptionWhenCallingWithEmptyArgument() {
-//        try {
-//            adminManagementService.findByEmail("");
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
-//    @Test
-//    public void testThatFindByEmailThrowsIllegalArgumentExceptionWhenCallingWithNullArgument() {
-//        try {
-//            adminManagementService.findByEmail(null);
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
     @Test
     public void testThatFindByEmailThrowsAdminNotExistExceptionWhenCallingWhenCannotFindPersonWithEmail() {
         when(adminRepository.getInstances()).thenReturn(getAdmin());
@@ -81,8 +60,6 @@ public class AdminManagementServiceImplTest {
         Optional<Admin> admin = adminManagementService.findByPhoneNumber("11111");
 
         assertThat(admin.get()).isEqualToComparingFieldByField(adminGiven);
-
-       // Assert.assertEquals(admin, adminGiven);
     }
 
     @Test
@@ -96,26 +73,6 @@ public class AdminManagementServiceImplTest {
             assertThat(e).isInstanceOf(AdminNotExistException.class);
         }
     }
-
-//    @Test
-//    public void testThatFindByPhoneReturnsAdminThrowsIllegalArgumentExceptionWhenCallWithEmptyArg() {
-//        try {
-//            adminManagementService.findByPhoneNumber("");
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
-//    @Test
-//    public void testThatFindByPhoneReturnsAdminThrowsIllegalArgumentExceptionWhenCallWithNullArg() {
-//        try {
-//            adminManagementService.findByPhoneNumber(null);
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
 
     @Test
     public void testThatAddInstanceReturnsAdmin() {
@@ -141,16 +98,6 @@ public class AdminManagementServiceImplTest {
         }
     }
 
-//    @Test
-//    public void addInstancetestThatAddInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            adminManagementService.add(null);
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
     @Test
     public void testThatUpdatePhoneNumberWithoutExceptions() {
         Admin adminInRepo = new Admin.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
@@ -162,16 +109,6 @@ public class AdminManagementServiceImplTest {
         assertThat(updatedAdmin).isEqualTo(admin);
         assertThat(updatedAdmin.getPhone()).isEqualTo("55285");
     }
-
-//    @Test
-//    public void testThatUpdatePhoneNumberThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            adminManagementService.updatePhone(null, "55285");
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
 
     @Test
     public void testThatUpdatePhoneNumberThrowAdminNotExistExceptionIfNoSuchAdminFind() {
@@ -210,18 +147,6 @@ public class AdminManagementServiceImplTest {
         assertThat(updatedAdmin.getAddress()).isEqualTo(testAddress);
     }
 
-
-
-//    @Test
-//    public void testThatUpdateEmailThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            adminManagementService.updateEmail(null, "ivanov@test.com");
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
     @Test
     public void testThatUpdateEmailThrowAdminNotExistExceptionIfNoSuchAdminFind() {
         when(adminRepository.getInstance(any())).thenReturn(null);
@@ -246,16 +171,6 @@ public class AdminManagementServiceImplTest {
         verify(adminRepository, times(1)).getInstance(any());
     }
 
-//    @Test
-//    public void testThatRemoveInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            adminManagementService.remove(null);
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
     @Test
     public void testThatRemoveInstanceThrowAdminNotExistExceptionWhenCallWithNullValueArgument() {
         when(adminRepository.getInstance(any())).thenReturn(null);
@@ -278,17 +193,4 @@ public class AdminManagementServiceImplTest {
         };
         return Arrays.asList(admins);
     }
-
-//    @Test
-//    public void whenUpdateEmailWithAdminNullThenThrowIllegalArgumentException() {
-//        Admin admin = null;
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                adminManagementService.updateEmail(admin, "email"));
-//    }
-//
-//    @Test
-//    public void whenUpdateAdressWithAdminIsNullThenThrowIllegalArgumentException() {
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                adminManagementService.updateAddress(null, new Address()));
-//    }
 }

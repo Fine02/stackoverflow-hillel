@@ -173,13 +173,6 @@ public class InformationServiceImplTest {
         assertThat(informationService.searchFlightByDate(date).get()).isEqualTo(flights);
     }
 
-//    @Test
-//    public void whenAirportIsNullThenSearchFlightByDepartureAirportThrowIllegalArgumentException() {
-//
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                informationService.searchFlightByDepartureAirport(null));
-//    }
-
     @Test
     public void whenDepartureAirportIsActualThenSearchFlightByDepartureAirportReturnListFlight() {
         Flight flight = new Flight.Builder().setArrival(airport).build();
@@ -190,13 +183,6 @@ public class InformationServiceImplTest {
 
         assertThat(informationService.searchFlightByDepartureAirport(airport).get()).isEqualTo(flights);
     }
-
-//    @Test
-//    public void whenAirportIsNullThenSearchFlightByArrivalAirportThrowIllegalArgumentException() {
-//
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                informationService.searchFlightByArrivalAirport(null));
-//    }
 
     @Test
     public void whenArrivalAirportIsActualThenSearchFlightByArrivalAirportReturnListFlight() {

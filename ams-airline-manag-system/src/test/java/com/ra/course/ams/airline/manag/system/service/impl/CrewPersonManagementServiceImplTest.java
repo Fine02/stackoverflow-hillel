@@ -32,7 +32,6 @@ public class CrewPersonManagementServiceImplTest {
         crewPersonManagementService.setCrewRepository(crewRepository);
     }
 
-
     @Test
     public void testThatFindByEmailReturnsCrew() {
         when(crewRepository.getInstances()).thenReturn(getCrew());
@@ -42,27 +41,6 @@ public class CrewPersonManagementServiceImplTest {
         assertThat(crew.getName()).isEqualTo("Ivanov Ivan");
         assertThat(crew.getEmail()).isEqualTo("ivanov@example.com");
     }
-
-//    @Test
-//    public void testThatFindByEmailThrowsIllegalArgumentExceptionWhenCallingWithEmptyArgument() {
-//        try {
-//            crewPersonManagementService.findByEmail("");
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
-//    @Test
-//    public void testThatFindByEmailThrowsIllegalArgumentExceptionWhenCallingWithNullArgument() {
-//        try {
-//            crewPersonManagementService.findByEmail(null);
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
 
     @Test
     public void testThatFindByEmailThrowsCrewNotExistExceptionWhenCallingWhenCannotFindPersonWithEmail() {
@@ -84,38 +62,6 @@ public class CrewPersonManagementServiceImplTest {
         Crew crew = crewPersonManagementService.findByPhoneNumber("11111").get();
         assertThat(crew).isEqualToComparingFieldByField(crewGiven);
     }
-
-//    @Test
-//    public void testThatFindByPhoneReturnsCrewThrowsCrewNotExistExceptionWhenNoSuchPersonAvalialable() {
-//        when(crewRepository.getInstance(any(String.class))).thenReturn(null);
-//
-//        try {
-//            crewPersonManagementService.findByPhoneNumber("11111");
-//            fail("Expected CrewNotExistException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(CrewNotExistException.class);
-//        }
-//    }
-//
-//    @Test
-//    public void testThatFindByPhoneReturnsCrewThrowsIllegalArgumentExceptionWhenCallWithEmptyArg() {
-//        try {
-//            crewPersonManagementService.findByPhoneNumber("");
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-//
-//    @Test
-//    public void testThatFindByPhoneReturnsCrewThrowsIllegalArgumentExceptionWhenCallWithNullArg() {
-//        try {
-//            crewPersonManagementService.findByPhoneNumber(null);
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
 
     @Test
     public void testThatAddInstanceReturnsCrew() {
@@ -141,16 +87,6 @@ public class CrewPersonManagementServiceImplTest {
         }
     }
 
-//    @Test
-//    public void testThatAddInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            crewPersonManagementService.add(null);
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
     @Test
     public void testThatUpdatePhoneNumberWithoutExceptions() {
         Crew crewInRepo = new Crew.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
@@ -162,16 +98,6 @@ public class CrewPersonManagementServiceImplTest {
         assertThat(updatedCrew).isEqualTo(crew);
         assertThat(updatedCrew.getPhone()).isEqualTo("55285");
     }
-
-//    @Test
-//    public void testThatUpdatePhoneNumberThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            crewPersonManagementService.updatePhone(null, "55285");
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
 
     @Test
     public void testThatUpdatePhoneNumberThrowCrewNotExistExceptionIfNoSuchCrewFind() {
@@ -210,16 +136,6 @@ public class CrewPersonManagementServiceImplTest {
         assertThat(updatedCrew.getAddress()).isEqualTo(testAddress);
     }
 
-//    @Test
-//    public void testThatUpdateEmailThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            crewPersonManagementService.updateEmail(null, "ivanov@test.com");
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
     @Test
     public void testThatUpdateEmailThrowCrewNotExistExceptionIfNoSuchCrewFind() {
         when(crewRepository.getInstance(any())).thenReturn(null);
@@ -244,16 +160,6 @@ public class CrewPersonManagementServiceImplTest {
         verify(crewRepository, times(1)).getInstance(any());
     }
 
-//    @Test
-//    public void testThatRemoveInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            crewPersonManagementService.remove(null);
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
     @Test
     public void testThatRemoveInstanceThrowCrewNotExistExceptionWhenCallWithNullValueArgument() {
         when(crewRepository.getInstance(any())).thenReturn(null);
@@ -276,11 +182,4 @@ public class CrewPersonManagementServiceImplTest {
         };
         return Arrays.asList(crews);
     }
-
-//    @Test
-//    public void whenUpdateAddressWithCrewNullThenThrowIllegalArgumentException() {
-//        Crew crew = null;
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                crewPersonManagementService.updateAddress(crew, new Address()));
-//    }
 }

@@ -42,23 +42,6 @@ public class PilotManagementServiceImplTest {
         assertThat(updatedPilot.getFlightInstances().get(0)).isEqualTo(flightInstanceToAdd);
     }
 
-//    @Test
-//    public void testThatAddFlightInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            pilotManagenentService.addFlightInstance(null, null);
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
-//    @Test
-//    public void whenAddFlightInstanceWithFlightInstancNullThenThrowIllegalArgumentException() {
-//        Pilot pilot = null;
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                pilotManagenentService.addFlightInstance(new Pilot(), null));
-//    }
-
     @Test
     public void testThatAddFlightInstanceThrowPilotNotExistExceptionIfNoSuchPilotFind() {
         when(pilotRepository.getInstance(any())).thenReturn(null);
@@ -86,22 +69,6 @@ public class PilotManagementServiceImplTest {
         assertThat(updatedPilot.getFlightInstances()).isEmpty();
         assertThat(pilotInRepo.getFlightInstances()).isEmpty();
     }
-
-//    @Test
-//    public void testThatRemoveFlightInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            pilotManagenentService.removeFlightInstance(null, null);
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
-//    @Test
-//    public void whenRemoveFlightInstanceWithPilotNullThenThrowIllegalArgumentException() {
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                pilotManagenentService.removeFlightInstance(new Pilot(), null));
-//    }
 
     @Test
     public void testThatRemoveFlightInstanceThrowPilotNotExistExceptionIfNoSuchPilotFind() {

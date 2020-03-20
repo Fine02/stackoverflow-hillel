@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 public class FlightServiceImplTest {
@@ -39,16 +38,6 @@ public class FlightServiceImplTest {
         assertThat(returnedFlight.getFlightNumber()).isEqualTo("0001");
     }
 
-//    @Test
-//    public void testThatIfPassNullInArgumentAddMethodThrowsError() {
-//        try {
-//            flightService.add(null);
-//            fail("Expected that IllegalArgumentException will be throws");
-//        } catch (IllegalArgumentException e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
     @Test
     public void testThatIfPassValidFlightObjectInArgumentUpdateMethodReturnsFlight() {
         doNothing().when(flightRepository).updateInstance(any(Flight.class));
@@ -57,16 +46,6 @@ public class FlightServiceImplTest {
         assertThat(returnedFlight).isNotNull();
         assertThat(returnedFlight.getFlightNumber()).isEqualTo("0001");
     }
-
-//    @Test
-//    public void testThatIfPassNullInArgumentUpdateMethodThrowsError() {
-//        try {
-//            flightService.update(null);
-//            fail("Expected that IllegalArgumentException will be throws");
-//        } catch (IllegalArgumentException e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
 
     @Test
     public void testThatIfPassValidFlightObjectInArgumentCancelMethodReturnsTrue() {

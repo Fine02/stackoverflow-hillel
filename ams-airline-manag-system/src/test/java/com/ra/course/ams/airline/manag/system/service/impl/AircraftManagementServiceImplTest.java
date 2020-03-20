@@ -39,16 +39,6 @@ public class AircraftManagementServiceImplTest {
         assertThat(returnedAircraft.getId()).isEqualTo("0001");
     }
 
-//    @Test
-////    public void testThatIfPassNullInArgumentAddAircraftMethodThrowsError(){
-////        try {
-////            aircraftManagementService.addAircraft(null);
-////            fail("Expected that IllegalArgumentException will be throws");
-////        } catch (IllegalArgumentException e) {
-////            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-////        }
-////    }
-
     @Test
     public void testThatIfPassValidObjectInArgumentUpdateAircraftMethodReturnsAircraft(){
         Aircraft aircraftToUpdate = new Aircraft.Builder().setId("0001").build();
@@ -58,16 +48,6 @@ public class AircraftManagementServiceImplTest {
         assertThat(returnedAircraft).isNotNull();
         assertThat(returnedAircraft.getId()).isEqualTo("0001");
     }
-
-//    @Test
-//    public void testThatIfPassNullInArgumentUpdateAircraftMethodThrowsError(){
-//        try {
-//            aircraftManagementService.updateAircraft(null);
-//            fail("Expected that IllegalArgumentException will be throws");
-//        } catch (IllegalArgumentException e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
 
     @Test
     public void testThatIfPassValidAircraftObjectArgumentInGetFlightsMethodThanReturnFlights(){

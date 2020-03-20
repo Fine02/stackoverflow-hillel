@@ -42,22 +42,6 @@ public class PilotPersonManagementServiceImplTest {
         assertThat(pilot.getEmail()).isEqualTo("ivanov@example.com");
     }
 
-//    @Test
-//    public void testThatFindByEmailThrowsIllegalArgumentExceptionWhenCallingWithEmptyArgument() {
-//        try {
-//            pilotPersonManagementService.findByEmail("");
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
-//    @Test
-//    public void whenFindByEmailWithEmailNullThenThrowIllegalArgumentException() {
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                pilotPersonManagementService.findByEmail(null));
-//    }
-
     @Test
     public void testThatFindByEmailThrowsPilotNotExistExceptionWhenCallingWhenCannotFindPersonWithEmail() {
         when(pilotRepository.getInstances()).thenReturn(getPilot());
@@ -91,22 +75,6 @@ public class PilotPersonManagementServiceImplTest {
         }
     }
 
-//    @Test
-//    public void testThatFindByPhoneReturnsPilotThrowsIllegalArgumentExceptionWhenCallWithEmptyArg() {
-//        try {
-//            pilotPersonManagementService.findByPhoneNumber("");
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
-//    @Test
-//    public void whenFindByPhoneNumberWithPhoneNumberNullThenThrowIllegalArgumentException() {
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                pilotPersonManagementService.findByPhoneNumber(null));
-//    }
-
     @Test
     public void testThatAddInstanceReturnsPilot() {
         when(pilotRepository.getInstance(any())).thenReturn(null);
@@ -135,16 +103,6 @@ public class PilotPersonManagementServiceImplTest {
         verify(pilotRepository, times(1)).getInstance(any());
     }
 
-//    @Test
-//    public void testThatAddInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            pilotPersonManagementService.add(null);
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
     @Test
     public void testThatUpdatePhoneNumberWithoutExceptions() {
         Pilot pilotInRepo = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
@@ -159,16 +117,6 @@ public class PilotPersonManagementServiceImplTest {
         verify(pilotRepository, times(1)).updateInstance(eq(pilotInRepo));
         verify(pilotRepository, times(1)).getInstance(any());
     }
-
-//    @Test
-//    public void testThatUpdatePhoneNumberThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            pilotPersonManagementService.updatePhone(null, "55285");
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
 
     @Test
     public void testThatUpdatePhoneNumberThrowPilotNotExistExceptionIfNoSuchPilotFind() {
@@ -214,16 +162,6 @@ public class PilotPersonManagementServiceImplTest {
         verify(pilotRepository, times(1)).getInstance(any());
     }
 
-//    @Test
-//    public void testThatUpdateEmailThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            pilotPersonManagementService.updateEmail(null, "ivanov@test.com");
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
     @Test
     public void testThatUpdateEmailThrowPilotNotExistExceptionIfNoSuchPilotFind() {
         when(pilotRepository.getInstance(any())).thenReturn(null);
@@ -248,16 +186,6 @@ public class PilotPersonManagementServiceImplTest {
         verify(pilotRepository, times(1)).getInstance(any());
     }
 
-//    @Test
-//    public void testThatRemoveInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument() {
-//        try {
-//            pilotPersonManagementService.remove(null);
-//            fail("Expected IllegalArgumentException to be thrown");
-//        } catch (Exception e) {
-//            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-//        }
-//    }
-
     @Test
     public void testThatRemoveInstanceThrowPilotNotExistExceptionWhenCallWithNullValueArgument() {
         when(pilotRepository.getInstance(any())).thenReturn(null);
@@ -280,11 +208,4 @@ public class PilotPersonManagementServiceImplTest {
         };
         return Arrays.asList(pilots);
     }
-
-//    @Test
-//    public void whenUpdateAddressWithPilotNullThenThrowIllegalArgumentException() {
-//        Pilot pilot = null;
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                pilotPersonManagementService.updateAddress(pilot, new Address()));
-//    }
 }
