@@ -1,24 +1,23 @@
 package com.ra.course.aws.online.shopping.entity;
 import com.ra.course.aws.online.shopping.entity.product.Product;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 public class Catalog  {
     private LocalDateTime lastUpdated;
-    private Map<String, List<Product>> productNames;
-    private Map<String, List<Product>> productCategories;
+    private Map<String, List<Product>> productsByNames;
+    private Map<String, List<Product>> productsByCategories;
 
     public Catalog() {
     }
 
-    public Catalog(LocalDateTime lastUpdated, Map<String, List<Product>> productNames,
-                   Map<String, List<Product>> productCategories) {
+    public Catalog(LocalDateTime lastUpdated, Map<String, List<Product>> productsByNames,
+                   Map<String, List<Product>> productsByCategories) {
         this.lastUpdated = lastUpdated;
-        this.productNames = productNames;
-        this.productCategories = productCategories;
+        this.productsByNames = productsByNames;
+        this.productsByCategories = productsByCategories;
     }
 
     public LocalDateTime getLastUpdated() {
@@ -29,21 +28,19 @@ public class Catalog  {
         this.lastUpdated = lastUpdated;
     }
 
-    public Map<String, List<Product>> getProductNames() {
-        return productNames;
+    public Map<String, List<Product>> getProductsByNames() {
+        return productsByNames;
     }
 
-    public void setProductNames(Map<String, List<Product>> productNames) {
-        this.productNames = productNames;
+    public void setProductsByNames(Map<String, List<Product>> productsByNames) {
+        this.productsByNames = productsByNames;
     }
 
-    public Map<String, List<Product>> getProductCategories() {
-        return productCategories;
+    public Map<String, List<Product>> getProductsByCategories() {
+        return productsByCategories;
     }
 
-    public void setProductCategories(Map<String, List<Product>> productCategories) {
-        this.productCategories = productCategories;
+    public void setProductsByCategories(Map<String, List<Product>> productsByCategories) {
+        this.productsByCategories = productsByCategories;
     }
-
-
 }

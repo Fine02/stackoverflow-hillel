@@ -1,10 +1,21 @@
 package com.ra.course.aws.online.shopping.service;
 
+import com.ra.course.aws.online.shopping.entity.product.Product;
+import com.ra.course.aws.online.shopping.entity.product.ProductCategory;
+
+import java.util.List;
+
 public interface CatalogService {
 
-    void updateCatalogWithModifiedProduct(Long productId);
+    boolean updateCatalogWithModifiedProduct(Long productId);
 
-    void updateCatalogWithNewProduct(Long productId);
+    boolean updateCatalogWithNewProduct(Long productId);
 
-    void removeProductFromCatalog(final Long productId);
+    boolean removeProductFromCatalog(Long productId);
+
+    List<Product> searchProductsByName(String productName);
+
+    List<Product> searchProductsByCategory(ProductCategory productCategory);
+
+    List<Product> getAll();
 }
