@@ -16,6 +16,8 @@ import static org.mockito.Mockito.*;
 
 public class PilotManagementServiceImplTest {
 
+    Pilot testPilot;
+
     @Mock
     private PilotsRepository pilotRepository;
 
@@ -23,6 +25,7 @@ public class PilotManagementServiceImplTest {
 
     @BeforeEach
     public void setup() {
+        testPilot = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
         MockitoAnnotations.initMocks(this);
         pilotManagenentService = new PilotManagementServiceImpl();
         pilotManagenentService.setPilotRepo(pilotRepository);
@@ -30,10 +33,10 @@ public class PilotManagementServiceImplTest {
 
     @Test
     public void testThatAddFlightInstanceWithoutExceptions() {
-        Pilot pilotInRepo = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+        Pilot pilotInRepo =  new Pilot.Builder().setName("Ivanov Ivan").build();
         when(pilotRepository.getInstance(any())).thenReturn(pilotInRepo);
 
-        Pilot pilot = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+        Pilot pilot = testPilot;
         FlightInstance flightInstanceToAdd = new FlightInstance();
         Pilot updatedPilot = pilotManagenentService.addFlightInstance(pilot, flightInstanceToAdd).get();
 
@@ -46,7 +49,7 @@ public class PilotManagementServiceImplTest {
     public void testThatAddFlightInstanceThrowPilotNotExistExceptionIfNoSuchPilotFind() {
         when(pilotRepository.getInstance(any())).thenReturn(null);
         try {
-            Pilot pilot = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+            Pilot pilot = testPilot;
             FlightInstance flightInstanceToAdd = new FlightInstance();
             pilotManagenentService.addFlightInstance(pilot, flightInstanceToAdd);
             fail("Expected PilotNotExistException to be thrown");
@@ -62,7 +65,7 @@ public class PilotManagementServiceImplTest {
                 .setEmail("ivanov@example.com").setPhone("11111").addFlightInstance(flightInstanceToRemove).build();
         when(pilotRepository.getInstance(any())).thenReturn(pilotInRepo);
 
-        Pilot pilot = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+        Pilot pilot = testPilot;
         Pilot updatedPilot = pilotManagenentService.removeFlightInstance(pilot, flightInstanceToRemove).get();
 
         assertThat(updatedPilot).isEqualTo(pilot);
@@ -74,7 +77,7 @@ public class PilotManagementServiceImplTest {
     public void testThatRemoveFlightInstanceThrowPilotNotExistExceptionIfNoSuchPilotFind() {
         when(pilotRepository.getInstance(any())).thenReturn(null);
         try {
-            Pilot pilot = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+            Pilot pilot = testPilot;
             FlightInstance flightInstanceToRemove = new FlightInstance();
             pilotManagenentService.removeFlightInstance(pilot, flightInstanceToRemove);
             fail("Expected PilotNotExistException to be thrown");

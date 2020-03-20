@@ -20,6 +20,8 @@ import static org.mockito.Mockito.*;
 
 public class PilotPersonManagementServiceImplTest {
 
+    Pilot testPilot;
+
     @Mock
     private PilotsRepository pilotRepository;
 
@@ -27,6 +29,7 @@ public class PilotPersonManagementServiceImplTest {
 
     @BeforeEach
     public void setup() {
+        testPilot = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
         MockitoAnnotations.initMocks(this);
         pilotPersonManagementService = new PilotPersonManagementServiceImpl();
         pilotPersonManagementService.setPilotRepo(pilotRepository);
@@ -56,7 +59,7 @@ public class PilotPersonManagementServiceImplTest {
 
     @Test
     public void testThatFindByPhoneReturnsPilot() {
-        Pilot pilotGiven = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+        Pilot pilotGiven = testPilot;
         when(pilotRepository.getInstance(any(String.class))).thenReturn(pilotGiven);
 
         Pilot pilot = pilotPersonManagementService.findByPhoneNumber("11111").get();
@@ -79,7 +82,7 @@ public class PilotPersonManagementServiceImplTest {
     public void testThatAddInstanceReturnsPilot() {
         when(pilotRepository.getInstance(any())).thenReturn(null);
 
-        Pilot pilotToAdd = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+        Pilot pilotToAdd =testPilot;
         Pilot pilot = pilotPersonManagementService.add(pilotToAdd).get();
 
         assertThat(pilot).isEqualToComparingFieldByField(pilotToAdd);
@@ -89,10 +92,10 @@ public class PilotPersonManagementServiceImplTest {
 
     @Test
     public void testThatAddInstanceThrowsPilotAlreadyExistExceptionWhenTryToAddExistingPilot() {
-        Pilot pilotInRepo = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+        Pilot pilotInRepo = testPilot;
         when(pilotRepository.getInstance(any())).thenReturn(pilotInRepo);
 
-        Pilot pilotToAdd = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+        Pilot pilotToAdd =testPilot;
         try {
             pilotPersonManagementService.add(pilotToAdd);
             fail("Expected PilotAlreadyExistException to be thrown");
@@ -105,10 +108,10 @@ public class PilotPersonManagementServiceImplTest {
 
     @Test
     public void testThatUpdatePhoneNumberWithoutExceptions() {
-        Pilot pilotInRepo = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+        Pilot pilotInRepo = testPilot;
         when(pilotRepository.getInstance(any())).thenReturn(pilotInRepo);
 
-        Pilot pilot = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+        Pilot pilot = testPilot;
         Pilot updatedPilot = pilotPersonManagementService.updatePhone(pilot, "55285").get();
 
         assertThat(updatedPilot).isEqualTo(pilot);
@@ -122,7 +125,7 @@ public class PilotPersonManagementServiceImplTest {
     public void testThatUpdatePhoneNumberThrowPilotNotExistExceptionIfNoSuchPilotFind() {
         when(pilotRepository.getInstance(any())).thenReturn(null);
         try {
-            Pilot pilot = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+            Pilot pilot = testPilot;
             pilotPersonManagementService.updatePhone(pilot, "55285");
             fail("Expected PilotNotExistException to be thrown");
         } catch (Exception e) {
@@ -133,10 +136,10 @@ public class PilotPersonManagementServiceImplTest {
 
     @Test
     public void testThatUpdateEmailWithoutExceptions() {
-        Pilot pilotInRepo = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+        Pilot pilotInRepo = testPilot;
         when(pilotRepository.getInstance(any())).thenReturn(pilotInRepo);
 
-        Pilot pilot = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+        Pilot pilot = testPilot;
         Pilot updatedPilot = pilotPersonManagementService.updateEmail(pilot, "ivanov@test.com").get();
 
         assertThat(updatedPilot).isEqualTo(pilot);
@@ -166,7 +169,7 @@ public class PilotPersonManagementServiceImplTest {
     public void testThatUpdateEmailThrowPilotNotExistExceptionIfNoSuchPilotFind() {
         when(pilotRepository.getInstance(any())).thenReturn(null);
         try {
-            Pilot pilot = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+            Pilot pilot =testPilot;
             pilotPersonManagementService.updateEmail(pilot, "ivanov@test.com");
             fail("Expected PilotNotExistException to be thrown");
         } catch (Exception e) {
@@ -176,10 +179,10 @@ public class PilotPersonManagementServiceImplTest {
 
     @Test
     public void testThatRemovePilotWithoutExceptions() {
-        Pilot pilotInRepo = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+        Pilot pilotInRepo = testPilot;
         when(pilotRepository.getInstance(any())).thenReturn(pilotInRepo);
 
-        Pilot pilotToRemove = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+        Pilot pilotToRemove =testPilot;
         pilotPersonManagementService.remove(pilotToRemove);
 
         verify(pilotRepository, times(1)).removeInstance(eq(pilotInRepo));
@@ -191,7 +194,7 @@ public class PilotPersonManagementServiceImplTest {
         when(pilotRepository.getInstance(any())).thenReturn(null);
 
         try {
-            Pilot pilot = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
+            Pilot pilot = testPilot;
             pilotPersonManagementService.remove(pilot);
             fail("Expected PilotNotExistException to be thrown");
         } catch (Exception e) {

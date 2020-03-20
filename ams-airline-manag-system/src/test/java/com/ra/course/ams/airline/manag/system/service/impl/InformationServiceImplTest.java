@@ -47,20 +47,6 @@ public class InformationServiceImplTest {
         informationService.setShedRepos(weeklyScheduleRepo, customScheduleRepo);
     }
 
-//    @Test
-//    public void whenFlightNumberIsNullCheckFlightWeeklyScheduleThrowIllegalArgumentException() {
-//
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                informationService.checkFlightWeeklySchedule(null));
-//    }
-
-//    @Test
-//    public void whenFlightNumberIsEmptyCheckFlightWeeklyScheduleThrowIllegalArgumentException() {
-//
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                informationService.checkFlightWeeklySchedule(" "));
-//    }
-
     @Test
     public void whenFlightNumberIsActualThenCheckFlightWeeklyScheduleReturnWeeklySchedule() {
         WeeklySchedule existedWeeklySchedule = new WeeklySchedule.Builder().setId("1").build();
@@ -69,20 +55,6 @@ public class InformationServiceImplTest {
 
         assertThat(informationService.checkFlightWeeklySchedule("1").get()).isEqualTo(existedWeeklySchedule);
     }
-
-//    @Test
-//    public void whenFlightNumberIsNullCheckFlightCustomScheduleThrowIllegalArgumentException() {
-//
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                informationService.checkFlightCustomSchedule(null));
-//    }
-
-//    @Test
-//    public void whenFlightNumberIsEmptyCheckFlightCustomScheduleThrowIllegalArgumentException() {
-//
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                informationService.checkFlightCustomSchedule(" "));
-//    }
 
     @Test
     public void whenFlightNumberIsActualButNoSheduleinDBCheckFlightCustomScheduleThrowIllegalArgumentException() {
@@ -103,13 +75,6 @@ public class InformationServiceImplTest {
         assertThat(informationService.checkFlightCustomSchedule("1").get()).isEqualTo(existedCustSched);
     }
 
-//    @Test
-//    public void whenFlightInstanceIsNullThenCheckAvailableSeatsThrowIllegalArgumentException() {
-//
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                informationService.checkAvailableSeats(null));
-//    }
-
     @Test
     public void whenFlightInstanceIsActualThenCheckAvailableSeatsReturnSeatsList() {
         FlightSeat flightSeat = new FlightSeat.Builder().setReservationNumber("1").build();
@@ -122,13 +87,6 @@ public class InformationServiceImplTest {
         assertThat(informationService.checkAvailableSeats(flightInstance).get()).isEqualTo(flightSeatList);
     }
 
-//    @Test
-//    public void whenFlightInstanceIsNullThenCheckDepartureTimeThrowIllegalArgumentException() {
-//
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                informationService.checkDepartureTime(null));
-//    }
-
     @Test
     public void whenFlightInstanceIsActualThenCheckDepartureTimeReturnFlight() {
         FlightInstance flightInstance = new FlightInstance.Builder().setDepartureTime(time).build();
@@ -138,13 +96,6 @@ public class InformationServiceImplTest {
         assertThat(informationService.checkDepartureTime(flightInstance).get()).isEqualTo(time);
     }
 
-//    @Test
-//    public void whenFlightInstanceIsNullThenCheckArrivalTimeThrowIllegalArgumentException() {
-//
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                informationService.checkArrivalTime(null));
-//    }
-
     @Test
     public void whenFlightInstanceIsActualThenCheckArrivalTimeReturnFlight() {
         FlightInstance flightInstance = new FlightInstance.Builder().setArrivalTime(time).build();
@@ -153,13 +104,6 @@ public class InformationServiceImplTest {
 
         assertThat(informationService.checkArrivalTime(flightInstance).get()).isEqualTo(time);
     }
-
-//    @Test
-//    public void whenDateIsNullThenSearchFlightByDateThrowIllegalArgumentException() {
-//
-//        Assertions.assertThrows(IllegalArgumentException.class, () ->
-//                informationService.searchFlightByDate(null));
-//    }
 
     @Test
     public void whenDateIsActualThenSearchFlightByDateReturnListFlight() {

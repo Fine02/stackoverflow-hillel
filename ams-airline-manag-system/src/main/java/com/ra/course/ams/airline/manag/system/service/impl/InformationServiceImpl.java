@@ -15,9 +15,6 @@ import java.util.stream.Collectors;
 
 public class InformationServiceImpl implements InformationService {
 
-    transient public String flightNumerErrMes = "FlightNumber for search cannot be null, empty or blank";
-    transient public String airportErMes = "Airport cannot be null, empty or blank";
-
     transient private WeeklyScheduleRepository weeklySchedRepo;
     transient private CustomScheduleRepository customSchedRepo;
     transient private FlightInstanceRepository flightInstRepo;
