@@ -5,7 +5,6 @@ import com.ra.course.aws.online.shopping.entity.Item;
 import com.ra.course.aws.online.shopping.entity.enums.PaymentStatus;
 import com.ra.course.aws.online.shopping.entity.product.Product;
 import com.ra.course.aws.online.shopping.exceptions.ElementNotFoundException;
-import com.ra.course.aws.online.shopping.exceptions.ObjectRequireNotBeNullException;
 import com.ra.course.aws.online.shopping.service.ShoppingCartService;
 
 import java.util.List;
@@ -24,9 +23,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public Long addProductToCart(final Product product) {
-        if(product == null){
-            throw new ObjectRequireNotBeNullException("given product must not be Null!");
-        }
+        Objects.requireNonNull(product);
         final Item itemToSave = new Item(product.getId(), MIN_QUANTITY, product.getPrice());
         return shoppingCartDao.addItemToCart(itemToSave);
     }

@@ -49,9 +49,7 @@ class ShoppingCartServiceImplTest {
         //when
         Product productForDel = null;
         //then
-        Throwable exception = Assertions.assertThrows(NullPointerException.class, () -> shoppingCartService.addProductToCart(productForDel));
-        assertEquals(exception.getMessage(), "given product must not be Null!");
-
+        Assertions.assertThrows(NullPointerException.class, () -> shoppingCartService.addProductToCart(productForDel));
     }
 
     @Test
