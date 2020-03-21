@@ -16,6 +16,13 @@ public class Person {
         this.name = name;
     }
 
+    public Person(Person person) {
+        this.name = person.getName();
+        this.email = person.getEmail();
+        this.phone = person.getPhone();
+        this.address = person.getAddress();
+    }
+
     private Person(Builder builder) {
         this.name = builder.name;
         this.email = builder.email;

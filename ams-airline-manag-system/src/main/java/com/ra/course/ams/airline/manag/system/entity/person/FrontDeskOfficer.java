@@ -1,4 +1,4 @@
 package com.ra.course.ams.airline.manag.system.entity.person;
 
-public class FrontDeskOfficer extends Person {
+public class FrontDeskOfficer extends Pilot {
 }
