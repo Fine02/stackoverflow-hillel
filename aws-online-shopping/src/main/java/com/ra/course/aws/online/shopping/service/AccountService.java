@@ -6,10 +6,10 @@ public interface AccountService {
 
     Long save(Account account);
 
-    Account findById(Long id);
-
     boolean update(Account account);
 
-    boolean delete(Long id);
+    boolean remove(Long id);
+
+    Account findById(Long id);
 
 }

@@ -6,9 +6,9 @@ public interface AccountDao {
 
     Long save (Account account);
 
-    Account findByID (Long id);
+    Account findById(Long id);
 
     boolean update (Account account);
 
-    boolean delete (Long id);
+    boolean remove(Long id);
 }
