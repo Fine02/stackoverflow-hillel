@@ -3,11 +3,15 @@ package com.ra.course.ams.airline.manag.system.service;
 import com.ra.course.ams.airline.manag.system.entity.flight.CustomSchedule;
 import com.ra.course.ams.airline.manag.system.entity.flight.WeeklySchedule;
 
+import java.util.Optional;
+
 public interface FlightScheduleService {
 
-    WeeklySchedule addSchedule(WeeklySchedule weeklySchedule);
-    WeeklySchedule updateSchedule(WeeklySchedule weeklySchedule);
-    CustomSchedule addSchedule(CustomSchedule customSchedule);
-    CustomSchedule updateSchedule(CustomSchedule customSchedule);
+    Optional<WeeklySchedule> addSchedule(WeeklySchedule weeklySchedule);
 
+    Optional<WeeklySchedule> updateSchedule(WeeklySchedule weeklySchedule);
+
+    Optional<CustomSchedule> addSchedule(CustomSchedule customSchedule);
+
+    Optional<CustomSchedule> updateSchedule(CustomSchedule customSchedule);
 }

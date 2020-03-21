@@ -1,49 +1,23 @@
 package com.ra.course.ams.airline.manag.system.repository.person;
 
 import com.ra.course.ams.airline.manag.system.entity.person.FrontDeskOfficer;
-import com.ra.course.ams.airline.manag.system.exception.InstanceAlreadyExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
 
 import java.util.Collection;
 import java.util.Map;
 
-public class FrontDeskOfficerRepository implements Repository<FrontDeskOfficer, String> {
+public interface FrontDeskOfficerRepository {
 
-    private Map<String, FrontDeskOfficer> frontDeskOfficers;
+    FrontDeskOfficer getInstance(final String phoneNumber);
 
-    @Override
-    public FrontDeskOfficer getInstance(final String phoneNumber) {
-        return frontDeskOfficers.get(phoneNumber);
-    }
+    Collection<FrontDeskOfficer> getInstances();
 
-    @Override
-    public Collection<FrontDeskOfficer> getInstances() {
-        return frontDeskOfficers.values();
-    }
+    FrontDeskOfficer addInstance(final FrontDeskOfficer officer);
 
-    @Override
-    public FrontDeskOfficer addInstance(final FrontDeskOfficer officer) {
-        if (frontDeskOfficers.containsKey(officer.getPhone())){
-            throw new InstanceAlreadyExistException();
-        }
-        return frontDeskOfficers.put(officer.getPhone(), officer);
-    }
+    void updateInstance(final FrontDeskOfficer officer);
 
-    @Override
-    public void updateInstance(final FrontDeskOfficer officer) {
-        frontDeskOfficers.put(officer.getPhone(), officer);
-    }
+    void removeInstance(final FrontDeskOfficer officer);
 
-    @Override
-    public void removeInstance(final FrontDeskOfficer officer) {
-        frontDeskOfficers.remove(officer.getPhone());
-    }
+    Map<String, FrontDeskOfficer> getFrontDeskOfficers();
 
-    public Map<String, FrontDeskOfficer> getFrontDeskOfficers() {
-        return frontDeskOfficers;
-    }
-
-    public void setFrontDeskOfficers(final Map<String, FrontDeskOfficer> frontDeskOfficers) {
-        this.frontDeskOfficers = frontDeskOfficers;
-    }
+    void setFrontDeskOfficers(final Map<String, FrontDeskOfficer> frontDeskOfficers);
 }

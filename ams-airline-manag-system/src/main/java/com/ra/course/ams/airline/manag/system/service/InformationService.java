@@ -5,23 +5,24 @@ import com.ra.course.ams.airline.manag.system.entity.flight.*;
 import java.sql.Time;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface InformationService {
 
-    WeeklySchedule checkFlightWeeklySchedule(String flightNumber);
+    Optional<WeeklySchedule> checkFlightWeeklySchedule(String flightNumber);
 
-    CustomSchedule checkFlightCustomSchedule(String flightNumber);
+    Optional<CustomSchedule> checkFlightCustomSchedule(String flightNumber);
 
-    Time checkDepartureTime(FlightInstance flightInstance);
+    Optional<Time> checkDepartureTime(FlightInstance flightInstance);
 
-    List<FlightSeat> checkAvailableSeats(FlightInstance flightInstance);
+    Optional<List<FlightSeat>> checkAvailableSeats(FlightInstance flightInstance);
 
-    Time checkArrivalTime(FlightInstance flightInstance);
+    Optional<Time> checkArrivalTime(FlightInstance flightInstance);
 
-    List<Flight> searchFlightByDate(Date date);
+    Optional<List<Flight>> searchFlightByDate(Date date);
 
-    List<Flight> searchFlightByDepartureAirport(Airport airport);
+    Optional<List<Flight>> searchFlightByDepartureAirport(Airport airport);
 
-    List<Flight> searchFlightByArrivalAirport(Airport airport);
+    Optional<List<Flight>> searchFlightByArrivalAirport(Airport airport);
 
 }

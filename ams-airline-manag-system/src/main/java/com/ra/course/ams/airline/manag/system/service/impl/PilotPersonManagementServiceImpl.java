@@ -4,60 +4,50 @@ import com.ra.course.ams.airline.manag.system.entity.Address;
 import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
 import com.ra.course.ams.airline.manag.system.exception.PilotAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.PilotNotExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.person.PilotsRepository;
 import com.ra.course.ams.airline.manag.system.service.PersonManagementService;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public class PilotPersonManagementServiceImpl implements PersonManagementService<Pilot> {
 
-    private Repository<Pilot, String> pilotRepo;
-
+    transient private PilotsRepository pilotRepo;
 
     @Override
-    public Pilot findByEmail(final String email) {
-        if (email == null || email.isBlank()) {
-            throw new IllegalArgumentException("Email address for search cannot be null, empty or blank");
-        }
+    public Optional<Pilot> findByEmail(final String email) {
         final Collection<Pilot> pilots = pilotRepo.getInstances();
         final Pilot findedPilot = pilots.stream()
                 .filter(pilot -> email.equals(pilot.getEmail()))
                 .findAny()
                 .orElseThrow(() -> new PilotNotExistException("No pilot found for given email"));
-        return new Pilot(findedPilot);
+
+        return Optional.of(new Pilot(findedPilot));
     }
 
     @Override
-    public Pilot findByPhoneNumber(final String phone) {
-        if (phone == null || phone.isBlank()) {
-            throw new IllegalArgumentException("Phone for search cannot be null, empty or blank");
-        }
+    public Optional<Pilot> findByPhoneNumber(final String phone) {
         final Pilot pilot = pilotRepo.getInstance(phone);
         if (pilot == null) {
             throw new PilotNotExistException("No pilot found for given phone number");
         }
-        return new Pilot(pilot);
+        return Optional.of(new Pilot(pilot));
     }
 
     @Override
-    public Pilot add(final Pilot pilot) {
-        if (pilot == null) {
-            throw new IllegalArgumentException("Cannot process add operation for null value argument.");
-        }
+    public Optional<Pilot> add(final Pilot pilot) {
         Pilot pilotFromRepo = pilotRepo.getInstance(pilot.getPhone());
         if (pilotFromRepo != null) {
             throw new PilotAlreadyExistException();
         }
         pilotFromRepo = new Pilot(pilot);
         pilotRepo.addInstance(pilotFromRepo);
-        return pilot;
+
+        return Optional.of(pilot);
     }
 
     @Override
-    public Pilot updatePhone(final Pilot pilot, final String phone) {
-        if (pilot == null) {
-            throw new IllegalArgumentException("Cannot process updatePhone operation for null value argument.");
-        }
+    public Optional<Pilot> updatePhone(final Pilot pilot, final String phone) {
         final Pilot pilotFromRepo = pilotRepo.getInstance(pilot.getPhone());
         if (pilotFromRepo == null) {
             throw new PilotNotExistException();
@@ -65,14 +55,12 @@ public class PilotPersonManagementServiceImpl implements PersonManagementService
         pilotFromRepo.setPhone(phone);
         pilotRepo.updateInstance(pilotFromRepo);
         pilot.setPhone(phone);
-        return pilot;
+
+        return Optional.of(pilot);
     }
 
     @Override
-    public Pilot updateEmail(final Pilot pilot, final String email) {
-        if (pilot == null) {
-            throw new IllegalArgumentException("Cannot process updateEmail operation for null value argument.");
-        }
+    public Optional<Pilot> updateEmail(final Pilot pilot, final String email) {
         final Pilot pilotFromRepo = pilotRepo.getInstance(pilot.getPhone());
         if (pilotFromRepo == null) {
             throw new PilotNotExistException();
@@ -80,14 +68,12 @@ public class PilotPersonManagementServiceImpl implements PersonManagementService
         pilotFromRepo.setEmail(email);
         pilotRepo.updateInstance(pilotFromRepo);
         pilot.setEmail(email);
-        return pilot;
+
+        return Optional.of(pilot);
     }
 
     @Override
-    public Pilot updateAddress(final Pilot pilot, final Address address) {
-        if (pilot == null) {
-            throw new IllegalArgumentException("Cannot process updateAddress operation for null value argument.");
-        }
+    public Optional<Pilot> updateAddress(final Pilot pilot, final Address address) {
         final Pilot pilotFromRepo = pilotRepo.getInstance(pilot.getPhone());
         if (pilotFromRepo == null) {
             throw new PilotNotExistException();
@@ -95,7 +81,8 @@ public class PilotPersonManagementServiceImpl implements PersonManagementService
         pilotFromRepo.setAddress(address);
         pilotRepo.updateInstance(pilotFromRepo);
         pilot.setAddress(address);
-        return pilot;
+
+        return Optional.of(pilot);
     }
 
     @Override
@@ -110,11 +97,7 @@ public class PilotPersonManagementServiceImpl implements PersonManagementService
         pilotRepo.removeInstance(pilotFromRepo);
     }
 
-    public Repository<Pilot, String> getPilotRepo() {
-        return pilotRepo;
-    }
-
-    public void setPilotRepo(final Repository<Pilot, String> pilotRepo) {
+    public void setPilotRepo(final PilotsRepository pilotRepo) {
         this.pilotRepo = pilotRepo;
     }
 }

@@ -2,48 +2,45 @@ package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.flight.Flight;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.flight.FlightRepository;
 import com.ra.course.ams.airline.manag.system.service.FlightService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class FlightServiceImpl implements FlightService {
 
-    transient private final Repository<Flight, String> flightRepository;
+    transient private final FlightRepository flightRepository;
 
-    public FlightServiceImpl(final Repository<Flight, String> flightRepository) {
+    public FlightServiceImpl(final FlightRepository flightRepository) {
         this.flightRepository = flightRepository;
     }
 
     @Override
     public List<FlightInstance> getFlightInstances(final Flight flight) {
+
         return flight.getFlightInstances();
     }
 
     @Override
-    public Flight add(final Flight flight) {
-        if (flight == null) {
-            throw new IllegalArgumentException("Cannot process add operation for null value argument.");
-        }
-        return flightRepository.addInstance(flight);
+    public Optional<Flight> add(final Flight flight) {
+
+        return Optional.of(flightRepository.addInstance(flight));
     }
 
     @Override
-    public Flight update(final Flight flight) {
-        if (flight == null) {
-            throw new IllegalArgumentException("Cannot process update operation for null value argument.");
-        }
+    public Optional<Flight> update(final Flight flight) {
         flightRepository.updateInstance(flight);
-        return flight;
+
+        return Optional.of(flight);
     }
 
     @Override
     public boolean cancel(final Flight flight) {
         if (flight == null) {
-            throw new IllegalArgumentException("Cannot process cancel operation for null value argument.");
+            return false;
         }
         flightRepository.removeInstance(flight);
         return true;
     }
-
 }

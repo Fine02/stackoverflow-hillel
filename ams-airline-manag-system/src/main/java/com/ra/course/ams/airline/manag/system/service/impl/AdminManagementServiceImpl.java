@@ -4,60 +4,50 @@ import com.ra.course.ams.airline.manag.system.entity.Address;
 import com.ra.course.ams.airline.manag.system.entity.person.Admin;
 import com.ra.course.ams.airline.manag.system.exception.AdminAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.AdminNotExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
+import com.ra.course.ams.airline.manag.system.repository.person.AdminsRepository;
 import com.ra.course.ams.airline.manag.system.service.PersonManagementService;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public class AdminManagementServiceImpl implements PersonManagementService<Admin> {
 
-    private Repository<Admin, String> adminRepository;
+    private AdminsRepository adminRepository;
 
 
     @Override
-    public Admin findByEmail(final String email) {
-        if (email == null || email.isBlank()) {
-            throw new IllegalArgumentException("Email address for search cannot be null, empty or blank");
-        }
+    public Optional <Admin> findByEmail(final String email) {
         final Collection<Admin> admins = adminRepository.getInstances();
         final Admin findedAdmin = admins.stream()
                 .filter(admin -> email.equals(admin.getEmail()))
                 .findAny()
                 .orElseThrow(() -> new AdminNotExistException("No admin found for given email"));
-        return new Admin(findedAdmin);
+
+        return Optional.of(new Admin(findedAdmin));
     }
 
     @Override
-    public Admin findByPhoneNumber(final String phone) {
-        if (phone == null || phone.isBlank()) {
-            throw new IllegalArgumentException("Phone for search cannot be null, empty or blank");
-        }
+    public Optional <Admin> findByPhoneNumber(final String phone) {
         final Admin adminFromRepo = adminRepository.getInstance(phone);
         if (adminFromRepo == null) {
             throw new AdminNotExistException("No admin found for given phone number");
         }
-        return new Admin(adminFromRepo);
+        return Optional.of(new Admin(adminFromRepo));
     }
 
     @Override
-    public Admin add(final Admin admin) {
-        if (admin == null) {
-            throw new IllegalArgumentException("Cannot process add operation for null value argument.");
-        }
+    public  Optional <Admin> add(final Admin admin) {
         Admin adminFromRepo = adminRepository.getInstance(admin.getPhone());
         if (adminFromRepo != null) {
             throw new AdminAlreadyExistException();
         }
         adminFromRepo = new Admin(admin);
         adminRepository.addInstance(adminFromRepo);
-        return admin;
+        return Optional.of(admin);
     }
 
     @Override
-    public Admin updatePhone(final Admin admin, final String phone) {
-        if (admin == null) {
-            throw new IllegalArgumentException("Cannot process updatePhone operation for null value argument.");
-        }
+    public Optional <Admin> updatePhone(final Admin admin, final String phone) {
         final Admin adminFromRepo = adminRepository.getInstance(admin.getPhone());
         if (adminFromRepo == null) {
             throw new AdminNotExistException();
@@ -65,14 +55,12 @@ public class AdminManagementServiceImpl implements PersonManagementService<Admin
         adminFromRepo.setPhone(phone);
         adminRepository.updateInstance(adminFromRepo);
         admin.setPhone(phone);
-        return admin;
+
+        return Optional.of(admin);
     }
 
     @Override
-    public Admin updateEmail(final Admin admin, final String email) {
-        if (admin == null) {
-            throw new IllegalArgumentException("Cannot process updateEmail operation for null value argument.");
-        }
+    public Optional <Admin> updateEmail(final Admin admin, final String email) {
         final Admin adminFromRepo = adminRepository.getInstance(admin.getPhone());
         if (adminFromRepo == null) {
             throw new AdminNotExistException();
@@ -80,14 +68,12 @@ public class AdminManagementServiceImpl implements PersonManagementService<Admin
         adminFromRepo.setEmail(email);
         adminRepository.updateInstance(adminFromRepo);
         admin.setEmail(email);
-        return admin;
+
+        return Optional.of(admin);
     }
 
     @Override
-    public Admin updateAddress(final Admin admin, final Address address) {
-        if (admin == null) {
-            throw new IllegalArgumentException("Cannot process updateAddress operation for null value argument.");
-        }
+    public Optional <Admin> updateAddress(final Admin admin, final Address address) {
         final Admin adminFromRepo = adminRepository.getInstance(admin.getPhone());
         if (adminFromRepo == null) {
             throw new AdminNotExistException();
@@ -95,14 +81,12 @@ public class AdminManagementServiceImpl implements PersonManagementService<Admin
         adminFromRepo.setAddress(address);
         adminRepository.updateInstance(adminFromRepo);
         admin.setAddress(address);
-        return admin;
+
+        return Optional.of(admin);
     }
 
     @Override
     public void remove(final Admin admin) {
-        if (admin == null) {
-            throw new IllegalArgumentException("Cannot process remove operation for null value argument.");
-        }
         final Admin adminFromRepo = adminRepository.getInstance(admin.getPhone());
         if (adminFromRepo == null) {
             throw new AdminNotExistException();
@@ -110,11 +94,11 @@ public class AdminManagementServiceImpl implements PersonManagementService<Admin
         adminRepository.removeInstance(adminFromRepo);
     }
 
-    public Repository<Admin, String> getAdminRepository() {
+    public AdminsRepository getAdminRepository() {
         return adminRepository;
     }
 
-    public void setAdminRepository(final Repository<Admin, String> adminRepository) {
+    public void setAdminRepository(final AdminsRepository  adminRepository) {
         this.adminRepository = adminRepository;
     }
 }

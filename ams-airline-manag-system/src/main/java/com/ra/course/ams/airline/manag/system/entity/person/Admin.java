@@ -2,7 +2,7 @@ package com.ra.course.ams.airline.manag.system.entity.person;
 
 import com.ra.course.ams.airline.manag.system.entity.Address;
 
-public class Admin extends Pilot {
+public class Admin extends Person {
 
     private Admin(Builder builder) {
         this.setName(builder.name);

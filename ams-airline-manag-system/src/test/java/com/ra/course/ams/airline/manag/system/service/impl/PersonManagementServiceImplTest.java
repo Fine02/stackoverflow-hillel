@@ -1,12 +1,10 @@
 package com.ra.course.ams.airline.manag.system.service.impl;
 
 import com.ra.course.ams.airline.manag.system.entity.Address;
-import com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance;
 import com.ra.course.ams.airline.manag.system.entity.person.Person;
 import com.ra.course.ams.airline.manag.system.exception.PersonAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.PersonNotExistException;
-import com.ra.course.ams.airline.manag.system.repository.Repository;
-import org.junit.jupiter.api.Assertions;
+import com.ra.course.ams.airline.manag.system.repository.person.PersonsRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -22,7 +20,7 @@ import static org.mockito.Mockito.*;
 public class PersonManagementServiceImplTest {
 
         @Mock
-        private Repository<Person, String> personRepository;
+        private PersonsRepository personRepository;
 
         private PersonManagementServiceImpl personManagenentService;
 
@@ -36,31 +34,11 @@ public class PersonManagementServiceImplTest {
         @Test
         public void testThatFindByEmailReturnsPerson(){
                 when(personRepository.getInstances()).thenReturn(getPersons());
-                Person person = personManagenentService.findByEmail("ivanov@example.com");
+                Person person = personManagenentService.findByEmail("ivanov@example.com").get();
 
                 assertThat(person).isNotNull();
                 assertThat(person.getName()).isEqualTo("Ivanov Ivan");
                 assertThat(person.getEmail()).isEqualTo("ivanov@example.com");
-        }
-
-        @Test
-        public void testThatFindByEmailThrowsIllegalArgumentExceptionWhenCallingWithEmptyArgument(){
-                try {
-                        personManagenentService.findByEmail("");
-                        fail("Expected IllegalArgumentException to be thrown");
-                } catch (Exception e) {
-                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
-                }
-        }
-
-        @Test
-        public void testThatFindByEmailThrowsIllegalArgumentExceptionWhenCallingWithNullArgument(){
-                try {
-                        personManagenentService.findByEmail(null);
-                        fail("Expected IllegalArgumentException to be thrown");
-                } catch (Exception e) {
-                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
-                }
         }
 
         @Test
@@ -80,7 +58,7 @@ public class PersonManagementServiceImplTest {
                 Person personGiven = new Person.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
                 when(personRepository.getInstance(any(String.class))).thenReturn(personGiven);
 
-                Person person = personManagenentService.findByPhoneNumber("11111");
+                Person person = personManagenentService.findByPhoneNumber("11111").get();
                 assertThat(person).isEqualToComparingFieldByField(personGiven);
         }
 
@@ -97,31 +75,11 @@ public class PersonManagementServiceImplTest {
         }
 
         @Test
-        public void testThatFindByPhoneThrowsIllegalArgumentExceptionWhenCallWithEmptyArg(){
-                try {
-                        personManagenentService.findByPhoneNumber("");
-                        fail("Expected IllegalArgumentException to be thrown");
-                } catch (Exception e) {
-                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
-                }
-        }
-
-        @Test
-        public void testThatFindByPhoneThrowsIllegalArgumentExceptionWhenCallWithNullArg(){
-                try {
-                        personManagenentService.findByPhoneNumber(null);
-                        fail("Expected IllegalArgumentException to be thrown");
-                } catch (Exception e) {
-                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
-                }
-        }
-
-        @Test
         public void testThatAddInstanceReturnsPerson(){
                 when(personRepository.getInstance(any())).thenReturn(null);
 
                 Person personToAdd = new Person.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
-                Person person = personManagenentService.add(personToAdd);
+                Person person = personManagenentService.add(personToAdd).get();
 
                 assertThat(person).isEqualToComparingFieldByField(personToAdd);
         }
@@ -141,35 +99,15 @@ public class PersonManagementServiceImplTest {
         }
 
         @Test
-        public void testThatAddInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument(){
-                try {
-                        personManagenentService.add(null);
-                        fail("Expected IllegalArgumentException to be thrown");
-                } catch (Exception e) {
-                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
-                }
-        }
-
-        @Test
         public void testThatUpdatePhoneNumberWithoutExceptions(){
                 Person personInRepo = new Person.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
                 when(personRepository.getInstance(any())).thenReturn(personInRepo);
 
                 Person person = new Person.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
-                Person updatedPerson = personManagenentService.updatePhone(person, "55285");
+                Person updatedPerson = personManagenentService.updatePhone(person, "55285").get();
 
                 assertThat(updatedPerson).isEqualTo(person);
                 assertThat(updatedPerson.getPhone()).isEqualTo("55285");
-        }
-
-        @Test
-        public void testThatUpdatePhoneNumberThrowIllegalArgumentExceptionWhenCallWithNullValueArgument(){
-                try {
-                        personManagenentService.updatePhone(null, "55285");
-                        fail("Expected IllegalArgumentException to be thrown");
-                } catch (Exception e) {
-                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
-                }
         }
 
         @Test
@@ -190,20 +128,23 @@ public class PersonManagementServiceImplTest {
                 when(personRepository.getInstance(any())).thenReturn(personInRepo);
 
                 Person person = new Person.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
-                Person updatedCrew = personManagenentService.updateEmail(person, "ivanov@test.com");
+                Person updatedCrew = personManagenentService.updateEmail(person, "ivanov@test.com").get();
 
                 assertThat(updatedCrew).isEqualTo(person);
                 assertThat(updatedCrew.getEmail()).isEqualTo("ivanov@test.com");
         }
 
         @Test
-        public void testThatUpdateEmailThrowIllegalArgumentExceptionWhenCallWithNullValueArgument(){
-                try {
-                        personManagenentService.updateEmail(null, "ivanov@test.com");
-                        fail("Expected IllegalArgumentException to be thrown");
-                } catch (Exception e) {
-                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
-                }
+        public void testThatUpdateAddressWithoutExceptions(){
+                Address testAddress = new Address.Builder("s", "c").build();
+                Person personInRepo = new Person.Builder().setName("Ivanov Ivan").setAddress(testAddress).setPhone("11111").build();
+                when(personRepository.getInstance(any())).thenReturn(personInRepo);
+
+                Person person = new Person.Builder().setName("Ivanov Ivan").setAddress(testAddress).setPhone("11111").build();
+                Person updatedCrew = personManagenentService.updateAddress(person, testAddress).get();
+
+                assertThat(updatedCrew).isEqualTo(person);
+                assertThat(updatedCrew.getAddress()).isEqualTo(testAddress);
         }
 
         @Test
@@ -228,16 +169,6 @@ public class PersonManagementServiceImplTest {
         }
 
         @Test
-        public void testThatRemoveInstanceThrowIllegalArgumentExceptionWhenCallWithNullValueArgument(){
-                try {
-                        personManagenentService.remove(null);
-                        fail("Expected IllegalArgumentException to be thrown");
-                } catch (Exception e) {
-                        assertThat(e).isInstanceOf(IllegalArgumentException.class);
-                }
-        }
-
-        @Test
         public void testThatRemoveInstanceThrowPersonNotExistExceptionWhenCallWithNullValueArgument(){
                 when(personRepository.getInstance(any())).thenReturn(null);
 
@@ -248,12 +179,6 @@ public class PersonManagementServiceImplTest {
                 } catch (Exception e) {
                         assertThat(e).isInstanceOf(PersonNotExistException.class);
                 }
-        }
-
-        @Test
-        public void whenUpdateAdressWithPersonIsNullThenThrowIllegalArgumentException() {
-                Assertions.assertThrows(IllegalArgumentException.class, () ->
-                        personManagenentService.updateAddress(null, new Address()));
         }
 
         private static Collection<Person> getPersons() {
