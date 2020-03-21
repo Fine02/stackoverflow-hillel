@@ -1,64 +1,46 @@
 package com.ra.course.aws.online.shopping.entity;
+import com.ra.course.aws.online.shopping.entity.product.Product;
 
-import interfaces.Search;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-public class Catalog implements Search {
-    private LocalDate lastUpdated;
-    private Map<String, List<Product>> productNames;
-    private Map<String, List<Product>> productCategories;
-    private  String name;
+public class Catalog  {
+    private LocalDateTime lastUpdated;
+    private Map<String, List<Product>> productsByNames;
+    private Map<String, List<Product>> productsByCategories;
 
-    public Catalog(LocalDate lastUpdated, Map<String, List<Product>> productNames,
-                   Map<String, List<Product>> productCategories, String name) {
-        this.lastUpdated = lastUpdated;
-        this.productNames = productNames;
-        this.productCategories = productCategories;
-        this.name = name;
+    public Catalog() {
     }
 
-    public LocalDate getLastUpdated() {
+    public Catalog(LocalDateTime lastUpdated, Map<String, List<Product>> productsByNames,
+                   Map<String, List<Product>> productsByCategories) {
+        this.lastUpdated = lastUpdated;
+        this.productsByNames = productsByNames;
+        this.productsByCategories = productsByCategories;
+    }
+
+    public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }
 
-    public void setLastUpdated(LocalDate lastUpdated) {
+    public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
-    public Map<String, List<Product>> getProductNames() {
-        return productNames;
+    public Map<String, List<Product>> getProductsByNames() {
+        return productsByNames;
     }
 
-    public void setProductNames(Map<String, List<Product>> productNames) {
-        this.productNames = productNames;
+    public void setProductsByNames(Map<String, List<Product>> productsByNames) {
+        this.productsByNames = productsByNames;
     }
 
-    public Map<String, List<Product>> getProductCategories() {
-        return productCategories;
+    public Map<String, List<Product>> getProductsByCategories() {
+        return productsByCategories;
     }
 
-    public void setProductCategories(Map<String, List<Product>> productCategories) {
-        this.productCategories = productCategories;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public List<Product> searchProductByName(String name) {
-        return null;
-    }
-
-    @Override
-    public List<Product> searchProductByCategory(String category) {
-        return null;
+    public void setProductsByCategories(Map<String, List<Product>> productsByCategories) {
+        this.productsByCategories = productsByCategories;
     }
 }
