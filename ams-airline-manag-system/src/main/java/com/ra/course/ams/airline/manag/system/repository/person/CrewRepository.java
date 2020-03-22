@@ -9,6 +9,10 @@ public interface CrewRepository {
 
     Crew getInstance(final String phoneNumber);
 
+    Crew findByPhoneNumber(final String phoneNumber);
+
+    Crew findByEmail(final String email);
+
     Collection<Crew> getInstances();
 
     Crew addInstance(final Crew crew) ;
