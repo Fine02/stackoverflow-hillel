@@ -5,14 +5,20 @@ import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
 import com.ra.course.ams.airline.manag.system.exception.PilotNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.person.PilotsRepository;
 import com.ra.course.ams.airline.manag.system.service.PilotManagementService;
+import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class PilotManagementServiceImpl implements PilotManagementService {
 
-    transient private PilotsRepository pilotRepo;
+    transient private final PilotsRepository pilotRepo;
+
+    public PilotManagementServiceImpl(final PilotsRepository pilotRepo) {
+        this.pilotRepo = pilotRepo;
+    }
 
     @Override
     public Optional<Pilot> addFlightInstance(final Pilot pilot, final FlightInstance flightInstance) {
@@ -59,7 +65,4 @@ public class PilotManagementServiceImpl implements PilotManagementService {
 //        return pilotRepo;
 //    }
 
-    public void setPilotRepo(final PilotsRepository pilotRepo) {
-        this.pilotRepo = pilotRepo;
-    }
 }

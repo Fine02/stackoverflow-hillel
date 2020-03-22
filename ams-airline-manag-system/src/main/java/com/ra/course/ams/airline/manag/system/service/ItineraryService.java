@@ -4,15 +4,15 @@ import com.ra.course.ams.airline.manag.system.entity.Itinerary;
 import com.ra.course.ams.airline.manag.system.entity.person.Customer;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ItineraryService {
 
-    Optional <Itinerary> createItinerary(Itinerary itinerary);
+    Itinerary createItinerary(Itinerary itinerary, String accounId);
 
-    void cancelItinerary(Itinerary itinerary);
+    void cancelItinerary(Itinerary itinerary, String accounId);
 
-    Optional <Itinerary> updateItinerary(Itinerary itinerary);
+    Itinerary updateItinerary(Itinerary itinerary, String accounId);
 
-    Optional <List<Itinerary>> getItineraries(Customer customer);
+    List<Itinerary> getItineraries(Customer customer, String accounId);
+
 }

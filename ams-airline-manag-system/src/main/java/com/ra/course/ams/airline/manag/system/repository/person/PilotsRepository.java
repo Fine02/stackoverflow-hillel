@@ -9,6 +9,10 @@ public interface PilotsRepository  {
 
     Pilot getInstance(final String phoneNumber);
 
+    Pilot findByPhoneNumber(final String phoneNumber);
+
+    Pilot findByEmail(final String email);
+
     Collection<Pilot> getInstances();
 
     Pilot addInstance(final Pilot pilot);

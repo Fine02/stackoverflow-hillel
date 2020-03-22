@@ -5,14 +5,20 @@ import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.exception.CrewNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.person.CrewRepository;
 import com.ra.course.ams.airline.manag.system.service.CrewManagementService;
+import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CrewManagementServiceImpl implements CrewManagementService {
 
-    transient private CrewRepository crewRepository;
+    transient private final CrewRepository crewRepository;
+
+    public CrewManagementServiceImpl(final CrewRepository crewRepository) {
+        this.crewRepository = crewRepository;
+    }
 
     @Override
     public Optional<Crew> addFlightInstance(final Crew crew, final FlightInstance flightInstance) {
@@ -54,11 +60,8 @@ public class CrewManagementServiceImpl implements CrewManagementService {
         }
     }
 
-//    public CrewRepository getCrewRepository() {
-//        return crewRepository;
-//    }
-
-    public void setCrewRepository(final CrewRepository crewRepository) {
-        this.crewRepository = crewRepository;
+    public CrewRepository getCrewRepository() {
+        return crewRepository;
     }
+
 }

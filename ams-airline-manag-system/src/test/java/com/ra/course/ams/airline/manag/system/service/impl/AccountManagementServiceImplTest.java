@@ -41,8 +41,7 @@ public class AccountManagementServiceImplTest {
     @BeforeEach
     public void setup(){
         MockitoAnnotations.initMocks(this);
-        accountManagementService = new AccountManagementServiceImpl();
-        accountManagementService.setAccountRepository(accountRepository);
+        accountManagementService = new AccountManagementServiceImpl(accountRepository);
         accountManagementService.setAuthenticationSvc(authenticationService);
         accountManagementService.setAuthorizationSvc(authorizationService);
     }

@@ -4,10 +4,12 @@ import com.ra.course.ams.airline.manag.system.entity.flight.Aircraft;
 import com.ra.course.ams.airline.manag.system.entity.flight.Flight;
 import com.ra.course.ams.airline.manag.system.repository.flight.AircraftRepository;
 import com.ra.course.ams.airline.manag.system.service.AircraftManagementService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class AircraftManagementServiceImpl implements AircraftManagementService {
 
     transient private final AircraftRepository aircraftRepo;

@@ -6,13 +6,19 @@ import com.ra.course.ams.airline.manag.system.exception.AdminAlreadyExistExcepti
 import com.ra.course.ams.airline.manag.system.exception.AdminNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.person.AdminsRepository;
 import com.ra.course.ams.airline.manag.system.service.PersonManagementService;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
 
+@Service
 public class AdminManagementServiceImpl implements PersonManagementService<Admin> {
 
-    private AdminsRepository adminRepository;
+    private final AdminsRepository adminRepository;
+
+    public AdminManagementServiceImpl(final AdminsRepository adminRepository) {
+        this.adminRepository = adminRepository;
+    }
 
 
     @Override
@@ -98,7 +104,4 @@ public class AdminManagementServiceImpl implements PersonManagementService<Admin
         return adminRepository;
     }
 
-    public void setAdminRepository(final AdminsRepository  adminRepository) {
-        this.adminRepository = adminRepository;
-    }
 }
