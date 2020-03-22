@@ -4,9 +4,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringApplicationMain {
+public final class SpringApplicationMain {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(SpringApplicationMain.class, args);
+    }
+
+    private SpringApplicationMain() {
     }
 }

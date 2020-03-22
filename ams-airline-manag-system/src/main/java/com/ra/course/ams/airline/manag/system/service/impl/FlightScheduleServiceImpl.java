@@ -5,9 +5,11 @@ import com.ra.course.ams.airline.manag.system.entity.flight.WeeklySchedule;
 import com.ra.course.ams.airline.manag.system.repository.flight.CustomScheduleRepository;
 import com.ra.course.ams.airline.manag.system.repository.flight.WeeklyScheduleRepository;
 import com.ra.course.ams.airline.manag.system.service.FlightScheduleService;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class FlightScheduleServiceImpl implements FlightScheduleService {
 
     transient private final WeeklyScheduleRepository weeklySchedRepo;

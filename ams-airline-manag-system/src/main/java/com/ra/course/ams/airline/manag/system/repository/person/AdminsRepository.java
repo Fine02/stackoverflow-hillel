@@ -9,6 +9,10 @@ public interface AdminsRepository {
 
     Admin getInstance(final String phoneNumber);
 
+    Admin findByPhoneNumber(String phoneNumber);
+
+    Admin findByEmail(String email);
+
     Collection<Admin> getInstances();
 
     Admin addInstance(final Admin admin);
