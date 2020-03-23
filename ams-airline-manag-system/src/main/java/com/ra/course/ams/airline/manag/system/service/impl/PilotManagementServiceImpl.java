@@ -60,9 +60,4 @@ public class PilotManagementServiceImpl implements PilotManagementService {
             flightInstances.remove(flightInstance);
         }
     }
-
-//    public PilotsRepository getPilotRepo() {
-//        return pilotRepo;
-//    }
-
 }

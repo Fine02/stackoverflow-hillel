@@ -8,7 +8,6 @@ import com.ra.course.ams.airline.manag.system.repository.flight.FlightInstanceRe
 import com.ra.course.ams.airline.manag.system.repository.flight.FlightRepository;
 import com.ra.course.ams.airline.manag.system.repository.flight.WeeklyScheduleRepository;
 import com.ra.course.ams.airline.manag.system.service.InformationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
@@ -18,13 +17,9 @@ import java.util.stream.Collectors;
 @Service
 public class InformationServiceImpl implements InformationService {
 
-    @Autowired
     transient private WeeklyScheduleRepository weeklySchedRepo;
-    @Autowired
     transient private CustomScheduleRepository customSchedRepo;
-    @Autowired
     transient private FlightInstanceRepository flightInstRepo;
-    @Autowired
     transient private FlightRepository flightRepository;
 
     @Override

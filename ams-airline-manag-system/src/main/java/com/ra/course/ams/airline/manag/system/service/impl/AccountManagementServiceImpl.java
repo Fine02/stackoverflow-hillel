@@ -9,7 +9,6 @@ import com.ra.course.ams.airline.manag.system.repository.person.AccountsReposito
 import com.ra.course.ams.airline.manag.system.service.AccountManagementService;
 import com.ra.course.ams.airline.manag.system.service.AuthenticationService;
 import com.ra.course.ams.airline.manag.system.service.AuthorizationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -20,9 +19,7 @@ import java.util.List;
 public class AccountManagementServiceImpl implements AccountManagementService {
 
     private final AccountsRepository accountRepository;
-    @Autowired
     private AuthorizationService authorizationSvc;
-    @Autowired
     private AuthenticationService authenticationSvc;
 
     public AccountManagementServiceImpl(final AccountsRepository accountRepository) {

@@ -44,6 +44,18 @@ project(':ams-airline-manag-system') {
 
 }
 
+project(':ams-airline-management-integration-test') {
+    dependencies {
+        testCompile project(':ams-airline-manag-system'){
+            bootJar.enabled = false
+            jar.enabled = true
+        }
+    }
+    bootJar {
+        enabled = false
+    }
+}
+
 project(':aws-online-shopping') {
 
 }

@@ -12,28 +12,28 @@ import java.util.Optional;
 @Service
 public class AircraftManagementServiceImpl implements AircraftManagementService {
 
-    transient private final AircraftRepository aircraftRepo;
+    transient private final  AircraftRepository aircraftRepo;
 
     public AircraftManagementServiceImpl(final AircraftRepository aircraftRepo) {
         this.aircraftRepo = aircraftRepo;
     }
 
     @Override
-    public Optional <Aircraft> addAircraft(final Aircraft aircraft) {
+    public Optional<Aircraft> addAircraft(final Aircraft aircraft) {
         aircraftRepo.addInstance(aircraft);
 
         return Optional.of(aircraft);
     }
 
     @Override
-    public Optional <Aircraft> updateAircraft(final Aircraft aircraft) {
+    public Optional<Aircraft> updateAircraft(final Aircraft aircraft) {
         aircraftRepo.updateInstance(aircraft);
 
         return Optional.of(aircraft);
     }
 
     @Override
-    public Optional <List<Flight>> getFlights(final Aircraft aircraft) {
+    public Optional<List<Flight>> getFlights(final Aircraft aircraft) {
         return Optional.of(aircraft.getFlights());
     }
 }

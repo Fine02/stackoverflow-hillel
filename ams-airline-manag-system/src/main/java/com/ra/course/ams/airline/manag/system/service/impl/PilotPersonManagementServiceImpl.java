@@ -102,5 +102,4 @@ public class PilotPersonManagementServiceImpl implements PersonManagementService
         }
         pilotRepo.removeInstance(pilotFromRepo);
     }
-
 }
