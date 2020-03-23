@@ -11,9 +11,10 @@ import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.NotificationException;
 import com.ra.course.aws.online.shopping.service.NotificationService;
-
+import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
+@Service
 public class NotificationServiceImpl implements NotificationService {
     private transient final NotificationDao notificationDao;
     private transient final OrderDao orderDao;

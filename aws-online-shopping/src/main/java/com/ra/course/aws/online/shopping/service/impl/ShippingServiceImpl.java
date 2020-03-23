@@ -9,10 +9,12 @@ import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.ShipmentLogIsAlreadyExistException;
 import com.ra.course.aws.online.shopping.exceptions.ShippingAddressNotFoundException;
 import com.ra.course.aws.online.shopping.service.ShippingService;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 
+@Service
 public class ShippingServiceImpl implements ShippingService {
     private transient final ShippingDao shippingDao;
 
