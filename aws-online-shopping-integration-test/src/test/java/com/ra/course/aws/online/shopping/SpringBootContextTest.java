@@ -1,13 +1,7 @@
 package com.ra.course.aws.online.shopping;
 
-import com.ra.course.aws.online.shopping.dao.NotificationDao;
-import com.ra.course.aws.online.shopping.dao.OrderDao;
-import com.ra.course.aws.online.shopping.dao.PaymentDao;
-import com.ra.course.aws.online.shopping.dao.ShippingDao;
-import com.ra.course.aws.online.shopping.service.NotificationService;
-import com.ra.course.aws.online.shopping.service.OrderService;
-import com.ra.course.aws.online.shopping.service.PaymentService;
-import com.ra.course.aws.online.shopping.service.ShippingService;
+import com.ra.course.aws.online.shopping.dao.*;
+import com.ra.course.aws.online.shopping.service.*;
 import com.ra.course.aws.online.shopping.service.impl.NotificationServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +45,16 @@ public class SpringBootContextTest {
         assertEquals(NotificationServiceImpl.class, context.getBean(NotificationServiceImpl.class).getClass());
     }
 
+    @Test
+    void checkContextForAccountService() {
+        assertNotNull(context.getBean(AccountService.class));
+    }
+
+    @Test
+    void checkContextForCatalogService() {
+        assertNotNull(context.getBean(CatalogService.class));
+    }
+
     @TestConfiguration
     static class SpringBootContextTestConfiguration {
 
@@ -76,6 +80,18 @@ public class SpringBootContextTest {
         @Bean
         public ShippingDao mockedShippingDao() {
             return mock(ShippingDao.class);
+        }
+
+        @Primary
+        @Bean
+        public AccountDao mockedAccountDao() {
+            return mock(AccountDao.class);
+        }
+
+        @Primary
+        @Bean
+        public ProductDao mockedProductDao() {
+            return mock(ProductDao.class);
         }
     }
 }
