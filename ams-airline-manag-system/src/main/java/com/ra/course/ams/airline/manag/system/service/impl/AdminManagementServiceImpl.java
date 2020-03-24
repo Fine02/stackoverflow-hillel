@@ -6,17 +6,22 @@ import com.ra.course.ams.airline.manag.system.exception.AdminAlreadyExistExcepti
 import com.ra.course.ams.airline.manag.system.exception.AdminNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.person.AdminsRepository;
 import com.ra.course.ams.airline.manag.system.service.PersonManagementService;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
 
+@Service
 public class AdminManagementServiceImpl implements PersonManagementService<Admin> {
 
-    private AdminsRepository adminRepository;
+    private final AdminsRepository adminRepository;
 
+    public AdminManagementServiceImpl(final AdminsRepository adminRepository) {
+        this.adminRepository = adminRepository;
+    }
 
     @Override
-    public Optional <Admin> findByEmail(final String email) {
+    public Optional<Admin> findByEmail(final String email) {
         final Collection<Admin> admins = adminRepository.getInstances();
         final Admin findedAdmin = admins.stream()
                 .filter(admin -> email.equals(admin.getEmail()))
@@ -27,7 +32,7 @@ public class AdminManagementServiceImpl implements PersonManagementService<Admin
     }
 
     @Override
-    public Optional <Admin> findByPhoneNumber(final String phone) {
+    public Optional<Admin> findByPhoneNumber(final String phone) {
         final Admin adminFromRepo = adminRepository.getInstance(phone);
         if (adminFromRepo == null) {
             throw new AdminNotExistException("No admin found for given phone number");
@@ -36,7 +41,7 @@ public class AdminManagementServiceImpl implements PersonManagementService<Admin
     }
 
     @Override
-    public  Optional <Admin> add(final Admin admin) {
+    public Optional<Admin> add(final Admin admin) {
         Admin adminFromRepo = adminRepository.getInstance(admin.getPhone());
         if (adminFromRepo != null) {
             throw new AdminAlreadyExistException();
@@ -47,7 +52,7 @@ public class AdminManagementServiceImpl implements PersonManagementService<Admin
     }
 
     @Override
-    public Optional <Admin> updatePhone(final Admin admin, final String phone) {
+    public Optional<Admin> updatePhone(final Admin admin, final String phone) {
         final Admin adminFromRepo = adminRepository.getInstance(admin.getPhone());
         if (adminFromRepo == null) {
             throw new AdminNotExistException();
@@ -60,7 +65,7 @@ public class AdminManagementServiceImpl implements PersonManagementService<Admin
     }
 
     @Override
-    public Optional <Admin> updateEmail(final Admin admin, final String email) {
+    public Optional<Admin> updateEmail(final Admin admin, final String email) {
         final Admin adminFromRepo = adminRepository.getInstance(admin.getPhone());
         if (adminFromRepo == null) {
             throw new AdminNotExistException();
@@ -73,7 +78,7 @@ public class AdminManagementServiceImpl implements PersonManagementService<Admin
     }
 
     @Override
-    public Optional <Admin> updateAddress(final Admin admin, final Address address) {
+    public Optional<Admin> updateAddress(final Admin admin, final Address address) {
         final Admin adminFromRepo = adminRepository.getInstance(admin.getPhone());
         if (adminFromRepo == null) {
             throw new AdminNotExistException();
@@ -98,7 +103,4 @@ public class AdminManagementServiceImpl implements PersonManagementService<Admin
         return adminRepository;
     }
 
-    public void setAdminRepository(final AdminsRepository  adminRepository) {
-        this.adminRepository = adminRepository;
-    }
 }

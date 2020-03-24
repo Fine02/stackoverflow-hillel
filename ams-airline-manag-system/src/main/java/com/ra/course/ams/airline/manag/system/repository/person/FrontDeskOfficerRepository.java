@@ -9,6 +9,10 @@ public interface FrontDeskOfficerRepository {
 
     FrontDeskOfficer getInstance(final String phoneNumber);
 
+    FrontDeskOfficer findByPhoneNumber(final String phoneNumber);
+
+    FrontDeskOfficer findByEmail(final String email);
+
     Collection<FrontDeskOfficer> getInstances();
 
     FrontDeskOfficer addInstance(final FrontDeskOfficer officer);

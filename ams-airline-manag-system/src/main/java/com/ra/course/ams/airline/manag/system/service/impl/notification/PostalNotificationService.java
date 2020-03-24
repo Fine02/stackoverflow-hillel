@@ -5,7 +5,9 @@ import com.ra.course.ams.airline.manag.system.entity.ReservationStatus;
 import com.ra.course.ams.airline.manag.system.entity.flight.FlightStatus;
 import com.ra.course.ams.airline.manag.system.exception.ReservationWasNotModifiedException;
 import com.ra.course.ams.airline.manag.system.service.NotificationService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PostalNotificationService implements NotificationService <FlightReservation> {
 
     @Override

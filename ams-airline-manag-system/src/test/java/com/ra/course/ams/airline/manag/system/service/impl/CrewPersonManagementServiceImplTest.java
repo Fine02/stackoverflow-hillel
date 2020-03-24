@@ -5,7 +5,6 @@ import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.exception.CrewAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.CrewNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.person.CrewRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,8 +27,7 @@ public class CrewPersonManagementServiceImplTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        crewPersonManagementService = new CrewPersonManagementServiceImpl();
-        crewPersonManagementService.setCrewRepository(crewRepository);
+        crewPersonManagementService = new CrewPersonManagementServiceImpl(crewRepository);
     }
 
     @Test

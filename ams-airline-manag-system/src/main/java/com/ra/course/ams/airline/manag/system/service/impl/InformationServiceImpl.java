@@ -8,11 +8,13 @@ import com.ra.course.ams.airline.manag.system.repository.flight.FlightInstanceRe
 import com.ra.course.ams.airline.manag.system.repository.flight.FlightRepository;
 import com.ra.course.ams.airline.manag.system.repository.flight.WeeklyScheduleRepository;
 import com.ra.course.ams.airline.manag.system.service.InformationService;
+import org.springframework.stereotype.Service;
 
 import java.sql.Time;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class InformationServiceImpl implements InformationService {
 
     transient private WeeklyScheduleRepository weeklySchedRepo;

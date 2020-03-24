@@ -6,13 +6,19 @@ import com.ra.course.ams.airline.manag.system.exception.CrewAlreadyExistExceptio
 import com.ra.course.ams.airline.manag.system.exception.CrewNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.person.CrewRepository;
 import com.ra.course.ams.airline.manag.system.service.PersonManagementService;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
 
+@Service
 public class CrewPersonManagementServiceImpl implements PersonManagementService<Crew> {
 
-    private CrewRepository crewRepository;
+    private final CrewRepository crewRepository;
+
+    public CrewPersonManagementServiceImpl(final CrewRepository crewRepository) {
+        this.crewRepository = crewRepository;
+    }
 
     @Override
     public Optional<Crew> findByEmail(final String email) {
@@ -94,7 +100,4 @@ public class CrewPersonManagementServiceImpl implements PersonManagementService<
         return crewRepository;
     }
 
-    public void setCrewRepository(final CrewRepository crewRepository) {
-        this.crewRepository = crewRepository;
-    }
 }

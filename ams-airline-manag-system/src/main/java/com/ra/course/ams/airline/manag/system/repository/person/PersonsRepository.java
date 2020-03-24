@@ -9,6 +9,10 @@ public interface PersonsRepository {
 
     Person getInstance(final String phoneNumber);
 
+    Person findByEmail(final String email);
+
+    Person findByPhoneNumber(final String phoneNumber);
+
     Collection<Person> getInstances();
 
     Person addInstance(final Person person);

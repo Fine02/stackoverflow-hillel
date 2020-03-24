@@ -5,7 +5,6 @@ import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
 import com.ra.course.ams.airline.manag.system.exception.PilotAlreadyExistException;
 import com.ra.course.ams.airline.manag.system.exception.PilotNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.person.PilotsRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -31,8 +30,7 @@ public class PilotPersonManagementServiceImplTest {
     public void setup() {
         testPilot = new Pilot.Builder().setName("Ivanov Ivan").setEmail("ivanov@example.com").setPhone("11111").build();
         MockitoAnnotations.initMocks(this);
-        pilotPersonManagementService = new PilotPersonManagementServiceImpl();
-        pilotPersonManagementService.setPilotRepo(pilotRepository);
+        pilotPersonManagementService = new PilotPersonManagementServiceImpl(pilotRepository);
     }
 
     @Test

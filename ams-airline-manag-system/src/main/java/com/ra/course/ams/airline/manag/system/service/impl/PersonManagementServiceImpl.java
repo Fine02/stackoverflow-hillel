@@ -6,12 +6,18 @@ import com.ra.course.ams.airline.manag.system.exception.PersonAlreadyExistExcept
 import com.ra.course.ams.airline.manag.system.exception.PersonNotExistException;
 import com.ra.course.ams.airline.manag.system.repository.person.PersonsRepository;
 import com.ra.course.ams.airline.manag.system.service.PersonManagementService;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class PersonManagementServiceImpl implements PersonManagementService<Person> {
 
-    transient private PersonsRepository personRepository;
+    transient private final PersonsRepository personRepository;
+
+    public PersonManagementServiceImpl(final PersonsRepository personRepository) {
+        this.personRepository = personRepository;
+    }
 
     @Override
     public Optional<Person> findByEmail(final String email) {
@@ -87,7 +93,4 @@ public class PersonManagementServiceImpl implements PersonManagementService<Pers
         personRepository.removeInstance(personRepoInst);
     }
 
-    public void setPersonRepository(final PersonsRepository personRepository) {
-        this.personRepository = personRepository;
-    }
 }
