@@ -6,15 +6,15 @@ import com.ra.course.aws.online.shopping.entity.enums.PaymentStatus;
 import com.ra.course.aws.online.shopping.entity.product.Product;
 import com.ra.course.aws.online.shopping.exceptions.ElementNotFoundException;
 import com.ra.course.aws.online.shopping.service.ShoppingCartService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 
-
+@Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final transient ShoppingCartDao shoppingCartDao;
     private static final int MIN_QUANTITY = 1;
-
 
     public ShoppingCartServiceImpl(final ShoppingCartDao shoppingCartDao) {
         this.shoppingCartDao = shoppingCartDao;

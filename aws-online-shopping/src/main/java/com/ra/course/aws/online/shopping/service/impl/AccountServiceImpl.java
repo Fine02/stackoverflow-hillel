@@ -4,9 +4,11 @@ import com.ra.course.aws.online.shopping.dao.AccountDao;
 import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.exceptions.AccountNotFoundException;
 import com.ra.course.aws.online.shopping.service.AccountService;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class AccountServiceImpl implements AccountService {
     private transient final AccountDao accountDao;
 

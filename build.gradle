@@ -60,6 +60,18 @@ project(':aws-online-shopping') {
 
 }
 
+project(':aws-online-shopping-integration-test') {
+    dependencies {
+        testCompile project(':aws-online-shopping'){
+            bootJar.enabled = false
+            jar.enabled = true
+        }
+    }
+
+    bootJar {
+        enabled = false
+    }
+}
 project(':stack-overflow') {
     dependencies {
         compileOnly utils.lombok

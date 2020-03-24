@@ -5,7 +5,6 @@ import com.ra.course.aws.online.shopping.entity.payment.CreditCardTransaction;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransaction;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
 import com.ra.course.aws.online.shopping.entity.user.Member;
-
 import java.util.List;
 
 public interface PaymentDao {
