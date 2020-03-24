@@ -9,16 +9,22 @@ import com.ra.course.ams.airline.manag.system.repository.person.AccountsReposito
 import com.ra.course.ams.airline.manag.system.service.AccountManagementService;
 import com.ra.course.ams.airline.manag.system.service.AuthenticationService;
 import com.ra.course.ams.airline.manag.system.service.AuthorizationService;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+@Service
 public class AccountManagementServiceImpl implements AccountManagementService {
 
-    private AccountsRepository accountRepository;
+    private final AccountsRepository accountRepository;
     private AuthorizationService authorizationSvc;
     private AuthenticationService authenticationSvc;
+
+    public AccountManagementServiceImpl(final AccountsRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
     @Override
     public Account createAccount(final Account account) {
@@ -94,10 +100,6 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 
     public AccountsRepository getAccountRepository() {
         return accountRepository;
-    }
-
-    public void setAccountRepository(final AccountsRepository accountRepository) {
-        this.accountRepository = accountRepository;
     }
 
     public AuthorizationService getAuthorizationSvc() {

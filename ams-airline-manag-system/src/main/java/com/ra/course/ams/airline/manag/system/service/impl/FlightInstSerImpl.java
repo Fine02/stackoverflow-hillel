@@ -6,11 +6,13 @@ import com.ra.course.ams.airline.manag.system.entity.person.Crew;
 import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
 import com.ra.course.ams.airline.manag.system.repository.flight.FlightInstanceRepository;
 import com.ra.course.ams.airline.manag.system.service.FlightInstanceService;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class FlightInstSerImpl implements FlightInstanceService {
 
     transient private final FlightInstanceRepository flightInstRepo;

@@ -27,8 +27,7 @@ public class PersonManagementServiceImplTest {
         @BeforeEach
         public void setup(){
                 MockitoAnnotations.initMocks(this);
-                personManagenentService = new PersonManagementServiceImpl();
-                personManagenentService.setPersonRepository(personRepository);
+                personManagenentService = new PersonManagementServiceImpl(personRepository);
         }
 
         @Test

@@ -3,7 +3,9 @@ package com.ra.course.ams.airline.manag.system.service.impl.payment;
 import com.ra.course.ams.airline.manag.system.entity.payment.CreditCardTransaction;
 import com.ra.course.ams.airline.manag.system.entity.payment.PaymentStatus;
 import com.ra.course.ams.airline.manag.system.service.PaymentService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CreditCardTransactionService implements PaymentService<CreditCardTransaction> {
 
     @Override

@@ -28,8 +28,7 @@ public class AdminManagementServiceImplTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        adminManagementService = new AdminManagementServiceImpl();
-        adminManagementService.setAdminRepository(adminRepository);
+        adminManagementService = new AdminManagementServiceImpl(adminRepository);
     }
 
     @Test

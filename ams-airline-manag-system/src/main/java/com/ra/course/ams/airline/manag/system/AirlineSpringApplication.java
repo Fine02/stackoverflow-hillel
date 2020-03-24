@@ -1,12 +1,12 @@
-package com.ra.course.ams.airline.manag.system.entity;
+package com.ra.course.ams.airline.manag.system;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @SuppressWarnings("PMD")
-public class AmsAirlineManagSystemApplication {
+public class AirlineSpringApplication {
     public static void main(String[] args) {
-        SpringApplication.run(AmsAirlineManagSystemApplication.class, args);
+        SpringApplication.run(AirlineSpringApplication.class, args);
     }
 }
