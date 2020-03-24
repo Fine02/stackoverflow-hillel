@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CatalogServiceImpl implements CatalogService {
-
     private transient final Catalog catalog;
     private transient final ProductDao productDao;
 

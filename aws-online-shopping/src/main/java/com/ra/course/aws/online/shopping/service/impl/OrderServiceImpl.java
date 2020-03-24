@@ -10,11 +10,13 @@ import com.ra.course.aws.online.shopping.exceptions.OrderIsAlreadyShippedExcepti
 import com.ra.course.aws.online.shopping.exceptions.OrderLogIsAlreadyExistException;
 import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
 import com.ra.course.aws.online.shopping.service.OrderService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+@Service
 public class OrderServiceImpl implements OrderService {
     private transient final OrderDao orderDao;
 

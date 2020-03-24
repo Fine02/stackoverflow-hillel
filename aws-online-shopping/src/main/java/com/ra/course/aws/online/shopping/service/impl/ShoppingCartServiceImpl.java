@@ -15,7 +15,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final transient ShoppingCartDao shoppingCartDao;
     private static final int MIN_QUANTITY = 1;
 
-
     public ShoppingCartServiceImpl(final ShoppingCartDao shoppingCartDao) {
         this.shoppingCartDao = shoppingCartDao;
     }
