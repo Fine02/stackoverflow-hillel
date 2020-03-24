@@ -55,6 +55,15 @@ public class SpringBootContextTest {
         assertNotNull(context.getBean(CatalogService.class));
     }
 
+    @Test
+    void checkContextForProductService() {
+        assertNotNull(context.getBean(ProductService.class));
+    }
+    @Test
+    void checkContextForShoppingCartService() {
+        assertNotNull(context.getBean(ShoppingCartService.class));
+    }
+
     @TestConfiguration
     static class SpringBootContextTestConfiguration {
 
@@ -92,6 +101,12 @@ public class SpringBootContextTest {
         @Bean
         public ProductDao mockedProductDao() {
             return mock(ProductDao.class);
+        }
+
+        @Primary
+        @Bean
+        public ShoppingCartDao mockedShoppingCartDao() {
+            return mock(ShoppingCartDao.class);
         }
     }
 }
