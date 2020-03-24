@@ -78,18 +78,6 @@ project(':stack-overflow-integration-test') {
     }
 }
 
-project(':aws-online-shopping-integration-test') {
-    dependencies {
-        testCompile project(':aws-online-shopping'){
-            bootJar.enabled = false
-            jar.enabled = true
-        }
-    }
-    bootJar {
-        enabled = false
-    }
-}
-
 wrapper {
     version = '6.1.1'
 }
