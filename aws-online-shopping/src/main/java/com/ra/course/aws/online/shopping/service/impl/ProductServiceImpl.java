@@ -4,11 +4,12 @@ import com.ra.course.aws.online.shopping.dao.ProductDao;
 import com.ra.course.aws.online.shopping.entity.product.Product;
 import com.ra.course.aws.online.shopping.exceptions.ProductNotFoundException;
 import com.ra.course.aws.online.shopping.service.ProductService;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class ProductServiceImpl implements ProductService {
-
     private transient final ProductDao productDao;
 
     public ProductServiceImpl(final ProductDao productDao) {

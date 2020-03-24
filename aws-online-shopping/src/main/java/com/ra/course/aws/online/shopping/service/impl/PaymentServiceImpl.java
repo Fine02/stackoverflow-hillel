@@ -6,16 +6,16 @@ import com.ra.course.aws.online.shopping.entity.payment.*;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.PaymentNotProvidedException;
 import com.ra.course.aws.online.shopping.service.PaymentService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PaymentServiceImpl implements PaymentService {
     private transient final PaymentDao paymentDao;
-
     private transient final static String MESSAGE = "payment process is failed";
 
     public PaymentServiceImpl(final PaymentDao paymentDao) {
         this.paymentDao = paymentDao;
     }
-
 
     @Override
     public PaymentStatus processPaymentByElectronicBankTransaction(final Member member, final ElectronicBankTransfer bankTransfer, final ElectronicBankTransaction bankTransaction) {
