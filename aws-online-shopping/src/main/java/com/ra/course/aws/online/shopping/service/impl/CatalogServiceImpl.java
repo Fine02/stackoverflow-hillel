@@ -6,13 +6,14 @@ import com.ra.course.aws.online.shopping.entity.product.Product;
 import com.ra.course.aws.online.shopping.entity.product.ProductCategory;
 import com.ra.course.aws.online.shopping.exceptions.ProductNotFoundException;
 import com.ra.course.aws.online.shopping.service.CatalogService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+@Service
 public class CatalogServiceImpl implements CatalogService {
     private transient final Catalog catalog;
     private transient final ProductDao productDao;
