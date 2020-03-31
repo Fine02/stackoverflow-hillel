@@ -6,14 +6,22 @@ import com.ra.course.aws.online.shopping.entity.notification.SMSNotification;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class JdbcNotificationDaoImpl implements NotificationDao {
+    private static final String SELECT_ONE_SQL = "";
+    private static final String SELECT_ORDER_LOG_SQL = "";
+    private static final String SELECT_MEMBER_SQL = "";
+    private static final String SELECT_SMS_Notification_SQL = "";
+
+
     private final JdbcTemplate jdbcTemplate;
 
     public JdbcNotificationDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
     @Override
     public SMSNotification createSMSNotification(SMSNotification smsNotification) {
+//        jdbcTemplate.queryForObject()
         return null;
     }
 
