@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS tag, account, member, bounty, question, answer, comment, photo, tag_question;
+DROP TABLE IF EXISTS notification, tag, account, member, bounty, question, answer, comment, photo, tag_question;
 
 DROP DOMAIN IF EXISTS account_status_type;
 DROP DOMAIN IF EXISTS question_closing_remark_type;
@@ -37,6 +37,12 @@ CREATE TYPE  question_status_type AS ENUM ('open',
                                             'close',
                                             'on_hold',
                                             'deleted');
+
+CREATE TABLE notification (
+                              id IDENTITY PRIMARY KEY,
+                              created_on TIMESTAMP NOT NULL,
+                              content TEXT NOT NULL
+);
 
 CREATE TABLE  tag  (
                        id  IDENTITY PRIMARY KEY,

@@ -1,5 +1,5 @@
 BEGIN TRANSACTION;
-DROP TABLE IF EXISTS tag, account, member, bounty, question, answer, comment, photo, tag_question;
+DROP TABLE IF EXISTS notification, tag, account, member, bounty, question, answer, comment, photo, tag_question;
 
 DROP TYPE IF EXISTS account_status_type, question_closing_remark_type, question_status_type, badge_type;
 
@@ -35,6 +35,12 @@ CREATE TYPE badge_type AS ENUM ('student',
                                 'nice_question',
                                 'good_question',
                                 'great_question');
+
+CREATE TABLE notification (
+                              id BIGSERIAL PRIMARY KEY,
+                              created_on TIMESTAMP NOT NULL,
+                              content TEXT NOT NULL
+);
 
 CREATE TABLE  tag  (
                        id  BIGSERIAL PRIMARY KEY,
