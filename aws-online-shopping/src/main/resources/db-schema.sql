@@ -1,3 +1,10 @@
+CREATE SCHEMA IF NOT EXISTS onlineshopping;
+USE onlineshopping;
+
+DROP TABLE IF EXISTS payment_status, shipment_status, account_status, order_status, address, sms_notification, email_notification, notification,
+shipment_log, shipment, order_log, `order`, payment, electronic_bank_transfer, credit_card,
+account, member;
+
 CREATE TABLE `payment_status`
 (
 `id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -41,7 +48,7 @@ CREATE TABLE `sms_notification`
 CREATE TABLE `email_notification`
 (
 `id` INT PRIMARY KEY AUTO_INCREMENT,
-`phone` varchar (255) NOT NULL
+`email` varchar (255) NOT NULL
 );
 
 CREATE TABLE `notification`
@@ -67,7 +74,7 @@ CREATE TABLE `shipment`
 `shipmentNumber` varchar (255) NOT NULL,
 `shipmentDate` DATETIME NOT NULL,
 `estimatedArrival` DATETIME NOT NULL,
-`ShipmentMethod` varchar (255) NOT NULL,
+`shipmentMethod` varchar (255) NOT NULL,
 `shipment_logs_id` INT NOT NULL,
 CONSTRAINT  `fk_shipment_logs_id`
 FOREIGN KEY (`shipment_logs_id`) REFERENCES `shipment_log` (`id`)
