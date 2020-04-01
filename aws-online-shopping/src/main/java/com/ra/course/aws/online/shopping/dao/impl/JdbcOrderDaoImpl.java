@@ -11,10 +11,14 @@ public class JdbcOrderDaoImpl implements OrderDao {
     private static final String SELECT_UPDATE_SQL = "UPDATE `ORDER` SET ORDERNUMBER, ";
     private static final String SELECT_ORDER_LOG_SQL = "";
 
-    private static final String GET_ORDER_LOG_BY_ID = "";
+
+
+    private static final String UPDATE_ORDER_LOG_BY_ORDERNUMBER = "UPDATE `ORDER_LOG` ol SET `orderNumber`=?, `creationDate`=?, `order_status_id`=? WHERE ol.orderNumber=?";
+
 
     private static final String GET_MEMBER_BY_ID = "SELECT \n" +
-            "\tm.`account_id` id,\n" +
+            "\tm.`account_id` ,\n" +
+            "        m.`id` `member_id`,\n" +
             "        a.`userName`, a.`password`,\n" +
             "        acs.`status`,\n" +
             "        a.`name`,\n" +
@@ -28,8 +32,25 @@ public class JdbcOrderDaoImpl implements OrderDao {
             "JOIN `address` adr ON a.`address_id` = adr.`id`\n" +
             "JOIN `credit_card` crc ON a.`creditCardList_id` = crc.`id`\n" +
             "JOIN `electronic_bank_transfer` ebt ON a.`electronicBankTransferList_id` = ebt.`id`\n" +
-            "WHERE m.id=? GROUP BY a.id";
+            "WHERE m.id=1 GROUP BY a.id";
 
+    private static final String UPDATE_ORDER_LOG_BY_OL_ID = "UPDATE `ORDER_LOG` ol SET `orderNumber`=?, `creationDate`=?, `order_status_id`=? WHERE ol.id=?";
+
+    private static final String FIND_ORDER_BY_ORDER_NUMBER = "SELECT \n" +
+            "o.`id` order_id, o.`orderNumber`, os2.`status` order_status, o.`orderDate`,\n" +
+            "ol.`id` orderLog_id, ol.`orderNumber`,\n" +
+            "ol.`creationDate`, os.`status` orderLogStatus\n" +
+            "FROM  (`order_log` ol\n" +
+            "JOIN `order` o ON ol.`order_id` = o.`id`)\n" +
+            ",`order_status` os, `order_status` os2\n" +
+            "WHERE (\n" +
+            "ol.`orderNumber` =? AND ol.`order_status_id` = os.`id` AND o.`order_status_id` = os2.`id`\n" +
+            ")";
+
+
+    private static final String FIND_ORDER_LOG_BY_FIELDS = "SELECT ol.`id`, ol.`orderNumber`, ol.`creationDate`, os.`status`, ol.`order_id` FROM order_log ol JOIN order_status os ON ol.`order_status_id` = os.`id` WHERE ol.`orderNumber`=? && ol.`creationDate`=? && os.`status`=?";
+    private static final String ADD_ORDER_LOG = "INSERT INTO `order_log` (`orderNumber`, `creationDate`, `order_status_id`, `order_id`) VALUES (?, ?, ?, ?)";
+    private static final String GET_ORDER_LOG_BY_ID = "SELECT ol.`id` orderLog_id, ol.`orderNumber`, ol.`creationDate`, os.`status` FROM order_log ol JOIN order_status os ON ol.`order_status_id` = os.`id` WHERE ol.id=?";
 
     private static final String SELECT_SMS_Notification_SQL = "";
 
@@ -66,7 +87,6 @@ public class JdbcOrderDaoImpl implements OrderDao {
 
     @Override
     public void addOrderLog(boolean add) {
-
     }
 
     @Override
