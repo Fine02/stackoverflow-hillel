@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 
 public class JdbcOrderDaoImpl implements OrderDao {
-    private static final String GET_MEMBER_BY_ID = "SELECT \n" +
+    private static final String GET_MEMBER_BY_ID = " SELECT \n" +
             "\tm.`account_id` ,\n" +
             "        m.`id` `member_id`,\n" +
             "        a.`userName`, a.`password`,\n" +
@@ -17,14 +17,14 @@ public class JdbcOrderDaoImpl implements OrderDao {
             "        adr.`streetAddress`, adr.`city`, adr.`state`, adr.`zipcode`, adr.`country`,\n" +
             "        a.`email`,\n" +
             "        a.`phone`,\n" +
-            "        crc.`nameOnCard`, crc.`cardNumber`,crc.`code`, adr.`streetAddress`, adr.`city`, adr.`state`, adr.`zipcode`, adr.`country`,\n" +
+            "        crc.`nameOnCard`, crc.`cardNumber`,crc.`code`, \n" +
             "        ebt.`bankName`, ebt.`routingNumber`, ebt.`accountNumber`\n" +
             "FROM member m JOIN account a ON m.`account_id`= a.`id`\n" +
             "JOIN account_status acs ON a.`account_status_id` = acs.`id`\n" +
             "JOIN `address` adr ON a.`address_id` = adr.`id`\n" +
-            "JOIN `credit_card` crc ON a.`creditCardList_id` = crc.`id`\n" +
-            "JOIN `electronic_bank_transfer` ebt ON a.`electronicBankTransferList_id` = ebt.`id`\n" +
-            "WHERE m.id=1 GROUP BY a.id";
+            "JOIN `credit_card` crc ON crc.`account_id` = a.`id`\n" +
+            "JOIN `electronic_bank_transfer` ebt ON ebt.`account_id` = a.`id`\n" +
+            "WHERE m.id=1 GROUP BY a.id\n";
 
     private static final String UPDATE_ORDER_LOG_BY_OL_ID = "UPDATE `ORDER_LOG` ol SET `orderNumber`=?, `creationDate`=?, `order_status_id`=? WHERE ol.id=?";
     private static final String UPDATE_ORDER_LOG_BY_ORDERNUMBER = "UPDATE `ORDER_LOG` ol SET `orderNumber`=?, `creationDate`=?, `order_status_id`=? WHERE ol.orderNumber=?";
@@ -47,7 +47,7 @@ public class JdbcOrderDaoImpl implements OrderDao {
             "JOIN `order` o ON ol.`order_id` = o.`id`)\n" +
             ",`order_status` os, `order_status` os2\n" +
             "WHERE (\n" +
-            "ol.`order_status_id` = os.`id` AND o.`order_status_id` = os2.`id` AND o.`id` =? AND o.`orderNumber`=? AND os2.`status`=? AND o.`orderDate`= ?\n" +
+            "ol.`order_status_id` = os.`id` AND o.`order_status_id` = os2.`id` AND o.`orderNumber`=? AND os2.`status`=? AND o.`orderDate`= ?\n" +
             ") ";
 
     private static final String FIND_ORDER_LOG_BY_FIELDS = "SELECT ol.`id`, ol.`orderNumber`, ol.`creationDate`, os.`status`, ol.`order_id` FROM order_log ol JOIN order_status os ON ol.`order_status_id` = os.`id` WHERE ol.`orderNumber`=? && ol.`creationDate`=? && os.`status`=?";
