@@ -60,3 +60,7 @@ INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (1, 'cr
 INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (2, 'student', 2);
 INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (2, 'teacher', 3);
 INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (3, 'supporter', 1);
+
+INSERT INTO member_voted_question (member_id, question_id, upvoted) VALUES (1, 1, true);
+INSERT INTO member_voted_question (member_id, question_id, upvoted) VALUES (2, 2, false);
+INSERT INTO member_voted_question (member_id, question_id, upvoted) VALUES (3, 3, null);
