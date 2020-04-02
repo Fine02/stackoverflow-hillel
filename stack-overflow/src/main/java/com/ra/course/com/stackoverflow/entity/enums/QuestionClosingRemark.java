@@ -7,7 +7,7 @@ public enum QuestionClosingRemark {
     NOT_CONSTRUCTIVE,
     NOT_REAL_QUESTION,
     PRIMARLY_OPINION_BASED,
-    ADVERTASING,
+    ADVERTISING,
     ABUSE,
     SPAM,
     NOT_MARKED_FOR_CLOSING

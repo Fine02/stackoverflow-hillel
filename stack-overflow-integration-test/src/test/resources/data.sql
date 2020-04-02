@@ -15,7 +15,7 @@ INSERT INTO  bounty (reputation, expiry, creator_id) VALUES(33, '2020-03-19 22:2
 INSERT INTO  bounty (reputation, expiry, creator_id) VALUES(1, '2020-01-24 15:02:14', 3);
 
 INSERT INTO  question (title, description, view_count, vote_count, creation_time, update_time, status, closing_remark, author_id, bounty_id)
-VALUES('Firs question title', 'Firs question description', 100, 15, '2020-03-19 13:32:37', '2020-05-15 12:35:51', 'open', 'duplicate', 1, 2);
+VALUES('First question title', 'First question description', 100, 15, '2020-03-19 13:32:37', '2020-05-15 12:35:51', 'open', 'duplicate', 1, 2);
 INSERT INTO  question (title, description, view_count, vote_count, creation_time, update_time, status, closing_remark, author_id)
 VALUES('Another question title', 'Another question description', 2, 0, '2020-03-19 14:55:14', '2020-03-18 10:35:22', 'close', 'offtopic', 2);
 INSERT INTO  question (title, description, view_count, vote_count, creation_time, update_time, status, closing_remark, author_id, bounty_id)
@@ -45,3 +45,18 @@ VALUES('/image/3/photo789.jpg', '2016-04-28 13:00:00', 3);
 INSERT INTO  tag_question (tag_id, question_id) VALUES(1, 2);
 INSERT INTO  tag_question (tag_id, question_id) VALUES(3, 3);
 INSERT INTO  tag_question (tag_id, question_id) VALUES(2, 1);
+
+INSERT INTO member_question (member_id, question_id) VALUES (1, 1);
+INSERT INTO member_question (member_id, question_id) VALUES (1, 2);
+INSERT INTO member_question (member_id, question_id) VALUES (2, 3);
+
+INSERT INTO member_answer (member_id, answer_id) VALUES (2, 1);
+INSERT INTO member_answer (member_id, answer_id) VALUES (2, 2);
+INSERT INTO member_answer (member_id, answer_id) VALUES (1, 3);
+
+INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (1, 'student', 1);
+INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (1, 'student', 2);
+INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (1, 'critic', 2);
+INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (2, 'student', 2);
+INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (2, 'teacher', 3);
+INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (3, 'supporter', 1);
