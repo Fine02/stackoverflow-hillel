@@ -1,6 +1,6 @@
 BEGIN;
 
-DROP TABLE IF EXISTS tag, account, member, bounty, question, answer, comment, photo, notification,
+DROP TABLE IF EXISTS notification, tag, account, member, bounty, question, answer, comment, photo, notification,
     tag_question, member_question, member_answer, member_comment, member_notification,
     member_badge_question, member_voted_question, member_voted_answer, member_voted_comment;
 
@@ -38,6 +38,12 @@ CREATE TYPE badge_type AS ENUM ('student',
                                 'nice_question',
                                 'good_question',
                                 'great_question');
+
+CREATE TABLE notification (
+                              id BIGSERIAL PRIMARY KEY,
+                              created_on TIMESTAMP NOT NULL,
+                              content TEXT NOT NULL
+);
 
 CREATE TABLE  tag  (
                        id  BIGSERIAL PRIMARY KEY,
@@ -146,11 +152,6 @@ CREATE TABLE  photo  (
                                  REFERENCES  comment  ( id )
                                  ON DELETE CASCADE
                                  ON UPDATE CASCADE);
-
-CREATE TABLE notification (
-                              id BIGSERIAL PRIMARY KEY,
-                              created_on TIMESTAMP NOT NULL,
-                              content TEXT NOT NULL);
 
 CREATE TABLE  tag_question  (
                                 tag_id  BIGINT NOT NULL,

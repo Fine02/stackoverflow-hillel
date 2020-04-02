@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS tag, account, member, bounty, question, answer, comment, photo, notification,
+DROP TABLE IF EXISTS notification, tag, account, member, bounty, question, answer, comment, photo, notification,
     tag_question, member_question, member_answer, member_comment, member_notification,
     member_badge_question, member_voted_question, member_voted_answer, member_voted_comment;
 
@@ -39,6 +39,12 @@ CREATE TYPE  question_status_type AS ENUM ('open',
                                             'close',
                                             'on_hold',
                                             'deleted');
+
+CREATE TABLE notification (
+                              id IDENTITY PRIMARY KEY,
+                              created_on TIMESTAMP NOT NULL,
+                              content TEXT NOT NULL
+);
 
 CREATE TABLE  tag  (
                        id  IDENTITY PRIMARY KEY,
