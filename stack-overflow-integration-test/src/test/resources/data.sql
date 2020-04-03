@@ -42,21 +42,13 @@ INSERT INTO  tag_question (tag_id, question_id) VALUES(1, 2);
 INSERT INTO  tag_question (tag_id, question_id) VALUES(3, 3);
 INSERT INTO  tag_question (tag_id, question_id) VALUES(2, 1);
 
-INSERT INTO account_question (account_id, question_id) VALUES (1, 1);
-INSERT INTO account_question (account_id, question_id) VALUES (1, 2);
-INSERT INTO account_question (account_id, question_id) VALUES (2, 3);
+INSERT INTO member_badge_question (account_id, badge, question_id) VALUES (1, 'student', 1);
+INSERT INTO member_badge_question (account_id, badge, question_id) VALUES (1, 'student', 2);
+INSERT INTO member_badge_question (account_id, badge, question_id) VALUES (1, 'critic', 2);
+INSERT INTO member_badge_question (account_id, badge, question_id) VALUES (2, 'student', 2);
+INSERT INTO member_badge_question (account_id, badge, question_id) VALUES (2, 'teacher', 3);
+INSERT INTO member_badge_question (account_id, badge, question_id) VALUES (3, 'supporter', 1);
 
-INSERT INTO account_answer (account_id, answer_id) VALUES (2, 1);
-INSERT INTO account_answer (account_id, answer_id) VALUES (2, 2);
-INSERT INTO account_answer (account_id, answer_id) VALUES (1, 3);
-
-INSERT INTO account_badge_question (account_id, badge, question_id) VALUES (1, 'student', 1);
-INSERT INTO account_badge_question (account_id, badge, question_id) VALUES (1, 'student', 2);
-INSERT INTO account_badge_question (account_id, badge, question_id) VALUES (1, 'critic', 2);
-INSERT INTO account_badge_question (account_id, badge, question_id) VALUES (2, 'student', 2);
-INSERT INTO account_badge_question (account_id, badge, question_id) VALUES (2, 'teacher', 3);
-INSERT INTO account_badge_question (account_id, badge, question_id) VALUES (3, 'supporter', 1);
-
-INSERT INTO account_voted_question (account_id, question_id, upvoted) VALUES (1, 1, true);
-INSERT INTO account_voted_question (account_id, question_id, upvoted) VALUES (2, 2, false);
-INSERT INTO account_voted_question (account_id, question_id, upvoted) VALUES (3, 3, null);
+INSERT INTO member_voted_question (account_id, question_id, upvoted) VALUES (1, 1, true);
+INSERT INTO member_voted_question (account_id, question_id, upvoted) VALUES (2, 2, false);
+INSERT INTO member_voted_question (account_id, question_id, upvoted) VALUES (3, 3, null);

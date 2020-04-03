@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS notification, tag, account, bounty, question, answer, comment, photo, notification,
-    tag_question, member_question, member_answer, member_comment, member_notification,
-    member_badge_question, member_voted_question, member_voted_answer, member_voted_comment;
+    tag_question, member_notification, member_badge_question, member_voted_question, member_voted_answer,
+    member_voted_comment;
 
 DROP DOMAIN IF EXISTS account_status_type;
 DROP DOMAIN IF EXISTS question_closing_remark_type;
@@ -154,51 +154,6 @@ CREATE TABLE  tag_question  (
                                 CONSTRAINT  fk_tag_question_question_id
                                     FOREIGN KEY ( question_id )
                                         REFERENCES  question  ( id )
-                                        ON DELETE CASCADE
-                                        ON UPDATE CASCADE);
-
-CREATE TABLE member_question (
-                                 account_id BIGINT NOT NULL,
-                                 question_id BIGINT NOT NULL,
-                                 PRIMARY KEY (account_id, question_id),
-                                 CONSTRAINT fk_account_question_account_id
-                                     FOREIGN KEY (account_id)
-                                         REFERENCES account (id)
-                                         ON DELETE CASCADE
-                                         ON UPDATE CASCADE,
-                                 CONSTRAINT fk_account_question_question_id
-                                     FOREIGN KEY (question_id)
-                                         REFERENCES question (id)
-                                         ON DELETE CASCADE
-                                         ON UPDATE CASCADE);
-
-CREATE TABLE member_answer (
-                               account_id BIGINT NOT NULL,
-                               answer_id BIGINT NOT NULL,
-                               PRIMARY KEY (account_id, answer_id),
-                               CONSTRAINT fk_account_answer_account_id
-                                   FOREIGN KEY (account_id)
-                                       REFERENCES account (id)
-                                       ON DELETE CASCADE
-                                       ON UPDATE CASCADE,
-                               CONSTRAINT fk_account_answer_answer_id
-                                   FOREIGN KEY (answer_id)
-                                       REFERENCES answer (id)
-                                       ON DELETE CASCADE
-                                       ON UPDATE CASCADE);
-
-CREATE TABLE member_comment (
-                                account_id BIGINT NOT NULL,
-                                comment_id BIGINT NOT NULL,
-                                PRIMARY KEY (account_id, comment_id),
-                                CONSTRAINT fk_account_comment_account_id
-                                    FOREIGN KEY (account_id)
-                                        REFERENCES account (id)
-                                        ON DELETE CASCADE
-                                        ON UPDATE CASCADE,
-                                CONSTRAINT fk_account_comment_comment_id
-                                    FOREIGN KEY (comment_id)
-                                        REFERENCES comment (id)
                                         ON DELETE CASCADE
                                         ON UPDATE CASCADE);
 
