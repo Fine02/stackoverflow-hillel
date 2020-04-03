@@ -6,10 +6,6 @@ INSERT INTO  account (password, name, email, reputation, account_status) VALUES(
 INSERT INTO  account (password, name, email, reputation, account_status) VALUES('password2', 'name2', 'email2@gmail.com', 0, 'blocked');
 INSERT INTO  account (password, name, email, reputation, account_status) VALUES('password3', 'name3', 'email3@gmail.com', 5, 'banned');
 
-INSERT INTO  member (account_id) VALUES(1);
-INSERT INTO  member (account_id) VALUES(2);
-INSERT INTO  member (account_id) VALUES(3);
-
 INSERT INTO  bounty (reputation, expiry, creator_id) VALUES(4, '2020-02-05 10:22:51', 1);
 INSERT INTO  bounty (reputation, expiry, creator_id) VALUES(33, '2020-03-19 22:22:11', 2);
 INSERT INTO  bounty (reputation, expiry, creator_id) VALUES(1, '2020-01-24 15:02:14', 3);
@@ -46,21 +42,21 @@ INSERT INTO  tag_question (tag_id, question_id) VALUES(1, 2);
 INSERT INTO  tag_question (tag_id, question_id) VALUES(3, 3);
 INSERT INTO  tag_question (tag_id, question_id) VALUES(2, 1);
 
-INSERT INTO member_question (member_id, question_id) VALUES (1, 1);
-INSERT INTO member_question (member_id, question_id) VALUES (1, 2);
-INSERT INTO member_question (member_id, question_id) VALUES (2, 3);
+INSERT INTO account_question (account_id, question_id) VALUES (1, 1);
+INSERT INTO account_question (account_id, question_id) VALUES (1, 2);
+INSERT INTO account_question (account_id, question_id) VALUES (2, 3);
 
-INSERT INTO member_answer (member_id, answer_id) VALUES (2, 1);
-INSERT INTO member_answer (member_id, answer_id) VALUES (2, 2);
-INSERT INTO member_answer (member_id, answer_id) VALUES (1, 3);
+INSERT INTO account_answer (account_id, answer_id) VALUES (2, 1);
+INSERT INTO account_answer (account_id, answer_id) VALUES (2, 2);
+INSERT INTO account_answer (account_id, answer_id) VALUES (1, 3);
 
-INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (1, 'student', 1);
-INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (1, 'student', 2);
-INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (1, 'critic', 2);
-INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (2, 'student', 2);
-INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (2, 'teacher', 3);
-INSERT INTO member_badge_question (member_id, badge, question_id) VALUES (3, 'supporter', 1);
+INSERT INTO account_badge_question (account_id, badge, question_id) VALUES (1, 'student', 1);
+INSERT INTO account_badge_question (account_id, badge, question_id) VALUES (1, 'student', 2);
+INSERT INTO account_badge_question (account_id, badge, question_id) VALUES (1, 'critic', 2);
+INSERT INTO account_badge_question (account_id, badge, question_id) VALUES (2, 'student', 2);
+INSERT INTO account_badge_question (account_id, badge, question_id) VALUES (2, 'teacher', 3);
+INSERT INTO account_badge_question (account_id, badge, question_id) VALUES (3, 'supporter', 1);
 
-INSERT INTO member_voted_question (member_id, question_id, upvoted) VALUES (1, 1, true);
-INSERT INTO member_voted_question (member_id, question_id, upvoted) VALUES (2, 2, false);
-INSERT INTO member_voted_question (member_id, question_id, upvoted) VALUES (3, 3, null);
+INSERT INTO account_voted_question (account_id, question_id, upvoted) VALUES (1, 1, true);
+INSERT INTO account_voted_question (account_id, question_id, upvoted) VALUES (2, 2, false);
+INSERT INTO account_voted_question (account_id, question_id, upvoted) VALUES (3, 3, null);
