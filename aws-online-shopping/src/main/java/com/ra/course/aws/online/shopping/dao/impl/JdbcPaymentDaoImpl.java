@@ -7,9 +7,11 @@ import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransactio
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class JdbcPaymentDaoImpl implements PaymentDao {
     private final JdbcTemplate jdbcTemplate;
 

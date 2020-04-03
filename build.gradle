@@ -36,7 +36,6 @@ configure(subprojects) { project ->
 
     dependencies {
         compile 'org.springframework.boot:spring-boot-starter'
-        compile 'org.springframework.boot:spring-boot-starter-jdbc'
         testCompile 'org.springframework.boot:spring-boot-starter-test'
     }
 }
@@ -58,7 +57,10 @@ project(':ams-airline-management-integration-test') {
 }
 
 project(':aws-online-shopping') {
-
+   dependencies{
+       compile boot.starterJdbc
+       compile db.postgres
+   }
 }
 
 project(':aws-online-shopping-integration-test') {

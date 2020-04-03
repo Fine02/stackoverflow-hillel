@@ -25,6 +25,9 @@ public class ShipmentLog {
         this.creationDate = creationDate;
     }
 
+    public ShipmentLog(String orderNumber) {
+    }
+
     public String getShipmentNumber() {
         return shipmentNumber;
     }

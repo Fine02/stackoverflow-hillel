@@ -1,4 +1,3 @@
-USE onlineshopping;
 
 INSERT INTO `payment_status` (`status`) VALUES ('UNPAID');
 INSERT INTO `payment_status` (`status`) VALUES ('PENDING');
@@ -46,41 +45,54 @@ INSERT INTO `notification` (`createdOn`, `content`) VALUES ('2020-03-19 20:22:11
 INSERT INTO `notification` (`createdOn`, `content`) VALUES ('2020-03-20 21:22:11', 'your order canceled');
 INSERT INTO `notification` (`createdOn`, `content`) VALUES ('2020-03-20 22:22:11', 'your order arrived');
 
-INSERT INTO `shipment_log` (`shipmentNumber`, `shipment_status_id`, `creationDate`) VALUES ('1',2,'2020-03-19 22:22:11');
-INSERT INTO `shipment_log` (`shipmentNumber`, `shipment_status_id`, `creationDate`) VALUES ('2',2,'2020-03-20 22:22:11');
-INSERT INTO `shipment_log` (`shipmentNumber`, `shipment_status_id`, `creationDate`) VALUES ('3',2,'2020-03-21 22:22:11');
+INSERT INTO `shipment` (`shipmentNumber`, `shipmentDate`, `estimatedArrival`, `shipmentMethod`) VALUES ('1','2020-03-19 22:22:11', '2020-04-19 22:22:11','by air');
+INSERT INTO `shipment` (`shipmentNumber`, `shipmentDate`, `estimatedArrival`, `shipmentMethod`) VALUES ('2','2020-03-20 22:22:11', '2020-04-19 22:22:11','by air');
+INSERT INTO `shipment` (`shipmentNumber`, `shipmentDate`, `estimatedArrival`, `shipmentMethod`) VALUES ('3','2020-03-21 22:22:11', '2020-04-19 22:22:11','by air');
 
-INSERT INTO `shipment` (`shipmentNumber`, `shipmentDate`, `estimatedArrival`, `shipmentMethod`,`shipment_logs_id`) VALUES ('1','2020-03-19 22:22:11', '2020-04-19 22:22:11','by air',1);
-INSERT INTO `shipment` (`shipmentNumber`, `shipmentDate`, `estimatedArrival`, `shipmentMethod`,`shipment_logs_id`) VALUES ('2','2020-03-20 22:22:11', '2020-04-19 22:22:11','by air',1);
-INSERT INTO `shipment` (`shipmentNumber`, `shipmentDate`, `estimatedArrival`, `shipmentMethod`,`shipment_logs_id`) VALUES ('3','2020-03-21 22:22:11', '2020-04-19 22:22:11','by air',1);
+INSERT INTO `shipment_log` (`shipmentNumber`, `shipment_status_id`, `creationDate`, `shipment_id`) VALUES ('1',2,'2020-03-19 22:22:11',1);
+INSERT INTO `shipment_log` (`shipmentNumber`, `shipment_status_id`, `creationDate`, `shipment_id`) VALUES ('2',2,'2020-03-20 22:22:11',2);
+INSERT INTO `shipment_log` (`shipmentNumber`, `shipment_status_id`, `creationDate`, `shipment_id`) VALUES ('2',2,'2020-03-21 22:22:11',2);
 
-INSERT INTO `order_log` (`orderNumber`, `creationDate`, `order_status_id`) VALUES ('1','2020-03-19 22:22:11', 2);
-INSERT INTO `order_log` (`orderNumber`, `creationDate`, `order_status_id`) VALUES ('2','2020-03-20 22:22:11', 2);
-INSERT INTO `order_log` (`orderNumber`, `creationDate`, `order_status_id`) VALUES ('3','2020-03-21 22:22:11', 2);
+INSERT INTO `order` (`orderNumber`, `order_status_id`, `orderDate`) VALUES ('1', 3,'2020-03-19 22:22:11');
+INSERT INTO `order` (`orderNumber`, `order_status_id`, `orderDate`) VALUES ('2', 3,'2020-03-20 22:22:11');
+INSERT INTO `order` (`orderNumber`, `order_status_id`, `orderDate`) VALUES ('3', 3,'2020-03-21 22:22:11');
 
-INSERT INTO `order` (`orderNumber`, `order_status_id`, `orderDate`, `order_log_id`) VALUES ('1', 3,'2020-03-19 22:22:11', 1);
-INSERT INTO `order` (`orderNumber`, `order_status_id`, `orderDate`, `order_log_id`) VALUES ('2', 3,'2020-03-20 22:22:11', 1);
-INSERT INTO `order` (`orderNumber`, `order_status_id`, `orderDate`, `order_log_id`) VALUES ('3', 3,'2020-03-21 22:22:11', 1);
+INSERT INTO `order_log` (`orderNumber`, `creationDate`, `order_status_id`, `order_id`) VALUES ('1','2020-03-19 22:22:11', 2,1);
+INSERT INTO `order_log` (`orderNumber`, `creationDate`, `order_status_id`, `order_id`) VALUES ('2','2020-03-20 22:22:11', 2,2);
+INSERT INTO `order_log` (`orderNumber`, `creationDate`, `order_status_id`, `order_id`) VALUES ('2','2020-03-21 22:22:11', 2,2);
 
 INSERT INTO `payment` (`payment_status_id`, `amount`) VALUES (1, 100.10);
 INSERT INTO `payment` (`payment_status_id`, `amount`) VALUES (2, 200.10);
 INSERT INTO `payment` (`payment_status_id`, `amount`) VALUES (3, 300.10);
 
-INSERT INTO `electronic_bank_transfer` (`bankName`, `routingNumber`, `accountNumber`) VALUES ('GermanBank', '5265', '8542');
-INSERT INTO `electronic_bank_transfer` (`bankName`, `routingNumber`, `accountNumber`) VALUES ('UniversalBank', '5548', '1254');
-INSERT INTO `electronic_bank_transfer` (`bankName`, `routingNumber`, `accountNumber`) VALUES ('AmericanExpress', '7777', '7415');
+INSERT INTO `account` (`userName`, `password`, `account_status_id`, `name`, `address_id`, `email`, `phone`) VALUES ('ivan','111', 1, 'ivan', 1, 'jj@gmail.com', '380777777777');
 
-INSERT INTO `credit_card` (`nameOnCard`, `cardNumber`, `code`, `address_id`) VALUES ('VISA', '5584', '5662', 1);
-INSERT INTO `credit_card` (`nameOnCard`, `cardNumber`, `code`, `address_id`) VALUES ('MASTERCARD', '8545', '8554', 2);
-INSERT INTO `credit_card` (`nameOnCard`, `cardNumber`, `code`, `address_id`) VALUES ('VISA', '7777', '7415', 3);
+INSERT INTO `account` (`userName`, `password`, `account_status_id`, `name`, `address_id`, `email`, `phone`) VALUES ('vasiliy','111', 2, 'vasiliy', 2, 'jj@gmail.com', '380777777777');
 
-INSERT INTO `account` (`userName`, `password`, `account_status_id`, `name`, `address_id`, `email`, `phone`, `creditCardList_id`, `electronicBankTransferList_id`) VALUES ('ivan','111', 1, 'ivan', 1, 'jj@gmail.com', '380777777777', 1, 1);
-INSERT INTO `account` (`userName`, `password`, `account_status_id`, `name`, `address_id`, `email`, `phone`, `creditCardList_id`, `electronicBankTransferList_id`) VALUES ('vasiliy','111', 2, 'vasiliy', 2, 'jj@gmail.com', '380777777777', 2, 2);
-INSERT INTO `account` (`userName`, `password`, `account_status_id`, `name`, `address_id`, `email`, `phone`, `creditCardList_id`, `electronicBankTransferList_id`) VALUES ('egor','111', 3, 'egor', 3, 'jj@gmail.com', '380777777777', 3, 3);
+INSERT INTO `account` (`userName`, `password`, `account_status_id`, `name`, `address_id`, `email`, `phone`) VALUES ('egor','111', 3, 'egor', 3, 'jj@gmail.com', '380777777777');
 
 INSERT INTO `member` (`account_id`) VALUES (1);
 INSERT INTO `member` (`account_id`) VALUES (2);
 INSERT INTO `member` (`account_id`) VALUES (3);
+
+INSERT INTO `electronic_bank_transfer` (`bankName`, `routingNumber`, `accountNumber`, `account_id`) VALUES ('GermanBank', '5265', '8542',1);
+INSERT INTO `electronic_bank_transfer` (`bankName`, `routingNumber`, `accountNumber`, `account_id`) VALUES ('UniversalBank', '5548', '1254',2);
+INSERT INTO `electronic_bank_transfer` (`bankName`, `routingNumber`, `accountNumber`, `account_id`) VALUES ('AmericanExpress', '7777', '7415',3);
+
+INSERT INTO `credit_card` (`nameOnCard`, `cardNumber`, `code`, `address_id`, `account_id`) VALUES ('VISA', '5584', '5662', 1, 1);
+INSERT INTO `credit_card` (`nameOnCard`, `cardNumber`, `code`, `address_id`, `account_id`) VALUES ('MASTERCARD', '8545', '8554', 2, 2);
+INSERT INTO `credit_card` (`nameOnCard`, `cardNumber`, `code`, `address_id`, `account_id`) VALUES ('VISA', '7777', '7415', 3, 3);
+
+
+
+
+
+
+
+
+
+
+
 
 
 

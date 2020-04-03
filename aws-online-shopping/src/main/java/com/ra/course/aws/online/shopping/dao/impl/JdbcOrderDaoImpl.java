@@ -3,11 +3,16 @@ package com.ra.course.aws.online.shopping.dao.impl;
 import com.ra.course.aws.online.shopping.dao.OrderDao;
 import com.ra.course.aws.online.shopping.entity.order.Order;
 import com.ra.course.aws.online.shopping.entity.order.OrderLog;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class JdbcOrderDaoImpl implements OrderDao {
+    private static final String UPDATE_ORDER_BY_ORDERNUMBER = "UPDATE `ORDER` o SET `orderNumber`=?, `order_status_id`=?, `orderDate`=? WHERE o.orderNumber=?";
+
     private static final String GET_MEMBER_BY_ID = " SELECT \n" +
             "\tm.`account_id` ,\n" +
             "        m.`id` `member_id`,\n" +
@@ -26,9 +31,6 @@ public class JdbcOrderDaoImpl implements OrderDao {
             "JOIN `electronic_bank_transfer` ebt ON ebt.`account_id` = a.`id`\n" +
             "WHERE m.id=1 GROUP BY a.id\n";
 
-    private static final String UPDATE_ORDER_LOG_BY_OL_ID = "UPDATE `ORDER_LOG` ol SET `orderNumber`=?, `creationDate`=?, `order_status_id`=? WHERE ol.id=?";
-    private static final String UPDATE_ORDER_LOG_BY_ORDERNUMBER = "UPDATE `ORDER_LOG` ol SET `orderNumber`=?, `creationDate`=?, `order_status_id`=? WHERE ol.orderNumber=?";
-
     private static final String FIND_ORDER_BY_ORDER_NUMBER = "SELECT \n" +
             "o.`id` order_id, o.`orderNumber`, os2.`status` order_status, o.`orderDate`,\n" +
             "ol.`id` orderLog_id, ol.`orderNumber`,\n" +
@@ -40,14 +42,14 @@ public class JdbcOrderDaoImpl implements OrderDao {
             "ol.`orderNumber` =? AND ol.`order_status_id` = os.`id` AND o.`order_status_id` = os2.`id`\n" +
             ")";
 
-    private static final String GET_ORDER_LOGS_BY_ORDER ="SELECT \n" +
+    private static final String GET_ORDER_LOGS_BY_ORDER_NO_IN_OLOGS = "SELECT \n" +
             "ol.`id` orderLog_id, ol.`orderNumber`,\n" +
             "ol.`creationDate`, os.`status` orderLogStatus\n" +
             "FROM  (`order_log` ol\n" +
             "JOIN `order` o ON ol.`order_id` = o.`id`)\n" +
             ",`order_status` os, `order_status` os2\n" +
             "WHERE (\n" +
-            "ol.`order_status_id` = os.`id` AND o.`order_status_id` = os2.`id` AND o.`orderNumber`=? AND os2.`status`=? AND o.`orderDate`= ?\n" +
+            "ol.`order_status_id` = os.`id` AND o.`order_status_id` = os2.`id`AND ol.`orderNumber`=? \n" +
             ") ";
 
     private static final String FIND_ORDER_LOG_BY_FIELDS = "SELECT ol.`id`, ol.`orderNumber`, ol.`creationDate`, os.`status`, ol.`order_id` FROM order_log ol JOIN order_status os ON ol.`order_status_id` = os.`id` WHERE ol.`orderNumber`=? && ol.`creationDate`=? && os.`status`=?";
@@ -62,35 +64,37 @@ public class JdbcOrderDaoImpl implements OrderDao {
 
     @Override
     public void updateOrder(Order orderNumber) {
-          //jdbcTemplate.queryForObject()
+        jdbcTemplate.update(UPDATE_ORDER_BY_ORDERNUMBER, orderNumber.getOrderNumber(), orderNumber.getStatus(), orderNumber.getOrderDate(), orderNumber.getOrderNumber());
     }
 
     @Override
     public boolean isFoundMemberID(Long id) {
-        return false;
+        return jdbcTemplate.queryForObject(GET_MEMBER_BY_ID, BeanPropertyRowMapper.newInstance(Boolean.class), id);
     }
 
     @Override
     public Order findByOrderNumber(String orderNumber) {
-        return null;
+        return jdbcTemplate.queryForObject(FIND_ORDER_BY_ORDER_NUMBER, BeanPropertyRowMapper.newInstance(Order.class), orderNumber);
     }
 
     @Override
     public List<OrderLog> findLogListByOrder(List<OrderLog> orderLogList) {
-        return null;
+        List<OrderLog> orderLogsList = jdbcTemplate.query(GET_ORDER_LOGS_BY_ORDER_NO_IN_OLOGS, (rs, rowNum) -> new OrderLog(rs.getString("orderNumber")), orderLogList);
+        return orderLogsList;
     }
 
     @Override
     public boolean isThisOrderLogExist(OrderLog orderLog) {
-        return false;
+        return jdbcTemplate.queryForObject(FIND_ORDER_LOG_BY_FIELDS, BeanPropertyRowMapper.newInstance(Boolean.class), orderLog);
     }
 
     @Override
     public void addOrderLog(boolean add) {
+        jdbcTemplate.queryForObject(ADD_ORDER_LOG, BeanPropertyRowMapper.newInstance(OrderLog.class), add);
     }
 
     @Override
     public OrderLog findOrderLogById(Long orderLogId) {
-        return null;
+        return jdbcTemplate.queryForObject(GET_ORDER_LOG_BY_ID, BeanPropertyRowMapper.newInstance(OrderLog.class), orderLogId);
     }
 }

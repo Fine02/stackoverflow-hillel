@@ -4,7 +4,9 @@ import com.ra.course.aws.online.shopping.dao.NotificationDao;
 import com.ra.course.aws.online.shopping.entity.notification.EmailNotification;
 import com.ra.course.aws.online.shopping.entity.notification.SMSNotification;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JdbcNotificationDaoImpl implements NotificationDao {
     private static final String SELECT_ONE_SQL = "";
     private static final String SELECT_ORDER_LOG_SQL = "";
