@@ -2,13 +2,10 @@ package com.ra.course.ams.airline.manag.system.entity.notification;
 
 import com.ra.course.ams.airline.manag.system.entity.Address;
 
-import java.util.Date;
-
 public class PostalNotification extends Notification {
     private Address address;
 
-    public PostalNotification(int notificationId, Date createdOn, String content, Address address) {
-        super(notificationId, createdOn, content);
+    public PostalNotification(Address address) {
         this.address = address;
     }
 
@@ -18,5 +15,13 @@ public class PostalNotification extends Notification {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "PostalNotification{" +
+                "address=" + address +
+                ", notification=" + super.toString() +
+                '}';
     }
 }
