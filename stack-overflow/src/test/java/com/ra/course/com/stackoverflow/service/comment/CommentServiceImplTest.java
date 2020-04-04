@@ -142,8 +142,8 @@ public class CommentServiceImplTest {
                 .id(id)
                 .text("Some_comment")
                 .creationDate(LocalDateTime.now())
-                .author(member)
-                .commentable(question)
+                .authorId(member.getId())
+                .questionId(question.getId())
                 .build();
     }
 }

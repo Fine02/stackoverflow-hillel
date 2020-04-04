@@ -15,11 +15,13 @@ public interface CommentRepository {
 
     void delete(Comment comment);
 
-    Comment update (Comment comment);
+    void update (Comment comment);
 
     List<Comment> findAll();
 
-    List<Comment> findAllMemberComments();
+    List<Comment> findByMemberId(long id);
 
     List<Comment> findByQuestionId(long id);
+
+    List<Comment> findByAnswerId(long id);
 }

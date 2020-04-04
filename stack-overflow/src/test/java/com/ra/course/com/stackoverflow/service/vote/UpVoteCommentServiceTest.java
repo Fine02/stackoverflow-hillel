@@ -14,6 +14,7 @@ import com.ra.course.com.stackoverflow.service.vote.impl.VoteCommentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -99,14 +100,12 @@ public class UpVoteCommentServiceTest {
     }
 
     private Comment mockComment(Member member){
-        var question = Question.builder()
-                .id(ID2)
-                .title("title")
-                .author(member).build();
         return Comment.builder()
                 .id(ID1)
-                .author(member)
-                .commentable(question).build();
+                .creationDate(LocalDateTime.now())
+                .text("text")
+                .authorId(member.getId())
+                .questionId(ID2).build();
     }
     private Member mockMember(long idMember){
         var account = Account.builder()

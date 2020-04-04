@@ -10,33 +10,19 @@ import java.time.LocalDateTime;
 
 @SuperBuilder
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Comment<T> {
+@EqualsAndHashCode
+public class Comment {
 
-    @EqualsAndHashCode.Include
-    private final long id;
+    private long id;
 
-    @Builder.Default
     @NonNull
-    private String text = "";
-
-    @Builder.Default
-    @NonNull
-    private LocalDateTime creationDate = LocalDateTime.now();
-
+    private String text;
+    @EqualsAndHashCode.Exclude
+    private final LocalDateTime creationDate;
     private int voteCount;
-
-    private int flagCount;
-
     @NonNull
-    private final Member author;
-
-    @NonNull
-    private T commentable;
-
-
-    public void incrementVoteCount() {
-        this.voteCount++;
-    }
+    private final Long authorId;
+    private final Long answerId;
+    private final Long questionId;
 
 }
