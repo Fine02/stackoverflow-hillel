@@ -41,7 +41,7 @@ jacocoTestCoverageVerification {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(
                     dir: it,
-                    exclude: ['**/dto/**', '**/entity/**', '**/*Application*/**', '**/exception/**', '**/configuration/**', '**/filter/**']
+                    exclude: ['**/dto/**', '**/entity/**', '**/*Application*/**', '**/exception/**', '**/configuration/**', '**/filter/**', '**/repository/**']
             )
         }))
     }

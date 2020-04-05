@@ -1,10 +1,12 @@
 package com.ra.course.ams.airline.manag.system.entity.flight;
 
+import java.util.Date;
 import java.util.List;
 
 public class Flight {
 
     private String flightNumber;
+    private Date date;
     private Airport departure;
     private Airport arrival;
     private int durationInMinutes;
@@ -17,6 +19,7 @@ public class Flight {
 
     private Flight(Builder builder) {
         flightNumber = builder.flightNumber;
+        date = builder.date;
         departure = builder.departure;
         arrival = builder.arrival;
         durationInMinutes = builder.durationInMinutes;
@@ -28,6 +31,7 @@ public class Flight {
     public static class Builder {
 
         private transient String flightNumber;
+        private transient Date date;
         private transient Airport departure;
         private transient Airport arrival;
         private transient int durationInMinutes;
@@ -39,6 +43,10 @@ public class Flight {
 
         public Builder setFlightNumber(String flightNumber) {
             this.flightNumber = flightNumber;
+            return this;
+        }
+        public Builder setDate(Date date) {
+            this.date = date;
             return this;
         }
 
@@ -75,6 +83,14 @@ public class Flight {
         public Flight build() {
             return new Flight(this);
         }
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getFlightNumber() {
@@ -135,7 +151,7 @@ public class Flight {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("com.ra.course.ams.airline.manag.system.entity.flight.Flight{");
+        final StringBuffer sb = new StringBuffer("Flight{");
         sb.append("\"flightNumber\": \"").append(flightNumber).append('"');
         sb.append(", \"departure\":").append(departure);
         sb.append(", \"arrival\":").append(arrival);

@@ -5,10 +5,14 @@ import com.ra.course.ams.airline.manag.system.entity.person.Pilot;
 
 import java.sql.Time;
 import java.util.List;
+import java.util.Objects;
 
 public class FlightInstance {
 
+    private String id;
+    private Flight flight;
     private Time departureTime;
+    private Time arrivalTime;
     private String gate;
     private FlightStatus status;
     private List<FlightSeat> seats;
@@ -20,7 +24,10 @@ public class FlightInstance {
     }
 
     private FlightInstance(Builder builder) {
+        id = builder.id;
+        flight = builder.flight;
         departureTime = builder.departureTime;
+        arrivalTime = builder.arrivalTime;
         gate = builder.gate;
         status = builder.status;
         seats = builder.seats;
@@ -31,7 +38,10 @@ public class FlightInstance {
 
     public static class Builder {
 
+        private transient String id;
+        private transient Flight flight;
         private transient Time departureTime;
+        private transient Time arrivalTime;
         private transient String gate;
         private transient FlightStatus status;
         private transient List<FlightSeat> seats;
@@ -39,10 +49,25 @@ public class FlightInstance {
         private transient List<Crew> crews;
         private transient List<Pilot> pilots;
 
-        public Builder () {}
+        public Builder() {
+        }
+
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setFlight(Flight flight) {
+            this.flight = flight;
+            return this;
+        }
 
         public Builder setDepartureTime(Time departureTime) {
             this.departureTime = departureTime;
+            return this;
+        }
+        public Builder setArrivalTime(Time arrivalTime) {
+            this.arrivalTime = arrivalTime;
             return this;
         }
 
@@ -81,73 +106,113 @@ public class FlightInstance {
         }
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
+
     public Time getDepartureTime() {
         return departureTime;
     }
 
-    public FlightInstance setDepartureTime(Time departureTime) {
+    public void setDepartureTime(Time departureTime) {
         this.departureTime = departureTime;
-        return this;
     }
 
     public String getGate() {
         return gate;
     }
 
-    public FlightInstance setGate(String gate) {
+    public void setGate(String gate) {
         this.gate = gate;
-        return this;
     }
 
     public FlightStatus getStatus() {
         return status;
     }
 
-    public FlightInstance setStatus(FlightStatus status) {
+    public void setStatus(FlightStatus status) {
         this.status = status;
-        return this;
     }
 
     public List<FlightSeat> getSeats() {
         return seats;
     }
 
-    public FlightInstance setSeats(List<FlightSeat> seats) {
+    public void setSeats(List<FlightSeat> seats) {
         this.seats = seats;
-        return this;
     }
 
     public Aircraft getAircraft() {
         return aircraft;
     }
 
-    public FlightInstance setAircraft(Aircraft aircraft) {
+    public void setAircraft(Aircraft aircraft) {
         this.aircraft = aircraft;
-        return this;
     }
 
     public List<Crew> getCrews() {
         return crews;
     }
 
-    public FlightInstance setCrews(List<Crew> crews) {
+    public void setCrews(List<Crew> crews) {
         this.crews = crews;
-        return this;
     }
 
     public List<Pilot> getPilots() {
         return pilots;
     }
 
-    public FlightInstance setPilots(List<Pilot> pilots) {
+    public void setPilots(List<Pilot> pilots) {
         this.pilots = pilots;
-        return this;
+    }
+
+    public Time getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(Time arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FlightInstance that = (FlightInstance) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(flight, that.flight) &&
+                Objects.equals(departureTime, that.departureTime) &&
+                Objects.equals(gate, that.gate) &&
+                status == that.status &&
+                Objects.equals(seats, that.seats) &&
+                Objects.equals(aircraft, that.aircraft) &&
+                Objects.equals(crews, that.crews) &&
+                Objects.equals(pilots, that.pilots);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, flight, departureTime, gate, status, seats, aircraft, crews, pilots);
     }
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("com.ra.course.ams.airline.manag.system.entity.flight.FlightInstance{");
-        sb.append("\"departureTime\": \"").append(departureTime).append('"');
+        final StringBuffer sb = new StringBuffer("FlightInstance{");
+        sb.append("\"id\": \"").append(id).append('"');
+        sb.append(", \"flight\":").append(flight);
+        sb.append(", \"departureTime\": \"").append(departureTime).append('"');
         sb.append(", \"gate\": \"").append(gate).append('"');
         sb.append(", \"status\":").append(status);
         sb.append(", \"seats\":").append(seats);

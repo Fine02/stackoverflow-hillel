@@ -4,7 +4,8 @@ public class CheckTransaction extends Payment {
     private String bankName;
     private String checkNumber;
 
-    public CheckTransaction(String bankName, String checkNumber) {
+    public CheckTransaction(int paimentId, double amound, PaymentStatus staus, String bankName, String checkNumber) {
+        super(paimentId, amound, staus);
         this.bankName = bankName;
         this.checkNumber = checkNumber;
     }
