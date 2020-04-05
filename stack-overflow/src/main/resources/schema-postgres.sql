@@ -2,7 +2,7 @@ BEGIN;
 
 DROP TABLE IF EXISTS notification, tag, account, bounty, question, answer, comment, photo, notification,
     tag_question, member_notification, member_badge_question, member_voted_question, member_voted_answer,
-    member_voted_comment;
+    member_voted_comment, question_member_question_closing_remark;
 
 DROP TYPE IF EXISTS account_status_type, question_closing_remark_type, question_status_type, badge_type;
 
@@ -19,7 +19,7 @@ CREATE TYPE  question_closing_remark_type AS ENUM ('duplicate',
                                                     'not_constructive',
                                                     'not_real_question',
                                                     'primarly_opinion_based',
-                                                    'advertasing',
+                                                    'advertising',
                                                     'abuse',
                                                     'spam',
                                                     'not_marked_for_closing');
@@ -104,7 +104,9 @@ CREATE TABLE  answer  (
                                   REFERENCES  account  ( id ),
                           CONSTRAINT  fk_answer_question_id
                               FOREIGN KEY ( question_id )
-                                  REFERENCES  question  ( id ));
+                                  REFERENCES  question  ( id )
+                                  ON DELETE CASCADE
+                                  ON UPDATE CASCADE);
 
 CREATE TABLE  comment  (
                            id  BIGSERIAL PRIMARY KEY,
@@ -244,5 +246,23 @@ CREATE TABLE member_voted_comment (
                                               REFERENCES comment (id)
                                               ON DELETE CASCADE
                                               ON UPDATE CASCADE);
+
+CREATE TABLE question_member_question_closing_remark (
+                                                         question_id BIGINT NOT NULL,
+                                                         account_id BIGINT NOT NULL,
+                                                         closing_remark question_closing_remark_type,
+                                                         marked_for_closing BOOLEAN NOT NULL,
+                                                         marked_for_deleting BOOLEAN NOT NULL,
+                                                         PRIMARY KEY (question_id, account_id, closing_remark),
+                                                         CONSTRAINT fk_question_id
+                                                             FOREIGN KEY (question_id)
+                                                                 REFERENCES question(id)
+                                                                 ON DELETE CASCADE
+                                                                 ON UPDATE CASCADE,
+                                                         CONSTRAINT fk_account_id
+                                                             FOREIGN KEY (account_id)
+                                                                 REFERENCES account(id)
+                                                                 ON DELETE CASCADE
+                                                                 ON UPDATE CASCADE);
 
 COMMIT;

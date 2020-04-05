@@ -52,3 +52,16 @@ INSERT INTO member_badge_question (account_id, badge, question_id) VALUES (3, 's
 INSERT INTO member_voted_question (account_id, question_id, upvoted) VALUES (1, 1, true);
 INSERT INTO member_voted_question (account_id, question_id, upvoted) VALUES (2, 2, false);
 INSERT INTO member_voted_question (account_id, question_id, upvoted) VALUES (3, 3, null);
+
+INSERT INTO question_member_question_closing_remark (question_id, account_id, closing_remark, marked_for_closing, marked_for_deleting)
+VALUES (1, 1, 'offtopic', true, false);
+INSERT INTO question_member_question_closing_remark (question_id, account_id, closing_remark, marked_for_closing, marked_for_deleting)
+VALUES (1, 2, 'not_constructive', true, false);
+INSERT INTO question_member_question_closing_remark (question_id, account_id, closing_remark, marked_for_closing, marked_for_deleting)
+VALUES (1, 3, 'advertising', false, true);
+INSERT INTO question_member_question_closing_remark (question_id, account_id, closing_remark, marked_for_closing, marked_for_deleting)
+VALUES (2, 1, 'too_broad', true, true);
+INSERT INTO question_member_question_closing_remark (question_id, account_id, closing_remark, marked_for_closing, marked_for_deleting)
+VALUES (2, 1, 'offtopic', true, false);
+INSERT INTO question_member_question_closing_remark (question_id, account_id, closing_remark, marked_for_closing, marked_for_deleting)
+VALUES (3, 3, 'duplicate', true, true);
