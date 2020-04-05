@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = {StackOverflowApplication.class, RepositoryTestConfiguration.class})
 @ActiveProfiles("test")
-@Sql({"classpath:schema-h2.sql", "classpath:data.sql"})
+@Sql({"classpath:schema.sql", "classpath:data.sql"})
 public class CommentRepositoryIntegrationTest {
     @Autowired
     private CommentRepository data;
