@@ -30,7 +30,7 @@ import java.util.List;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TagTable extends TableImpl<TagRecord> {
 
-    private static final long serialVersionUID = -1412543659;
+    private static final long serialVersionUID = -1963728011;
 
     /**
      * The reference instance of <code>public.tag</code>
@@ -86,7 +86,7 @@ public class TagTable extends TableImpl<TagRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.TAG_PKEY);
+        return Arrays.<Index>asList(Indexes.AK_TAG_NAME, Indexes.TAG_PKEY);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class TagTable extends TableImpl<TagRecord> {
 
     @Override
     public List<UniqueKey<TagRecord>> getKeys() {
-        return Arrays.<UniqueKey<TagRecord>>asList(Keys.TAG_PKEY);
+        return Arrays.<UniqueKey<TagRecord>>asList(Keys.TAG_PKEY, Keys.AK_TAG_NAME);
     }
 
     // -------------------------------------------------------------------------

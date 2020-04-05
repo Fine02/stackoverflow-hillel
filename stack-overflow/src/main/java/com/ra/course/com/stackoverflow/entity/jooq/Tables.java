@@ -35,7 +35,7 @@ public class Tables {
     /**
      * The table <code>public.bounty</code>.
      */
-    public static final BountyTable BOUNTY_TABLE = BountyTable.BOUNTY_TABLE;
+    public static final BountyTable BOUNTY = BountyTable.BOUNTY_TABLE;
 
     /**
      * The table <code>public.comment</code>.
@@ -43,9 +43,29 @@ public class Tables {
     public static final CommentTable COMMENT_TABLE = CommentTable.COMMENT_TABLE;
 
     /**
-     * The table <code>public.member</code>.
+     * The table <code>public.member_badge_question</code>.
      */
-    public static final MemberTable MEMBER_TABLE = MemberTable.MEMBER_TABLE;
+    public static final MemberBadgeQuestionTable MEMBER_BADGE_QUESTION = MemberBadgeQuestionTable.MEMBER_BADGE_QUESTION_TABLE;
+
+    /**
+     * The table <code>public.member_notification</code>.
+     */
+    public static final MemberNotificationTable MEMBER_NOTIFICATION = MemberNotificationTable.MEMBER_NOTIFICATION_TABLE;
+
+    /**
+     * The table <code>public.member_voted_answer</code>.
+     */
+    public static final MemberVotedAnswerTable MEMBER_VOTED_ANSWER = MemberVotedAnswerTable.MEMBER_VOTED_ANSWER_TABLE;
+
+    /**
+     * The table <code>public.member_voted_comment</code>.
+     */
+    public static final MemberVotedCommentTable MEMBER_VOTED_COMMENT = MemberVotedCommentTable.MEMBER_VOTED_COMMENT_TABLE;
+
+    /**
+     * The table <code>public.member_voted_question</code>.
+     */
+    public static final MemberVotedQuestionTable MEMBER_VOTED_QUESTION = MemberVotedQuestionTable.MEMBER_VOTED_QUESTION_TABLE;
 
     /**
      * The table <code>public.notification</code>.
@@ -63,6 +83,11 @@ public class Tables {
     public static final QuestionTable QUESTION_TABLE = QuestionTable.QUESTION_TABLE;
 
     /**
+     * The table <code>public.question_member_question_closing_remark</code>.
+     */
+    public static final QuestionMemberQuestionClosingRemarkTable QUESTION_MEMBER_QUESTION_CLOSING_REMARK = QuestionMemberQuestionClosingRemarkTable.QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE;
+
+    /**
      * The table <code>public.tag</code>.
      */
     public static final TagTable TAG_TABLE = TagTable.TAG_TABLE;
@@ -70,5 +95,5 @@ public class Tables {
     /**
      * The table <code>public.tag_question</code>.
      */
-    public static final TagQuestionTable TAG_QUESTION_TABLE = TagQuestionTable.TAG_QUESTION_TABLE;
+    public static final TagQuestionTable TAG_QUESTION = TagQuestionTable.TAG_QUESTION_TABLE;
 }

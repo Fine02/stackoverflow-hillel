@@ -31,7 +31,7 @@ VALUES('Another comment text', '2020-03-19 14:55:14', 2,1, 2);
 INSERT INTO  comment (comment_text, creation_date, vote_count, author_id, answer_id)
 VALUES('Just comment text', '2020-03-15 10:30:22', 5,1, 3);
 
-INSERT INTO  photo (photo_path, creation_date, comment_id)
+INSERT INTO  photo (photo_path, creation_date, answer_id)
 VALUES('/image/1/photo123.jpg', '2019-12-01 00:21:37', 1);
 INSERT INTO  photo (photo_path, creation_date, answer_id)
 VALUES('/image/2/photo456.jpg', '2020-01-19 22:32:01', 2);
