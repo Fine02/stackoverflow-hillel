@@ -1,5 +1,8 @@
-BEGIN TRANSACTION;
-DROP TABLE IF EXISTS notification, tag, account, member, bounty, question, answer, comment, photo, tag_question;
+BEGIN;
+
+DROP TABLE IF EXISTS notification, tag, account, bounty, question, answer, comment, photo, notification,
+    tag_question, member_notification, member_badge_question, member_voted_question, member_voted_answer,
+    member_voted_comment, question_member_question_closing_remark;
 
 DROP TYPE IF EXISTS account_status_type, question_closing_remark_type, question_status_type, badge_type;
 
@@ -16,7 +19,7 @@ CREATE TYPE  question_closing_remark_type AS ENUM ('duplicate',
                                                     'not_constructive',
                                                     'not_real_question',
                                                     'primarly_opinion_based',
-                                                    'advertasing',
+                                                    'advertising',
                                                     'abuse',
                                                     'spam',
                                                     'not_marked_for_closing');
@@ -45,8 +48,9 @@ CREATE TABLE notification (
 CREATE TABLE  tag  (
                        id  BIGSERIAL PRIMARY KEY,
                        name  VARCHAR(128) NOT NULL,
-                       description  VARCHAR(255) NULL
-);
+                       description  VARCHAR(255) NULL,
+                       CONSTRAINT ak_name_description
+                           UNIQUE (name, description));
 
 CREATE TABLE  account  (
                            id  BIGSERIAL PRIMARY KEY,
@@ -54,16 +58,9 @@ CREATE TABLE  account  (
                            name  VARCHAR(45) NOT NULL,
                            email  VARCHAR(45) NOT NULL,
                            reputation  INT NULL,
-                           account_status  account_status_type);
-
-CREATE TABLE  member  (
-                          id  BIGSERIAL PRIMARY KEY,
-                          account_id  BIGINT NOT NULL,
-                          CONSTRAINT  fk_account_id
-                              FOREIGN KEY ( id )
-                                  REFERENCES  account  ( id )
-                                  ON DELETE CASCADE
-                                  ON UPDATE CASCADE);
+                           account_status  account_status_type,
+                           CONSTRAINT ak_email
+                               UNIQUE (email));
 
 CREATE TABLE  bounty  (
                           id  BIGSERIAL PRIMARY KEY,
@@ -71,10 +68,8 @@ CREATE TABLE  bounty  (
                           expiry  TIMESTAMP NOT NULL,
                           creator_id  BIGINT NOT NULL,
                           CONSTRAINT  fk_creator_id
-                              FOREIGN KEY ( id )
-                                  REFERENCES  member  ( id )
-                                  ON DELETE NO ACTION
-                                  ON UPDATE NO ACTION);
+                              FOREIGN KEY ( creator_id )
+                                  REFERENCES  account  ( id ));
 
 CREATE TABLE  question  (
                             id  BIGSERIAL PRIMARY KEY,
@@ -90,14 +85,10 @@ CREATE TABLE  question  (
                             bounty_id  BIGINT NULL,
                             CONSTRAINT  fk_author_id
                                 FOREIGN KEY ( author_id )
-                                    REFERENCES  member  ( id )
-                                    ON DELETE NO ACTION
-                                    ON UPDATE NO ACTION,
+                                    REFERENCES  account  ( id ),
                             CONSTRAINT  fk_bounty_id
                                 FOREIGN KEY ( bounty_id )
-                                    REFERENCES  bounty  ( id )
-                                    ON DELETE NO ACTION
-                                    ON UPDATE NO ACTION);
+                                    REFERENCES  bounty  (id));
 
 CREATE TABLE  answer  (
                           id  BIGSERIAL PRIMARY KEY,
@@ -110,14 +101,12 @@ CREATE TABLE  answer  (
                           question_id  BIGINT NOT NULL,
                           CONSTRAINT  fk_answer_author_id
                               FOREIGN KEY ( author_id )
-                                  REFERENCES  member  ( id )
-                                  ON DELETE NO ACTION
-                                  ON UPDATE NO ACTION,
+                                  REFERENCES  account  ( id ),
                           CONSTRAINT  fk_answer_question_id
                               FOREIGN KEY ( question_id )
                                   REFERENCES  question  ( id )
-                                  ON DELETE NO ACTION
-                                  ON UPDATE NO ACTION);
+                                  ON DELETE CASCADE
+                                  ON UPDATE CASCADE);
 
 CREATE TABLE  comment  (
                            id  BIGSERIAL PRIMARY KEY,
@@ -129,19 +118,17 @@ CREATE TABLE  comment  (
                            question_id  BIGINT NULL,
                            CONSTRAINT  fk_comment_author_id
                                FOREIGN KEY ( author_id )
-                                   REFERENCES  member  ( id )
-                                   ON DELETE NO ACTION
-                                   ON UPDATE NO ACTION,
+                                   REFERENCES  account  ( id ),
                            CONSTRAINT  fk_comment_answer_id
                                FOREIGN KEY ( answer_id )
                                    REFERENCES  answer  ( id )
-                                   ON DELETE NO ACTION
-                                   ON UPDATE NO ACTION,
+                                   ON DELETE CASCADE
+                                   ON UPDATE CASCADE,
                            CONSTRAINT  fk_comment_question_id
                                FOREIGN KEY ( question_id )
                                    REFERENCES  question  ( id )
-                                   ON DELETE NO ACTION
-                                   ON UPDATE NO ACTION);
+                                   ON DELETE CASCADE
+                                   ON UPDATE CASCADE);
 
 CREATE TABLE  photo  (
                          id  BIGSERIAL PRIMARY KEY,
@@ -153,30 +140,129 @@ CREATE TABLE  photo  (
                          CONSTRAINT  fk_photo_question_id
                              FOREIGN KEY ( question_id )
                                  REFERENCES  question  ( id )
-                                 ON DELETE NO ACTION
-                                 ON UPDATE NO ACTION,
+                                 ON DELETE CASCADE
+                                 ON UPDATE CASCADE,
                          CONSTRAINT  fk_photo_answer_id
                              FOREIGN KEY ( answer_id )
                                  REFERENCES  answer  ( id )
-                                 ON DELETE NO ACTION
-                                 ON UPDATE NO ACTION,
+                                 ON DELETE CASCADE
+                                 ON UPDATE CASCADE,
                          CONSTRAINT  fk_photo_comment_id
                              FOREIGN KEY ( comment_id )
                                  REFERENCES  comment  ( id )
-                                 ON DELETE NO ACTION
-                                 ON UPDATE NO ACTION);
+                                 ON DELETE CASCADE
+                                 ON UPDATE CASCADE);
 
 CREATE TABLE  tag_question  (
                                 tag_id  BIGINT NOT NULL,
                                 question_id  BIGINT NOT NULL,
+                                PRIMARY KEY (tag_id, question_id),
                                 CONSTRAINT  fk_tag_question_tag_id
                                     FOREIGN KEY ( tag_id )
                                         REFERENCES  tag  ( id )
-                                        ON DELETE NO ACTION
-                                        ON UPDATE NO ACTION,
+                                        ON DELETE CASCADE
+                                        ON UPDATE CASCADE,
                                 CONSTRAINT  fk_tag_question_question_id
                                     FOREIGN KEY ( question_id )
                                         REFERENCES  question  ( id )
-                                        ON DELETE NO ACTION
-                                        ON UPDATE NO ACTION);
-COMMIT TRANSACTION;
+                                        ON DELETE CASCADE
+                                        ON UPDATE CASCADE);
+
+CREATE TABLE member_notification (
+                                     account_id BIGINT NOT NULL,
+                                     notification_id BIGINT NOT NULL,
+                                     PRIMARY KEY (account_id, notification_id),
+                                     CONSTRAINT fk_account_id
+                                         FOREIGN KEY (account_id)
+                                             REFERENCES account (id)
+                                             ON DELETE CASCADE
+                                             ON UPDATE CASCADE,
+                                     CONSTRAINT fk_notification_id
+                                         FOREIGN KEY (notification_id)
+                                             REFERENCES notification (id)
+                                             ON DELETE CASCADE
+                                             ON UPDATE CASCADE);
+
+CREATE TABLE member_badge_question (
+                                       account_id BIGINT NOT NULL,
+                                       badge badge_type,
+                                       question_id BIGINT NOT NULL,
+                                       PRIMARY KEY (account_id, badge, question_id),
+                                       CONSTRAINT fk_account_id
+                                           FOREIGN KEY (account_id)
+                                               REFERENCES account (id)
+                                               ON DELETE CASCADE
+                                               ON UPDATE CASCADE,
+                                       CONSTRAINT fk_question_id
+                                           FOREIGN KEY (question_id)
+                                               REFERENCES question (id)
+                                               ON DELETE CASCADE
+                                               ON UPDATE CASCADE);
+
+CREATE TABLE member_voted_question (
+                                       account_id BIGINT NOT NULL,
+                                       question_id BIGINT NOT NULL,
+                                       upvoted BOOLEAN NULL,
+                                       PRIMARY KEY (account_id, question_id),
+                                       CONSTRAINT fk_account_id
+                                           FOREIGN KEY (account_id)
+                                               REFERENCES account (id)
+                                               ON DELETE CASCADE
+                                               ON UPDATE CASCADE,
+                                       CONSTRAINT fk_question_id
+                                           FOREIGN KEY (question_id)
+                                               REFERENCES question (id)
+                                               ON DELETE CASCADE
+                                               ON UPDATE CASCADE);
+
+CREATE TABLE member_voted_answer (
+                                     account_id BIGINT NOT NULL,
+                                     answer_id BIGINT NOT NULL,
+                                     upvoted BOOLEAN NULL,
+                                     PRIMARY KEY (account_id, answer_id),
+                                     CONSTRAINT fk_account_id
+                                         FOREIGN KEY (account_id)
+                                             REFERENCES account (id)
+                                             ON DELETE CASCADE
+                                             ON UPDATE CASCADE,
+                                     CONSTRAINT fk_answer_id
+                                         FOREIGN KEY (answer_id)
+                                             REFERENCES answer (id)
+                                             ON DELETE CASCADE
+                                             ON UPDATE CASCADE);
+
+CREATE TABLE member_voted_comment (
+                                      account_id BIGINT NOT NULL,
+                                      comment_id BIGINT NOT NULL,
+                                      upvoted BOOLEAN NULL,
+                                      PRIMARY KEY (account_id, comment_id),
+                                      CONSTRAINT fk_account_id
+                                          FOREIGN KEY (account_id)
+                                              REFERENCES account (id)
+                                              ON DELETE CASCADE
+                                              ON UPDATE CASCADE,
+                                      CONSTRAINT fk_comment_id
+                                          FOREIGN KEY (comment_id)
+                                              REFERENCES comment (id)
+                                              ON DELETE CASCADE
+                                              ON UPDATE CASCADE);
+
+CREATE TABLE question_member_question_closing_remark (
+                                                         question_id BIGINT NOT NULL,
+                                                         account_id BIGINT NOT NULL,
+                                                         closing_remark question_closing_remark_type,
+                                                         marked_for_closing BOOLEAN NOT NULL,
+                                                         marked_for_deleting BOOLEAN NOT NULL,
+                                                         PRIMARY KEY (question_id, account_id, closing_remark),
+                                                         CONSTRAINT fk_question_id
+                                                             FOREIGN KEY (question_id)
+                                                                 REFERENCES question(id)
+                                                                 ON DELETE CASCADE
+                                                                 ON UPDATE CASCADE,
+                                                         CONSTRAINT fk_account_id
+                                                             FOREIGN KEY (account_id)
+                                                                 REFERENCES account(id)
+                                                                 ON DELETE CASCADE
+                                                                 ON UPDATE CASCADE);
+
+COMMIT;
