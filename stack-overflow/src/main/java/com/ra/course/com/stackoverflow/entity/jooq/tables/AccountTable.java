@@ -31,7 +31,7 @@ import java.util.List;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class AccountTable extends TableImpl<AccountRecord> {
 
-    private static final long serialVersionUID = 189946271;
+    private static final long serialVersionUID = -399927949;
 
     /**
      * The reference instance of <code>public.account</code>
@@ -102,7 +102,7 @@ public class AccountTable extends TableImpl<AccountRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.ACCOUNT_PKEY);
+        return Arrays.<Index>asList(Indexes.ACCOUNT_PKEY, Indexes.AK_ACCOUNT_EMAIL);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class AccountTable extends TableImpl<AccountRecord> {
 
     @Override
     public List<UniqueKey<AccountRecord>> getKeys() {
-        return Arrays.<UniqueKey<AccountRecord>>asList(Keys.ACCOUNT_PKEY);
+        return Arrays.<UniqueKey<AccountRecord>>asList(Keys.ACCOUNT_PKEY, Keys.AK_ACCOUNT_EMAIL);
     }
 
     // -------------------------------------------------------------------------

@@ -31,7 +31,7 @@ import java.util.List;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CommentTable extends TableImpl<CommentRecord> {
 
-    private static final long serialVersionUID = -848921318;
+    private static final long serialVersionUID = 1056413735;
 
     /**
      * The reference instance of <code>public.comment</code>
@@ -130,8 +130,8 @@ public class CommentTable extends TableImpl<CommentRecord> {
         return Arrays.<ForeignKey<CommentRecord, ?>>asList(Keys.COMMENT__FK_COMMENT_AUTHOR_ID, Keys.COMMENT__FK_COMMENT_ANSWER_ID, Keys.COMMENT__FK_COMMENT_QUESTION_ID);
     }
 
-    public MemberTable member() {
-        return new MemberTable(this, Keys.COMMENT__FK_COMMENT_AUTHOR_ID);
+    public AccountTable account() {
+        return new AccountTable(this, Keys.COMMENT__FK_COMMENT_AUTHOR_ID);
     }
 
     public AnswerTable answer() {

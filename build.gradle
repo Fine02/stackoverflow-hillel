@@ -85,7 +85,7 @@ project(':stack-overflow-integration-test') {
             bootJar.enabled = false
             jar.enabled = true
         }
-        testCompile db.h2
+        testCompile 'com.h2database:h2:1.4.200'
     }
     bootJar {
         enabled = false
