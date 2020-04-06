@@ -33,7 +33,7 @@ import java.util.List;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class QuestionTable extends TableImpl<QuestionRecord> {
 
-    private static final long serialVersionUID = -1153782407;
+    private static final long serialVersionUID = -63360502;
 
     /**
      * The reference instance of <code>public.question</code>
@@ -66,12 +66,12 @@ public class QuestionTable extends TableImpl<QuestionRecord> {
     /**
      * The column <code>public.question.view_count</code>.
      */
-    public static final TableField<QuestionRecord, Integer> VIEW_COUNT = createField(DSL.name("view_count"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), QUESTION_TABLE, "");
+    public static final TableField<QuestionRecord, Integer> VIEW_COUNT = createField(DSL.name("view_count"), org.jooq.impl.SQLDataType.INTEGER, QUESTION_TABLE, "");
 
     /**
      * The column <code>public.question.vote_count</code>.
      */
-    public static final TableField<QuestionRecord, Integer> VOTE_COUNT = createField(DSL.name("vote_count"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), QUESTION_TABLE, "");
+    public static final TableField<QuestionRecord, Integer> VOTE_COUNT = createField(DSL.name("vote_count"), org.jooq.impl.SQLDataType.INTEGER, QUESTION_TABLE, "");
 
     /**
      * The column <code>public.question.creation_time</code>.
@@ -152,8 +152,8 @@ public class QuestionTable extends TableImpl<QuestionRecord> {
         return Arrays.<ForeignKey<QuestionRecord, ?>>asList(Keys.QUESTION__FK_AUTHOR_ID, Keys.QUESTION__FK_BOUNTY_ID);
     }
 
-    public MemberTable member() {
-        return new MemberTable(this, Keys.QUESTION__FK_AUTHOR_ID);
+    public AccountTable account() {
+        return new AccountTable(this, Keys.QUESTION__FK_AUTHOR_ID);
     }
 
     public BountyTable bounty() {

@@ -31,7 +31,7 @@ import java.util.List;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class AnswerTable extends TableImpl<AnswerRecord> {
 
-    private static final long serialVersionUID = 483536241;
+    private static final long serialVersionUID = -124177582;
 
     /**
      * The reference instance of <code>public.answer</code>
@@ -64,12 +64,12 @@ public class AnswerTable extends TableImpl<AnswerRecord> {
     /**
      * The column <code>public.answer.vote_count</code>.
      */
-    public static final TableField<AnswerRecord, Integer> VOTE_COUNT = createField(DSL.name("vote_count"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), ANSWER_TABLE, "");
+    public static final TableField<AnswerRecord, Integer> VOTE_COUNT = createField(DSL.name("vote_count"), org.jooq.impl.SQLDataType.INTEGER, ANSWER_TABLE, "");
 
     /**
      * The column <code>public.answer.flag_count</code>.
      */
-    public static final TableField<AnswerRecord, Integer> FLAG_COUNT = createField(DSL.name("flag_count"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), ANSWER_TABLE, "");
+    public static final TableField<AnswerRecord, Integer> FLAG_COUNT = createField(DSL.name("flag_count"), org.jooq.impl.SQLDataType.INTEGER, ANSWER_TABLE, "");
 
     /**
      * The column <code>public.answer.creation_date</code>.
@@ -135,8 +135,8 @@ public class AnswerTable extends TableImpl<AnswerRecord> {
         return Arrays.<ForeignKey<AnswerRecord, ?>>asList(Keys.ANSWER__FK_ANSWER_AUTHOR_ID, Keys.ANSWER__FK_ANSWER_QUESTION_ID);
     }
 
-    public MemberTable member() {
-        return new MemberTable(this, Keys.ANSWER__FK_ANSWER_AUTHOR_ID);
+    public AccountTable account() {
+        return new AccountTable(this, Keys.ANSWER__FK_ANSWER_AUTHOR_ID);
     }
 
     public QuestionTable question() {

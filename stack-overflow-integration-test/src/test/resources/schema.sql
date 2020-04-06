@@ -270,7 +270,7 @@ CREATE TABLE question_member_question_closing_remark
         'not_constructive',
         'not_real_question',
         'primarly_opinion_based',
-        'advertasing',
+        'advertising',
         'abuse',
         'spam',
         'not_marked_for_closing'),
