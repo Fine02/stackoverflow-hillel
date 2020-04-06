@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
-@SpringBootTest
+@SpringBootTest (classes = AwsOnlineShoppingApplication.class)
 public class SpringBootContextTest {
     @Autowired
     private ApplicationContext context;

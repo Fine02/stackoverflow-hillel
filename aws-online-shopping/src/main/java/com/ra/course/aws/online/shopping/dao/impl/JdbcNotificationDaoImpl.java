@@ -20,10 +20,8 @@ public class JdbcNotificationDaoImpl implements NotificationDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
     @Override
     public SMSNotification createSMSNotification(SMSNotification smsNotification) {
-//        jdbcTemplate.queryForObject()
         return null;
     }
 

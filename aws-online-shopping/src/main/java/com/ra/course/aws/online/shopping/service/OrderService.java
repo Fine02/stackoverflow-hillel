@@ -3,8 +3,10 @@ package com.ra.course.aws.online.shopping.service;
 import com.ra.course.aws.online.shopping.entity.order.Order;
 import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import com.ra.course.aws.online.shopping.entity.user.Member;
-import java.util.List;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+@Repository
 public interface OrderService {
     Order cancelOrder(Order order, Member member);
 

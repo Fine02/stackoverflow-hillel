@@ -1,6 +1,7 @@
 package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.entity.product.Product;
+import org.springframework.stereotype.Repository;
 
 public interface ProductService {
 

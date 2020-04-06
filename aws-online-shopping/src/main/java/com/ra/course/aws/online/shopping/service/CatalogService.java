@@ -2,6 +2,7 @@ package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.entity.product.Product;
 import com.ra.course.aws.online.shopping.entity.product.ProductCategory;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

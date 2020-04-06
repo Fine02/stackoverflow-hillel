@@ -2,11 +2,9 @@ package com.ra.course.aws.online.shopping.dao.impl;
 
 import com.ra.course.aws.online.shopping.dao.ShippingDao;
 import com.ra.course.aws.online.shopping.entity.Address;
-import com.ra.course.aws.online.shopping.entity.order.Order;
 import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import com.ra.course.aws.online.shopping.entity.shipment.Shipment;
 import com.ra.course.aws.online.shopping.entity.shipment.ShipmentLog;
-import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

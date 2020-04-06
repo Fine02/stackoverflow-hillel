@@ -36,7 +36,6 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
 
     @Override
     public void update(ElectronicBankTransaction bankTransaction) {
-
     }
 
     @Override

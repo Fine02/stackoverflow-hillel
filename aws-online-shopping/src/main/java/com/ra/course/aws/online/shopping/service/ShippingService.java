@@ -4,6 +4,7 @@ import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.shipment.Shipment;
 import com.ra.course.aws.online.shopping.entity.shipment.ShipmentLog;
 import com.ra.course.aws.online.shopping.entity.user.Member;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
