@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 public class Comment {
 
-    private long id;
+    private Long id;
 
     @NonNull
     private String text;

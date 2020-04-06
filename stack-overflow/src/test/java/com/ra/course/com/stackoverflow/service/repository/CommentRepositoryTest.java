@@ -42,7 +42,7 @@ public class CommentRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        comment = Comment.builder().id(1).text("Some comment text").creationDate(LocalDateTime.MIN).voteCount(3).authorId(1L).answerId(1L).questionId(1L).build();
+        comment = Comment.builder().id(1L).text("Some comment text").creationDate(LocalDateTime.MIN).voteCount(3).authorId(1L).answerId(1L).questionId(1L).build();
         expectedList = new ArrayList<>();
     }
 
@@ -62,18 +62,18 @@ public class CommentRepositoryTest {
     @Test
     public void whenFindCommentByIdThenReturnOptionalOfComment() {
         var expectedOptional = Optional.of(comment);
-        assertEquals(expectedOptional, data.findById(1));
+        assertEquals(expectedOptional, data.findById(1L));
     }
 
     @Test
     public void whenFindCommentByIdAndNoSuchCommentThenReturnOptionalEmpty() {
-        assertEquals(Optional.empty(), data.findById(555));
+        assertEquals(Optional.empty(), data.findById(555L));
     }
 
     @Test
     public void whenCommentDelete() {
         data.delete(comment);
-        assertEquals(Optional.empty(), data.findById(555));
+        assertEquals(Optional.empty(), data.findById(555L));
     }
 
     @Test
@@ -81,24 +81,24 @@ public class CommentRepositoryTest {
         comment.setVoteCount(123);
         comment.setText("new text");
         data.update(comment);
-        comment.setId(777);
-        assertEquals(comment, data.findById(777).get());
+        comment.setId(777L);
+        assertEquals(comment, data.findById(777L).get());
     }
     @Test
     public void whenFindByAnyIdThenReturnListWithComment(){
-        var comment2 = Comment.builder().id(777).text("new text").creationDate(LocalDateTime.MIN).voteCount(123).authorId(1L).answerId(1L).questionId(1L).build();
+        var comment2 = Comment.builder().id(777L).text("new text").creationDate(LocalDateTime.MIN).voteCount(123).authorId(1L).answerId(1L).questionId(1L).build();
         expectedList.add(comment);
         expectedList.add(comment2);
-        assertEquals(expectedList, data.findByQuestionId(888));
-        assertEquals(expectedList, data.findByMemberId(888));
-        assertEquals(expectedList, data.findByMemberId(888));
+        assertEquals(expectedList, data.findByQuestionId(888L));
+        assertEquals(expectedList, data.findByMemberId(888L));
+        assertEquals(expectedList, data.findByMemberId(888L));
     }
     @Test
     public void whenFindBySomeIdButThereIsNotInDbThenReturnEmptyList(){
         assertThat(expectedList)
-                .isEqualTo(data.findByAnswerId(666))
-                .isEqualTo(data.findByQuestionId(666))
-                .isEqualTo(data.findByMemberId(666));
+                .isEqualTo(data.findByAnswerId(666L))
+                .isEqualTo(data.findByQuestionId(666L))
+                .isEqualTo(data.findByMemberId(666L));
     }
 }
 

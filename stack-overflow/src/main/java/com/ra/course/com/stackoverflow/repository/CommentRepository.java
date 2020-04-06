@@ -11,7 +11,7 @@ public interface CommentRepository {
 
     long getNextId();
 
-    Optional<Comment> findById(long id);
+    Optional<Comment> findById(Long id);
 
     void delete(Comment comment);
 
@@ -19,9 +19,9 @@ public interface CommentRepository {
 
     List<Comment> findAll();
 
-    List<Comment> findByMemberId(long id);
+    List<Comment> findByMemberId(Long id);
 
-    List<Comment> findByQuestionId(long id);
+    List<Comment> findByQuestionId(Long id);
 
-    List<Comment> findByAnswerId(long id);
+    List<Comment> findByAnswerId(Long id);
 }

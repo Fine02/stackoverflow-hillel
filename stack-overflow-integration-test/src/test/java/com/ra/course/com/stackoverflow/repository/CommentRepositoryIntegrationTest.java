@@ -27,13 +27,13 @@ public class CommentRepositoryIntegrationTest {
     private CommentRepository data;
     private Comment comment;
     private List<Comment> expectedList;
-    private final long ID = 1;
+    private final Long ID = 1L;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @BeforeEach
     void setUp() {
         expectedList = new ArrayList<>();
-        comment = Comment.builder().id(1).text("Some comment text").creationDate(LocalDateTime.parse("2020-03-19 13:32:37", formatter )).voteCount(3).authorId(3L).questionId(1L).build();
+        comment = Comment.builder().id(ID).text("Some comment text").creationDate(LocalDateTime.parse("2020-03-19 13:32:37", formatter )).voteCount(3).authorId(3L).questionId(1L).build();
     }
 
     @Test
@@ -59,7 +59,8 @@ public class CommentRepositoryIntegrationTest {
     }
     @Test
     public void whenFindCommentByIdAndNoSuchCommentThenReturnOptionalEmpty(){
-        assertEquals(Optional.empty(), data.findById(12635));
+        assertEquals(Optional.empty(), data.findById(12635L));
+        assertEquals(Optional.empty(), data.findById(null));
     }
     @Test
     public void whenUpdateCommentThenCheckCommentInDb(){
@@ -71,32 +72,32 @@ public class CommentRepositoryIntegrationTest {
     @Test
     public void whenFindAllThenReturnListWithAllComments(){
         expectedList.add(comment);
-        expectedList.add(Comment.builder().id(2).text("Another comment text").creationDate(LocalDateTime.parse("2020-03-19 14:55:14", formatter )).voteCount(2).authorId(1L).answerId(2L).build());
-        expectedList.add(Comment.builder().id(3).text("Just comment text").creationDate(LocalDateTime.parse("2020-03-15 10:30:22", formatter )).voteCount(5).authorId(1L).answerId(3L).build());
+        expectedList.add(Comment.builder().id(2L).text("Another comment text").creationDate(LocalDateTime.parse("2020-03-19 14:55:14", formatter )).voteCount(2).authorId(1L).answerId(2L).build());
+        expectedList.add(Comment.builder().id(3L).text("Just comment text").creationDate(LocalDateTime.parse("2020-03-15 10:30:22", formatter )).voteCount(5).authorId(1L).answerId(3L).build());
         assertEquals(expectedList, data.findAll());
     }
     @Test
     public void whenFindByAuthorIdThenReturnListWithComments(){
-        expectedList.add(Comment.builder().id(2).text("Another comment text").creationDate(LocalDateTime.parse("2020-03-19 14:55:14", formatter )).voteCount(2).authorId(1L).answerId(2L).build());
-        expectedList.add(Comment.builder().id(3).text("Just comment text").creationDate(LocalDateTime.parse("2020-03-15 10:30:22", formatter )).voteCount(5).authorId(1L).answerId(3L).build());
-        assertEquals(expectedList, data.findByMemberId(1));
+        expectedList.add(Comment.builder().id(2L).text("Another comment text").creationDate(LocalDateTime.parse("2020-03-19 14:55:14", formatter )).voteCount(2).authorId(1L).answerId(2L).build());
+        expectedList.add(Comment.builder().id(3L).text("Just comment text").creationDate(LocalDateTime.parse("2020-03-15 10:30:22", formatter )).voteCount(5).authorId(1L).answerId(3L).build());
+        assertEquals(expectedList, data.findByMemberId(1L));
     }
     @Test
     public void whenFindByQuestionIdThenReturnListWithComment(){
         expectedList.add(comment);
-        assertEquals(expectedList, data.findByQuestionId(1));
+        assertEquals(expectedList, data.findByQuestionId(1L));
     }
     @Test
     public void whenFindByAnswerIdThenReturnListWithComments(){
-        expectedList.add(Comment.builder().id(2).text("Another comment text").creationDate(LocalDateTime.parse("2020-03-19 14:55:14", formatter )).voteCount(2).authorId(1L).answerId(2L).build());
-        assertEquals(expectedList, data.findByAnswerId(2));
+        expectedList.add(Comment.builder().id(2L).text("Another comment text").creationDate(LocalDateTime.parse("2020-03-19 14:55:14", formatter )).voteCount(2).authorId(1L).answerId(2L).build());
+        assertEquals(expectedList, data.findByAnswerId(2L));
     }
     @Test
     public void whenFindBySomeIdButThereIsNotInDbThenReturnEmptyList(){
         assertThat(expectedList)
-                .isEqualTo(data.findByAnswerId(666))
-                .isEqualTo(data.findByQuestionId(666))
-                .isEqualTo(data.findByMemberId(666));
+                .isEqualTo(data.findByAnswerId(666L))
+                .isEqualTo(data.findByQuestionId(666L))
+                .isEqualTo(data.findByMemberId(666L));
     }
 
 }

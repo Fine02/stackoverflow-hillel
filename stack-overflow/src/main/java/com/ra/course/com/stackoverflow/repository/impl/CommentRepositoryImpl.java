@@ -28,7 +28,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Comment save(final Comment comment) {
-        if (comment.getId() != 0) {
+        if (Objects.nonNull(comment.getId())) {
             throw new AlreadySaveComment("Comment is already exist");
         }
         final var commentId = defaultDSLContext.insertInto(COMMENT_TABLE)
@@ -47,7 +47,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public Optional<Comment> findById(final long id) {
+    public Optional<Comment> findById(final Long id) {
         final var list = listCommentFromD(id, ID);
         return list.isEmpty() ? Optional.empty()
                 : Optional.of(list.get(0));
@@ -79,21 +79,21 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<Comment> findByMemberId(final long id) {
+    public List<Comment> findByMemberId(final Long id) {
         return listCommentFromD(id, AUTHOR_ID);
     }
 
     @Override
-    public List<Comment> findByQuestionId(final long id) {
+    public List<Comment> findByQuestionId(final Long id) {
         return listCommentFromD(id, QUESTION_ID);
     }
 
     @Override
-    public List<Comment> findByAnswerId(final long id) {
+    public List<Comment> findByAnswerId(final Long id) {
         return listCommentFromD(id, ANSWER_ID);
     }
 
-    private List<Comment> listCommentFromD(final long id, final TableField<CommentRecord, Long> tableField) {
+    private List<Comment> listCommentFromD(final Long id, final TableField<CommentRecord, Long> tableField) {
         return defaultDSLContext.selectFrom(COMMENT_TABLE)
                 .where(tableField.eq(id))
                 .fetch()
