@@ -76,7 +76,7 @@ project(':stack-overflow') {
     dependencies {
         compileOnly utils.lombok
         annotationProcessor utils.lombok
-        compile 'org.springframework.boot:spring-boot-starter-jooq'
+        compile 'org.springframework.boot:spring-boot-starter-jooq:2.2.6.RELEASE'
     }
 }
 project(':stack-overflow-integration-test') {
@@ -86,7 +86,6 @@ project(':stack-overflow-integration-test') {
             jar.enabled = true
         }
         testCompile 'com.h2database:h2:1.4.200'
-        testCompile db.postgres
     }
     bootJar {
         enabled = false
