@@ -40,6 +40,7 @@ public class JdbcShippingDaoImpl implements ShippingDao {
 
     private static final String UPDATE_SHIPMENT_LOG_BY_SL = "UPDATE `SHIPMENT_LOG` sl SET `shipmentNumber`=?, `shipment_status_id`=?, `creationDate`=?, `shipment_id` =? WHERE sl.`shipmentNumber`= ? AND sl.`shipment_status_id`=? AND sl.`creationDate`=? AND sl.`shipment_id`=?";
     private static final String UPDATE_SHIPMENT_LOG_BY_SHIPMENT_NO = "UPDATE `SHIPMENT_LOG` sl SET `shipmentNumber`=?, `shipment_status_id`=?, `creationDate`=?, `shipment_id` =? WHERE sl.`shipmentNumber`= ? AND sl.`shipment_status_id`=? AND sl.`creationDate`=? AND sl.`shipment_id`=?";
+    private static final String INSERT_SHIPMENT = "INSERT INTO SHIPMENT (`shipmentNumber`, `shipmentDate`, `estimatedArrival`, `shipmentMethod`) VALUES (?, ?, ?, ?)";
 
     private static final String GET_SHIPMENT_LOG_BY_SL_ID = "SELECT \n" +
             "sl.`id` shipmentLog_id, sl.`shipmentNumber`, ss.`status` shipmentLogStatus,\n" +
@@ -106,7 +107,7 @@ public class JdbcShippingDaoImpl implements ShippingDao {
 
     @Override
     public void updateShipment(Shipment shipment) {
-        jdbcTemplate.update(UPDATE_SHIPMENT_LOG_BY_SL, shipment.getOrderNumber(), orderNumber.getStatus(), orderNumber.getOrderDate(), orderNumber.getOrderNumber());
+        jdbcTemplate.update(UPDATE_SHIPMENT_LOG_BY_SL,  shipment.getShipmentLogs());
     }
 
     @Override
