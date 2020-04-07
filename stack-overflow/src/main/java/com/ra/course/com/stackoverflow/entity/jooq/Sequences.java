@@ -44,11 +44,6 @@ public class Sequences {
     public static final Sequence<Long> COMMENT_ID_SEQ = new SequenceImpl<Long>("comment_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
 
     /**
-     * The sequence <code>public.member_id_seq</code>
-     */
-    public static final Sequence<Long> MEMBER_ID_SEQ = new SequenceImpl<Long>("member_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
-
-    /**
      * The sequence <code>public.notification_id_seq</code>
      */
     public static final Sequence<Long> NOTIFICATION_ID_SEQ = new SequenceImpl<Long>("notification_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false));

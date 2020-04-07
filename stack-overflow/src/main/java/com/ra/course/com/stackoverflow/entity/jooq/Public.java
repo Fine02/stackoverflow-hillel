@@ -29,7 +29,7 @@ import java.util.List;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = -1311895871;
+    private static final long serialVersionUID = 372070493;
 
     /**
      * The reference instance of <code>public</code>
@@ -57,9 +57,29 @@ public class Public extends SchemaImpl {
     public final CommentTable COMMENT_TABLE = CommentTable.COMMENT_TABLE;
 
     /**
-     * The table <code>public.member</code>.
+     * The table <code>public.member_badge_question</code>.
      */
-    public final MemberTable MEMBER_TABLE = MemberTable.MEMBER_TABLE;
+    public final MemberBadgeQuestionTable MEMBER_BADGE_QUESTION_TABLE = MemberBadgeQuestionTable.MEMBER_BADGE_QUESTION_TABLE;
+
+    /**
+     * The table <code>public.member_notification</code>.
+     */
+    public final MemberNotificationTable MEMBER_NOTIFICATION_TABLE = MemberNotificationTable.MEMBER_NOTIFICATION_TABLE;
+
+    /**
+     * The table <code>public.member_voted_answer</code>.
+     */
+    public final MemberVotedAnswerTable MEMBER_VOTED_ANSWER_TABLE = MemberVotedAnswerTable.MEMBER_VOTED_ANSWER_TABLE;
+
+    /**
+     * The table <code>public.member_voted_comment</code>.
+     */
+    public final MemberVotedCommentTable MEMBER_VOTED_COMMENT_TABLE = MemberVotedCommentTable.MEMBER_VOTED_COMMENT_TABLE;
+
+    /**
+     * The table <code>public.member_voted_question</code>.
+     */
+    public final MemberVotedQuestionTable MEMBER_VOTED_QUESTION_TABLE = MemberVotedQuestionTable.MEMBER_VOTED_QUESTION_TABLE;
 
     /**
      * The table <code>public.notification</code>.
@@ -77,6 +97,11 @@ public class Public extends SchemaImpl {
     public final QuestionTable QUESTION_TABLE = QuestionTable.QUESTION_TABLE;
 
     /**
+     * The table <code>public.question_member_question_closing_remark</code>.
+     */
+    public final QuestionMemberQuestionClosingRemarkTable QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE = QuestionMemberQuestionClosingRemarkTable.QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE;
+
+    /**
      * The table <code>public.tag</code>.
      */
     public final TagTable TAG_TABLE = TagTable.TAG_TABLE;
@@ -84,7 +109,7 @@ public class Public extends SchemaImpl {
     /**
      * The table <code>public.tag_question</code>.
      */
-    public final TagQuestionTable TAG_QUESTION = TagQuestionTable.TAG_QUESTION_TABLE;
+    public final TagQuestionTable TAG_QUESTION_TABLE = TagQuestionTable.TAG_QUESTION_TABLE;
 
     /**
      * No further instances allowed
@@ -112,7 +137,6 @@ public class Public extends SchemaImpl {
             Sequences.ANSWER_ID_SEQ,
             Sequences.BOUNTY_ID_SEQ,
             Sequences.COMMENT_ID_SEQ,
-            Sequences.MEMBER_ID_SEQ,
             Sequences.NOTIFICATION_ID_SEQ,
             Sequences.PHOTO_ID_SEQ,
             Sequences.QUESTION_ID_SEQ,
@@ -132,10 +156,15 @@ public class Public extends SchemaImpl {
             AnswerTable.ANSWER_TABLE,
             BountyTable.BOUNTY_TABLE,
             CommentTable.COMMENT_TABLE,
-            MemberTable.MEMBER_TABLE,
+            MemberBadgeQuestionTable.MEMBER_BADGE_QUESTION_TABLE,
+            MemberNotificationTable.MEMBER_NOTIFICATION_TABLE,
+            MemberVotedAnswerTable.MEMBER_VOTED_ANSWER_TABLE,
+            MemberVotedCommentTable.MEMBER_VOTED_COMMENT_TABLE,
+            MemberVotedQuestionTable.MEMBER_VOTED_QUESTION_TABLE,
             NotificationTable.NOTIFICATION_TABLE,
             PhotoTable.PHOTO_TABLE,
             QuestionTable.QUESTION_TABLE,
+            QuestionMemberQuestionClosingRemarkTable.QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE,
             TagTable.TAG_TABLE,
             TagQuestionTable.TAG_QUESTION_TABLE);
     }

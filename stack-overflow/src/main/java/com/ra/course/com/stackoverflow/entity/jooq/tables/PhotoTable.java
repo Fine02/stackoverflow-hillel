@@ -31,7 +31,7 @@ import java.util.List;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class PhotoTable extends TableImpl<PhotoRecord> {
 
-    private static final long serialVersionUID = 1504625382;
+    private static final long serialVersionUID = 750775289;
 
     /**
      * The reference instance of <code>public.photo</code>
@@ -70,11 +70,6 @@ public class PhotoTable extends TableImpl<PhotoRecord> {
      * The column <code>public.photo.answer_id</code>.
      */
     public static final TableField<PhotoRecord, Long> ANSWER_ID = createField(DSL.name("answer_id"), org.jooq.impl.SQLDataType.BIGINT, PHOTO_TABLE, "");
-
-    /**
-     * The column <code>public.photo.comment_id</code>.
-     */
-    public static final TableField<PhotoRecord, Long> COMMENT_ID = createField(DSL.name("comment_id"), org.jooq.impl.SQLDataType.BIGINT, PHOTO_TABLE, "");
 
     /**
      * No further instances allowed
@@ -122,7 +117,7 @@ public class PhotoTable extends TableImpl<PhotoRecord> {
 
     @Override
     public List<ForeignKey<PhotoRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<PhotoRecord, ?>>asList(Keys.PHOTO__FK_PHOTO_QUESTION_ID, Keys.PHOTO__FK_PHOTO_ANSWER_ID, Keys.PHOTO__FK_PHOTO_COMMENT_ID);
+        return Arrays.<ForeignKey<PhotoRecord, ?>>asList(Keys.PHOTO__FK_PHOTO_QUESTION_ID, Keys.PHOTO__FK_PHOTO_ANSWER_ID);
     }
 
     public QuestionTable question() {
@@ -133,16 +128,12 @@ public class PhotoTable extends TableImpl<PhotoRecord> {
         return new AnswerTable(this, Keys.PHOTO__FK_PHOTO_ANSWER_ID);
     }
 
-    public CommentTable comment() {
-        return new CommentTable(this, Keys.PHOTO__FK_PHOTO_COMMENT_ID);
-    }
-
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<Long, String, Timestamp, Long, Long, Long> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row5<Long, String, Timestamp, Long, Long> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }

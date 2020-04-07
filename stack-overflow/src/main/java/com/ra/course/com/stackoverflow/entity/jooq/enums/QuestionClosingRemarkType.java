@@ -37,7 +37,7 @@ public enum QuestionClosingRemarkType implements EnumType {
 
     primarly_opinion_based("primarly_opinion_based"),
 
-    advertasing("advertasing"),
+    advertising("advertising"),
 
     abuse("abuse"),
 

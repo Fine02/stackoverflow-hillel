@@ -31,7 +31,7 @@ import java.util.List;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class BountyTable extends TableImpl<BountyRecord> {
 
-    private static final long serialVersionUID = 1537432552;
+    private static final long serialVersionUID = -2144393609;
 
     /**
      * The reference instance of <code>public.bounty</code>
@@ -115,8 +115,8 @@ public class BountyTable extends TableImpl<BountyRecord> {
         return Arrays.<ForeignKey<BountyRecord, ?>>asList(Keys.BOUNTY__FK_CREATOR_ID);
     }
 
-    public MemberTable member() {
-        return new MemberTable(this, Keys.BOUNTY__FK_CREATOR_ID);
+    public AccountTable account() {
+        return new AccountTable(this, Keys.BOUNTY__FK_CREATOR_ID);
     }
 
     // -------------------------------------------------------------------------
