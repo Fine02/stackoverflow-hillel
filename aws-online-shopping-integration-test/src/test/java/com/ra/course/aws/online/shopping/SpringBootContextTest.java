@@ -73,11 +73,11 @@ public class SpringBootContextTest {
             return mock(NotificationDao.class);
         }
 
-        @Primary
-        @Bean
-        public OrderDao mockedOrderDao() {
-            return mock(OrderDao.class);
-        }
+//        @Primary
+//        @Bean
+//        public OrderDao mockedOrderDao() {
+//            return mock(OrderDao.class);
+//        }
 
         @Primary
         @Bean

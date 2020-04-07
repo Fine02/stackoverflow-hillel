@@ -15,11 +15,11 @@ import org.springframework.test.context.jdbc.Sql;
 @Sql(scripts= "classpath:test-data.sql")
 public class OrderServiceImplIntegrationTest {
 
- @Autowired
- private JdbcTemplate template;
-
-@Test
-    public void test (){
-    System.out.println(template.getDataSource());
-    }
+// @Autowired
+// private JdbcTemplate template;
+//
+//@Test
+//    public void test (){
+//    System.out.println(template.getDataSource());
+//    }
 }
