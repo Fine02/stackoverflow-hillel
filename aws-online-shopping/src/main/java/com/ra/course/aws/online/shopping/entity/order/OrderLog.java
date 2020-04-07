@@ -2,7 +2,6 @@ package com.ra.course.aws.online.shopping.entity.order;
 
 import com.ra.course.aws.online.shopping.entity.enums.OrderStatus;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -56,7 +55,7 @@ public class OrderLog {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 

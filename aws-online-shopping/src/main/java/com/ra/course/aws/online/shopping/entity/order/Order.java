@@ -2,7 +2,6 @@ package com.ra.course.aws.online.shopping.entity.order;
 
 import com.ra.course.aws.online.shopping.entity.enums.OrderStatus;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -57,7 +56,7 @@ public class Order {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 

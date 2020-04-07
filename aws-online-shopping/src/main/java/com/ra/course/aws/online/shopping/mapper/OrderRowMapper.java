@@ -17,11 +17,12 @@ public class OrderRowMapper implements RowMapper <Order> {
     @Override
     public Order mapRow(ResultSet rs, int rowNum) throws SQLException {
         OrderStatus orderStatus = mapToOrderStatus(rs, rowNum);
+        List<OrderLog> orderLogList =mapToOrderLogList(rs, rowNum);
         Order order = new Order();
         order.setOrderNumber(rs.getString("orderNumber"));
         order.setStatus(orderStatus);
         order.setOrderDate(rs.getDate("orderDate"));
-        order.getOrderLog();
+        order.getOrderLog(orderLogList);
 
         return order;
     }
@@ -47,5 +48,7 @@ public class OrderRowMapper implements RowMapper <Order> {
         return orderLogList;
 
     }
+
 }
+
 
