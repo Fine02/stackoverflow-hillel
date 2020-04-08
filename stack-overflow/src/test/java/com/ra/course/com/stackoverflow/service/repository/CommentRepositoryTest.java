@@ -2,7 +2,6 @@ package com.ra.course.com.stackoverflow.service.repository;
 
 import com.ra.course.com.stackoverflow.entity.Comment;
 import com.ra.course.com.stackoverflow.entity.jooq.tables.records.CommentRecord;
-import com.ra.course.com.stackoverflow.exception.repository.AlreadySaveComment;
 import com.ra.course.com.stackoverflow.repository.CommentRepository;
 import com.ra.course.com.stackoverflow.repository.impl.CommentRepositoryImpl;
 import org.jooq.SQLDialect;
@@ -15,7 +14,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,6 +28,7 @@ public class CommentRepositoryTest {
     private static CommentRepository data;
 
     private Comment comment;
+    private Comment comment2;
     private List<Comment> expectedList;
 
     @BeforeAll
@@ -42,18 +41,13 @@ public class CommentRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        comment = Comment.builder().id(1L).text("Some comment text").creationDate(LocalDateTime.MIN).voteCount(3).authorId(1L).answerId(1L).questionId(1L).build();
+        comment = createComment(1L,"Some comment text", 3);
+        comment2 = createComment(777L, "new text", 123);
         expectedList = new ArrayList<>();
     }
 
     @Test
-    public void whenCommentWithIdSaveToDBThenThrownException() {
-        assertThrows(AlreadySaveComment.class, () ->
-                data.save(comment));
-    }
-
-    @Test
-    public void whenCommentSaveToDBThenReturnCommentWithIdAndThenDeleteItFromDB() {
+    public void whenCommentSaveToDBThenReturnCommentWithId() {
         var comment = Comment.builder().creationDate(LocalDateTime.now()).text("text").authorId(1L).questionId(2L).build();
         var newComment = data.save(comment);
         assertNotEquals(0, newComment.getId());
@@ -81,30 +75,41 @@ public class CommentRepositoryTest {
         comment.setVoteCount(123);
         comment.setText("new text");
         data.update(comment);
-        comment.setId(777L);
-        assertEquals(comment, data.findById(777L).get());
+        assertEquals(comment2, data.findById(777L).get());
     }
+
     @Test
-    public void whenFindByAnyIdThenReturnListWithComment(){
-        var comment2 = Comment.builder().id(777L).text("new text").creationDate(LocalDateTime.MIN).voteCount(123).authorId(1L).answerId(1L).questionId(1L).build();
+    public void whenFindByAnyIdThenReturnListWithComment() {
         expectedList.add(comment);
         expectedList.add(comment2);
         assertEquals(expectedList, data.findByQuestionId(888L));
         assertEquals(expectedList, data.findByMemberId(888L));
         assertEquals(expectedList, data.findByMemberId(888L));
     }
+
     @Test
-    public void whenFindBySomeIdButThereIsNotInDbThenReturnEmptyList(){
+    public void whenFindBySomeIdButThereIsNotInDbThenReturnEmptyList() {
         assertThat(expectedList)
                 .isEqualTo(data.findByAnswerId(666L))
                 .isEqualTo(data.findByQuestionId(666L))
                 .isEqualTo(data.findByMemberId(666L));
     }
+    private Comment createComment(Long id, String text, int voteCount){
+        return Comment.builder()
+                .id(id)
+                .text(text)
+                .creationDate(LocalDateTime.MIN)
+                .voteCount(voteCount)
+                .authorId(1L)
+                .answerId(1L)
+                .questionId(1L).build();
+
+    }
 }
 
 class MyProvider implements MockDataProvider {
     @Override
-    public MockResult[] execute(MockExecuteContext ctx) throws SQLException {
+    public MockResult[] execute(MockExecuteContext ctx) {
         var dslContext = DSL.using(SQLDialect.H2);
         var mock = new MockResult[1];
         var sql = ctx.sql().toUpperCase();
@@ -123,7 +128,7 @@ class MyProvider implements MockDataProvider {
         } else if (sql.startsWith("SELECT") && bindings[0].equals(777L)) {
             result.add(record2);
             mock[0] = new MockResult(1, result);
-        } else if (sql.startsWith("SELECT") && bindings[0].equals(888L)){
+        } else if (sql.startsWith("SELECT") && bindings[0].equals(888L)) {
             result.add(record1);
             result.add(record2);
             mock[0] = new MockResult(1, result);

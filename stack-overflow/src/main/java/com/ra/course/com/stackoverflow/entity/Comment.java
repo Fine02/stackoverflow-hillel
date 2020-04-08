@@ -1,9 +1,6 @@
 package com.ra.course.com.stackoverflow.entity;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
@@ -11,9 +8,10 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @Data
 @EqualsAndHashCode
+@AllArgsConstructor
 public class Comment {
 
-    private Long id;
+    private final Long id;
 
     @NonNull
     private String text;

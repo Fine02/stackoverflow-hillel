@@ -1,9 +1,7 @@
 package com.ra.course.com.stackoverflow.repository.impl;
 
 import com.ra.course.com.stackoverflow.entity.Comment;
-import com.ra.course.com.stackoverflow.entity.jooq.Sequences;
 import com.ra.course.com.stackoverflow.entity.jooq.tables.records.CommentRecord;
-import com.ra.course.com.stackoverflow.exception.repository.AlreadySaveComment;
 import com.ra.course.com.stackoverflow.repository.CommentRepository;
 import lombok.AllArgsConstructor;
 import org.jooq.*;
@@ -24,44 +22,35 @@ import static org.jooq.impl.DSL.row;
 @AllArgsConstructor
 public class CommentRepositoryImpl implements CommentRepository {
 
-    private transient final DSLContext defaultDSLContext;
+    private transient final DSLContext dslContext;
 
     @Override
     public Comment save(final Comment comment) {
-        if (Objects.nonNull(comment.getId())) {
-            throw new AlreadySaveComment("Comment is already exist");
-        }
-        final var commentId = defaultDSLContext.insertInto(COMMENT_TABLE)
+        return dslContext.insertInto(COMMENT_TABLE)
                 .columns(COMMENT_TEXT, CREATION_DATE, VOTE_COUNT, AUTHOR_ID, ANSWER_ID, QUESTION_ID)
                 .values(comment.getText(), Timestamp.valueOf(comment.getCreationDate()), 0, comment.getAuthorId(), comment.getAnswerId(), comment.getQuestionId())
-                .returning(ID)
+                .returning()
                 .fetchOne()
-                .get(ID);
-        comment.setId(commentId);
-        return comment;
-    }
-
-    @Override
-    public long getNextId() {
-        return defaultDSLContext.currval(Sequences.COMMENT_ID_SEQ) + 1;
+                .into(Comment.class);
     }
 
     @Override
     public Optional<Comment> findById(final Long id) {
-        final var list = listCommentFromD(id, ID);
-        return list.isEmpty() ? Optional.empty()
-                : Optional.of(list.get(0));
+        final var commentFromDb = dslContext.fetchOne(COMMENT_TABLE, ID.eq(id));
+        return Objects.isNull(commentFromDb) ? Optional.empty()
+                : Optional.of(commentFromDb.into(Comment.class));
+
     }
 
     @Override
     public void delete(final Comment comment) {
-        defaultDSLContext.deleteFrom(COMMENT_TABLE)
+        dslContext.deleteFrom(COMMENT_TABLE)
                 .where(ID.eq(comment.getId())).execute();
     }
 
     @Override
     public void update(final Comment comment) {
-        defaultDSLContext.update(COMMENT_TABLE)
+        dslContext.update(COMMENT_TABLE)
                 .set(row(COMMENT_TEXT, VOTE_COUNT),
                         row(comment.getText(), comment.getVoteCount()))
                 .where(ID.eq(comment.getId()))
@@ -70,47 +59,31 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public List<Comment> findAll() {
-        return defaultDSLContext.selectFrom(COMMENT_TABLE)
-                .fetch()
-                .stream()
-                .filter(Objects::nonNull)
-                .map(this::getCommentFromCommentRecord)
+        return dslContext.selectFrom(COMMENT_TABLE)
+                .fetchStreamInto(Comment.class)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Comment> findByMemberId(final Long id) {
-        return listCommentFromD(id, AUTHOR_ID);
+        return listCommentFromDB(id, AUTHOR_ID);
     }
 
     @Override
     public List<Comment> findByQuestionId(final Long id) {
-        return listCommentFromD(id, QUESTION_ID);
+        return listCommentFromDB(id, QUESTION_ID);
     }
 
     @Override
     public List<Comment> findByAnswerId(final Long id) {
-        return listCommentFromD(id, ANSWER_ID);
+        return listCommentFromDB(id, ANSWER_ID);
     }
 
-    private List<Comment> listCommentFromD(final Long id, final TableField<CommentRecord, Long> tableField) {
-        return defaultDSLContext.selectFrom(COMMENT_TABLE)
+    private List<Comment> listCommentFromDB(final Long id, final TableField<CommentRecord, Long> tableField) {
+        return dslContext.selectFrom(COMMENT_TABLE)
                 .where(tableField.eq(id))
-                .fetch()
-                .stream()
-                .filter(Objects::nonNull)
-                .map(this::getCommentFromCommentRecord)
+                .fetchStreamInto(Comment.class)
                 .collect(Collectors.toList());
     }
 
-    private Comment getCommentFromCommentRecord(final CommentRecord record) {
-        return Comment.builder()
-                .id(record.getId())
-                .text(record.getCommentText())
-                .creationDate(record.getCreationDate().toLocalDateTime())
-                .voteCount(record.getVoteCount())
-                .authorId(record.getAuthorId())
-                .answerId(record.getAnswerId())
-                .questionId(record.getQuestionId()).build();
-    }
 }
