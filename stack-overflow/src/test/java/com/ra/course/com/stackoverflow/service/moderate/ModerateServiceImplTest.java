@@ -38,7 +38,7 @@ public class ModerateServiceImplTest {
                                   .account(account)
                                   .build();
 
-    private Tag tag = new Tag(id, TAG_NAME, description, List.of(), 1, 1);
+    private Tag tag = new Tag(id, TAG_NAME, description);
 
     private Question question = constructQuestion().build();
 
