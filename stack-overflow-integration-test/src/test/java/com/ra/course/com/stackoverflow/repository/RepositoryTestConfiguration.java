@@ -16,12 +16,6 @@ public class RepositoryTestConfiguration {
 
     @Primary
     @Bean
-    public BountyRepository mockedBountyRepository() {
-        return mock(BountyRepository.class);
-    }
-
-    @Primary
-    @Bean
     public QuestionRepository mockedQuestionRepository() {
         return mock(QuestionRepository.class);
     }
