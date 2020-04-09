@@ -2,7 +2,9 @@ package com.ra.course.aws.online.shopping.dao;
 
 import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
+import com.ra.course.aws.online.shopping.entity.enums.OrderStatus;
 import com.ra.course.aws.online.shopping.entity.order.Order;
+import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,12 +13,16 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.Mockito.mock;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
-//@Sql(scripts= "classpath:schema.sql")
-//@Sql(scripts= "classpath:test-data.sql")
+
 public class OrderDaoImplIntegrationTest {
     @Primary
     @Bean
@@ -57,9 +63,44 @@ public class OrderDaoImplIntegrationTest {
     @Autowired
     private OrderDao orderDao;
 
+    LocalDateTime orderlog_id1 = LocalDateTime.of(2020, 3, 19, 22, 22, 11);
+    LocalDateTime orderlog_id2 = LocalDateTime.of(2020, 3, 20, 22, 22, 11);
+    LocalDateTime orderlog_id3 = LocalDateTime.of(2020, 3, 21, 22, 22, 11);
+
+    private OrderLog makeOrderLog(String orderNumber, LocalDateTime creationDate, OrderStatus status) {
+        return new OrderLog(orderNumber, creationDate, status);
+    }
+
+
+    public List<OrderLog> makeOrderLogList() {
+        List<OrderLog> orderLogList = new ArrayList<>();
+        orderLogList.add(ORDER_LOG1);
+        orderLogList.add(ORDER_LOG2);
+        orderLogList.add(ORDER_LOG3);
+        return orderLogList;
+    }
+
+    public OrderLog ORDER_LOG1 = makeOrderLog("2", orderlog_id1, OrderStatus.PENDING);
+    public OrderLog ORDER_LOG2 = makeOrderLog("2", orderlog_id2, OrderStatus.PENDING);
+    public OrderLog ORDER_LOG3 = makeOrderLog("2", orderlog_id3, OrderStatus.PENDING);
+
+
     @Test
-    public void getInstanceTest(){
-     Order result =orderDao.findByOrderNumber("1");
+    public void getInstancefindLogListByOrderTest() {
+        List<OrderLog> result = orderDao.findLogListByOrder(makeOrderLogList());
         System.out.println(result);
     }
+
+    @Test
+    public void getInstanceTest() {
+        Order result = orderDao.findByOrderNumber("2");
+        System.out.println(result);
+    }
+
+    @Test
+    public void getInstanceByOrderLogById() {
+        OrderLog result = orderDao.findOrderLogById(3L);
+        System.out.println(result);
+    }
+
 }

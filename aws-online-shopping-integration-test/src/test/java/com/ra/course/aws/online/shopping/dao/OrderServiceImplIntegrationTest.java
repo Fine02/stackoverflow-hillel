@@ -22,4 +22,18 @@ public class OrderServiceImplIntegrationTest {
 //    public void test (){
 //    System.out.println(template.getDataSource());
 //    }
+
+
+    @Autowired
+    private OrderDao orderDao;
+
+//    @Test
+//    public void findOrderLogByIdTest(){
+//
+//    }
+
+    @Test
+    public void findOrderLogByIdTest(){
+
+    }
 }
