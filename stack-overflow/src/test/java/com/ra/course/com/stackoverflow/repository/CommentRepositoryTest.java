@@ -1,8 +1,7 @@
-package com.ra.course.com.stackoverflow.service.repository;
+package com.ra.course.com.stackoverflow.repository;
 
 import com.ra.course.com.stackoverflow.entity.Comment;
 import com.ra.course.com.stackoverflow.entity.jooq.tables.records.CommentRecord;
-import com.ra.course.com.stackoverflow.repository.CommentRepository;
 import com.ra.course.com.stackoverflow.repository.impl.CommentRepositoryImpl;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;

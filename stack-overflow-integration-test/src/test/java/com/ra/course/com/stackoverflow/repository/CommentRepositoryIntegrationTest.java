@@ -17,9 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = RepositoryTestConfiguration.class)
-//@SpringBootTest(classes = {StackOverflowApplication.class, RepositoryTestConfiguration.class})
 @ActiveProfiles("test")
-//@Sql({"classpath:schema.sql", "classpath:data.sql"})
 public class CommentRepositoryIntegrationTest {
     @Autowired
     private CommentRepository data;
