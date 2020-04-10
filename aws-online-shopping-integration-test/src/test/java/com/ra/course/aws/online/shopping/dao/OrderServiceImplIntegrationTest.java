@@ -23,6 +23,8 @@ public class OrderServiceImplIntegrationTest {
 //    System.out.println(template.getDataSource());
 //    }
 
+    @Autowired
+    private NotificationDao notificationDao;
 
     @Autowired
     private OrderDao orderDao;

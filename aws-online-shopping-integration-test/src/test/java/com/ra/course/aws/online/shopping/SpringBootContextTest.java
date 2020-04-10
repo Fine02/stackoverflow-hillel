@@ -67,11 +67,11 @@ public class SpringBootContextTest {
     @TestConfiguration
     static class SpringBootContextTestConfiguration {
 
-        @Primary
-        @Bean
-        public NotificationDao mockedNotificationDao() {
-            return mock(NotificationDao.class);
-        }
+//        @Primary
+//        @Bean
+//        public NotificationDao mockedNotificationDao() {
+//            return mock(NotificationDao.class);
+//        }
 
 //        @Primary
 //        @Bean

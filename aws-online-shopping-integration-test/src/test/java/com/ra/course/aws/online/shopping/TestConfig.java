@@ -9,11 +9,11 @@ import static org.mockito.Mockito.mock;
 
 @Configuration
 public class TestConfig {
-    @Primary
-    @Bean
-    public NotificationDao mockedNotificationDao() {
-        return mock(NotificationDao.class);
-    }
+//    @Primary
+//    @Bean
+//    public NotificationDao mockedNotificationDao() {
+//        return mock(NotificationDao.class);
+//    }
 
 //    @Primary
 //    @Bean

@@ -65,11 +65,11 @@ INSERT INTO payment (payment_status_id, amount) VALUES (1, 100.10);
 INSERT INTO payment (payment_status_id, amount) VALUES (2, 200.10);
 INSERT INTO payment (payment_status_id, amount) VALUES (3, 300.10);
 
-INSERT INTO account (userName, password, account_status_id, name, address_id, email, phone) VALUES ('ivan','111', 1, 'ivan', 1, 'jj@gmail.com', '380777777777');
+INSERT INTO account (userName, password, account_status_id, name, address_id, email, phone) VALUES ('ivan','111', 1, 'ivan', 1, 'jj@gmail.com', '38012345111');
 
-INSERT INTO account (userName, password, account_status_id, name, address_id, email, phone) VALUES ('vasiliy','111', 2, 'vasiliy', 2, 'jj@gmail.com', '380777777777');
+INSERT INTO account (userName, password, account_status_id, name, address_id, email, phone) VALUES ('vasiliy','111', 2, 'vasiliy', 2, 'jj@gmail.com', '38012345222');
 
-INSERT INTO account (userName, password, account_status_id, name, address_id, email, phone) VALUES ('egor','111', 3, 'egor', 3, 'jj@gmail.com', '380777777777');
+INSERT INTO account (userName, password, account_status_id, name, address_id, email, phone) VALUES ('egor','111', 3, 'egor', 3, 'jj@gmail.com', '38012345333');
 
 INSERT INTO member (account_id) VALUES (1);
 INSERT INTO member (account_id) VALUES (2);
