@@ -8,7 +8,7 @@ public interface TagRepository  {
 
     Tag save(Tag tag);
 
-    Optional<Tag> findById(long id);
+    Optional<Tag> findById(Long id);
 
     void delete(Tag tag);
 

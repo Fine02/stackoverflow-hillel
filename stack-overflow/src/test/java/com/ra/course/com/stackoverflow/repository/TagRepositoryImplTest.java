@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import static com.ra.course.com.stackoverflow.entity.jooq.tables.TagTable.TAG_TABLE;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TagRepositoryImplTest {
@@ -49,10 +49,22 @@ public class TagRepositoryImplTest {
     }
 
     @Test
+    public void whenTryFindByIdNullThenThrowException() {
+        assertThatThrownBy(() -> tagRepository.findById(null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
     public void whenSaveTagInDataBaseThenReturnTagWithId() {
         var savedTag = tagRepository.save(tag);
 
         assertThat(savedTag.getId() > 0).isTrue();
+    }
+
+    @Test
+    public void whenTrySaveNullThenThrowException() {
+        assertThatThrownBy(() -> tagRepository.save(null))
+                .isInstanceOf(NullPointerException.class);
     }
 
     @Test
@@ -70,6 +82,12 @@ public class TagRepositoryImplTest {
     }
 
     @Test
+    public void whetTryFindByTagNameWithNullArgumentThenThrowException() {
+        assertThatThrownBy(() -> tagRepository.findByTagName(null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
     public void whenDeleteTagFromDataBaseAndTryFindItThenReturnOptionalEmpty() {
         var tagForDeleting = new Tag(666L, "JAVA", "JAVA Teg Description");
         tagRepository.delete(tagForDeleting);
@@ -77,6 +95,12 @@ public class TagRepositoryImplTest {
         Optional<Tag> result = tagRepository.findById(tagForDeleting.getId());
 
         assertThat(result.isEmpty()).isTrue();
+    }
+
+    @Test
+    public void whenTryDeleteNullThenThrowException() {
+        assertThatThrownBy(() -> tagRepository.delete(null))
+                .isInstanceOf(NullPointerException.class);
     }
 
     @Test
@@ -89,6 +113,12 @@ public class TagRepositoryImplTest {
         var after = tagRepository.findById(777L).get();
 
         assertThat(after.getDescription().equals("Test111")).isTrue();
+    }
+
+    @Test
+    public void whenTryUpdateNullThenThrowException() {
+        assertThatThrownBy(() -> tagRepository.update(null))
+                .isInstanceOf(NullPointerException.class);
     }
 
 

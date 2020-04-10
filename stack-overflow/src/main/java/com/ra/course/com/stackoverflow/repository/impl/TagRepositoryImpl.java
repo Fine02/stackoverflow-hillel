@@ -27,7 +27,7 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public Optional<Tag> findById(final long id) {
+    public Optional<Tag> findById(@NonNull final Long id) {
         final var tagRecord = dslContext.fetchOne(TAG_TABLE, TAG_TABLE.ID.eq(id));
 
         return tagRecord != null ? Optional.of(tagRecord.into(Tag.class)) : Optional.empty();
@@ -43,7 +43,6 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     public void update(@NonNull final Tag tag) {
         dslContext.update(TAG_TABLE)
-                .set(TAG_TABLE.NAME, tag.getName())
                 .set(TAG_TABLE.DESCRIPTION, tag.getDescription())
                 .where(TAG_TABLE.ID.eq(tag.getId()))
                 .execute();
