@@ -3,54 +3,53 @@ package com.ra.course.aws.online.shopping.dao.impl;
 import com.ra.course.aws.online.shopping.dao.OrderDao;
 import com.ra.course.aws.online.shopping.entity.order.Order;
 import com.ra.course.aws.online.shopping.entity.order.OrderLog;
-import com.ra.course.aws.online.shopping.mapper.OrderLogRowMapper;
-import com.ra.course.aws.online.shopping.mapper.ListOrderLogRowMapper;
-import com.ra.course.aws.online.shopping.mapper.OrderRowMapper;
+import com.ra.course.aws.online.shopping.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//@Repository
-@Component
+//@Component
+@Repository
 public class JdbcOrderDaoImpl implements OrderDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final OrderRowMapper orderRowMapper;
     private final ListOrderLogRowMapper orderLogRowMapper;
     private final OrderLogRowMapper orderLogOneRowMapper;
+    private final MemberBooleanRowMapper memberBooleanRowMapper;
 
     @Autowired
-    public JdbcOrderDaoImpl(JdbcTemplate jdbcTemplate, OrderRowMapper orderRowMapper, ListOrderLogRowMapper orderLogRowMapper, OrderLogRowMapper orderLogOneRowMapper) {
+    public JdbcOrderDaoImpl(JdbcTemplate jdbcTemplate, OrderRowMapper orderRowMapper, ListOrderLogRowMapper orderLogRowMapper, OrderLogRowMapper orderLogOneRowMapper, MemberRowMapper memberRowMapper, MemberBooleanRowMapper memberBooleanRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.orderRowMapper = orderRowMapper;
         this.orderLogRowMapper = orderLogRowMapper;
         this.orderLogOneRowMapper = orderLogOneRowMapper;
+        this.memberBooleanRowMapper = memberBooleanRowMapper;
     }
 
     private static final String UPDATE_ORDER_BY_ORDERNUMBER = "UPDATE `ORDER` o SET `orderNumber`=?, `order_status_id`=?, `orderDate`=? WHERE o.orderNumber=?";
 
     private static final String GET_MEMBER_BY_ID = " SELECT \n" +
-            "\tm.`account_id` ,\n" +
-            "        m.`id` `member_id`,\n" +
-            "        a.`userName`, a.`password`,\n" +
-            "        acs.`status`,\n" +
-            "        a.`name`,\n" +
-            "        adr.`streetAddress`, adr.`city`, adr.`state`, adr.`zipcode`, adr.`country`,\n" +
-            "        a.`email`,\n" +
-            "        a.`phone`,\n" +
-            "        crc.`nameOnCard`, crc.`cardNumber`,crc.`code`, \n" +
-            "        ebt.`bankName`, ebt.`routingNumber`, ebt.`accountNumber`\n" +
-            "FROM member m JOIN account a ON m.`account_id`= a.`id`\n" +
-            "JOIN account_status acs ON a.`account_status_id` = acs.`id`\n" +
-            "JOIN `address` adr ON a.`address_id` = adr.`id`\n" +
-            "JOIN `credit_card` crc ON crc.`account_id` = a.`id`\n" +
-            "JOIN `electronic_bank_transfer` ebt ON ebt.`account_id` = a.`id`\n" +
-            "WHERE m.id=1 GROUP BY a.id\n";
-
+            "\t    m.account_id,\n" +
+            "        m.id member_id,\n" +
+            "        a.userName, a.password,\n" +
+            "        acs.status,\n" +
+            "        a.name,\n" +
+            "        adr.streetAddress, adr.city, adr.state, adr.zipcode, adr.country,\n" +
+            "        a.email,\n" +
+            "        a.phone,\n" +
+            "        crc.nameOnCard, crc.cardNumber,crc.code, \n" +
+            "        ebt.bankName, ebt.routingNumber, ebt.accountNumber\n" +
+            "FROM member m JOIN account a ON m.account_id= a.id\n" +
+            "JOIN account_status acs ON a.account_status_id = acs.id\n" +
+            "JOIN address adr ON a.address_id = adr.id\n" +
+            "JOIN credit_card crc ON crc.account_id = a.id\n" +
+            "JOIN electronic_bank_transfer ebt ON ebt.account_id = a.id\n" +
+            "WHERE m.id=? ";
 
     private static final String FIND_ORDER_BY_ORDER_NUMBER = "SELECT \n" +
             "o.id order_id, o.orderNumber, os2.status order_status, o.orderDate,\n" +
@@ -87,32 +86,37 @@ public class JdbcOrderDaoImpl implements OrderDao {
 
     @Override
     public boolean isFoundMemberID(Long id) {
-        return jdbcTemplate.queryForObject(GET_MEMBER_BY_ID, BeanPropertyRowMapper.newInstance(Boolean.class), id);
+      var result = jdbcTemplate.queryForObject(GET_MEMBER_BY_ID, memberBooleanRowMapper,id);
+        return  result;
     }
 
     @Override
     public Order findByOrderNumber(String orderNumber) {
-//        return jdbcTemplate.queryForObject(FIND_ORDER_BY_ORDER_NUMBER, orderRowMapper, orderNumber);
-//        List<Order> orderLogsList = jdbcTemplate.query(FIND_ORDER_BY_ORDER_NUMBER, orderRowMapper, orderNumber);
         List<Order> list = jdbcTemplate.query(FIND_ORDER_BY_ORDER_NUMBER, orderRowMapper, orderNumber);
         Order order = new Order();
         List<OrderLog> orderLogList = null;
+        List<OrderLog> orderLogList2 = new ArrayList<>();
         ArrayList<OrderLog> arL = new ArrayList<>();
-        for(Order row: list){
-            OrderLog ol = new OrderLog();
-            order.setOrderNumber(row.getOrderNumber());
-            order.setStatus(row.getStatus());
-            order.setOrderDate(row.getOrderDate());
-            ol.setId(row.getOrderLog().get(0).getId());
-            ol.setOrderNumber(row.getOrderLog().get(0).getOrderNumber());
-            ol.setCreationDate(row.getOrderLog().get(0).getCreationDate());
-            ol.setStatus(row.getOrderLog().get(0).getStatus());
+            for (Order row : list) {
+                OrderLog ol = new OrderLog();
+                order.setOrderNumber(row.getOrderNumber());
+                order.setStatus(row.getStatus());
+                order.setOrderDate(row.getOrderDate());
+                ol.setId(row.getOrderLog().get(0).getId());
+                ol.setOrderNumber(row.getOrderLog().get(0).getOrderNumber());
+                ol.setCreationDate(row.getOrderLog().get(0).getCreationDate());
+                ol.setStatus(row.getOrderLog().get(0).getStatus());
+             //   orderLogList2.add(ol);
 //            orderLogList.add(ol);
-            arL.add(ol);
-        }
+        arL.add(ol);
+            }
 //        order.setOrderLog(orderLogList);
-        order.setOrderLog(arL);
-        return order;
+            //order.setOrderLog(arL);
+            order.setOrderLog(orderLogList2);
+            return order;
+
+
+
     }
 
     //work well

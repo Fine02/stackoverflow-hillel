@@ -71,7 +71,6 @@ public class OrderDaoImplIntegrationTest {
         return new OrderLog(orderNumber, creationDate, status);
     }
 
-
     public List<OrderLog> makeOrderLogList() {
         List<OrderLog> orderLogList = new ArrayList<>();
         orderLogList.add(ORDER_LOG1);
@@ -86,14 +85,21 @@ public class OrderDaoImplIntegrationTest {
 
 
     @Test
+    public void getInstanceIsFoundMemberIDTest() {
+        boolean result = orderDao.isFoundMemberID(3L);
+        System.out.println(result);
+    }
+
+    @Test
     public void getInstancefindLogListByOrderTest() {
         List<OrderLog> result = orderDao.findLogListByOrder(makeOrderLogList());
         System.out.println(result);
     }
 
+    ///пересмотреть, т.к. все подрят проходит тест
     @Test
     public void getInstanceTest() {
-        Order result = orderDao.findByOrderNumber("2");
+        Order result = orderDao.findByOrderNumber("4");
         System.out.println(result);
     }
 
