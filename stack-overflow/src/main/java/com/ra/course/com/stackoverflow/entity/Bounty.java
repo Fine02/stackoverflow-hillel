@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class Bounty {
 
     @EqualsAndHashCode.Include
-    private final long id;
+    private long id;
 
     private int reputation;
 
@@ -18,6 +18,6 @@ public class Bounty {
     private LocalDateTime expiry;
 
     @NonNull
-    private final Member creator;
+    private final Long creator_id;
 
 }

@@ -40,7 +40,7 @@ class BountyServiceImplTest {
         questionRepository = mock(QuestionRepository.class);
         bountyRepository = mock(BountyRepository.class);
         bountyService = new BountyServiceImpl(questionRepository, bountyRepository);
-        bounty = new Bounty(id, reputation, LocalDateTime.now(), Member.builder().account(account).build());
+        bounty = new Bounty(id, reputation, LocalDateTime.now(), 1L);
         questionWithBounty = constructQuestionWithBounty();
         questionWithoutBounty = constructQuestionWithoutBounty();
     }
