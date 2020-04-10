@@ -1,0 +1,25 @@
+package com.ra.course.aws.online.shopping.service;
+
+import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
+import com.ra.course.aws.online.shopping.TestConfig;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
+
+@SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
+@ActiveProfiles("local")
+@Sql(scripts = {"classpath:schema.sql", "classpath:test-data.sql"})
+//@Sql(scripts= "classpath:test-data.sql")
+public class AccountServiceImplIntegrationTest {
+
+    @Autowired
+    private JdbcTemplate template;
+
+    @Test
+    public void test() {
+        System.out.println(template.getDataSource());
+    }
+}

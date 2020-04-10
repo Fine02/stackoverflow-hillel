@@ -4,7 +4,7 @@ import com.ra.course.aws.online.shopping.entity.product.Product;
 
 import java.util.List;
 
-public interface ProductDao {
+public interface ProductDao extends Dao<Product>{
 
     Long save(Product product);
 
