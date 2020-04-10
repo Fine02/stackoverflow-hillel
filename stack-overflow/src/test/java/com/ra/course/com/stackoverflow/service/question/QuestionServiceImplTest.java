@@ -183,7 +183,6 @@ public class QuestionServiceImplTest {
     }
 
     private Tag createNewTag(long id) {
-        return new Tag(id, "tag_name", "tag_description",
-                new ArrayList<>(), 1, 2);
+        return new Tag(id, "tag_name", "tag_description");
     }
 }
