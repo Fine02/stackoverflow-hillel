@@ -3,12 +3,15 @@ package com.ra.course.aws.online.shopping.dao;
 
 import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
+import com.ra.course.aws.online.shopping.entity.notification.EmailNotification;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.time.LocalDateTime;
 
 import static org.mockito.Mockito.mock;
 
@@ -49,8 +52,23 @@ public class NotificationDaoImplIntegrationTest {
     @Autowired
     private NotificationDao notificationDao;
 
+    LocalDateTime time = LocalDateTime.of(2020, 3, 19, 22, 25, 25);
+    String content = "some content";
     String phoneNumber ="38012345333";
     String email ="111j@gmail.com";
+
+
+    //EmailNotification(LocalDateTime createdOn, String content, String email)
+
+
+     EmailNotification emailNotification = new EmailNotification(time,content,email );
+
+    //work correct
+    @Test
+    public void createEmailNotificationTest() {
+        EmailNotification result = notificationDao.createEmailNotification(emailNotification);
+        System.out.println(result);
+    }
 
     //work correct
     @Test
