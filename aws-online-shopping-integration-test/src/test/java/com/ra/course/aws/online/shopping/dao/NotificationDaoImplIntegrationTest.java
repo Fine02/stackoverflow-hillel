@@ -49,11 +49,21 @@ public class NotificationDaoImplIntegrationTest {
     @Autowired
     private NotificationDao notificationDao;
 
+    String phoneNumber ="38012345333";
+    String email ="111j@gmail.com";
+
     //work correct
     @Test
-    public void isThisOrderLogExistTest() {
+    public void foundMemberEmail() {
+        String result = notificationDao.foundMemberEmail(email);
+        System.out.println(result);
+    }
 
-     //   System.out.println(result);
+    //work correct
+    @Test
+    public void foundMemberPhoneNumberTest() {
+    String result = notificationDao.foundMemberPhoneNumber(phoneNumber);
+    System.out.println(result);
     }
 
 }

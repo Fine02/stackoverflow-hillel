@@ -35,10 +35,9 @@ public class JdbcOrderDaoImpl implements OrderDao {
         this.numberFromStatusRowMapper = numberFromStatusRowMapper;
     }
 
-    //  private static final String UPDATE_ORDER_BY_ORDERNUMBER = "UPDATE \"order\" o SET orderNumber=?, order_status_id=?, orderDate=? WHERE o.orderNumber=?";
     private static final String UPDATE_ORDER_BY_ORDERNUMBER = "UPDATE \"order\" o SET  order_status_id=?, orderDate=? WHERE o.orderNumber=?";
-   // private static final String GET_INT_OF_ORDER_STATUS ="SELECT os.id FROM order_status os WHERE os.status=?";
-    private static final String GET_INT_OF_ORDER_STATUS ="SELECT * FROM order_status os WHERE os.status=?";
+
+    private static final String GET_INT_OF_ORDER_STATUS ="SELECT os.id FROM order_status os WHERE os.status=?";
 
     private static final String GET_MEMBER_BY_ID = " SELECT \n" +
             "\t    m.account_id,\n" +
@@ -80,7 +79,6 @@ public class JdbcOrderDaoImpl implements OrderDao {
             "ol.order_status_id = os.id AND o.order_status_id = os2.id AND ol.orderNumber=? \n" +
             ") ";
 
-    // private static final String FIND_ORDER_LOG_BY_FIELDS = "SELECT ol.`id`, ol.`orderNumber`, ol.`creationDate`, os.`status`, ol.`order_id` FROM order_log ol JOIN order_status os ON ol.`order_status_id` = os.`id` WHERE ol.`orderNumber`=? && ol.`creationDate`=? && os.`status`=?";
 
     private static final String FIND_ORDER_LOG_BY_FIELDS = "SELECT ol.id, ol.orderNumber, ol.creationDate, os.status, ol.order_id FROM order_log ol JOIN order_status os ON ol.order_status_id = os.id WHERE ol.id=?";
 
@@ -92,8 +90,8 @@ public class JdbcOrderDaoImpl implements OrderDao {
     //work correct
     @Override
     public void updateOrder(Order orderNumber) {
-       Integer getNumberFromStatus=jdbcTemplate.queryForObject(GET_INT_OF_ORDER_STATUS, numberFromStatusRowMapper, orderNumber.getStatus());
-        jdbcTemplate.update(UPDATE_ORDER_BY_ORDERNUMBER, getNumberFromStatus, orderNumber.getOrderDate(), orderNumber.getOrderNumber());
+       Integer getNumberFromStatus=jdbcTemplate.queryForObject(GET_INT_OF_ORDER_STATUS, numberFromStatusRowMapper, orderNumber.getStatus().toString());
+       jdbcTemplate.update(UPDATE_ORDER_BY_ORDERNUMBER, getNumberFromStatus, orderNumber.getOrderDate(), orderNumber.getOrderNumber());
     }
 
     //work correct
@@ -103,13 +101,12 @@ public class JdbcOrderDaoImpl implements OrderDao {
         return result;
     }
 
-    //отдает и Order=null
+    //работает, но Order может возращать и "null"
     @Override
     public Order findByOrderNumber(String orderNumber) {
         List<Order> list = jdbcTemplate.query(FIND_ORDER_BY_ORDER_NUMBER, orderRowMapper, orderNumber);
         Order order = new Order();
-        List<OrderLog> orderLogList = null;
-        List<OrderLog> orderLogList2 = new ArrayList<>();
+        List<OrderLog> orderLogList = new ArrayList<>();
         ArrayList<OrderLog> arL = new ArrayList<>();
         for (Order row : list) {
             OrderLog ol = new OrderLog();
@@ -120,16 +117,10 @@ public class JdbcOrderDaoImpl implements OrderDao {
             ol.setOrderNumber(row.getOrderLog().get(0).getOrderNumber());
             ol.setCreationDate(row.getOrderLog().get(0).getCreationDate());
             ol.setStatus(row.getOrderLog().get(0).getStatus());
-            //   orderLogList2.add(ol);
-//            orderLogList.add(ol);
             arL.add(ol);
         }
-//        order.setOrderLog(orderLogList);
-        //order.setOrderLog(arL);
-        order.setOrderLog(orderLogList2);
+        order.setOrderLog(orderLogList);
         return order;
-
-
     }
 
     //work correct

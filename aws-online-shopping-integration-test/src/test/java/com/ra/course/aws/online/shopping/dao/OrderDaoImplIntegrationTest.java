@@ -62,7 +62,7 @@ public class OrderDaoImplIntegrationTest {
     @Autowired
     private OrderDao orderDao;
 
-    LocalDateTime time1 = LocalDateTime.of(2020, 3, 19, 22, 25, 11);
+    LocalDateTime time1 = LocalDateTime.of(2020, 3, 19, 22, 25, 25);
     LocalDateTime time2 = LocalDateTime.of(2020, 3, 20, 22, 22, 11);
     LocalDateTime time3 = LocalDateTime.of(2020, 3, 21, 22, 22, 11);
 
@@ -88,12 +88,10 @@ public class OrderDaoImplIntegrationTest {
 
     Order order = new Order ("1",OrderStatus.UNSHIPPED,time1);
 
-    //проблемы со связанной таблицей Status
+    //work correct
     @Test
     public void updateOrderTest() {
         orderDao.updateOrder(order);
-      //  orderDao.updateOrder('1', 1, "2020-03-19 22:22:25", '1' );
-     //   System.out.println(result);
     }
 
     //work correct
