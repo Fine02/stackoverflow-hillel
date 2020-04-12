@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 public class SMSNotification extends Notification {
     private String phone;
 
+    public SMSNotification() {
+    }
+
     public SMSNotification(String phone) {
         this.phone = phone;
     }

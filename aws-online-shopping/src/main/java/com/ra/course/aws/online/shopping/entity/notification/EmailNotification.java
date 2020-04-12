@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 public class EmailNotification extends Notification {
     private String email;
 
+    public EmailNotification() {
+    }
+
     public EmailNotification(String email) {
         this.email = email;
     }

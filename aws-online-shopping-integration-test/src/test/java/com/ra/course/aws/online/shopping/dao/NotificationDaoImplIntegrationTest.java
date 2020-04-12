@@ -4,6 +4,7 @@ package com.ra.course.aws.online.shopping.dao;
 import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
 import com.ra.course.aws.online.shopping.entity.notification.EmailNotification;
+import com.ra.course.aws.online.shopping.entity.notification.SMSNotification;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -52,16 +53,22 @@ public class NotificationDaoImplIntegrationTest {
     @Autowired
     private NotificationDao notificationDao;
 
-    LocalDateTime time = LocalDateTime.of(2020, 3, 19, 22, 25, 25);
-    String content = "some content";
-    String phoneNumber ="38012345333";
+    LocalDateTime time = LocalDateTime.of(2020, 3, 19, 12, 17, 27);
+    String content = "some content + test+3";
+    String phoneNumber ="38012345111";
     String email ="111j@gmail.com";
 
 
-    //EmailNotification(LocalDateTime createdOn, String content, String email)
-
-
      EmailNotification emailNotification = new EmailNotification(time,content,email );
+     SMSNotification smsNotification = new SMSNotification(time,content,phoneNumber );
+
+
+    //work correct
+    @Test
+    public void createSMSNotificationTest() {
+        SMSNotification result = notificationDao.createSMSNotification(smsNotification);
+        System.out.println(result);
+    }
 
     //work correct
     @Test

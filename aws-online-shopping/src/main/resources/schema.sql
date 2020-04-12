@@ -65,7 +65,10 @@ CREATE SEQUENCE sms_notification_seq;
 CREATE TABLE sms_notification
 (
     id INT PRIMARY KEY DEFAULT NEXTVAL ('sms_notification_seq'),
-    phone varchar (255) NOT NULL
+    phone varchar (255) NOT NULL,
+    notification_id INT NOT NULL,
+    CONSTRAINT  fk_sms_notification_id
+    FOREIGN KEY (notification_id) REFERENCES notification (id) ON DELETE CASCADE
 );
 
 CREATE SEQUENCE email_notification_seq;
@@ -73,7 +76,10 @@ CREATE SEQUENCE email_notification_seq;
 CREATE TABLE email_notification
 (
     id INT PRIMARY KEY DEFAULT NEXTVAL ('email_notification_seq'),
-    email varchar (255) NOT NULL
+    email varchar (255) NOT NULL,
+    notification_id INT NOT NULL,
+    CONSTRAINT  fk_email_notification_id
+    FOREIGN KEY (notification_id) REFERENCES notification (id) ON DELETE CASCADE
 );
 
 CREATE SEQUENCE notification_seq;
