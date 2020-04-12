@@ -32,7 +32,7 @@ public class AnswerRepositoryImpl implements AnswerRepository {
                 .returning()
                 .fetchOne();
 
-        return convertToAnswer(answerRecord);
+        return intoAnswer(answerRecord);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class AnswerRepositoryImpl implements AnswerRepository {
             return Optional.empty();
         }
 
-        final Answer returningAnswer = convertToAnswer(answerRecord);
+        final Answer returningAnswer = intoAnswer(answerRecord);
 
         return Optional.of(returningAnswer);
     }
@@ -72,7 +72,7 @@ public class AnswerRepositoryImpl implements AnswerRepository {
                 .where(ANSWER_TABLE.QUESTION_ID.eq(id))
                 .fetch()
                 .stream()
-                .map(this::convertToAnswer)
+                .map(this::intoAnswer)
                 .collect(Collectors.toList());
     }
 
@@ -82,11 +82,12 @@ public class AnswerRepositoryImpl implements AnswerRepository {
                 .where(ANSWER_TABLE.AUTHOR_ID.eq(id))
                 .fetch()
                 .stream()
-                .map(this::convertToAnswer)
+                .map(this::intoAnswer)
                 .collect(Collectors.toList());
     }
 
-    private Answer convertToAnswer(final AnswerRecord answerRecord) {
+    //convert AnswerRecord.class into Answer.class
+    private Answer intoAnswer(final AnswerRecord answerRecord) {
         return  Answer.builder()
                 .id(answerRecord.getId())
                 .answerText(answerRecord.getAnswerText())

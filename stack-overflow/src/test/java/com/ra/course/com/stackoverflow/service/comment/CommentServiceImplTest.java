@@ -43,7 +43,7 @@ public class CommentServiceImplTest {
 
 
     @Test
-    public void whenAddCommentToOpenQuestionThenReturnNewCommentWithId() {
+    public void whenAddCommentToOpenQuestionThenReturnUpdatedQuestion() {
         //given
         question.setStatus(QuestionStatus.OPEN);
 
@@ -52,22 +52,20 @@ public class CommentServiceImplTest {
         when(questionRepository.findById(ID)).thenReturn(Optional.of(question));
 
         //then
-        var resultComment = commentService.addCommentToQuestion(comment, question);
-        assertThat(resultComment.getId()).isEqualTo(ID);
-        assertThat(question.getCommentList()).contains(resultComment);
+        var resultQuestion = commentService.addCommentToQuestion(comment, question);
+        assertThat(resultQuestion.getCommentList()).contains(comment);
     }
 
 
     @Test
-    public void whenAddCommentToAnswerThenReturnNewCommentWithId() {
+    public void whenAddCommentToAnswerThenReturnUpdatedAnswer() {
         //when
         when(commentRepository.save(comment)).thenReturn(comment);
         when(answerRepository.findById(ID)).thenReturn(Optional.of(answer));
 
         //then
-        var resultComment = commentService.addCommentToAnswer(comment, answer);
-        assertThat(resultComment.getId()).isEqualTo(ID);
-        assertThat(answer.getComments()).contains(resultComment);
+        var resultAnswer = commentService.addCommentToAnswer(comment, answer);
+        assertThat(answer.getComments()).contains(comment);
     }
 
 

@@ -42,7 +42,7 @@ public class QuestionServiceImplTest {
     }
 
     @Test
-    public void whenAddAnswerToOpenQuestionThenReturnNewAnswerWithId() {
+    public void whenAddAnswerToOpenQuestionThenReturnUpdatedQuestion() {
         //given
         question.setStatus(QuestionStatus.OPEN);
 
@@ -51,10 +51,9 @@ public class QuestionServiceImplTest {
         when(answerRepository.save(answer)).thenReturn(answer);
 
         //then
-        var resultAnswer = questionService.addAnswerToQuestion(answer);
+        var resultQuestion = questionService.addAnswerToQuestion(answer);
 
-        assertThat(resultAnswer.getId()).isEqualTo(ID);
-        assertThat(question.getAnswerList()).contains(resultAnswer);
+        assertThat(question.getAnswerList()).contains(answer);
     }
 
 

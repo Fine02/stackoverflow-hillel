@@ -29,7 +29,7 @@ public class QuestionServiceImpl implements QuestionService {
     /**Members able to add an answer to an open question.
      * If QuestionStatus is not OPEN, throws new QuestionClosedException()**/
     @Override
-    public Answer addAnswerToQuestion(@NonNull final Answer answer) {
+    public Question addAnswerToQuestion(@NonNull final Answer answer) {
 
         final var questionFromBD = questionRepo.findById(answer.getQuestionId())
                 .orElseThrow(() -> new QuestionNotFoundException("Question not found in DB. Can't add answer to nonexistent question."));
@@ -40,7 +40,9 @@ public class QuestionServiceImpl implements QuestionService {
 
         questionFromBD.getAnswerList().add(answer);
 
-        return answerRepo.save(answer);
+        answerRepo.save(answer);
+
+        return questionFromBD;
     }
 
 
