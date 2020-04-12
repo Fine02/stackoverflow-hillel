@@ -175,8 +175,8 @@ public class QuestionServiceImplTest {
                 .id(id)
                 .answerText("answer_text")
                 .creationDate(LocalDateTime.now())
-                .author(member)
-                .question(question)
+                .authorId(member.getId())
+                .questionId(question.getId())
                 .photos(new ArrayList<>())
                 .comments(new ArrayList<>())
                 .build();

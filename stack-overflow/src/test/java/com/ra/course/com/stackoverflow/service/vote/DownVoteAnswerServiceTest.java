@@ -106,8 +106,8 @@ public class DownVoteAnswerServiceTest {
                 .author(member).build();
         return Answer.builder()
                 .id(ID1)
-                .author(member)
-                .question(question).build();
+                .authorId(member.getId())
+                .questionId(question.getId()).build();
     }
 
     private Member mockMember(long idMember) {
