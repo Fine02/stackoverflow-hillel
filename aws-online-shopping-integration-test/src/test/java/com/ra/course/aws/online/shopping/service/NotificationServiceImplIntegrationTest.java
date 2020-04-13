@@ -90,7 +90,7 @@ public class NotificationServiceImplIntegrationTest {
         assertEquals(exceptionEmail.getMessage(), "Email-notification about order status can not be sent");
     }
 
-    //work not correct
+    //work correct
     @Test
     public void whenShipmentStatusWasChangedSendSMSNotification() {
 
@@ -103,7 +103,7 @@ public class NotificationServiceImplIntegrationTest {
         assertEquals(exception.getClass(), MemberDataNotFoundException.class);
     }
 
-    //work not correct
+    //work correct
     @Test
     public void whenMemberPhoneNotFoundThenExceptionThrownMemberNotFoundException() {
 

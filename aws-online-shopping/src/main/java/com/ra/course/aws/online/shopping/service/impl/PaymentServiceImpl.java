@@ -18,26 +18,28 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentStatus processPaymentByElectronicBankTransaction(final Member member, final ElectronicBankTransfer bankTransfer, final ElectronicBankTransaction bankTransaction) {
+    public PaymentStatus processPaymentByElectronicBankTransaction(final Member member, final ElectronicBankTransfer bankTransfer, final ElectronicBankTransaction bankTransaction, final Double amount) {
         final var foundMember = paymentDao.foundMemberById(member.getMemberID());
         final var foundBTList = paymentDao.foundListOfBankTransfer(foundMember.getAccount().getElectronicBankTransferList());
         if (foundBTList.contains(bankTransfer)) {
-            bankTransaction.getAmount();
+            //bankTransaction.getAmount();
+            bankTransaction.setAmount(amount);
             bankTransaction.setStatus(PaymentStatus.COMPLETED);
-            paymentDao.update(bankTransaction);
+            paymentDao.createTransaction(bankTransaction);
             return bankTransaction.getStatus();
         }
         throw new PaymentNotProvidedException(MESSAGE);
     }
 
     @Override
-    public PaymentStatus processPaymentByCreditCardTransaction(final Member member, final CreditCard creditCard, final CreditCardTransaction cardTransaction) {
+    public PaymentStatus processPaymentByCreditCardTransaction(final Member member, final CreditCard creditCard, final CreditCardTransaction cardTransaction, final Double amount) {
         final var foundMember = paymentDao.foundMemberById(member.getMemberID());
         final var foundCardList = paymentDao.foundListOfCreditCard(foundMember.getAccount().getCreditCardList());
         if (foundCardList.contains(creditCard)) {
-            cardTransaction.getAmount();
+           // cardTransaction.getAmount();
+            cardTransaction.setAmount(amount);
             cardTransaction.setStatus(PaymentStatus.COMPLETED);
-            paymentDao.update(cardTransaction);
+            paymentDao.createTransaction(cardTransaction);
             return cardTransaction.getStatus();
         }
         throw new PaymentNotProvidedException(MESSAGE);

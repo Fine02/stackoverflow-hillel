@@ -215,3 +215,24 @@ CREATE TABLE credit_card
     CONSTRAINT  fk_account_id_cc
         FOREIGN KEY (account_id) REFERENCES account (id)
 );
+
+CREATE SEQUENCE electronic_bank_transaction_seq;
+
+CREATE TABLE electronic_bank_transaction
+(
+    id INT PRIMARY KEY DEFAULT NEXTVAL ('electronic_bank_transaction_seq'),
+    payment_id INT NOT NULL,
+    CONSTRAINT  fk_payment_id
+        FOREIGN KEY (payment_id) REFERENCES payment (id)
+);
+
+
+CREATE SEQUENCE credit_card_transaction_seq;
+
+CREATE TABLE credit_card_transaction
+(
+    id INT PRIMARY KEY DEFAULT NEXTVAL ('credit_card_transaction_seq'),
+    payment_id INT NOT NULL,
+    CONSTRAINT  payment_id_fk
+        FOREIGN KEY (payment_id) REFERENCES payment (id)
+);

@@ -9,7 +9,7 @@ import com.ra.course.aws.online.shopping.entity.user.Member;
 import org.springframework.stereotype.Repository;
 
 public interface PaymentService {
-    PaymentStatus processPaymentByElectronicBankTransaction(Member member, ElectronicBankTransfer bankTransfer, ElectronicBankTransaction bankTransaction);
+    PaymentStatus processPaymentByElectronicBankTransaction(Member member, ElectronicBankTransfer bankTransfer, ElectronicBankTransaction bankTransaction, Double amount);
 
-    PaymentStatus processPaymentByCreditCardTransaction(Member member, CreditCard creditCard, CreditCardTransaction cardTransaction);
+    PaymentStatus processPaymentByCreditCardTransaction(Member member, CreditCard creditCard, CreditCardTransaction cardTransaction, Double amount);
 }

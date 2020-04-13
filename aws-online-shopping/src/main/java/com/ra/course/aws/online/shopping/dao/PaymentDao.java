@@ -14,7 +14,7 @@ public interface PaymentDao {
 
     List<CreditCard> foundListOfCreditCard(List<CreditCard> creditCards);
 
-    void update(ElectronicBankTransaction bankTransaction);
+    void createTransaction(ElectronicBankTransaction bankTransaction);
 
-    void update(CreditCardTransaction cardTransaction);
+    void createTransaction(CreditCardTransaction cardTransaction);
 }

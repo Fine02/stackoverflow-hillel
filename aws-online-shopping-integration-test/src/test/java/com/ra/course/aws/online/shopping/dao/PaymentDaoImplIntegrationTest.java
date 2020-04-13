@@ -3,7 +3,10 @@ package com.ra.course.aws.online.shopping.dao;
 import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
 import com.ra.course.aws.online.shopping.entity.Address;
+import com.ra.course.aws.online.shopping.entity.enums.PaymentStatus;
 import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
+import com.ra.course.aws.online.shopping.entity.payment.CreditCardTransaction;
+import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransaction;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,6 @@ import static org.mockito.Mockito.mock;
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
 public class PaymentDaoImplIntegrationTest {
-
 
     @Primary
     @Bean
@@ -44,6 +46,7 @@ public class PaymentDaoImplIntegrationTest {
     private PaymentDao paymentDao;
 
     Address address = new Address("Mira, 8", "Kiyv", "Kyiv", "14004", "Ukraine");
+    private Double amount = 777.77;
 
     public List<ElectronicBankTransfer> makeElectronicBankTransferList() {
         List<ElectronicBankTransfer> transferList = new ArrayList<>();
@@ -62,6 +65,8 @@ public class PaymentDaoImplIntegrationTest {
 
     public ElectronicBankTransfer transfer = makeBankTransfer("GermanBank", "5265", "8542");
     public CreditCard creditCard = makeCreditCard ("VISA", "5584",5662,address);
+    private ElectronicBankTransaction electronicBankTransaction = new ElectronicBankTransaction(PaymentStatus.PENDING, amount);
+    private CreditCardTransaction creditCardTransaction = new CreditCardTransaction(PaymentStatus.PENDING, amount);
 
     //work correct
     @Test
@@ -75,6 +80,17 @@ public class PaymentDaoImplIntegrationTest {
     public void getInstanceOfFindingListOfCreditCardTest() {
         List<CreditCard> result = paymentDao.foundListOfCreditCard(makeListOfCreditCard());
         System.out.println(result);
+    }
+
+    //work correct
+    @Test
+    public void createElectronicBankTransactionTest() {
+        paymentDao.createTransaction(electronicBankTransaction);
+    }
+    //work correct
+    @Test
+    public void createCreditCardTransactionTest() {
+        paymentDao.createTransaction(creditCardTransaction);
     }
 
 
