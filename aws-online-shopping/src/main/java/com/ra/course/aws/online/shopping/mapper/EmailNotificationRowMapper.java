@@ -12,7 +12,6 @@ import java.sql.SQLException;
 public class EmailNotificationRowMapper implements RowMapper<EmailNotification> {
     @Override
     public EmailNotification mapRow(ResultSet rs, int rowNum) throws SQLException {
-      // EmailNotification emailNotification = new EmailNotification( rs.getTimestamp("createdOn").toLocalDateTime(), rs.getString("context"), rs.getString("email"));
         EmailNotification emailNotification = new EmailNotification();
         emailNotification.setCreatedOn(rs.getTimestamp("createdOn").toLocalDateTime());
         emailNotification.setContent(rs.getString("context"));

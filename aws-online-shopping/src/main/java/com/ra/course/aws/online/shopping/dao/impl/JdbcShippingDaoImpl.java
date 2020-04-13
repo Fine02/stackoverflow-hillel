@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-//@Component
 @Repository
 public class JdbcShippingDaoImpl implements ShippingDao {
 
@@ -55,7 +54,6 @@ public class JdbcShippingDaoImpl implements ShippingDao {
             ") ";
 
 
-
     private static final String GET_SHIPMENT_LOGS_BY_SHIPMENT_NO_IN_OLOGS ="SELECT \n" +
             "sl.`id` shipmentLog_id, sl.`shipmentNumber`, ss.`status` shipmentLogStatus,\n" +
             "sl.`creationDate` \n" +
@@ -84,16 +82,6 @@ public class JdbcShippingDaoImpl implements ShippingDao {
             "FROM member m JOIN account a ON m.`account_id`= a.`id`\n" +
             "JOIN `address` adr ON a.`address_id` = adr.`id`\n" +
             "WHERE adr.`streetAddress`=? && adr.`city`=? &&  adr.`state` =? && adr.`zipcode`=? && adr.`country` =?  GROUP BY a.id";
-
-
-    ////
-   // private static final String FIND_ORDER_LOG_BY_FIELDS = "SELECT ol.id, ol.orderNumber, ol.creationDate, os.status, ol.order_id FROM order_log ol JOIN order_status os ON ol.order_status_id = os.id WHERE ol.id=?";
-
-   // private static final String GET_ORDER_LOG_LIST_BY_ID = "SELECT ol.id, ol.orderNumber, ol.creationDate, os.status FROM order_log ol JOIN order_status os ON ol.order_status_id = os.id WHERE ol.id=?";
-    ////
-
-   // private static final String FIND_SHIPMENT_LOG_BY_ID = "SELECT sl.id, sl.shipmentNumber, ss.status, sl.creationDate FROM shipment_log sl JOIN shipment_status ss ON sl.shipment_status_id = ss.id WHERE sl.`shipmentNumber`=? &&  ss.`status`=? && sl.`creationDate`=? ";
-
 
     private static final String FIND_SHIPMENT_LOG_BY_ID = "SELECT sl.id, sl.shipmentNumber, ss.status, sl.creationDate FROM shipment_log sl JOIN shipment_status ss ON sl.shipment_status_id = ss.id WHERE sl.id=? ";
 
@@ -144,39 +132,30 @@ public class JdbcShippingDaoImpl implements ShippingDao {
 
     @Override
     public void updateShipment(Shipment shipment) {
-        jdbcTemplate.update(UPDATE_SHIPMENT_LOG_BY_SL,  shipment.getShipmentLogs());
+      //  jdbcTemplate.update(UPDATE_SHIPMENT_LOG_BY_SL,  shipment.getShipmentLogs());
     }
-// start
-//    @Override
-//    public ShipmentLog findShipmentLogById(Long shipmentLogId) {
-//        return jdbcTemplate.queryForObject(GET_SHIPMENT_LOG_BY_SL_ID, BeanPropertyRowMapper.newInstance(ShipmentLog.class), shipmentLogId);
-//    }
-//
-//    @Override
-//    public boolean isThisShipmentLogExist(ShipmentLog shipmentLog) {
-//        return jdbcTemplate.queryForObject(FIND_SHIPMENT_LOG_BY_ID, BeanPropertyRowMapper.newInstance(Boolean.class), shipmentLog);
-//    }
-    //end
 
     @Override
     public List<ShipmentLog> findLogListByShipment(List<ShipmentLog> shipmentLogList) {
-        List<ShipmentLog> shipmentLogs = jdbcTemplate.query(GET_SHIPMENT_LOGS_BY_SHIPMENT_NO_IN_OLOGS, (rs, rowNum) -> new ShipmentLog(rs.getString("orderNumber")), shipmentLogList);
-        return shipmentLogs;
+       // List<ShipmentLog> shipmentLogs = jdbcTemplate.query(GET_SHIPMENT_LOGS_BY_SHIPMENT_NO_IN_OLOGS, (rs, rowNum) -> new ShipmentLog(rs.getString("orderNumber")), shipmentLogList);
+       // return shipmentLogs;
+        return null;
     }
 
     @Override
     public Shipment findByShipmentNumber(String shipmentNumber) {
-        return jdbcTemplate.queryForObject(FIND_SHIPMENT_BY_SHIPMENT_NUMBER, BeanPropertyRowMapper.newInstance(Shipment.class), shipmentNumber);
+       // return jdbcTemplate.queryForObject(FIND_SHIPMENT_BY_SHIPMENT_NUMBER, BeanPropertyRowMapper.newInstance(Shipment.class), shipmentNumber);
+        return null;
     }
 
-    //
     @Override
     public void addShipmentLog(boolean add) {
-        jdbcTemplate.queryForObject(ADD_SHIPMENT_LOG, BeanPropertyRowMapper.newInstance(OrderLog.class), add);
+       // jdbcTemplate.queryForObject(ADD_SHIPMENT_LOG, BeanPropertyRowMapper.newInstance(OrderLog.class), add);
     }
 
     @Override
     public Address findThatShippingAddress(Address shippingAddress) {
-        return jdbcTemplate.queryForObject(GET_SHIPMENT_ADDRESS_IN_ACCOUNT, BeanPropertyRowMapper.newInstance(Address.class), shippingAddress);
+        //return jdbcTemplate.queryForObject(GET_SHIPMENT_ADDRESS_IN_ACCOUNT, BeanPropertyRowMapper.newInstance(Address.class), shippingAddress);
+        return null;
     }
 }

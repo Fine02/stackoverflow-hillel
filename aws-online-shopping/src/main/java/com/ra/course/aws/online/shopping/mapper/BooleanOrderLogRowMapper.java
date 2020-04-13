@@ -25,14 +25,13 @@ public class BooleanOrderLogRowMapper implements RowMapper<Boolean> {
         return orderStatus;
     }
 
-
     public OrderLog mapRowOrderLog(ResultSet rs, int rowNum) throws SQLException {
         OrderStatus orderStatus = mapToOrderStatusForLog(rs, rowNum);
         OrderLog orderLog = new OrderLog();
         orderLog.setId(rs.getInt("id"));
-//        orderLog.setOrderNumber(rs.getString("orderNumber"));
-//        orderLog.setCreationDate(rs.getTimestamp("creationDate").toLocalDateTime());
-//        orderLog.setStatus(orderStatus);
+        orderLog.setOrderNumber(rs.getString("orderNumber"));
+        orderLog.setCreationDate(rs.getTimestamp("creationDate").toLocalDateTime());
+        orderLog.setStatus(orderStatus);
         return orderLog;
     }
 }

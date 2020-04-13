@@ -21,18 +21,6 @@ public class NotificationDaoImplIntegrationTest {
 
     @Primary
     @Bean
-    public PaymentDao mockedPaymentDao() {
-        return mock(PaymentDao.class);
-    }
-
-    @Primary
-    @Bean
-    public ShippingDao mockedShippingDao() {
-        return mock(ShippingDao.class);
-    }
-
-    @Primary
-    @Bean
     public AccountDao mockedAccountDao() {
         return mock(AccountDao.class);
     }

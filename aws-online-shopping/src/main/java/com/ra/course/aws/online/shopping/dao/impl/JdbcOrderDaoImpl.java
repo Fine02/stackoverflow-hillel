@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Component
 @Repository
 public class JdbcOrderDaoImpl implements OrderDao {
 
@@ -38,7 +37,7 @@ public class JdbcOrderDaoImpl implements OrderDao {
 
     private static final String UPDATE_ORDER_BY_ORDERNUMBER = "UPDATE \"order\" o SET  order_status_id=?, orderDate=? WHERE o.orderNumber=?";
 
-    private static final String GET_INT_OF_ORDER_STATUS ="SELECT os.id FROM order_status os WHERE os.status=?";
+    private static final String GET_INT_OF_ORDER_STATUS = "SELECT os.id FROM order_status os WHERE os.status=?";
 
     private static final String GET_MEMBER_BY_ID = " SELECT \n" +
             "\t    m.account_id,\n" +
@@ -80,7 +79,6 @@ public class JdbcOrderDaoImpl implements OrderDao {
             "ol.order_status_id = os.id AND o.order_status_id = os2.id AND ol.orderNumber=? \n" +
             ") ";
 
-
     private static final String FIND_ORDER_LOG_BY_FIELDS = "SELECT ol.id, ol.orderNumber, ol.creationDate, os.status, ol.order_id FROM order_log ol JOIN order_status os ON ol.order_status_id = os.id WHERE ol.id=?";
 
     private static final String ADD_ORDER_LOG = "INSERT INTO order_log (orderNumber, creationDate, order_status_id, order_id) VALUES (?, ?, ?, ?)";
@@ -91,8 +89,8 @@ public class JdbcOrderDaoImpl implements OrderDao {
     //work correct
     @Override
     public void updateOrder(Order orderNumber) {
-       Integer getNumberFromStatus=jdbcTemplate.queryForObject(GET_INT_OF_ORDER_STATUS, numberFromStatusRowMapper, orderNumber.getStatus().toString());
-       jdbcTemplate.update(UPDATE_ORDER_BY_ORDERNUMBER, getNumberFromStatus, orderNumber.getOrderDate(), orderNumber.getOrderNumber());
+        Integer getNumberFromStatus = jdbcTemplate.queryForObject(GET_INT_OF_ORDER_STATUS, numberFromStatusRowMapper, orderNumber.getStatus().toString());
+        jdbcTemplate.update(UPDATE_ORDER_BY_ORDERNUMBER, getNumberFromStatus, orderNumber.getOrderDate(), orderNumber.getOrderNumber());
     }
 
     //work correct
@@ -136,7 +134,7 @@ public class JdbcOrderDaoImpl implements OrderDao {
     //work correct
     @Override
     public boolean isThisOrderLogExist(OrderLog orderLog) {
-        try{
+        try {
             Long foundId = orderLog.getId();
             return jdbcTemplate.queryForObject(FIND_ORDER_LOG_BY_FIELDS, booleanOrderLogRowMapper, foundId);
         } catch (NullPointerException ex) {
@@ -147,7 +145,7 @@ public class JdbcOrderDaoImpl implements OrderDao {
     //need to be revision for next action
     @Override
     public void addOrderLog(boolean add) {
-         // jdbcTemplate.update( BeanPropertyRowMapper.newInstance(OrderLog.class), add);
+        // jdbcTemplate.update( BeanPropertyRowMapper.newInstance(OrderLog.class), add);
     }
 
     //work correct

@@ -74,25 +74,21 @@ public class MemberBooleanRowMapper implements RowMapper<Boolean> {
 
     private List<CreditCard> mapToCreditCardList(ResultSet rs) throws SQLException, DataAccessException {
         List<CreditCard> creditCards = new ArrayList<>();
-        //   while (rs.next()) {
         CreditCard creditCard = new CreditCard();
         creditCard.setNameOnCard(rs.getString("nameOnCard"));
         creditCard.setCardNumber(rs.getString("cardNumber"));
         creditCard.setCode(rs.getInt("code"));
         creditCards.add(creditCard);
-        //     }
         return creditCards;
     }
 
     private List<ElectronicBankTransfer> mapToElectronicBankTransfer(ResultSet rs) throws SQLException, DataAccessException {
         List<ElectronicBankTransfer> electronicBankTransferList = new ArrayList<>();
-        //  while (rs.next()) {
         ElectronicBankTransfer electronicBankTransfer = new ElectronicBankTransfer();
         electronicBankTransfer.setBankName(rs.getString("bankName"));
         electronicBankTransfer.setRoutingNumber(rs.getString("routingNumber"));
         electronicBankTransfer.setAccountNumber(rs.getString("accountNumber"));
         electronicBankTransferList.add(electronicBankTransfer);
-        //  }
         return electronicBankTransferList;
     }
 

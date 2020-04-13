@@ -23,16 +23,12 @@ public class ListOrderLogRowMapper implements ResultSetExtractor<List<OrderLog>>
     public List<OrderLog> extractData(ResultSet rs) throws SQLException, DataAccessException {
         OrderStatus orderStatus = mapToOrderStatusForLog(rs);
         List<OrderLog> orderLogList = new ArrayList<>();
-        // OrderLog orderLog = null;
- //while(rs.next()) {
-            OrderLog orderLog = new OrderLog();
-          //  orderLog.setId(rs.getInt("orderLog_id"));
-            orderLog.setOrderNumber(rs.getString(2));
-            orderLog.setCreationDate(rs.getTimestamp(3).toLocalDateTime());
-            orderLog.setStatus(orderStatus);
-            orderLogList.add(orderLog);
-   //   }
-     return orderLogList;
+        OrderLog orderLog = new OrderLog();
+        orderLog.setOrderNumber(rs.getString(2));
+        orderLog.setCreationDate(rs.getTimestamp(3).toLocalDateTime());
+        orderLog.setStatus(orderStatus);
+        orderLogList.add(orderLog);
+        return orderLogList;
     }
-    }
+}
 

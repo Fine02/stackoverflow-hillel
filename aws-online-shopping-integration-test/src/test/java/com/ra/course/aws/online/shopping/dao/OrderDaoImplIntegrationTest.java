@@ -16,30 +16,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.booleanThat;
 import static org.mockito.Mockito.mock;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
 
 public class OrderDaoImplIntegrationTest {
-    @Primary
-    @Bean
-    public NotificationDao mockedNotificationDao() {
-        return mock(NotificationDao.class);
-    }
-
-    @Primary
-    @Bean
-    public PaymentDao mockedPaymentDao() {
-        return mock(PaymentDao.class);
-    }
-
-    @Primary
-    @Bean
-    public ShippingDao mockedShippingDao() {
-        return mock(ShippingDao.class);
-    }
 
     @Primary
     @Bean

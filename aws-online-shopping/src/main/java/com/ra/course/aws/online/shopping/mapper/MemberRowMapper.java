@@ -16,25 +16,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class MemberRowMapper implements ResultSetExtractor <Member> {
+public class MemberRowMapper implements ResultSetExtractor<Member> {
     @Override
     public Member extractData(ResultSet rs) throws SQLException, DataAccessException {
-        Account account = dataFromAccount (rs);
+        Account account = dataFromAccount(rs);
         Member member = new Member();
         member.setAccount(account);
         member.setMemberID(rs.getInt("member_id"));
         return member;
     }
 
-    public Account dataFromAccount(ResultSet rs) throws SQLException, DataAccessException{
+    public Account dataFromAccount(ResultSet rs) throws SQLException, DataAccessException {
         Account account = new Account();
         AccountStatus accountStatus = mapToAccountStatus(rs);
-        Address shippingAddress = mapToAddress (rs);
-
-        List<CreditCard>  creditCardList = mapToCreditCardList (rs);
-        List<ElectronicBankTransfer>  bankTransferList = mapToElectronicBankTransfer(rs);
-
-
+        Address shippingAddress = mapToAddress(rs);
+        List<CreditCard> creditCardList = mapToCreditCardList(rs);
+        List<ElectronicBankTransfer> bankTransferList = mapToElectronicBankTransfer(rs);
         account.setUserName(rs.getString("userName"));
         account.setPassword(rs.getString("password"));
         account.setStatus(accountStatus);
@@ -42,10 +39,9 @@ public class MemberRowMapper implements ResultSetExtractor <Member> {
         account.setShippingAddress(shippingAddress);
         account.setEmail(rs.getString("email"));
         account.setPhone(rs.getString("phone"));
-
         account.setCreditCardList(creditCardList);
         account.setElectronicBankTransferList(bankTransferList);
-        return  account;
+        return account;
     }
 
     private AccountStatus mapToAccountStatus(ResultSet rs) throws SQLException, DataAccessException {
@@ -53,7 +49,7 @@ public class MemberRowMapper implements ResultSetExtractor <Member> {
         return accountStatus;
     }
 
-    private Address  mapToAddress (ResultSet rs) throws SQLException, DataAccessException {
+    private Address mapToAddress(ResultSet rs) throws SQLException, DataAccessException {
         Address address = new Address();
         address.setStreetAddress(rs.getString("streetAddress"));
         address.setCity(rs.getString("city"));
@@ -63,7 +59,7 @@ public class MemberRowMapper implements ResultSetExtractor <Member> {
         return address;
     }
 
-    private List<CreditCard>   mapToCreditCardList (ResultSet rs) throws SQLException, DataAccessException {
+    private List<CreditCard> mapToCreditCardList(ResultSet rs) throws SQLException, DataAccessException {
         List<CreditCard> creditCards = new ArrayList<>();
         while (rs.next()) {
             CreditCard creditCard = new CreditCard();
@@ -75,10 +71,10 @@ public class MemberRowMapper implements ResultSetExtractor <Member> {
         return creditCards;
     }
 
-    private List<ElectronicBankTransfer>  mapToElectronicBankTransfer (ResultSet rs) throws SQLException, DataAccessException {
+    private List<ElectronicBankTransfer> mapToElectronicBankTransfer(ResultSet rs) throws SQLException, DataAccessException {
         List<ElectronicBankTransfer> electronicBankTransferList = new ArrayList<>();
         while (rs.next()) {
-            ElectronicBankTransfer electronicBankTransfer = new ElectronicBankTransfer ();
+            ElectronicBankTransfer electronicBankTransfer = new ElectronicBankTransfer();
             electronicBankTransfer.setBankName(rs.getString("bankName"));
             electronicBankTransfer.setRoutingNumber(rs.getString("routingNumber"));
             electronicBankTransfer.setAccountNumber(rs.getString("accountNumber"));
@@ -86,5 +82,4 @@ public class MemberRowMapper implements ResultSetExtractor <Member> {
         }
         return electronicBankTransferList;
     }
-
 }
