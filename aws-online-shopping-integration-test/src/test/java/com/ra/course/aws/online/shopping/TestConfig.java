@@ -27,11 +27,11 @@ public class TestConfig {
         return mock(PaymentDao.class);
     }
 
-    @Primary
-    @Bean
-    public ShippingDao mockedShippingDao() {
-        return mock(ShippingDao.class);
-    }
+//    @Primary
+//    @Bean
+//    public ShippingDao mockedShippingDao() {
+//        return mock(ShippingDao.class);
+//    }
 
     @Primary
     @Bean

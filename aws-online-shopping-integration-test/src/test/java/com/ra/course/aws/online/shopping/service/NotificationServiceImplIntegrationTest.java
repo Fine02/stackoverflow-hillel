@@ -2,7 +2,6 @@ package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
-import com.ra.course.aws.online.shopping.dao.OrderDao;
 import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.enums.OrderStatus;
@@ -14,6 +13,7 @@ import com.ra.course.aws.online.shopping.entity.shipment.ShipmentLog;
 import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
+import com.ra.course.aws.online.shopping.exceptions.NotificationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,59 +25,91 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
 public class NotificationServiceImplIntegrationTest {
 
     @Autowired
-    private OrderDao orderDao;
-
-    @Autowired
     private NotificationService notificationService;
 
 
-    LocalDateTime time1 = LocalDateTime.of(2020, 3, 19, 22, 25, 25);
-    LocalDateTime time2 = LocalDateTime.of(2020, 3, 20, 22, 22, 11);
-    LocalDateTime time3 = LocalDateTime.of(2020, 3, 21, 22, 22, 11);
-//    private OrderLog makeOrderLog(String orderNumber, LocalDateTime creationDate, OrderStatus status) {
-//        return new OrderLog(orderNumber, creationDate, status);
-//    }
-//    private OrderLog makeOrderLog(long id, String orderNumber, LocalDateTime creationDate, OrderStatus status) {
-//        return new OrderLog(id, orderNumber, creationDate, status);
-//    }
-//
-//    public OrderLog ORDER_LOG1 = makeOrderLog("2", time1, OrderStatus.PENDING);
-//    public OrderLog ORDER_LOG2 = makeOrderLog("2", time2, OrderStatus.PENDING);
-//    public OrderLog ORDER_LOG3 = makeOrderLog("2", time3, OrderStatus.PENDING);
-//    public OrderLog ORDER_LOG4 = makeOrderLog(1L,"2", time3, OrderStatus.PENDING);
-
-    private final OrderLog orderLog = makeOrderLog("101010", time1, OrderStatus.PENDING);
-    private final ShipmentLog shipmentLog = makeShipmentLog("101010", ShipmentStatus.SHIPPED, time1);
+    LocalDateTime time = LocalDateTime.of(2020, 3, 19, 22, 22, 11);
 
     private String emailNotExist = "hhhhh@gmail.com";
     private String phoneNotExist = "456522";
+
     private String emailExist = "111j@gmail.com";
     private String phoneExist = "38012345111";
 
     private Address address = new Address("Mira", "Kiyv", "Kyiv", "04114", "Ukraine");
 
-    private Account accountNotExist = makeAccount(emailNotExist, phoneNotExist);
-    private Member memberNotExist = makeMember(accountNotExist);
+    private Account accountWithNotExistData = makeAccount(emailNotExist, phoneNotExist);
+    private Member memberWithNotExistData = makeMember(accountWithNotExistData);
 
     private Account accountExist = makeAccount(emailExist, phoneExist);
     private Member memberExist = makeMember(accountExist);
 
+    OrderLog newOrderLog = makeOrderLog(7, "5548541", LocalDateTime.now().minusDays(1), OrderStatus.PENDING);
+    ShipmentLog newShipmentLog = makeShipmentLog(7, "55785", ShipmentStatus.ONHOLD, LocalDateTime.now().minusDays(1));
+
+    OrderLog orderLogInDB = makeOrderLog(1, "1", time, OrderStatus.PENDING);
+    ShipmentLog shipmentLogInDB = makeShipmentLog(1, "1", ShipmentStatus.SHIPPED, time);
+
+    //work correct
+    @Test
+    public void whenNotificationAboutShipmentStatusWasNotSentThanThrowNotificationException() {
+
+        Throwable exceptionEmail = Assertions.assertThrows(NotificationException.class, () -> {
+            notificationService.sendEmailNotificationAboutShipmentStatus(shipmentLogInDB, memberExist);
+        });
+
+        Throwable exceptionSMS = Assertions.assertThrows(NotificationException.class, () -> {
+            notificationService.sendSMSNotificationAboutShipmentStatus(shipmentLogInDB, memberExist);
+        });
+
+        assertEquals(exceptionEmail.getMessage(), "Email-notification about shipment status can not be sent");
+
+        assertEquals(exceptionSMS.getMessage(), "SMS-notification about shipment status can not be sent");
+    }
+
+    //work correct
+    @Test
+    public void whenNotificationAboutOrderStatusWasNotSentThanThrowNotificationException() {
+
+        Throwable exceptionEmail = Assertions.assertThrows(NotificationException.class, () -> {
+            notificationService.sendEmailNotificationAboutOrderStatus(orderLogInDB, memberExist);
+        });
+
+        Throwable exceptionSMS = Assertions.assertThrows(NotificationException.class, () -> {
+            notificationService.sendSMSNotificationAboutOrderStatus(orderLogInDB, memberExist);
+        });
+
+        assertEquals(exceptionSMS.getMessage(), "SMS-notification about order status can not be sent");
+
+        assertEquals(exceptionEmail.getMessage(), "Email-notification about order status can not be sent");
+    }
+
+    //work not correct
+    @Test
+    public void whenShipmentStatusWasChangedSendSMSNotification() {
+
+        Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {
+            notificationService.sendSMSNotificationAboutOrderStatus(newOrderLog, memberWithNotExistData);
+            notificationService.sendSMSNotificationAboutShipmentStatus(newShipmentLog, memberWithNotExistData);
+        });
+
+        assertEquals(exception.getMessage(), "There is not found the phone number");
+        assertEquals(exception.getClass(), MemberDataNotFoundException.class);
+    }
 
     //work not correct
     @Test
     public void whenMemberPhoneNotFoundThenExceptionThrownMemberNotFoundException() {
-        OrderLog newOrderLog = makeOrderLog("5548541", LocalDateTime.now().minusDays(1), OrderStatus.PENDING);
+
         Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {
-            notificationService.sendEmailNotificationAboutOrderStatus(newOrderLog, memberNotExist);
-            // notificationService.sendEmailNotificationAboutShipmentStatus(SHIPMENT_LOG, memberExist);
+            notificationService.sendEmailNotificationAboutOrderStatus(newOrderLog, memberWithNotExistData);
+            notificationService.sendEmailNotificationAboutShipmentStatus(newShipmentLog, memberExist);
         });
 
         assertEquals(exception.getMessage(), "There is not found the member's email");
@@ -87,8 +119,7 @@ public class NotificationServiceImplIntegrationTest {
     //work correct
     @Test
     public void whenShipmentStatusWasChangedSendNotification() {
-
-        ShipmentLog newShipmentLog = makeShipmentLog("55785", ShipmentStatus.ONHOLD, LocalDateTime.now().minusDays(1));
+        ShipmentLog newShipmentLog = makeShipmentLog(7, "55785", ShipmentStatus.ONHOLD, LocalDateTime.now().minusDays(1));
         String expectedResult = "your shipment number 55785 has changed status on ONHOLD";
 
         var resultSMS = notificationService.sendSMSNotificationAboutShipmentStatus(newShipmentLog, memberExist);
@@ -98,11 +129,10 @@ public class NotificationServiceImplIntegrationTest {
         assertEquals(expectedResult, resultEmail.getContent());
     }
 
-
     //work correct
     @Test
-    public void whenMemberPhoneFoundAndOrderLogIsAbsentInDBThenReturnEmailNotificationAndSMSNotification() {
-        OrderLog newOrderLog = makeOrderLog("5548541", LocalDateTime.now().minusDays(1), OrderStatus.PENDING);
+    public void whenOrderStatusWasChangedSendNotification() {
+        OrderLog newOrderLog = makeOrderLog(7, "5548541", LocalDateTime.now().minusDays(1), OrderStatus.PENDING);
         String expectedResult = "your order number 5548541 has changed status on PENDING";
 
         var resultSMS = notificationService.sendSMSNotificationAboutOrderStatus(newOrderLog, memberExist);
@@ -112,12 +142,12 @@ public class NotificationServiceImplIntegrationTest {
         assertEquals(expectedResult, resultEmail.getContent());
     }
 
-    private ShipmentLog makeShipmentLog(String shipmentNumber, ShipmentStatus status, LocalDateTime creationDate) {
-        return new ShipmentLog(shipmentNumber, status, creationDate);
+    private ShipmentLog makeShipmentLog(long id, String shipmentNumber, ShipmentStatus status, LocalDateTime creationDate) {
+        return new ShipmentLog(id, shipmentNumber, status, creationDate);
     }
 
-    private OrderLog makeOrderLog(String orderNumber, LocalDateTime creationDate, OrderStatus status) {
-        return new OrderLog(orderNumber, creationDate, status);
+    private OrderLog makeOrderLog(long id, String orderNumber, LocalDateTime creationDate, OrderStatus status) {
+        return new OrderLog(id, orderNumber, creationDate, status);
     }
 
     private Account makeAccount(String email, String phoneNumber) {
