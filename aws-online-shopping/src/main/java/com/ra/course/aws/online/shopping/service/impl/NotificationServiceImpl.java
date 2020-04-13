@@ -41,7 +41,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         final var foundPhoneNumber = notificationDao.foundMemberPhoneNumber(member.getAccount().getPhone());
-        if (foundPhoneNumber.isBlank()) {
+        if (foundPhoneNumber==null) {
             throw new MemberDataNotFoundException(MESSAGE_NO_PHONE);
         }
 
@@ -60,7 +60,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         final var foundPhoneNumber = notificationDao.foundMemberPhoneNumber(member.getAccount().getPhone());
-        if (foundPhoneNumber.isBlank()) {
+        if (foundPhoneNumber==null) {
             throw new MemberDataNotFoundException(MESSAGE_NO_PHONE);
         }
 
@@ -78,7 +78,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         final var foundEmail = notificationDao.foundMemberEmail(member.getAccount().getEmail());
-        if (foundEmail.isBlank()) {
+        if (foundEmail==null) {
             throw new MemberDataNotFoundException(MESSAGE_NO_EMAIL);
         }
 
@@ -96,7 +96,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         final var foundEmail = notificationDao.foundMemberEmail(member.getAccount().getEmail());
-        if (foundEmail.isBlank()) {
+        if (foundEmail==null) {
             throw new MemberDataNotFoundException(MESSAGE_NO_EMAIL);
         }
 

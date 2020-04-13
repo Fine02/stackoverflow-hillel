@@ -5,6 +5,7 @@ import com.ra.course.aws.online.shopping.entity.order.Order;
 import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import com.ra.course.aws.online.shopping.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -135,8 +136,12 @@ public class JdbcOrderDaoImpl implements OrderDao {
     //work correct
     @Override
     public boolean isThisOrderLogExist(OrderLog orderLog) {
-        Long foundId = orderLog.getId();
-       return jdbcTemplate.queryForObject(FIND_ORDER_LOG_BY_FIELDS, booleanOrderLogRowMapper, foundId);
+        try{
+            Long foundId = orderLog.getId();
+            return jdbcTemplate.queryForObject(FIND_ORDER_LOG_BY_FIELDS, booleanOrderLogRowMapper, foundId);
+        } catch (NullPointerException ex) {
+            return false;
+        }
     }
 
     //need to be revision for next action
@@ -148,6 +153,10 @@ public class JdbcOrderDaoImpl implements OrderDao {
     //work correct
     @Override
     public OrderLog findOrderLogById(Long orderLogId) {
-        return jdbcTemplate.queryForObject(GET_ORDER_LOG_BY_ID, BeanPropertyRowMapper.newInstance(OrderLog.class), orderLogId);
+        try {
+            return jdbcTemplate.queryForObject(GET_ORDER_LOG_BY_ID, BeanPropertyRowMapper.newInstance(OrderLog.class), orderLogId);
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
     }
 }

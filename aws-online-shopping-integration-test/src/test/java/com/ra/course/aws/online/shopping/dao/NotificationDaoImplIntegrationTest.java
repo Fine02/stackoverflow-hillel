@@ -1,6 +1,5 @@
 package com.ra.course.aws.online.shopping.dao;
 
-
 import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
 import com.ra.course.aws.online.shopping.entity.notification.EmailNotification;
@@ -55,12 +54,12 @@ public class NotificationDaoImplIntegrationTest {
 
     LocalDateTime time = LocalDateTime.of(2020, 3, 19, 12, 17, 27);
     String content = "some content + test+3";
-    String phoneNumber ="38012345111";
-    String email ="111j@gmail.com";
+    String phoneNumber = "38012345111";
+    String email = "111j@gmail.com";
 
 
-     EmailNotification emailNotification = new EmailNotification(time,content,email );
-     SMSNotification smsNotification = new SMSNotification(time,content,phoneNumber );
+    EmailNotification emailNotification = new EmailNotification(time, content, email);
+    SMSNotification smsNotification = new SMSNotification(time, content, phoneNumber);
 
 
     //work correct
@@ -87,8 +86,8 @@ public class NotificationDaoImplIntegrationTest {
     //work correct
     @Test
     public void foundMemberPhoneNumberTest() {
-    String result = notificationDao.foundMemberPhoneNumber(phoneNumber);
-    System.out.println(result);
+        String result = notificationDao.foundMemberPhoneNumber(phoneNumber);
+        System.out.println(result);
     }
 
 }

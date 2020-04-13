@@ -94,10 +94,10 @@ public class NotificationServiceImplTest {
 
     @Test
     public void whenNotFoundEmailOfMemberThanEmailNotificationAboutOrderStatusWillNotBeSentThanThrowMemberNotFoundException() {
-        Account account = mockAccount("", phone);
+        Account account = mockAccount(null, phone);
         var member = mockMember(account);
 
-        when(notificationDao.foundMemberEmail(member.getAccount().getEmail())).thenReturn(" ");
+        when(notificationDao.foundMemberEmail(member.getAccount().getEmail())).thenReturn(null);
         Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {
             notificationService.sendEmailNotificationAboutOrderStatus(ORDER_LOG, member);
             notificationService.sendEmailNotificationAboutShipmentStatus(SHIPMENT_LOG, member);
@@ -110,10 +110,10 @@ public class NotificationServiceImplTest {
 
     @Test
     public void whenShipmentStatusWasChangedSendSMSNotification() {
-        Account account = mockAccount(email, " ");
+        Account account = mockAccount(email, null);
         var member = mockMember(account);
 
-        when(notificationDao.foundMemberPhoneNumber(member.getAccount().getPhone())).thenReturn(" ");
+        when(notificationDao.foundMemberPhoneNumber(member.getAccount().getPhone())).thenReturn(null);
 
         Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {
             notificationService.sendSMSNotificationAboutOrderStatus(ORDER_LOG, member);
