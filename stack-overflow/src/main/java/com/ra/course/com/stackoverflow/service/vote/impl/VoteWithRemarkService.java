@@ -30,16 +30,6 @@ public class VoteWithRemarkService {
         return question;
     }
 
-    public Question voteToDelete(final Question question, final Member member, final QuestionClosingRemark remark) {
-        final var questionFromDB = checkQuestion(question);
-        final var memberFromDB = checkMember(member);
-        checkIsAlreadyVotedToCloseOrDelete(memberFromDB.getId(),
-                questionFromDB.getMembersIdsWhoVotedQuestionToDelete());
-        question.getMembersIdsWhoVotedQuestionToDelete().put(memberFromDB.getId(), remark);
-        updateQuestionWithNewRemarkToDelete(questionFromDB, memberFromDB.getId(), remark);
-        return question;
-    }
-
     private Question checkQuestion(final Question question) {
         return questionData.findById(question.getId()).orElseThrow(
                 () -> new QuestionNotFoundException("No such question in DB"));
@@ -64,10 +54,4 @@ public class VoteWithRemarkService {
         questionData.update(question);
     }
 
-    private void updateQuestionWithNewRemarkToDelete(final Question question, final long memberId, final QuestionClosingRemark remark) {
-        final Map<Long, QuestionClosingRemark> idWithRemarks = question.getMembersIdsWhoVotedQuestionToDelete();
-        idWithRemarks.put(memberId, remark);
-        question.setMembersIdsWhoVotedQuestionToDelete(idWithRemarks);
-        questionData.update(question);
-    }
 }

@@ -62,6 +62,6 @@ VALUES (1, 3, 'advertising', false, true);
 INSERT INTO question_member_question_closing_remark (question_id, account_id, closing_remark, marked_for_closing, marked_for_deleting)
 VALUES (2, 1, 'too_broad', true, true);
 INSERT INTO question_member_question_closing_remark (question_id, account_id, closing_remark, marked_for_closing, marked_for_deleting)
-VALUES (2, 1, 'offtopic', true, false);
+VALUES (2, 2, 'offtopic', true, false);
 INSERT INTO question_member_question_closing_remark (question_id, account_id, closing_remark, marked_for_closing, marked_for_deleting)
 VALUES (3, 3, 'duplicate', true, true);

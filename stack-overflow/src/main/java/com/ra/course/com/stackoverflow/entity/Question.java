@@ -47,7 +47,11 @@ public class Question {
 
     @NonNull
     @ToString.Exclude
-    private Member author;
+//    private Member author;
+    private Long authorId;
+
+    @Builder.Default
+    private Optional<Bounty> bounty = Optional.empty();
 
     @NonNull
     @Builder.Default
@@ -56,9 +60,6 @@ public class Question {
     @NonNull
     @Builder.Default
     private List<Answer> answerList = new ArrayList<>();
-
-    @Builder.Default
-    private Optional<Bounty> bounty = Optional.empty();
 
     @NonNull
     @Builder.Default
@@ -71,9 +72,5 @@ public class Question {
     @NonNull
     @Builder.Default
     private Map<Long, QuestionClosingRemark> membersIdsWhoVotedQuestionToClose = new HashMap<>();
-
-    @NonNull
-    @Builder.Default
-    private Map<Long, QuestionClosingRemark> membersIdsWhoVotedQuestionToDelete = new HashMap<>();
 
 }

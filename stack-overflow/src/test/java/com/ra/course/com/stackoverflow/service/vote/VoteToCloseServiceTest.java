@@ -4,6 +4,7 @@ import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.enums.QuestionClosingRemark;
+import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundException;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyVotedException;
@@ -13,6 +14,7 @@ import com.ra.course.com.stackoverflow.service.vote.impl.VoteWithRemarkService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -93,7 +95,14 @@ public class VoteToCloseServiceTest {
         return Question.builder()
                 .id(ID)
                 .title("title")
-                .author(member).build();
+                .authorId(member.getId())
+                .description("Some description")
+                .creationTime(LocalDateTime.now())
+                .updateTime(LocalDateTime.now())
+                .status(QuestionStatus.OPEN)
+                .closingRemark(QuestionClosingRemark.NOT_MARKED_FOR_CLOSING)
+                .membersIdsWhoVotedQuestionToClose(new HashMap<>())
+                .build();
     }
 
     private Member mockMember() {

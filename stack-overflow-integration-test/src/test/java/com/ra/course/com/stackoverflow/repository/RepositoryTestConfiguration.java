@@ -14,10 +14,4 @@ public class RepositoryTestConfiguration {
         return mock(MemberRepository.class);
     }
 
-    @Primary
-    @Bean
-    public QuestionRepository mockedQuestionRepository() {
-        return mock(QuestionRepository.class);
-    }
-
 }

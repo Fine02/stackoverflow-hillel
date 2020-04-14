@@ -119,7 +119,7 @@ public class CommentServiceImplTest {
                 .id(id)
                 .description("some question")
                 .title("title")
-                .author(member)
+                .authorId(member.getId())
                 .build();
     }
 

@@ -14,6 +14,7 @@ import com.ra.course.com.stackoverflow.service.vote.impl.VoteAnswerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -99,15 +100,13 @@ public class UpVoteAnswerServiceTest {
         assertTrue(member.getUpVotedAnswersId().contains(answer.getId()));
     }
 
-    private Answer mockAnswer(Member member){
-        var question = Question.builder()
-                .id(ID2)
-                .title("title")
-                .author(member).build();
+    private Answer mockAnswer(Member member){ ;
         return Answer.builder()
                 .id(ID1)
+                .answerText("Some answer")
+                .creationDate(LocalDateTime.now())
                 .authorId(member.getId())
-                .questionId(question.getId()).build();
+                .questionId(ID2).build();
     }
 
     private Member mockMember(long idMember){

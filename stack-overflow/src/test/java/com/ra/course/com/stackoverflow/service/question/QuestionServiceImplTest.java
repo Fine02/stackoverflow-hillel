@@ -165,7 +165,7 @@ public class QuestionServiceImplTest {
                 .id(id)
                 .description("some_question")
                 .title("title")
-                .author(member)
+                .authorId(member.getId())
                 .build();
     }
 

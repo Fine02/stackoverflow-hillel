@@ -41,9 +41,9 @@ public class AnswerRepositoryImplIntegrationTest {
 
     @Test
     public void whenFindAnswerByIdAndAnswerNotPresentInDataBaseThenReturnOptionalEmpty() {
-        Optional<Answer> tag = answerRepository.findById(666L);
+        Optional<Answer> answer = answerRepository.findById(666L);
 
-        assertThat(tag.isEmpty()).isTrue();
+        assertThat(answer.isEmpty()).isTrue();
     }
 
     @Test
@@ -65,7 +65,7 @@ public class AnswerRepositoryImplIntegrationTest {
     }
 
     @Test
-    public void whenUpdateTagInDatabaseThenGetUpdatedTag() {
+    public void whenUpdateAnswerInDatabaseThenGetUpdatedAnswer() {
         var before = answerRepository.findById(2L).get();
         before.setAnswerText("Test111");
         answerRepository.update(before);
@@ -108,7 +108,7 @@ public class AnswerRepositoryImplIntegrationTest {
                 .id(id)
                 .description("some_question")
                 .title("title")
-                .author(member)
+                .authorId(member.getId())
                 .build();
     }
 

@@ -59,9 +59,9 @@ public class AnswerRepositoryImplTest {
 
     @Test
     public void whenFindAnswerByIdAndAnswerNotPresentInDataBaseThenReturnOptionalEmpty() {
-        Optional<Answer> tag = answerRepository.findById(666L);
+        Optional<Answer> answer = answerRepository.findById(666L);
 
-        assertThat(tag.isEmpty()).isTrue();
+        assertThat(answer.isEmpty()).isTrue();
     }
 
     @Test
@@ -86,7 +86,7 @@ public class AnswerRepositoryImplTest {
     @Test
     public void whenDeleteAnswerFromDataBaseAndTryFindItThenReturnOptionalEmpty() {
         var answerForDeleting = createNewAnswer(666L, member, question);
-        answerRepository.delete(answer);
+        answerRepository.delete(answerForDeleting);
 
         Optional<Answer> result = answerRepository.findById(answerForDeleting.getId());
 
@@ -100,7 +100,7 @@ public class AnswerRepositoryImplTest {
     }
 
     @Test
-    public void whenUpdateTagInDatabaseThenGetUpdatedTag() {
+    public void whenUpdateAnswerInDatabaseThenGetUpdatedAnswer() {
         var before = createNewAnswer(777L, member, question);
         answerRepository.save(before);
 
@@ -163,7 +163,7 @@ public class AnswerRepositoryImplTest {
                 .id(id)
                 .description("some_question")
                 .title("title")
-                .author(member)
+                .authorId(member.getId())
                 .build();
     }
 
