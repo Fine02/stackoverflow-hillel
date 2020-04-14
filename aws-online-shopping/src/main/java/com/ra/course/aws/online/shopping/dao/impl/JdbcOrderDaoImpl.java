@@ -23,9 +23,10 @@ public class JdbcOrderDaoImpl implements OrderDao {
     private final MemberBooleanRowMapper memberBooleanRowMapper;
     private final BooleanOrderLogRowMapper booleanOrderLogRowMapper;
     private final NumberFromStatusRowMapper numberFromStatusRowMapper;
+    private final OrderRowMapper2 orderRowMapper2;
 
     @Autowired
-    public JdbcOrderDaoImpl(JdbcTemplate jdbcTemplate, OrderRowMapper orderRowMapper, ListOrderLogRowMapper orderLogRowMapper, OrderLogRowMapper orderLogOneRowMapper, MemberRowMapper memberRowMapper, MemberBooleanRowMapper memberBooleanRowMapper, BooleanOrderLogRowMapper booleanOrderLogRowMapper, NumberFromStatusRowMapper numberFromStatusRowMapper) {
+    public JdbcOrderDaoImpl(JdbcTemplate jdbcTemplate, OrderRowMapper orderRowMapper, ListOrderLogRowMapper orderLogRowMapper, OrderLogRowMapper orderLogOneRowMapper, MemberRowMapper memberRowMapper, MemberBooleanRowMapper memberBooleanRowMapper, BooleanOrderLogRowMapper booleanOrderLogRowMapper, NumberFromStatusRowMapper numberFromStatusRowMapper, OrderRowMapper2 orderRowMapper2) {
         this.jdbcTemplate = jdbcTemplate;
         this.orderRowMapper = orderRowMapper;
         this.orderLogRowMapper = orderLogRowMapper;
@@ -33,6 +34,7 @@ public class JdbcOrderDaoImpl implements OrderDao {
         this.memberBooleanRowMapper = memberBooleanRowMapper;
         this.booleanOrderLogRowMapper = booleanOrderLogRowMapper;
         this.numberFromStatusRowMapper = numberFromStatusRowMapper;
+        this.orderRowMapper2 = orderRowMapper2;
     }
 
     private static final String UPDATE_ORDER_BY_ORDERNUMBER = "UPDATE \"order\" o SET  order_status_id=?, orderDate=? WHERE o.orderNumber=?";
@@ -57,15 +59,28 @@ public class JdbcOrderDaoImpl implements OrderDao {
             "JOIN electronic_bank_transfer ebt ON ebt.account_id = a.id\n" +
             "WHERE m.id=? ";
 
+    //немного неверный результат т.к. ищит то он в другой таблице
+//    private static final String FIND_ORDER_BY_ORDER_NUMBER = "SELECT \n" +
+//            "o.id order_id, o.orderNumber, os2.status order_status, o.orderDate,\n" +
+//            "ol.id orderLog_id, ol.orderNumber,\n" +
+//            "ol.creationDate, os.status orderLogStatus\n" +
+//            "FROM  (order_log ol\n" +
+//            "JOIN \"order\" o ON ol.order_id = o.id)\n" +
+//            ",order_status os, order_status os2\n" +
+//            "WHERE (\n" +
+//            "ol.orderNumber =? AND ol.order_status_id = os.id AND o.order_status_id = os2.id\n" +
+//            ")";
+
+
     private static final String FIND_ORDER_BY_ORDER_NUMBER = "SELECT \n" +
             "o.id order_id, o.orderNumber, os2.status order_status, o.orderDate,\n" +
             "ol.id orderLog_id, ol.orderNumber,\n" +
             "ol.creationDate, os.status orderLogStatus\n" +
-            "FROM  (order_log ol\n" +
-            "JOIN \"order\" o ON ol.order_id = o.id)\n" +
-            ",order_status os, order_status os2\n" +
+            "FROM  (\"order\" o \n" +
+            "JOIN order_log ol ON ol.order_id = o.id )\n" +
+            ",order_status os, order_status os2 \n" +
             "WHERE (\n" +
-            "ol.orderNumber =? AND ol.order_status_id = os.id AND o.order_status_id = os2.id\n" +
+            "o.orderNumber =? AND ol.order_status_id = os.id AND o.order_status_id = os2.id\n" +
             ")";
 
 
@@ -101,28 +116,39 @@ public class JdbcOrderDaoImpl implements OrderDao {
     }
 
     //работает, но Order может возращать и "null"
-    @Override
-    public Order findByOrderNumber(String orderNumber) {
-        List<Order> list = jdbcTemplate.query(FIND_ORDER_BY_ORDER_NUMBER, orderRowMapper, orderNumber);
-        Order order = new Order();
-        List<OrderLog> orderLogList = new ArrayList<>();
-        ArrayList<OrderLog> arL = new ArrayList<>();
-        for (Order row : list) {
-            OrderLog ol = new OrderLog();
-            order.setOrderNumber(row.getOrderNumber());
-            order.setStatus(row.getStatus());
-            order.setOrderDate(row.getOrderDate());
-            ol.setId(row.getOrderLog().get(0).getId());
-            ol.setOrderNumber(row.getOrderLog().get(0).getOrderNumber());
-            ol.setCreationDate(row.getOrderLog().get(0).getCreationDate());
-            ol.setStatus(row.getOrderLog().get(0).getStatus());
-            arL.add(ol);
-        }
-        order.setOrderLog(orderLogList);
-        return order;
-    }
+//    @Override
+//    public Order findByOrderNumber(String orderNumber) {
+//        List<Order> list = jdbcTemplate.query(FIND_ORDER_BY_ORDER_NUMBER, orderRowMapper, orderNumber);
+////       if (list.size() > 0) {
+//            Order order = new Order();
+//            List<OrderLog> orderLogList = new ArrayList<>();
+//            ArrayList<OrderLog> arL = new ArrayList<>();
+//            for (Order row : list) {
+//                OrderLog ol = new OrderLog();
+//                order.setOrderNumber(row.getOrderNumber());
+//                order.setStatus(row.getStatus());
+//                order.setOrderDate(row.getOrderDate());
+//                ol.setId(row.getOrderLog().get(0).getId());
+//                ol.setOrderNumber(row.getOrderLog().get(0).getOrderNumber());
+//                ol.setCreationDate(row.getOrderLog().get(0).getCreationDate());
+//                ol.setStatus(row.getOrderLog().get(0).getStatus());
+//                //arL.add(ol);
+//                orderLogList.add(ol);
+//            }
+//            //order.setOrderLog(orderLogList);
+//            order.setOrderLog(orderLogList);
+//
+//            return order;
+////        }
+////        return  jdbcTemplate.queryForObject(FIND_ORDER_BY_ORDER_NUMBER, orderRowMapper, orderNumber);
+//        }
 
-    //work correct
+        @Override
+    public Order findByOrderNumber(String orderNumber) {
+            Order order = jdbcTemplate.queryForObject(FIND_ORDER_BY_ORDER_NUMBER, orderRowMapper2, orderNumber);
+            return order;
+        }
+
     @Override
     public List<OrderLog> findLogListByOrder(List<OrderLog> orderLogList) {
         OrderLog orderLog = orderLogList.get(0);

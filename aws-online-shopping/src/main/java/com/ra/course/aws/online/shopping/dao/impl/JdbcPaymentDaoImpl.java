@@ -1,19 +1,13 @@
 package com.ra.course.aws.online.shopping.dao.impl;
 
 import com.ra.course.aws.online.shopping.dao.PaymentDao;
-import com.ra.course.aws.online.shopping.entity.notification.EmailNotification;
 import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
 import com.ra.course.aws.online.shopping.entity.payment.CreditCardTransaction;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransaction;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
 import com.ra.course.aws.online.shopping.entity.user.Member;
-import com.ra.course.aws.online.shopping.mapper.CreditCardRowMapper;
-import com.ra.course.aws.online.shopping.mapper.GetLastIdRowMapper;
-import com.ra.course.aws.online.shopping.mapper.GetNumberRowMapper;
-import com.ra.course.aws.online.shopping.mapper.ElectronicBankTransferRowMapper;
+import com.ra.course.aws.online.shopping.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -41,25 +35,56 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
     private static final String INSERT_DATA_INTO_ELECTRONIC_BANK_TRANSACTION = "INSERT INTO electronic_bank_transaction (payment_id) VALUES (?)";
     private static final String INSERT_DATA_INTO_CREDIT_CARD_TRANSACTION = "INSERT INTO credit_card_transaction (payment_id) VALUES (?)";
 
+    private static final String GET_MEMBER_BY_ID = " SELECT \n" +
+            "\t    m.account_id,\n" +
+            "        m.id member_id,\n" +
+            "        a.userName, a.password,\n" +
+            "        acs.status,\n" +
+            "        a.name,\n" +
+            "        adr.streetAddress, adr.city, adr.state, adr.zipcode, adr.country,\n" +
+            "        a.email,\n" +
+            "        a.phone\n" +
+            "FROM member m JOIN account a ON m.account_id= a.id\n" +
+            "JOIN account_status acs ON a.account_status_id = acs.id\n" +
+            "JOIN address adr ON a.address_id = adr.id\n" +
+            "WHERE m.id=?";
+
+    private static final String GET_LIST_OF_CREDIT_CARD_BY_MEMBER_ID = "SELECT crc.nameOnCard, crc.cardNumber,crc.code, adr.streetAddress, adr.city, adr.state, adr.zipcode, adr.country \n" +
+            "FROM (member m JOIN account a ON m.account_id= a.id\n" +
+            "JOIN credit_card crc ON crc.account_id = a.id), address adr\n" +
+            "WHERE (crc.address_id = adr.id AND m.id=?)";
+
+    private static final String GET_LIST_OF_ELECTRONIC_BANK_TRANSFER_BY_MEMBER_ID ="SELECT ebt.bankName, ebt.routingNumber, ebt.accountNumber\n" +
+            "FROM member m JOIN account a ON m.account_id= a.id\n" +
+            "JOIN electronic_bank_transfer ebt ON ebt.account_id = a.id\n" +
+            "WHERE  m.id=?";
 
     private final JdbcTemplate jdbcTemplate;
     private final ElectronicBankTransferRowMapper listTransferRowMapper;
     private final GetNumberRowMapper getNumberRowMapper;
     private final CreditCardRowMapper cardRowMapper;
     private final GetLastIdRowMapper getLastIdRowMapper;
+    private final MemberWithoutListsRowMapper memberMapper;
 
     @Autowired
-    public JdbcPaymentDaoImpl(JdbcTemplate jdbcTemplate, ElectronicBankTransferRowMapper listTransferRowMapper, GetNumberRowMapper getNumberRowMapper, CreditCardRowMapper cardRowMapper, GetLastIdRowMapper getLastIdRowMapper) {
+    public JdbcPaymentDaoImpl(JdbcTemplate jdbcTemplate, ElectronicBankTransferRowMapper listTransferRowMapper, GetNumberRowMapper getNumberRowMapper, CreditCardRowMapper cardRowMapper, GetLastIdRowMapper getLastIdRowMapper, MemberWithoutListsRowMapper memberMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.listTransferRowMapper = listTransferRowMapper;
         this.getNumberRowMapper = getNumberRowMapper;
         this.cardRowMapper = cardRowMapper;
         this.getLastIdRowMapper = getLastIdRowMapper;
+        this.memberMapper = memberMapper;
     }
 
     @Override
     public Member foundMemberById(Long memberId) {
-        return null;
+        List<CreditCard> cardList = jdbcTemplate.query(GET_LIST_OF_CREDIT_CARD_BY_MEMBER_ID,cardRowMapper,memberId);
+        List<ElectronicBankTransfer> bankTransfers =jdbcTemplate.query(GET_LIST_OF_ELECTRONIC_BANK_TRANSFER_BY_MEMBER_ID,listTransferRowMapper, memberId);
+        Member result =jdbcTemplate.queryForObject(GET_MEMBER_BY_ID, memberMapper, memberId);
+        Member member =result;
+        member.getAccount().setElectronicBankTransferList(bankTransfers);
+        member.getAccount().setCreditCardList(cardList);
+        return member;
     }
 
     @Override
@@ -79,7 +104,6 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
         List<CreditCard> cardList = jdbcTemplate.query(GET_CREDIT_CARD_LIST_BY_ACCOUNT_ID, cardRowMapper, getMemberAccountId);
         return cardList;
     }
-
 
     @Override
     public void createTransaction(ElectronicBankTransaction bankTransaction) {

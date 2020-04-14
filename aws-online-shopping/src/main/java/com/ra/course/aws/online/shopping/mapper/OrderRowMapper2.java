@@ -11,26 +11,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Service
-public class OrderRowMapper implements RowMapper<Order> {
-
+public class OrderRowMapper2 implements RowMapper <Order> {
     @Override
     public Order mapRow(ResultSet rs, int rowNum) throws SQLException {
         Order order = new Order();
         OrderStatus orderStatus = mapToOrderStatus1(rs, rowNum);
-        OrderStatus orderStatus2 = mapToOrderStatusForLog(rs);
         List<OrderLog> logList = new ArrayList<>();
+//        logList.add(mapToOrderLog (rs, rowNum));
         order.setOrderNumber(rs.getString("orderNumber"));
         order.setStatus(orderStatus);
         order.setOrderDate(rs.getTimestamp("orderDate").toLocalDateTime());
-        OrderLog ol = new OrderLog();
-        ol.setId(rs.getInt("orderLog_id"));
-        ol.setOrderNumber(rs.getString("orderNumber"));
-        ol.setCreationDate(rs.getTimestamp("creationDate").toLocalDateTime());
-        ol.setStatus(orderStatus2);
-        logList.add(ol);
-        order.setOrderLog(logList);
+        if (logList.size()>0) {
+            order.setOrderLog(logList);
+        }
         return order;
     }
 
@@ -39,11 +33,19 @@ public class OrderRowMapper implements RowMapper<Order> {
         return orderStatus;
     }
 
-    private OrderStatus mapToOrderStatusForLog(ResultSet rs) throws SQLException {
+    private OrderStatus mapToOrderStatusForLog(ResultSet rs, int rowNum) throws SQLException {
         OrderStatus orderStatus = OrderStatus.valueOf(OrderStatus.class, rs.getString("orderLogStatus"));
         return orderStatus;
     }
 
+//    private OrderLog mapToOrderLog (ResultSet rs, int rowNum) throws SQLException {
+//        OrderStatus orderStatus = mapToOrderStatusForLog(rs, rowNum);
+//        OrderLog ol = new OrderLog();
+//        ol.setId(rs.getInt("orderLog_id"));
+//        ol.setOrderNumber(rs.getString("orderNumber"));
+//        ol.setCreationDate(rs.getTimestamp("creationDate").toLocalDateTime());
+//        ol.setStatus(orderStatus);
+//       return ol;
+//    }
+
 }
-
-

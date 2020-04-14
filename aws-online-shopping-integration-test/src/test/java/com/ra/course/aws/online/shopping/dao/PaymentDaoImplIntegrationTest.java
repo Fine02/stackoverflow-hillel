@@ -8,6 +8,7 @@ import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
 import com.ra.course.aws.online.shopping.entity.payment.CreditCardTransaction;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransaction;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
+import com.ra.course.aws.online.shopping.entity.user.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,7 +46,7 @@ public class PaymentDaoImplIntegrationTest {
     @Autowired
     private PaymentDao paymentDao;
 
-    Address address = new Address("Mira, 8", "Kiyv", "Kyiv", "14004", "Ukraine");
+    Address address = new Address("Mira, 8", "Kyiv", "Kyiv", "14004", "Ukraine");
     private Double amount = 777.77;
 
     public List<ElectronicBankTransfer> makeElectronicBankTransferList() {
@@ -56,17 +57,24 @@ public class PaymentDaoImplIntegrationTest {
         return transferList;
     }
 
-        private List<CreditCard> makeListOfCreditCard() {
+    private List<CreditCard> makeListOfCreditCard() {
         List<CreditCard> creditCardList = new ArrayList<>();
         creditCardList.add(creditCard);
-        creditCardList.add(creditCard);
+      //  creditCardList.add(creditCard);
         return creditCardList;
     }
 
     public ElectronicBankTransfer transfer = makeBankTransfer("GermanBank", "5265", "8542");
-    public CreditCard creditCard = makeCreditCard ("VISA", "5584",5662,address);
+    public CreditCard creditCard = makeCreditCard("VISA", "5584", 5662, address);
     private ElectronicBankTransaction electronicBankTransaction = new ElectronicBankTransaction(PaymentStatus.PENDING, amount);
     private CreditCardTransaction creditCardTransaction = new CreditCardTransaction(PaymentStatus.PENDING, amount);
+
+    //work correct
+    @Test
+    public void getInstanceOfFoundMemberTest() {
+        Member member = paymentDao.foundMemberById(2L);
+        System.out.println(member);
+    }
 
     //work correct
     @Test
@@ -81,12 +89,20 @@ public class PaymentDaoImplIntegrationTest {
         List<CreditCard> result = paymentDao.foundListOfCreditCard(makeListOfCreditCard());
         System.out.println(result);
     }
+    //work correct
+    @Test
+    public void isListContainsTheObject(){
+        List<CreditCard> result = paymentDao.foundListOfCreditCard(makeListOfCreditCard());
+        boolean a =result.contains(creditCard);
+        System.out.println(a);
+    }
 
     //work correct
     @Test
     public void createElectronicBankTransactionTest() {
         paymentDao.createTransaction(electronicBankTransaction);
     }
+
     //work correct
     @Test
     public void createCreditCardTransactionTest() {
@@ -101,5 +117,4 @@ public class PaymentDaoImplIntegrationTest {
     private ElectronicBankTransfer makeBankTransfer(String bankName, String routingNumber, String accountNumber) {
         return new ElectronicBankTransfer(bankName, routingNumber, accountNumber);
     }
-
 }

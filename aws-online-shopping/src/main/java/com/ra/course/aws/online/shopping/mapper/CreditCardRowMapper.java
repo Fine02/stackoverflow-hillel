@@ -24,7 +24,8 @@ public class CreditCardRowMapper implements RowMapper<CreditCard> {
     public Address mapAddress(ResultSet rs, int rowNum) throws SQLException {
         Address address = new Address();
         address.setStreetAddress(rs.getString("streetAddress"));
-        address.setCity(rs.getString("state"));
+        address.setCity(rs.getString("city"));
+        address.setState(rs.getString("state"));
         address.setZipCode(rs.getString("zipcode"));
         address.setCountry(rs.getString("country"));
         return address;

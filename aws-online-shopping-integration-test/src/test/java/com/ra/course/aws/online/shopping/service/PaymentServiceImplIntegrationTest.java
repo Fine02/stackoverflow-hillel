@@ -2,6 +2,7 @@ package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
+import com.ra.course.aws.online.shopping.dao.PaymentDao;
 import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.enums.PaymentStatus;
@@ -28,8 +29,10 @@ public class PaymentServiceImplIntegrationTest {
 
     @Autowired
     private PaymentService paymentService;
+    @Autowired
+    private PaymentDao paymentDao;
 
-    Address address = new Address("Mira, 8", "Kiyv", "Kyiv", "14004", "Ukraine");
+    Address address = new Address("Mira, 8", "Kyiv", "Kyiv", "14004", "Ukraine");
     private Double amount = 777.77;
 
     public List<ElectronicBankTransfer> makeElectronicBankTransferList() {
@@ -43,12 +46,12 @@ public class PaymentServiceImplIntegrationTest {
     private List<CreditCard> makeListOfCreditCard() {
         List<CreditCard> creditCardList = new ArrayList<>();
         creditCardList.add(creditCard);
-        creditCardList.add(creditCard);
+      //  creditCardList.add(creditCard);
         return creditCardList;
     }
 
     public ElectronicBankTransfer transfer = makeBankTransfer("GermanBank", "5265", "8542");
-    public CreditCard creditCard = makeCreditCard ("VISA", "5584",5662,address);
+    public CreditCard creditCard = new CreditCard("VISA", "5584",5662, address);
     private ElectronicBankTransaction electronicBankTransaction = new ElectronicBankTransaction(PaymentStatus.PENDING, amount);
     private CreditCardTransaction creditCardTransaction = new CreditCardTransaction(PaymentStatus.PENDING, amount);
 
@@ -56,27 +59,21 @@ public class PaymentServiceImplIntegrationTest {
    // private Account accountWithNotExistData = makeAccount(emailNotExist, phoneNotExist);
     //private Member memberWithNotExistData = makeMember(accountWithNotExistData);
 
-    private Account accountExist = makeAccount();
-    private Member memberExist = makeMember(accountExist);
+    private Account accountWithExistData = makeAccount(makeListOfCreditCard(), makeElectronicBankTransferList());
+    private Member memberWithExistData = makeMember(accountWithExistData);
 
-//    @Test
-//    public void whenThePaymentByElectronicBankTransactionIsSuccessful() {
-//        var expectedResult = PaymentStatus.COMPLETED;
-//
-//        var actualResult = paymentService.processPaymentByElectronicBankTransaction(MEMBER_IN_DB, bankTransfer, electronicBankTransaction, amount);
-//
-//        assertEquals(expectedResult, actualResult);
-//        verify(paymentDao).createTransaction(electronicBankTransaction);
-//    }
-//
+    @Test
+    public void whenThePaymentByElectronicBankTransactionIsSuccessful() {
+        var expectedResult = PaymentStatus.COMPLETED;
+        var actualResult = paymentService.processPaymentByElectronicBankTransaction(memberWithExistData, transfer, electronicBankTransaction, amount);
+        assertEquals(expectedResult, actualResult);
+    }
+
     @Test
     public void whenThePaymentByCreditCardIsSuccessful() {
         var expectedResult = PaymentStatus.COMPLETED;
-
-        var actualResult = paymentService.processPaymentByCreditCardTransaction(memberExist, creditCard, creditCardTransaction, amount);
-
+        var actualResult = paymentService.processPaymentByCreditCardTransaction(memberWithExistData, creditCard, creditCardTransaction, amount);
         assertEquals(expectedResult, actualResult);
-        //verify(paymentDao).createTransaction(creditCardTransaction);
     }
 
     private CreditCard makeCreditCard(String nameOnCard, String cardNumber, int code, Address billingAddress) {
@@ -87,12 +84,9 @@ public class PaymentServiceImplIntegrationTest {
         return new ElectronicBankTransfer(bankName, routingNumber, accountNumber);
     }
 
-    private Account makeAccount() {
-        List<CreditCard> creditCardList = new ArrayList<>();
-        creditCardList.add(new CreditCard("VISA", "77", 44, address));
-        List<ElectronicBankTransfer> electronicBankTransfers = new ArrayList<>();
-        electronicBankTransfers.add(new ElectronicBankTransfer("P8", "77", "10"));
+    private Account makeAccount( List<CreditCard> cardList, List<ElectronicBankTransfer> bankTransfers) {
         Account account = new Account(
+                1L,
                 "Ivan",
                 "1",
                 AccountStatus.ACTIVE,
@@ -100,15 +94,15 @@ public class PaymentServiceImplIntegrationTest {
                 address,
                 "111j@gmail.com",
                 "38012345111",
-                creditCardList,
-                electronicBankTransfers
+                cardList,
+                bankTransfers
         );
         return account;
     }
-
-
+    
     private Member makeMember(Account account) {
         Member member = new Member(account);
+        member.setMemberID(1L);
         return member;
     }
 

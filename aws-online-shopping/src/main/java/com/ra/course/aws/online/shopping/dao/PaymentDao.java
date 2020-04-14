@@ -8,6 +8,7 @@ import com.ra.course.aws.online.shopping.entity.user.Member;
 import java.util.List;
 
 public interface PaymentDao {
+
     Member foundMemberById(Long memberId);
 
     List<ElectronicBankTransfer> foundListOfBankTransfer(List<ElectronicBankTransfer> bankTransfers);

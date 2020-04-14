@@ -93,7 +93,7 @@ public class OrderDaoImplIntegrationTest {
     ///пересмотреть, т.к. всё подрят проходит тест
     @Test
     public void getInstanceTest() {
-        Order result = orderDao.findByOrderNumber("4");
+        Order result = orderDao.findByOrderNumber("3");
         System.out.println(result);
     }
 
