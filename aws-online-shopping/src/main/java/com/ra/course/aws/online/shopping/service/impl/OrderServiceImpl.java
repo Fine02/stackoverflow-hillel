@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
                 orderDao.updateOrder(foundOrder);
                 return order;
             }
-            throw new OrderNotFoundException("There is not found the Order by this number");
+           throw new NullPointerException();
         }
         throw new MemberDataNotFoundException("There is not found the Member by this ID");
     }

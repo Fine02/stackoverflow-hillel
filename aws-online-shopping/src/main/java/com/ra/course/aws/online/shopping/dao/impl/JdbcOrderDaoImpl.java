@@ -3,6 +3,7 @@ package com.ra.course.aws.online.shopping.dao.impl;
 import com.ra.course.aws.online.shopping.dao.OrderDao;
 import com.ra.course.aws.online.shopping.entity.order.Order;
 import com.ra.course.aws.online.shopping.entity.order.OrderLog;
+import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
 import com.ra.course.aws.online.shopping.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -120,20 +121,27 @@ public class JdbcOrderDaoImpl implements OrderDao {
     //work correct
     @Override
     public boolean isFoundMemberID(Long id) {
-        var result = jdbcTemplate.queryForObject(GET_MEMBER_BY_ID, memberBooleanRowMapper, id);
-        return result;
+        try {
+            var result = jdbcTemplate.queryForObject(GET_MEMBER_BY_ID, memberBooleanRowMapper, id);
+            return result;
+        }catch (EmptyResultDataAccessException ex) {
+            return false;
+        }
     }
 
     //work correct
     @Override
     public Order findByOrderNumber(String orderNumber) {
-        List<OrderLog> list = jdbcTemplate.query(GET_ORDER_LOGS_BY_ORDER_NUMBER, BeanPropertyRowMapper.newInstance(OrderLog.class), orderNumber);
-        Order result = jdbcTemplate.queryForObject(GET_ORDER_BY_ORDER_NUMBER, BeanPropertyRowMapper.newInstance(Order.class), orderNumber);
-        Order order =result;
-        order.setOrderLog(list);
-        return order;
+        try {
+            List<OrderLog> list = jdbcTemplate.query(GET_ORDER_LOGS_BY_ORDER_NUMBER, BeanPropertyRowMapper.newInstance(OrderLog.class), orderNumber);
+            Order result = jdbcTemplate.queryForObject(GET_ORDER_BY_ORDER_NUMBER, BeanPropertyRowMapper.newInstance(Order.class), orderNumber);
+            Order order = result;
+            order.setOrderLog(list);
+            return order;
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
         }
-
+    }
     //work correct?
 //    @Override
 //    public List<OrderLog> findLogListByOrder(List<OrderLog> orderLogList) {

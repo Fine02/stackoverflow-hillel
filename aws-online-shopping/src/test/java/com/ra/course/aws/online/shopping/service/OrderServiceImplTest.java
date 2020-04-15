@@ -116,23 +116,18 @@ public class OrderServiceImplTest {
 
         assertEquals(exception.getMessage(), "There is not found the Member by this ID");
         assertEquals(exception.getClass(), MemberDataNotFoundException.class);
-
-
     }
 
     @Test()
-    public void shouldThrowOrderNotFoundException() {
-        var InDbOrder = mockOrder(ORDER_IN_DB, OrderStatus.PENDING, LocalDateTime.now().plusDays(8),ORDER_LOG_LIST);
-
+    public void shouldThrowNullPointerException() {
         when(orderDao.isFoundMemberID(searchMember.getMemberID())).thenReturn(true);
-        when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(InDbOrder);
+        when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(null);
 
-        Throwable exception = Assertions.assertThrows(OrderNotFoundException.class, () -> {
-            orderService.cancelOrder(searchOrder, searchMember);
+        Throwable exception = Assertions.assertThrows(NullPointerException.class, () -> {
+            orderService.cancelOrder(null, searchMember);
         });
 
-        assertEquals(exception.getMessage(), "There is not found the Order by this number");
-        assertEquals(exception.getClass(), OrderNotFoundException.class);
+        assertEquals(exception.getClass(), NullPointerException.class);
     }
 
     @Test
