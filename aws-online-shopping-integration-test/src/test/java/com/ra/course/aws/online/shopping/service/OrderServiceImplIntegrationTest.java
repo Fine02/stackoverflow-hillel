@@ -13,7 +13,7 @@ import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.OrderIsAlreadyShippedException;
-import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
+import com.ra.course.aws.online.shopping.exceptions.OrderLogIsAlreadyExistException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
@@ -44,6 +43,8 @@ public class OrderServiceImplIntegrationTest {
 
     public OrderLog orderLog1 = new OrderLog("2", time2, OrderStatus.PENDING);
     public OrderLog orderLog2 = new OrderLog("2", time3, OrderStatus.PENDING);
+    public OrderLog orderLog3 = new OrderLog("3", LocalDateTime.now(), OrderStatus.COMPLETE);
+    public OrderLog existOrderLogInDB = new OrderLog("3", time3, OrderStatus.COMPLETE);
 
     Order orderIsAlreadyShipped = new Order("3", OrderStatus.SHIPPED, time);
     private Member memberExist = makeMember(makeAccount(), 1L);
@@ -116,6 +117,26 @@ public class OrderServiceImplIntegrationTest {
         Assertions.assertSame(resultOrder.getStatus(), OrderStatus.CANCELED);
 
         assertEquals(1L, memberExist.getMemberID());
+    }
+
+    //work correct
+    @Test
+    public void whenAddOrderLogToOrderLogListThenReturnTrue() {
+        boolean actualResponse = orderService.addOrderLogToOrder(order, orderLog3);
+
+        assertEquals(actualResponse, true);
+    }
+
+    //work correct
+    @Test
+    public void shouldThrowExceptionIfOrderLogIsAlreadyExist() {
+
+        Throwable exception = Assertions.assertThrows(OrderLogIsAlreadyExistException.class, () -> {
+            orderService.addOrderLogToOrder(order, existOrderLogInDB);
+        });
+
+        assertEquals(exception.getMessage(), "This OrderLog is already exist");
+        assertEquals(exception.getClass(), OrderLogIsAlreadyExistException.class);
     }
 
     public List<OrderLog> makeOrderLogList() {

@@ -47,10 +47,12 @@ public class OrderDaoImplIntegrationTest {
     LocalDateTime time1 = LocalDateTime.of(2020, 3, 19, 22, 25, 25);
     LocalDateTime time2 = LocalDateTime.of(2020, 3, 20, 22, 22, 11);
     LocalDateTime time3 = LocalDateTime.of(2020, 3, 21, 22, 22, 11);
+    LocalDateTime time4 = LocalDateTime.of(2020, 2, 15, 10, 12, 10);
 
     private OrderLog makeOrderLog(String orderNumber, LocalDateTime creationDate, OrderStatus status) {
         return new OrderLog(orderNumber, creationDate, status);
     }
+
     private OrderLog makeOrderLog(long id, String orderNumber, LocalDateTime creationDate, OrderStatus status) {
         return new OrderLog(id, orderNumber, creationDate, status);
     }
@@ -66,9 +68,10 @@ public class OrderDaoImplIntegrationTest {
     public OrderLog ORDER_LOG1 = makeOrderLog("2", time1, OrderStatus.PENDING);
     public OrderLog ORDER_LOG2 = makeOrderLog("2", time2, OrderStatus.PENDING);
     public OrderLog ORDER_LOG3 = makeOrderLog("2", time3, OrderStatus.PENDING);
-    public OrderLog ORDER_LOG4 = makeOrderLog(1L,"2", time3, OrderStatus.PENDING);
+    public OrderLog ORDER_LOG4 = makeOrderLog(1L, "2", time3, OrderStatus.PENDING);
+    public OrderLog ORDER_LOG5 = makeOrderLog("3", time4, OrderStatus.COMPLETE);
 
-    Order order = new Order ("3",OrderStatus.SHIPPED,time1);
+    Order order = new Order("3", OrderStatus.SHIPPED, time1);
 
     //work correct
     @Test
@@ -90,7 +93,7 @@ public class OrderDaoImplIntegrationTest {
         System.out.println(result);
     }
 
-    ///пересмотреть, т.к. всё подрят проходит тест
+    //work correct
     @Test
     public void getInstanceTest() {
         Order result = orderDao.findByOrderNumber("2");
@@ -111,4 +114,9 @@ public class OrderDaoImplIntegrationTest {
         System.out.println(result);
     }
 
+    //work correct
+    @Test
+    public void addOrderLogAndUpdateOrderTest() {
+        orderDao.addOrderLogAndUpdateOrder(order, ORDER_LOG5);
+    }
 }

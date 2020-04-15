@@ -8,7 +8,6 @@ import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.OrderIsAlreadyShippedException;
 import com.ra.course.aws.online.shopping.exceptions.OrderLogIsAlreadyExistException;
-import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
 import com.ra.course.aws.online.shopping.service.OrderService;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
                 orderDao.updateOrder(foundOrder);
                 return order;
             }
-           throw new NullPointerException();
+            throw new NullPointerException();
         }
         throw new MemberDataNotFoundException("There is not found the Member by this ID");
     }
@@ -54,10 +53,8 @@ public class OrderServiceImpl implements OrderService {
         if (foundOrder.getOrderLog().contains(orderLog)) {
             throw new OrderLogIsAlreadyExistException("This OrderLog is already exist");
         }
-        final var foundOrderList = orderDao.findLogListByOrder(order.getOrderLog());
-        orderDao.addOrderLog(foundOrderList.add(orderLog));
         foundOrder.setStatus(orderLog.getStatus());
-        orderDao.updateOrder(foundOrder);
+        orderDao.addOrderLogAndUpdateOrder(foundOrder, orderLog);
         return true;
     }
 

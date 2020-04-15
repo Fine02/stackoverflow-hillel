@@ -9,7 +9,6 @@ import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.OrderIsAlreadyShippedException;
 import com.ra.course.aws.online.shopping.exceptions.OrderLogIsAlreadyExistException;
-import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
 import com.ra.course.aws.online.shopping.service.impl.OrderServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,25 +35,24 @@ public class OrderServiceImplTest {
     private final List<OrderLog> ORDER_LOG_LIST = mockOrderLogList(ORDER_LOG);
     private final Order ORDER = mockOrder("855", OrderStatus.PENDING, LocalDateTime.now(), ORDER_LOG_LIST);
 
-
     @BeforeEach
     public void before() {
         orderService = new OrderServiceImpl(orderDao);
-        searchOrder = mockOrder(ORDER_IN_DB, OrderStatus.COMPLETE, LocalDateTime.now(),ORDER_LOG_LIST);
+        searchOrder = mockOrder(ORDER_IN_DB, OrderStatus.COMPLETE, LocalDateTime.now(), ORDER_LOG_LIST);
         searchMember = mockMember(MEMBER_ID);
         when(orderDao.findByOrderNumber(ORDER.getOrderNumber())).thenReturn(ORDER);
         when(orderDao.findLogListByOrder(ORDER.getOrderLog())).thenReturn(ORDER_LOG_LIST);
     }
 
     @Test
-    public void whenSendForShipmentOrderThanOrderStatusChange(){
+    public void whenSendForShipmentOrderThanOrderStatusChange() {
         when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(searchOrder);
         orderService.sendForShipment(ORDER);
         assertEquals(ORDER.getStatus(), OrderStatus.SHIPPED);
     }
 
     @Test
-    public void shouldThrowExceptionIfOrderIsAlreadyShipped(){
+    public void shouldThrowExceptionIfOrderIsAlreadyShipped() {
         var alreadyShippedOrder = mockOrder("8554", OrderStatus.SHIPPED, LocalDateTime.now(), ORDER_LOG_LIST);
 
         Throwable exception = Assertions.assertThrows(OrderIsAlreadyShippedException.class, () -> {
@@ -73,8 +71,6 @@ public class OrderServiceImplTest {
         boolean actualResponse = orderService.addOrderLogToOrder(ORDER, newOrderLog);
 
         assertEquals(actualResponse, true);
-        verify(orderDao).addOrderLog(ORDER.getOrderLog().add(newOrderLog));
-        verify(orderDao).updateOrder(ORDER);
     }
 
     @Test
@@ -87,6 +83,7 @@ public class OrderServiceImplTest {
         assertEquals(exception.getMessage(), "This OrderLog is already exist");
         assertEquals(exception.getClass(), OrderLogIsAlreadyExistException.class);
     }
+
 
     @Test
     public void shouldGetOrderTrack() {
@@ -132,7 +129,7 @@ public class OrderServiceImplTest {
 
     @Test
     public void whenOrderDateIsAfterCurrentThenOrderCanBeCanceled() {
-        var InDbOrder = mockOrder(ORDER_IN_DB,OrderStatus.PENDING, LocalDateTime.now().minusDays(1),ORDER_LOG_LIST );
+        var InDbOrder = mockOrder(ORDER_IN_DB, OrderStatus.PENDING, LocalDateTime.now().minusDays(1), ORDER_LOG_LIST);
         when(orderDao.isFoundMemberID(searchMember.getMemberID())).thenReturn(true);
         when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(InDbOrder);
         var resultOrder = orderService.cancelOrder(searchOrder, searchMember);

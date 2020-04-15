@@ -9,6 +9,8 @@ public interface OrderDao {
 
     void updateOrder(Order order);
 
+    void addOrderLogAndUpdateOrder(Order order, OrderLog orderLog);
+
     boolean isFoundMemberID(Long id);
 
     Order findByOrderNumber(String orderNumber);
@@ -16,8 +18,6 @@ public interface OrderDao {
     List<OrderLog> findLogListByOrder(List<OrderLog> orderLogList);
 
     boolean isThisOrderLogExist(OrderLog orderLog);
-
-    void addOrderLog(boolean add);
 
     OrderLog findOrderLogById(Long orderLogId);
 
