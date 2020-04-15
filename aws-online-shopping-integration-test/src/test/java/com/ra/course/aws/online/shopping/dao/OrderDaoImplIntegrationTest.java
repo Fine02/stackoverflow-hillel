@@ -68,7 +68,7 @@ public class OrderDaoImplIntegrationTest {
     public OrderLog ORDER_LOG3 = makeOrderLog("2", time3, OrderStatus.PENDING);
     public OrderLog ORDER_LOG4 = makeOrderLog(1L,"2", time3, OrderStatus.PENDING);
 
-    Order order = new Order ("1",OrderStatus.UNSHIPPED,time1);
+    Order order = new Order ("3",OrderStatus.SHIPPED,time1);
 
     //work correct
     @Test
@@ -93,7 +93,7 @@ public class OrderDaoImplIntegrationTest {
     ///пересмотреть, т.к. всё подрят проходит тест
     @Test
     public void getInstanceTest() {
-        Order result = orderDao.findByOrderNumber("3");
+        Order result = orderDao.findByOrderNumber("2");
         System.out.println(result);
     }
 

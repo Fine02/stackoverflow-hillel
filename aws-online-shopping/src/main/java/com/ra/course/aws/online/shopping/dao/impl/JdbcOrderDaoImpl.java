@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -24,9 +24,10 @@ public class JdbcOrderDaoImpl implements OrderDao {
     private final BooleanOrderLogRowMapper booleanOrderLogRowMapper;
     private final NumberFromStatusRowMapper numberFromStatusRowMapper;
     private final OrderRowMapper2 orderRowMapper2;
+    private final GetLastIdRowMapper getIdRowMapper;
 
     @Autowired
-    public JdbcOrderDaoImpl(JdbcTemplate jdbcTemplate, OrderRowMapper orderRowMapper, ListOrderLogRowMapper orderLogRowMapper, OrderLogRowMapper orderLogOneRowMapper, MemberRowMapper memberRowMapper, MemberBooleanRowMapper memberBooleanRowMapper, BooleanOrderLogRowMapper booleanOrderLogRowMapper, NumberFromStatusRowMapper numberFromStatusRowMapper, OrderRowMapper2 orderRowMapper2) {
+    public JdbcOrderDaoImpl(JdbcTemplate jdbcTemplate, OrderRowMapper orderRowMapper, ListOrderLogRowMapper orderLogRowMapper, OrderLogRowMapper orderLogOneRowMapper, MemberRowMapper memberRowMapper, MemberBooleanRowMapper memberBooleanRowMapper, BooleanOrderLogRowMapper booleanOrderLogRowMapper, NumberFromStatusRowMapper numberFromStatusRowMapper, OrderRowMapper2 orderRowMapper2, GetLastIdRowMapper getIdRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.orderRowMapper = orderRowMapper;
         this.orderLogRowMapper = orderLogRowMapper;
@@ -35,9 +36,10 @@ public class JdbcOrderDaoImpl implements OrderDao {
         this.booleanOrderLogRowMapper = booleanOrderLogRowMapper;
         this.numberFromStatusRowMapper = numberFromStatusRowMapper;
         this.orderRowMapper2 = orderRowMapper2;
+        this.getIdRowMapper = getIdRowMapper;
     }
 
-    private static final String UPDATE_ORDER_BY_ORDERNUMBER = "UPDATE \"order\" o SET  order_status_id=?, orderDate=? WHERE o.orderNumber=?";
+    private static final String UPDATE_ORDER_BY_ORDERNUMBER = "UPDATE \"order\" SET  order_status_id=?, orderDate=? WHERE orderNumber=?";
 
     private static final String GET_INT_OF_ORDER_STATUS = "SELECT os.id FROM order_status os WHERE os.status=?";
 
@@ -72,16 +74,20 @@ public class JdbcOrderDaoImpl implements OrderDao {
 //            ")";
 
 
-    private static final String FIND_ORDER_BY_ORDER_NUMBER = "SELECT \n" +
-            "o.id order_id, o.orderNumber, os2.status order_status, o.orderDate,\n" +
-            "ol.id orderLog_id, ol.orderNumber,\n" +
-            "ol.creationDate, os.status orderLogStatus\n" +
-            "FROM  (\"order\" o \n" +
-            "JOIN order_log ol ON ol.order_id = o.id )\n" +
-            ",order_status os, order_status os2 \n" +
-            "WHERE (\n" +
-            "o.orderNumber =? AND ol.order_status_id = os.id AND o.order_status_id = os2.id\n" +
-            ")";
+    private static final String GET_ORDER_BY_ORDER_NUMBER = "SELECT \n" +
+            "o.id, o.orderNumber, os2.status, o.orderDate\n" +
+            "FROM  \"order\" o \n" +
+            "JOIN order_status os2 ON o.order_status_id = os2.id\n" +
+            "WHERE \n" +
+            "o.orderNumber =?";
+
+    private static final String GET_ORDER_LOGS_BY_ORDER_NUMBER = "SELECT \n" +
+            "ol.id, ol.orderNumber,\n" +
+            "ol.creationDate, os.status\n" +
+            "FROM  order_log ol\n" +
+            "JOIN order_status os ON ol.order_status_id = os.id\n" +
+            "WHERE \n" +
+            "ol.orderNumber =?";
 
 
     private static final String GET_ORDER_LOGS_BY_ORDER_NO_IN_OLOGS = "SELECT \n" +
@@ -99,13 +105,16 @@ public class JdbcOrderDaoImpl implements OrderDao {
     private static final String ADD_ORDER_LOG = "INSERT INTO order_log (orderNumber, creationDate, order_status_id, order_id) VALUES (?, ?, ?, ?)";
 
     private static final String GET_ORDER_LOG_BY_ID = "SELECT ol.id, ol.orderNumber, ol.creationDate, os.status FROM order_log ol JOIN order_status os ON ol.order_status_id = os.id WHERE ol.id=?";
-
+    private static final String INSERT_ORDER_LOG = "INSERT INTO order_log (orderNumber, creationDate, order_status_id, order_id) VALUES (?, ?, ?, ?)";
+    private static final String GET_ORDER_ID ="SELECT id FROM \"order\"  WHERE orderNumber=?";
 
     //work correct
     @Override
-    public void updateOrder(Order orderNumber) {
-        Integer getNumberFromStatus = jdbcTemplate.queryForObject(GET_INT_OF_ORDER_STATUS, numberFromStatusRowMapper, orderNumber.getStatus().toString());
-        jdbcTemplate.update(UPDATE_ORDER_BY_ORDERNUMBER, getNumberFromStatus, orderNumber.getOrderDate(), orderNumber.getOrderNumber());
+    public void updateOrder(Order order) {
+        Integer getIdOfOrder = jdbcTemplate.queryForObject(GET_ORDER_ID, getIdRowMapper, order.getOrderNumber());
+        Integer getNumberFromStatus = jdbcTemplate.queryForObject(GET_INT_OF_ORDER_STATUS, getIdRowMapper, order.getStatus().toString());
+        jdbcTemplate.update(UPDATE_ORDER_BY_ORDERNUMBER, getNumberFromStatus, LocalDateTime.now(), order.getOrderNumber());
+        jdbcTemplate.update(INSERT_ORDER_LOG, order.getOrderNumber(), LocalDateTime.now(), getNumberFromStatus, getIdOfOrder);
     }
 
     //work correct
@@ -115,45 +124,30 @@ public class JdbcOrderDaoImpl implements OrderDao {
         return result;
     }
 
-    //работает, но Order может возращать и "null"
-//    @Override
-//    public Order findByOrderNumber(String orderNumber) {
-//        List<Order> list = jdbcTemplate.query(FIND_ORDER_BY_ORDER_NUMBER, orderRowMapper, orderNumber);
-////       if (list.size() > 0) {
-//            Order order = new Order();
-//            List<OrderLog> orderLogList = new ArrayList<>();
-//            ArrayList<OrderLog> arL = new ArrayList<>();
-//            for (Order row : list) {
-//                OrderLog ol = new OrderLog();
-//                order.setOrderNumber(row.getOrderNumber());
-//                order.setStatus(row.getStatus());
-//                order.setOrderDate(row.getOrderDate());
-//                ol.setId(row.getOrderLog().get(0).getId());
-//                ol.setOrderNumber(row.getOrderLog().get(0).getOrderNumber());
-//                ol.setCreationDate(row.getOrderLog().get(0).getCreationDate());
-//                ol.setStatus(row.getOrderLog().get(0).getStatus());
-//                //arL.add(ol);
-//                orderLogList.add(ol);
-//            }
-//            //order.setOrderLog(orderLogList);
-//            order.setOrderLog(orderLogList);
-//
-//            return order;
-////        }
-////        return  jdbcTemplate.queryForObject(FIND_ORDER_BY_ORDER_NUMBER, orderRowMapper, orderNumber);
-//        }
-
-        @Override
+    //work correct
+    @Override
     public Order findByOrderNumber(String orderNumber) {
-            Order order = jdbcTemplate.queryForObject(FIND_ORDER_BY_ORDER_NUMBER, orderRowMapper2, orderNumber);
-            return order;
+        List<OrderLog> list = jdbcTemplate.query(GET_ORDER_LOGS_BY_ORDER_NUMBER, BeanPropertyRowMapper.newInstance(OrderLog.class), orderNumber);
+        Order result = jdbcTemplate.queryForObject(GET_ORDER_BY_ORDER_NUMBER, BeanPropertyRowMapper.newInstance(Order.class), orderNumber);
+        Order order =result;
+        order.setOrderLog(list);
+        return order;
         }
+
+    //work correct?
+//    @Override
+//    public List<OrderLog> findLogListByOrder(List<OrderLog> orderLogList) {
+//        OrderLog orderLog = orderLogList.get(0);
+//        String orderNumber = orderLog.getOrderNumber();
+//        List<OrderLog> orderLogsList = jdbcTemplate.query(GET_ORDER_LOGS_BY_ORDER_NO_IN_OLOGS, orderLogOneRowMapper, orderNumber);
+//        return orderLogsList;
+//    }
 
     @Override
     public List<OrderLog> findLogListByOrder(List<OrderLog> orderLogList) {
         OrderLog orderLog = orderLogList.get(0);
         String orderNumber = orderLog.getOrderNumber();
-        List<OrderLog> orderLogsList = jdbcTemplate.query(GET_ORDER_LOGS_BY_ORDER_NO_IN_OLOGS, orderLogOneRowMapper, orderNumber);
+        List<OrderLog> orderLogsList = jdbcTemplate.query(GET_ORDER_LOGS_BY_ORDER_NUMBER, BeanPropertyRowMapper.newInstance(OrderLog.class), orderNumber);
         return orderLogsList;
     }
 

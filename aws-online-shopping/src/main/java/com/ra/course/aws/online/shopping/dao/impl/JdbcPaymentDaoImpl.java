@@ -29,7 +29,6 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
             "WHERE (crc.address_id = adr.id AND crc.account_id=?)";
 
     private static final String GET_ACCOUNT_ID_OF_CREDIT_CARD_IN_DB = "SELECT cc.account_id FROM credit_card cc WHERE cardNumber=?";
-    //INSERT INTO notification (createdOn, content) VALUES (?, ?) RETURNING notification.id";
     private static final String INSERT_DATA_INTO_PAYMENT_TABLE = "INSERT INTO payment (payment_status_id, amount) VALUES (?, ?) RETURNING payment.id";
     private static final String GET_ID_OF_PAYMENT_STATUS = "SELECT ps.id FROM payment_status ps WHERE ps.status=?";
     private static final String INSERT_DATA_INTO_ELECTRONIC_BANK_TRANSACTION = "INSERT INTO electronic_bank_transaction (payment_id) VALUES (?)";

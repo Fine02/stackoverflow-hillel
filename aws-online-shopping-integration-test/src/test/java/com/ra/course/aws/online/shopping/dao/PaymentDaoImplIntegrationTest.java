@@ -49,21 +49,6 @@ public class PaymentDaoImplIntegrationTest {
     Address address = new Address("Mira, 8", "Kyiv", "Kyiv", "14004", "Ukraine");
     private Double amount = 777.77;
 
-    public List<ElectronicBankTransfer> makeElectronicBankTransferList() {
-        List<ElectronicBankTransfer> transferList = new ArrayList<>();
-        transferList.add(transfer);
-        transferList.add(transfer);
-        transferList.add(transfer);
-        return transferList;
-    }
-
-    private List<CreditCard> makeListOfCreditCard() {
-        List<CreditCard> creditCardList = new ArrayList<>();
-        creditCardList.add(creditCard);
-      //  creditCardList.add(creditCard);
-        return creditCardList;
-    }
-
     public ElectronicBankTransfer transfer = makeBankTransfer("GermanBank", "5265", "8542");
     public CreditCard creditCard = makeCreditCard("VISA", "5584", 5662, address);
     private ElectronicBankTransaction electronicBankTransaction = new ElectronicBankTransaction(PaymentStatus.PENDING, amount);
@@ -109,6 +94,20 @@ public class PaymentDaoImplIntegrationTest {
         paymentDao.createTransaction(creditCardTransaction);
     }
 
+    public List<ElectronicBankTransfer> makeElectronicBankTransferList() {
+        List<ElectronicBankTransfer> transferList = new ArrayList<>();
+        transferList.add(transfer);
+        transferList.add(transfer);
+        transferList.add(transfer);
+        return transferList;
+    }
+
+    private List<CreditCard> makeListOfCreditCard() {
+        List<CreditCard> creditCardList = new ArrayList<>();
+        creditCardList.add(creditCard);
+        creditCardList.add(creditCard);
+        return creditCardList;
+    }
 
     private CreditCard makeCreditCard(String nameOnCard, String cardNumber, int code, Address billingAddress) {
         return new CreditCard(nameOnCard, cardNumber, code, billingAddress);

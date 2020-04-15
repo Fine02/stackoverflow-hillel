@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface OrderDao {
 
-    void updateOrder(Order orderNumber);
+    void updateOrder(Order order);
 
     boolean isFoundMemberID(Long id);
 
