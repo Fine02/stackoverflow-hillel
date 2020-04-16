@@ -22,7 +22,10 @@ public interface ShippingDao {
 
     Shipment findByShipmentNumber(String shipmentNumber);
 
-    void addShipmentLog(boolean add);
+    //delete?
+    //void addShipmentLog(boolean add);
+
+    void addShipmentLog(ShipmentLog shipmentLog);
 
     Address findThatShippingAddress(Address shippingAddress);
 

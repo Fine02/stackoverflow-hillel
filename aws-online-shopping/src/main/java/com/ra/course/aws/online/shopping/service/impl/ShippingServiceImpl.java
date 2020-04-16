@@ -53,9 +53,7 @@ public class ShippingServiceImpl implements ShippingService {
         if (foundShipment.getShipmentLogs().contains(shipmentLog)){
             throw new ShipmentLogIsAlreadyExistException("This ShipmentLog is already exist");
         }
-        final var foundShipmentList = shippingDao.findLogListByShipment(shipment.getShipmentLogs());
-        shippingDao.addShipmentLog(foundShipmentList.add(shipmentLog));
-        shippingDao.updateShipment(foundShipment);
+        shippingDao.addShipmentLog(shipmentLog);
         return true;
     }
 }

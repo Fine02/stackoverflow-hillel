@@ -29,8 +29,8 @@ public class JdbcOrderDaoImpl implements OrderDao {
         this.getIdRowMapper = getIdRowMapper;
     }
 
-    private static final String UPDATE_ORDER_BY_ORDERNUMBER = "UPDATE \"order\" SET  order_status_id=? WHERE orderNumber=?";
-    private static final String GET_INT_OF_ORDER_STATUS = "SELECT os.id FROM order_status os WHERE os.status=?";
+    private static final String UPDATE_ORDER_BY_ORDER_NUMBER = "UPDATE \"order\" SET  order_status_id=? WHERE orderNumber=?";
+    private static final String GET_ID_OF_ORDER_STATUS = "SELECT os.id FROM order_status os WHERE os.status=?";
     private static final String FIND_ORDER_LOG_BY_FIELDS = "SELECT ol.id, ol.orderNumber, ol.creationDate, os.status, ol.order_id FROM order_log ol JOIN order_status os ON ol.order_status_id = os.id WHERE ol.id=?";
     private static final String GET_ORDER_LOG_BY_ID = "SELECT ol.id, ol.orderNumber, ol.creationDate, os.status FROM order_log ol JOIN order_status os ON ol.order_status_id = os.id WHERE ol.id=?";
     private static final String INSERT_ORDER_LOG = "INSERT INTO order_log (orderNumber, creationDate, order_status_id, order_id) VALUES (?, ?, ?, ?)";
@@ -61,7 +61,7 @@ public class JdbcOrderDaoImpl implements OrderDao {
             "WHERE \n" +
             "o.orderNumber =?";
 
-    private static final String GET_ORDER_LOGS_BY_ORDER_NUMBER = "SELECT \n" +
+    private static final String GET_ORDER_LOG_BY_ORDER_NUMBER = "SELECT \n" +
             "ol.id, ol.orderNumber,\n" +
             "ol.creationDate, os.status\n" +
             "FROM  order_log ol\n" +
@@ -73,8 +73,8 @@ public class JdbcOrderDaoImpl implements OrderDao {
     @Override
     public void updateOrder(Order order) {
         Integer getIdOfOrder = jdbcTemplate.queryForObject(GET_ORDER_ID, getIdRowMapper, order.getOrderNumber());
-        Integer getNumberFromStatus = jdbcTemplate.queryForObject(GET_INT_OF_ORDER_STATUS, getIdRowMapper, order.getStatus().toString());
-        jdbcTemplate.update(UPDATE_ORDER_BY_ORDERNUMBER, getNumberFromStatus, order.getOrderNumber());
+        Integer getNumberFromStatus = jdbcTemplate.queryForObject(GET_ID_OF_ORDER_STATUS, getIdRowMapper, order.getStatus().toString());
+        jdbcTemplate.update(UPDATE_ORDER_BY_ORDER_NUMBER, getNumberFromStatus, order.getOrderNumber());
         jdbcTemplate.update(INSERT_ORDER_LOG, order.getOrderNumber(), LocalDateTime.now(), getNumberFromStatus, getIdOfOrder);
     }
 
@@ -82,9 +82,9 @@ public class JdbcOrderDaoImpl implements OrderDao {
     @Override
     public void addOrderLogAndUpdateOrder(Order order, OrderLog orderLog) {
         Integer getIdOfOrder = jdbcTemplate.queryForObject(GET_ORDER_ID, getIdRowMapper, orderLog.getOrderNumber());
-        Integer getNumberFromStatus = jdbcTemplate.queryForObject(GET_INT_OF_ORDER_STATUS, getIdRowMapper, orderLog.getStatus().toString());
-        jdbcTemplate.update(UPDATE_ORDER_BY_ORDERNUMBER, getNumberFromStatus, order.getOrderNumber());
-        jdbcTemplate.update(INSERT_ORDER_LOG, orderLog.getOrderNumber(), orderLog.getCreationDate(), getNumberFromStatus, getIdOfOrder);
+        Integer getNumberOfStatus = jdbcTemplate.queryForObject(GET_ID_OF_ORDER_STATUS, getIdRowMapper, orderLog.getStatus().toString());
+        jdbcTemplate.update(UPDATE_ORDER_BY_ORDER_NUMBER, getNumberOfStatus, order.getOrderNumber());
+        jdbcTemplate.update(INSERT_ORDER_LOG, orderLog.getOrderNumber(), orderLog.getCreationDate(), getNumberOfStatus, getIdOfOrder);
     }
 
     //work correct
@@ -102,7 +102,7 @@ public class JdbcOrderDaoImpl implements OrderDao {
     @Override
     public Order findByOrderNumber(String orderNumber) {
         try {
-            List<OrderLog> list = jdbcTemplate.query(GET_ORDER_LOGS_BY_ORDER_NUMBER, BeanPropertyRowMapper.newInstance(OrderLog.class), orderNumber);
+            List<OrderLog> list = jdbcTemplate.query(GET_ORDER_LOG_BY_ORDER_NUMBER, BeanPropertyRowMapper.newInstance(OrderLog.class), orderNumber);
             Order result = jdbcTemplate.queryForObject(GET_ORDER_BY_ORDER_NUMBER, BeanPropertyRowMapper.newInstance(Order.class), orderNumber);
             Order order = result;
             order.setOrderLog(list);
@@ -117,7 +117,7 @@ public class JdbcOrderDaoImpl implements OrderDao {
     public List<OrderLog> findLogListByOrder(List<OrderLog> orderLogList) {
         OrderLog orderLog = orderLogList.get(0);
         String orderNumber = orderLog.getOrderNumber();
-        List<OrderLog> orderLogsList = jdbcTemplate.query(GET_ORDER_LOGS_BY_ORDER_NUMBER, BeanPropertyRowMapper.newInstance(OrderLog.class), orderNumber);
+        List<OrderLog> orderLogsList = jdbcTemplate.query(GET_ORDER_LOG_BY_ORDER_NUMBER, BeanPropertyRowMapper.newInstance(OrderLog.class), orderNumber);
         return orderLogsList;
     }
 

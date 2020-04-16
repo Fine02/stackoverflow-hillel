@@ -60,8 +60,6 @@ public class ShippingServiceImplTest {
         boolean actualResponse = shippingService.addShipmentLogToShipment(SHIPMENT, newShipmentLog);
 
         assertEquals(actualResponse, true);
-        verify(shippingDao).addShipmentLog(SHIPMENT.getShipmentLogs().add(newShipmentLog));
-        verify(shippingDao).updateShipment(SHIPMENT);
     }
 
     @Test
