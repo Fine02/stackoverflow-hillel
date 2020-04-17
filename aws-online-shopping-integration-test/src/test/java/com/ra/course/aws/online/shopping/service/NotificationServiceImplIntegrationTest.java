@@ -50,8 +50,11 @@ public class NotificationServiceImplIntegrationTest {
     private Account accountExist = makeAccount(emailExist, phoneExist);
     private Member memberExist = makeMember(accountExist);
 
-    OrderLog newOrderLog = makeOrderLog(7, "5548541", LocalDateTime.now().minusDays(1), OrderStatus.PENDING);
-    ShipmentLog newShipmentLog = makeShipmentLog(7, "55785", ShipmentStatus.ONHOLD, LocalDateTime.now().minusDays(1));
+    //OrderLog newOrderLog = makeOrderLog(7, "5548541", LocalDateTime.now().minusDays(1), OrderStatus.PENDING);
+    //ShipmentLog newShipmentLog = makeShipmentLog(7, "55785", ShipmentStatus.ONHOLD, LocalDateTime.now().minusDays(1));
+
+    OrderLog newOrderLog = new OrderLog(55555555,"5548541", LocalDateTime.now(), OrderStatus.PENDING);
+    ShipmentLog newShipmentLog = new ShipmentLog( 8555555,"55785", ShipmentStatus.ONHOLD, LocalDateTime.now().minusDays(1));
 
     OrderLog orderLogInDB = makeOrderLog(1, "1", time, OrderStatus.PENDING);
     ShipmentLog shipmentLogInDB = makeShipmentLog(1, "1", ShipmentStatus.SHIPPED, time);
@@ -69,8 +72,10 @@ public class NotificationServiceImplIntegrationTest {
         });
 
         assertEquals(exceptionEmail.getMessage(), "Email-notification about shipment status can not be sent");
+        assertEquals(exceptionEmail.getClass(), NotificationException.class);
 
         assertEquals(exceptionSMS.getMessage(), "SMS-notification about shipment status can not be sent");
+        assertEquals(exceptionSMS.getClass(), NotificationException.class);
     }
 
     //work correct
@@ -86,8 +91,10 @@ public class NotificationServiceImplIntegrationTest {
         });
 
         assertEquals(exceptionSMS.getMessage(), "SMS-notification about order status can not be sent");
+        assertEquals(exceptionSMS.getClass(), NotificationException.class);
 
         assertEquals(exceptionEmail.getMessage(), "Email-notification about order status can not be sent");
+        assertEquals(exceptionEmail.getClass(), NotificationException.class);
     }
 
     //work correct
@@ -119,7 +126,7 @@ public class NotificationServiceImplIntegrationTest {
     //work correct
     @Test
     public void whenShipmentStatusWasChangedSendNotification() {
-        ShipmentLog newShipmentLog = makeShipmentLog(7, "55785", ShipmentStatus.ONHOLD, LocalDateTime.now().minusDays(1));
+        ShipmentLog newShipmentLog = new ShipmentLog(11144555,"55785", ShipmentStatus.ONHOLD, LocalDateTime.now());
         String expectedResult = "your shipment number 55785 has changed status on ONHOLD";
 
         var resultSMS = notificationService.sendSMSNotificationAboutShipmentStatus(newShipmentLog, memberExist);
@@ -132,7 +139,7 @@ public class NotificationServiceImplIntegrationTest {
     //work correct
     @Test
     public void whenOrderStatusWasChangedSendNotification() {
-        OrderLog newOrderLog = makeOrderLog(7, "5548541", LocalDateTime.now().minusDays(1), OrderStatus.PENDING);
+        OrderLog newOrderLog = new OrderLog(855514477,"5548541", LocalDateTime.now(), OrderStatus.PENDING);
         String expectedResult = "your order number 5548541 has changed status on PENDING";
 
         var resultSMS = notificationService.sendSMSNotificationAboutOrderStatus(newOrderLog, memberExist);

@@ -2,9 +2,16 @@ package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
+import com.ra.course.aws.online.shopping.entity.Address;
+import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.enums.ShipmentStatus;
+import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
+import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
 import com.ra.course.aws.online.shopping.entity.shipment.Shipment;
 import com.ra.course.aws.online.shopping.entity.shipment.ShipmentLog;
+import com.ra.course.aws.online.shopping.entity.user.Account;
+import com.ra.course.aws.online.shopping.entity.user.Member;
+import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.ShipmentLogIsAlreadyExistException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
@@ -34,16 +40,22 @@ public class ShippingServiceImplIntegrationTest {
     LocalDateTime time4 = LocalDateTime.of(2020, 4, 15, 17, 12, 11);
     private final ShipmentLog shipmentLogInDB1 = new ShipmentLog (2,"2", ShipmentStatus.SHIPPED, time1);
     private final ShipmentLog shipmentLogInDB2 = new ShipmentLog (3,"2", ShipmentStatus.SHIPPED, time2);
-    private final Shipment shipmentInDb = new Shipment("3",time, time3,"by air");
-    private final ShipmentLog shipmentLogInDB = new ShipmentLog (4,"3", ShipmentStatus.ONHOLD, time4);
-    private final ShipmentLog newShipmentLog = new ShipmentLog ("3", ShipmentStatus.DELIVERED, LocalDateTime.now());
+    private final Shipment shipmentInDb = new Shipment("2",time1, time3,"by air");
+   // private final ShipmentLog shipmentLogInDB = new ShipmentLog (4,"3", ShipmentStatus.ONHOLD, time4);
+    private final ShipmentLog shipmentLogInDB = new ShipmentLog (2,"2", ShipmentStatus.SHIPPED, time1);
+    private final ShipmentLog newShipmentLog = new ShipmentLog ("2", ShipmentStatus.DELIVERED, LocalDateTime.now());
+    private final ShipmentLog shipmentLog1 = new ShipmentLog (1,"1", ShipmentStatus.SHIPPED, time);
+    Address addressForUpdate = new Address("Mira, 11", "Kyiv", "Kyiv", "14004", "Ukraine");
+    Address addressInDb = new Address("Mira, 10", "Kyiv", "Kyiv", "14004", "Ukraine");
+    Member memberInDb = makeMember(3L);
+    Member wrongMember = makeMember(55523L);
 
     //work correct
     @Test
     public void shouldGetShippingTrack() {
-        String shippingNumber ="2";
+        String shippingNumber ="1";
 
-        List<ShipmentLog> expectedResult =makeListOfShipmentLog(shipmentLogInDB1, shipmentLogInDB2); ;
+        List<ShipmentLog> expectedResult =makeListOfShipmentLog(shipmentLog1); ;
 
         List<ShipmentLog> actualResponse = shippingService.getShipmentTrack(shippingNumber);
 
@@ -77,11 +89,58 @@ public class ShippingServiceImplIntegrationTest {
         assertEquals(exception.getClass(), ShipmentLogIsAlreadyExistException.class);
     }
 
+    @Test
+    public void whenMemberShouldSpecifyShippingAddress() {
 
-    private List<ShipmentLog> makeListOfShipmentLog(ShipmentLog shipmentLog1, ShipmentLog shipmentLog2 ) {
+        var resultOfSpecifyShippingAddress = shippingService.specifyShippingAddress(memberInDb, addressForUpdate);
+
+        Assertions.assertSame(true, resultOfSpecifyShippingAddress);
+
+        assertEquals(3L, memberInDb.getMemberID());
+    }
+
+    @Test
+    public void shouldThrowMemberNotFoundException() {
+
+        Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {
+            shippingService.specifyShippingAddress(wrongMember, addressForUpdate);
+        });
+
+        assertEquals(exception.getMessage(), "There is not found the Member by this ID");
+        assertEquals(exception.getClass(), MemberDataNotFoundException.class);
+    }
+
+
+    private List<ShipmentLog> makeListOfShipmentLog(ShipmentLog shipmentLog1 ) {
         List<ShipmentLog> shipmentLogs = new ArrayList<>();
         shipmentLogs.add(shipmentLog1);
-        shipmentLogs.add(shipmentLog2);
         return shipmentLogs;
     }
+
+    private Account makeAccount() {
+        List<CreditCard> creditCardList = new ArrayList<>();
+        creditCardList.add(new CreditCard("VISA", "77", 44, addressInDb));
+        List<ElectronicBankTransfer> bankTransfers = new ArrayList<>();
+        bankTransfers.add(new ElectronicBankTransfer("P8", "77", "10"));
+        Account account = new Account(
+                1L,
+                "Ivan",
+                "1",
+                AccountStatus.ACTIVE,
+                "Ann",
+                addressInDb,
+                "111j@gmail.com",
+                "38012345111",
+                creditCardList,
+                bankTransfers
+        );
+        return account;
+    }
+
+    private Member makeMember(Long id) {
+        Member member = new Member(makeAccount());
+        member.setMemberID(id);
+        return member;
+    }
+
 }

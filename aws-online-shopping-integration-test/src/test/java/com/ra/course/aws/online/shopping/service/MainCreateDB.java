@@ -11,8 +11,8 @@ import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
-@Sql(scripts = "classpath:schema.sql")
-@Sql(scripts = "classpath:test-data.sql")
+//@Sql(scripts = "classpath:schema.sql")
+//@Sql(scripts = "classpath:test-data.sql")
 public class MainCreateDB {
 
     @Autowired

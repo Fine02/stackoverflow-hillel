@@ -7,6 +7,7 @@ import com.ra.course.aws.online.shopping.entity.shipment.ShipmentLog;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.mapper.BooleanShipmentLogRowMapper;
 import com.ra.course.aws.online.shopping.mapper.GetLastIdRowMapper;
+import com.ra.course.aws.online.shopping.mapper.MemberBooleanRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -17,76 +18,34 @@ import java.util.List;
 
 @Repository
 public class JdbcShippingDaoImpl implements ShippingDao {
-
-    private static final String GET_MEMBER_BY_ID = " SELECT \n" +
-            "\tm.`account_id` ,\n" +
-            "        m.`id` `member_id`,\n" +
-            "        a.`userName`, a.`password`,\n" +
-            "        acs.`status`,\n" +
-            "        a.`name`,\n" +
-            "        adr.`streetAddress`, adr.`city`, adr.`state`, adr.`zipcode`, adr.`country`,\n" +
-            "        a.`email`,\n" +
-            "        a.`phone`,\n" +
-            "        crc.`nameOnCard`, crc.`cardNumber`,crc.`code`, \n" +
-            "        ebt.`bankName`, ebt.`routingNumber`, ebt.`accountNumber`\n" +
-            "FROM member m JOIN account a ON m.`account_id`= a.`id`\n" +
-            "JOIN account_status acs ON a.`account_status_id` = acs.`id`\n" +
-            "JOIN `address` adr ON a.`address_id` = adr.`id`\n" +
-            "JOIN `credit_card` crc ON crc.`account_id` = a.`id`\n" +
-            "JOIN `electronic_bank_transfer` ebt ON ebt.`account_id` = a.`id`\n" +
-            "WHERE m.id=1 GROUP BY a.id\n";
-
-
-    private static final String UPDATE_SHIPMENT_ADDRESS_IN_MEMBER_ACCOUNT = "";
-
-    private static final String UPDATE_SHIPMENT_LOG_BY_SL = "UPDATE `SHIPMENT_LOG` sl SET `shipmentNumber`=?, `shipment_status_id`=?, `creationDate`=?, `shipment_id` =? WHERE sl.`shipmentNumber`= ? AND sl.`shipment_status_id`=? AND sl.`creationDate`=? AND sl.`shipment_id`=?";
-    private static final String UPDATE_SHIPMENT_LOG_BY_SHIPMENT_NO = "UPDATE `SHIPMENT_LOG` sl SET `shipmentNumber`=?, `shipment_status_id`=?, `creationDate`=?, `shipment_id` =? WHERE sl.`shipmentNumber`= ? AND sl.`shipment_status_id`=? AND sl.`creationDate`=? AND sl.`shipment_id`=?";
-    private static final String INSERT_SHIPMENT = "INSERT INTO SHIPMENT (`shipmentNumber`, `shipmentDate`, `estimatedArrival`, `shipmentMethod`) VALUES (?, ?, ?, ?)";
-
-    private static final String GET_SHIPMENT_LOG_BY_SL_ID = "SELECT \n" +
-            "sl.`id` shipmentLog_id, sl.`shipmentNumber`, ss.`status` shipmentLogStatus,\n" +
-            "sl.`creationDate` \n" +
-            "FROM  (`shipment_log` sl\n" +
-            "JOIN `shipment` s ON sl.`shipment_id` = s.`id`)\n" +
-            ",`shipment_status` ss\n" +
-            "WHERE (\n" +
-            "sl.`shipment_status_id` = ss.`id` AND sl.`id`=?\n" +
-            ") ";
-
-
-    private static final String GET_SHIPMENT_LOGS_BY_SHIPMENT_NO_IN_OLOGS ="SELECT \n" +
-            "sl.`id` shipmentLog_id, sl.`shipmentNumber`, ss.`status` shipmentLogStatus,\n" +
-            "sl.`creationDate` \n" +
-            "FROM  (`shipment_log` sl\n" +
-            "JOIN `shipment` s ON sl.`shipment_id` = s.`id`)\n" +
-            ",`shipment_status` ss\n" +
-            "WHERE (\n" +
-            "sl.`shipment_status_id` = ss.`id` AND s.`shipmentNumber`=? \n" +
-            ")";
-
-    private static final String FIND_SHIPMENT_BY_SHIPMENT_NUMBER = "SELECT \n" +
-            "s.`id` shipment_id, s.`shipmentNumber`, s.`shipmentDate`, s.`estimatedArrival`, s.`shipmentMethod`,\n" +
-            "sl.`id` shipmentLog_id, sl.`shipmentNumber`, ss.`status` shipmentLogStatus,\n" +
-            "sl.`creationDate` \n" +
-            "FROM  (`shipment_log` sl\n" +
-            "JOIN `shipment` s ON sl.`shipment_id` = s.`id`)\n" +
-            ",`shipment_status` ss\n" +
-            "WHERE (\n" +
-            " sl.`shipment_status_id` = ss.`id` AND s.`shipmentNumber`=? \n" +
-            ")";
-
-    private static final String ADD_SHIPMENT_LOG = "INSERT INTO `shipment_log` (`shipmentNumber`, `shipment_status_id`, `creationDate`, `shipment_id`) VALUES (?, ?, ?, ?)";
-
-    private static final String GET_SHIPMENT_ADDRESS_IN_ACCOUNT = "SELECT \n" +
-            "adr.`streetAddress`, adr.`city`, adr.`state`, adr.`zipcode`, adr.`country`\n" +
-            "FROM member m JOIN account a ON m.`account_id`= a.`id`\n" +
-            "JOIN `address` adr ON a.`address_id` = adr.`id`\n" +
-            "WHERE adr.`streetAddress`=? && adr.`city`=? &&  adr.`state` =? && adr.`zipcode`=? && adr.`country` =?  GROUP BY a.id";
-
     private static final String FIND_SHIPMENT_LOG_BY_ID = "SELECT sl.id, sl.shipmentNumber, ss.status, sl.creationDate FROM shipment_log sl JOIN shipment_status ss ON sl.shipment_status_id = ss.id WHERE sl.id=? ";
     private static final String GET_SHIPMENT_ID ="SELECT id FROM shipment  WHERE shipmentNumber=?";
     private static final String GET_ID_OF_SHIPMENT_STATUS ="SELECT ss.id FROM shipment_status ss WHERE ss.status=?";
     private static final String INSERT_SHIPMENT_LOG = "INSERT INTO shipment_log (shipmentNumber, shipment_status_id, creationDate, shipment_id) VALUES (?, ?, ?, ?)";
+    private  static final String UPDATE_ADDRESS ="UPDATE address SET streetAddress=?, city=?, state=?, zipCode=?, country=? WHERE id=?";
+
+    private static final String GET_ID_OF_ADDRESS_IN_ACCOUNT_BY_MEMBER_ID = "SELECT \n" +
+            "a.address_id id\n" +
+            "FROM member m JOIN account a ON m.account_id=a.id\n" +
+            "WHERE m.id=?";
+
+    private static final String FIND_MEMBER_BY_ID = " SELECT \n" +
+            "\t    m.account_id,\n" +
+            "        m.id member_id,\n" +
+            "        a.userName, a.password,\n" +
+            "        acs.status,\n" +
+            "        a.name,\n" +
+            "        adr.streetAddress, adr.city, adr.state, adr.zipcode, adr.country,\n" +
+            "        a.email,\n" +
+            "        a.phone,\n" +
+            "        crc.nameOnCard, crc.cardNumber,crc.code, \n" +
+            "        ebt.bankName, ebt.routingNumber, ebt.accountNumber\n" +
+            "FROM member m JOIN account a ON m.account_id= a.id\n" +
+            "JOIN account_status acs ON a.account_status_id = acs.id\n" +
+            "JOIN address adr ON a.address_id = adr.id\n" +
+            "JOIN credit_card crc ON crc.account_id = a.id\n" +
+            "JOIN electronic_bank_transfer ebt ON ebt.account_id = a.id\n" +
+            "WHERE m.id=? ";
 
     private static final String GET_SHIPMENT_BY_SHIPMENT_NUMBER = "SELECT \n" +
             "s.id, s.shipmentNumber, s.shipmentDate, s.estimatedArrival, s.shipmentMethod\n" +
@@ -106,12 +65,14 @@ public class JdbcShippingDaoImpl implements ShippingDao {
     private final JdbcTemplate jdbcTemplate;
     private final BooleanShipmentLogRowMapper booleanShipmentLogRowMapper;
     private final GetLastIdRowMapper getIdRowMapper;
+    private final MemberBooleanRowMapper memberBooleanRowMapper;
 
     @Autowired
-    public JdbcShippingDaoImpl(JdbcTemplate jdbcTemplate, BooleanShipmentLogRowMapper booleanShipmentLogRowMapper, GetLastIdRowMapper getIdRowMapper) {
+    public JdbcShippingDaoImpl(JdbcTemplate jdbcTemplate, BooleanShipmentLogRowMapper booleanShipmentLogRowMapper, GetLastIdRowMapper getIdRowMapper, MemberBooleanRowMapper memberBooleanRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.booleanShipmentLogRowMapper = booleanShipmentLogRowMapper;
         this.getIdRowMapper = getIdRowMapper;
+        this.memberBooleanRowMapper = memberBooleanRowMapper;
     }
 
     //work correct
@@ -158,7 +119,7 @@ public class JdbcShippingDaoImpl implements ShippingDao {
         }
     }
 
-    //work correct?
+    //work correct
     @Override
     public void addShipmentLog(ShipmentLog shipmentLog) {
         Integer getIdOfShipment = jdbcTemplate.queryForObject(GET_SHIPMENT_ID, getIdRowMapper, shipmentLog.getShipmentNumber());
@@ -166,30 +127,21 @@ public class JdbcShippingDaoImpl implements ShippingDao {
         jdbcTemplate.update(INSERT_SHIPMENT_LOG, shipmentLog.getShipmentNumber(), getNumberOfStatus, shipmentLog.getCreationDate(), getIdOfShipment);
     }
 
-
-    @Override
-    public boolean findShippingAddress(Address address) {
-        return false;
-    }
-
+    //work correct
     @Override
     public boolean isFoundMemberID(Long id) {
-        return false;
+        try {
+            var result = jdbcTemplate.queryForObject(FIND_MEMBER_BY_ID, memberBooleanRowMapper, id);
+            return result;
+        } catch (EmptyResultDataAccessException ex) {
+            return false;
+        }
     }
 
+    //work correct
     @Override
-    public void updateShippingAddress(Member address) {
-    }
-
-    ///??? удалить
-    @Override
-    public void updateShipment(Shipment shipment) {
-      //  jdbcTemplate.update(UPDATE_SHIPMENT_LOG_BY_SL,  shipment.getShipmentLogs());
-    }
-
-    @Override
-    public Address findThatShippingAddress(Address shippingAddress) {
-        //return jdbcTemplate.queryForObject(GET_SHIPMENT_ADDRESS_IN_ACCOUNT, BeanPropertyRowMapper.newInstance(Address.class), shippingAddress);
-        return null;
+    public void updateShippingAddress(Member member, Address address) {
+      Integer addressId = jdbcTemplate.queryForObject(GET_ID_OF_ADDRESS_IN_ACCOUNT_BY_MEMBER_ID, getIdRowMapper ,member.getMemberID());
+      jdbcTemplate.update(UPDATE_ADDRESS, address.getStreetAddress(),address.getCity(),address.getState(), address.getZipCode(), address.getCountry() ,addressId);
     }
 }

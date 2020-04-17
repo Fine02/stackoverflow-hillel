@@ -2,9 +2,15 @@ package com.ra.course.aws.online.shopping.dao;
 
 import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
+import com.ra.course.aws.online.shopping.entity.Address;
+import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.enums.ShipmentStatus;
+import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
+import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
 import com.ra.course.aws.online.shopping.entity.shipment.Shipment;
 import com.ra.course.aws.online.shopping.entity.shipment.ShipmentLog;
+import com.ra.course.aws.online.shopping.entity.user.Account;
+import com.ra.course.aws.online.shopping.entity.user.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -52,6 +58,10 @@ public class ShippingDaoImplIntegrationTest {
     private final List<ShipmentLog> shipmentLogList = makeListOfShipmentLog(existShipmentLog);
     private final List<ShipmentLog> listOfShipmentLog = makeListOfShipmentLog(shipmentLog);
     private final ShipmentLog shipmentLog1 = new ShipmentLog("3", ShipmentStatus.ONHOLD, time2);
+    Address addressForUpdate = new Address("Mira, 11", "Kyiv", "Kyiv", "14004", "Ukraine");
+    Address addressInDb = new Address("Mira, 10", "Kyiv", "Kyiv", "14004", "Ukraine");
+    Member member = makeMember(3L);
+
 
     //work correct
     @Test
@@ -83,8 +93,21 @@ public class ShippingDaoImplIntegrationTest {
 
     //work correct
     @Test
+    public void getInstanceIsFoundMemberIDTest() {
+        boolean result = shippingDao.isFoundMemberID(3L);
+        System.out.println(result);
+    }
+
+    //work correct
+    @Test
     public void addShipmentLogTest() {
         shippingDao.addShipmentLog(shipmentLog1);
+    }
+
+    //work correct
+    @Test
+    public void updateShippingAddressTest() {
+        shippingDao.updateShippingAddress(member,addressForUpdate);
     }
 
     private ShipmentLog makeShipmentLog(long id, String shipmentNumber, ShipmentStatus status, LocalDateTime creationDate) {
@@ -96,6 +119,32 @@ public class ShippingDaoImplIntegrationTest {
         List<ShipmentLog> shipmentLogs = new ArrayList<>();
         shipmentLogs.add(shipmentLog);
         return shipmentLogs;
+    }
+
+    private Account makeAccount() {
+        List<CreditCard> creditCardList = new ArrayList<>();
+        creditCardList.add(new CreditCard("VISA", "77", 44, addressInDb));
+        List<ElectronicBankTransfer> bankTransfers = new ArrayList<>();
+        bankTransfers.add(new ElectronicBankTransfer("P8", "77", "10"));
+        Account account = new Account(
+                1L,
+                "Ivan",
+                "1",
+                AccountStatus.ACTIVE,
+                "Ann",
+                addressInDb,
+                "111j@gmail.com",
+                "38012345111",
+                creditCardList,
+                bankTransfers
+        );
+        return account;
+    }
+
+    private Member makeMember(Long id) {
+        Member member = new Member(makeAccount());
+        member.setMemberID(id);
+        return member;
     }
 
 }

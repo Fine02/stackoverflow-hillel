@@ -6,7 +6,6 @@ import com.ra.course.aws.online.shopping.entity.payment.CreditCardTransaction;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransaction;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
 import com.ra.course.aws.online.shopping.entity.user.Member;
-import org.springframework.stereotype.Repository;
 
 public interface PaymentService {
     PaymentStatus processPaymentByElectronicBankTransaction(Member member, ElectronicBankTransfer bankTransfer, ElectronicBankTransaction bankTransaction, Double amount);
