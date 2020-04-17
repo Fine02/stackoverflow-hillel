@@ -32,23 +32,6 @@ import static org.mockito.Mockito.mock;
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
 public class PaymentServiceImplIntegrationTest {
-    @Primary
-    @Bean
-    public AccountDao mockedAccountDao() {
-        return mock(AccountDao.class);
-    }
-
-    @Primary
-    @Bean
-    public ProductDao mockedProductDao() {
-        return mock(ProductDao.class);
-    }
-
-    @Primary
-    @Bean
-    public ShoppingCartDao mockedShoppingCartDao() {
-        return mock(ShoppingCartDao.class);
-    }
 
     @Autowired
     private PaymentService paymentService;
@@ -121,7 +104,7 @@ public class PaymentServiceImplIntegrationTest {
         );
         return account;
     }
-    
+
     private Member makeMember(Account account) {
         Member member = new Member(account);
         member.setMemberID(1L);

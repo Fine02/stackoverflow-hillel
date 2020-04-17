@@ -36,24 +36,6 @@ import static org.mockito.Mockito.mock;
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
 public class OrderServiceImplIntegrationTest {
-    @Primary
-    @Bean
-    public AccountDao mockedAccountDao() {
-        return mock(AccountDao.class);
-    }
-
-    @Primary
-    @Bean
-    public ProductDao mockedProductDao() {
-        return mock(ProductDao.class);
-    }
-
-    @Primary
-    @Bean
-    public ShoppingCartDao mockedShoppingCartDao() {
-        return mock(ShoppingCartDao.class);
-    }
-
 
     @Autowired
     private OrderService orderService;
@@ -65,8 +47,8 @@ public class OrderServiceImplIntegrationTest {
     Order order = new Order("3", OrderStatus.UNSHIPPED, time);
     Order orderNotExist = new Order("122113", OrderStatus.UNSHIPPED, time);
 
-    public OrderLog orderLog1 = new OrderLog("2", time2, OrderStatus.PENDING);
-    public OrderLog orderLog2 = new OrderLog("2", time3, OrderStatus.PENDING);
+    public OrderLog orderLog1 = new OrderLog(2,"2", time2, OrderStatus.PENDING);
+    public OrderLog orderLog2 = new OrderLog(3,"2", time3, OrderStatus.PENDING);
     public OrderLog orderLog3 = new OrderLog("3", LocalDateTime.now(), OrderStatus.COMPLETE);
     public OrderLog existOrderLogInDB = new OrderLog("3", time3, OrderStatus.COMPLETE);
 
@@ -101,7 +83,7 @@ public class OrderServiceImplIntegrationTest {
 
         List<OrderLog> actualResponse = orderService.getOrderTrack(orderNumber);
 
-        assertEquals(actualResponse, expectedResult);
+        assertEquals(expectedResult, actualResponse);
     }
 
     //work correct
@@ -165,8 +147,8 @@ public class OrderServiceImplIntegrationTest {
 
     public List<OrderLog> makeOrderLogList() {
         List<OrderLog> orderLogList = new ArrayList<>();
-        orderLogList.add(orderLog1);
         orderLogList.add(orderLog2);
+        orderLogList.add(orderLog1);
         return orderLogList;
     }
 

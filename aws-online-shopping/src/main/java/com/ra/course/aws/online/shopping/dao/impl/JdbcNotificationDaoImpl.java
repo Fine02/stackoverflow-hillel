@@ -3,7 +3,6 @@ package com.ra.course.aws.online.shopping.dao.impl;
 import com.ra.course.aws.online.shopping.dao.NotificationDao;
 import com.ra.course.aws.online.shopping.entity.notification.EmailNotification;
 import com.ra.course.aws.online.shopping.entity.notification.SMSNotification;
-import com.ra.course.aws.online.shopping.mapper.EmailNotificationRowMapper;
 import com.ra.course.aws.online.shopping.mapper.GetLastIdRowMapper;
 import com.ra.course.aws.online.shopping.mapper.GetStringFromObjectRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ public class JdbcNotificationDaoImpl implements NotificationDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public JdbcNotificationDaoImpl(GetLastIdRowMapper getLastIdRowMapper, EmailNotificationRowMapper emailNotificationRowMapper, GetStringFromObjectRowMapper getStringFromObjectRowMapper, JdbcTemplate jdbcTemplate) {
+    public JdbcNotificationDaoImpl(GetLastIdRowMapper getLastIdRowMapper, GetStringFromObjectRowMapper getStringFromObjectRowMapper, JdbcTemplate jdbcTemplate) {
         this.getLastIdRowMapper = getLastIdRowMapper;
         this.getStringFromObjectRowMapper = getStringFromObjectRowMapper;
         this.jdbcTemplate = jdbcTemplate;

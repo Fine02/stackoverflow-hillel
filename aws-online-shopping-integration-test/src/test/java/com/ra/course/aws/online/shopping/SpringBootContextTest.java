@@ -84,5 +84,6 @@ public class SpringBootContextTest {
         public ShoppingCartDao mockedShoppingCartDao() {
             return mock(ShoppingCartDao.class);
         }
+
     }
 }

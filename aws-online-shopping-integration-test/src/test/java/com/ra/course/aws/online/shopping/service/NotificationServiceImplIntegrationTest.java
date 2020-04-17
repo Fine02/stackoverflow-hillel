@@ -35,27 +35,9 @@ import static org.mockito.Mockito.mock;
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
 public class NotificationServiceImplIntegrationTest {
-    @Primary
-    @Bean
-    public AccountDao mockedAccountDao() {
-        return mock(AccountDao.class);
-    }
-
-    @Primary
-    @Bean
-    public ProductDao mockedProductDao() {
-        return mock(ProductDao.class);
-    }
-
-    @Primary
-    @Bean
-    public ShoppingCartDao mockedShoppingCartDao() {
-        return mock(ShoppingCartDao.class);
-    }
 
     @Autowired
     private NotificationService notificationService;
-
 
     LocalDateTime time = LocalDateTime.of(2020, 3, 19, 22, 22, 11);
 
