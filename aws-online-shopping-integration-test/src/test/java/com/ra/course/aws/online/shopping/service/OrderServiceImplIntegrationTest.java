@@ -2,9 +2,6 @@ package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
-import com.ra.course.aws.online.shopping.dao.AccountDao;
-import com.ra.course.aws.online.shopping.dao.ProductDao;
-import com.ra.course.aws.online.shopping.dao.ShoppingCartDao;
 import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.enums.OrderStatus;
@@ -17,12 +14,11 @@ import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.OrderIsAlreadyShippedException;
 import com.ra.course.aws.online.shopping.exceptions.OrderLogIsAlreadyExistException;
+import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
@@ -31,7 +27,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
@@ -43,9 +38,10 @@ public class OrderServiceImplIntegrationTest {
     LocalDateTime time = LocalDateTime.of(2020, 3, 19, 22, 25, 25);
     LocalDateTime time2 = LocalDateTime.of(2020, 3, 20, 22, 22, 11);
     LocalDateTime time3 = LocalDateTime.of(2020, 3, 21, 22, 22, 11);
+    LocalDateTime time4 = LocalDateTime.of(2021, 9, 21, 22, 22, 11);
 
     Order order = new Order("3", OrderStatus.UNSHIPPED, time);
-    Order orderNotExist = new Order("122113", OrderStatus.UNSHIPPED, time);
+    Order newOrder = new Order("4", OrderStatus.UNSHIPPED, time4);
 
     public OrderLog orderLog1 = new OrderLog(2,"2", time2, OrderStatus.PENDING);
     public OrderLog orderLog2 = new OrderLog(3,"2", time3, OrderStatus.PENDING);
@@ -106,13 +102,14 @@ public class OrderServiceImplIntegrationTest {
 
     //work correct
     @Test()
-    public void shouldThrowNullPointerException() {
+    public void shouldThrowOrderNotFoundExceptionException() {
 
-        Throwable exception = Assertions.assertThrows(NullPointerException.class, () -> {
-            orderService.cancelOrder(orderNotExist, memberExist);
+        Throwable exception = Assertions.assertThrows(OrderNotFoundException.class, () -> {
+            orderService.cancelOrder(newOrder, memberExist);
         });
 
-        assertEquals(exception.getClass(), NullPointerException.class);
+        assertEquals(exception.getMessage(), "You can not cancel the order");
+        assertEquals(exception.getClass(), OrderNotFoundException.class);
     }
 
     //work correct

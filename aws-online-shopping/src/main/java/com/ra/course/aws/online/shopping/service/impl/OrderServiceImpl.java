@@ -8,6 +8,7 @@ import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.OrderIsAlreadyShippedException;
 import com.ra.course.aws.online.shopping.exceptions.OrderLogIsAlreadyExistException;
+import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
 import com.ra.course.aws.online.shopping.service.OrderService;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
                 orderDao.updateOrder(foundOrder);
                 return order;
             }
-            throw new NullPointerException();
+            throw new OrderNotFoundException("You can not cancel the order");
         }
         throw new MemberDataNotFoundException("There is not found the Member by this ID");
     }

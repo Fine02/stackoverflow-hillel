@@ -3,6 +3,7 @@ package com.ra.course.aws.online.shopping.dao.impl;
 import com.ra.course.aws.online.shopping.dao.OrderDao;
 import com.ra.course.aws.online.shopping.entity.order.Order;
 import com.ra.course.aws.online.shopping.entity.order.OrderLog;
+import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
 import com.ra.course.aws.online.shopping.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;

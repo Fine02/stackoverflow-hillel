@@ -2,9 +2,6 @@ package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
-import com.ra.course.aws.online.shopping.dao.AccountDao;
-import com.ra.course.aws.online.shopping.dao.ProductDao;
-import com.ra.course.aws.online.shopping.dao.ShoppingCartDao;
 import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.enums.ShipmentStatus;
@@ -20,8 +17,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
@@ -30,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
@@ -44,10 +38,7 @@ public class ShippingServiceImplIntegrationTest {
     LocalDateTime time2 = LocalDateTime.of(2020, 3, 21, 22, 22, 11);
     LocalDateTime time3 = LocalDateTime.of(2020, 4, 19, 22, 22, 11);
     LocalDateTime time4 = LocalDateTime.of(2020, 4, 15, 17, 12, 11);
-    private final ShipmentLog shipmentLogInDB1 = new ShipmentLog (2,"2", ShipmentStatus.SHIPPED, time1);
-    private final ShipmentLog shipmentLogInDB2 = new ShipmentLog (3,"2", ShipmentStatus.SHIPPED, time2);
     private final Shipment shipmentInDb = new Shipment("2",time1, time3,"by air");
-   // private final ShipmentLog shipmentLogInDB = new ShipmentLog (4,"3", ShipmentStatus.ONHOLD, time4);
     private final ShipmentLog shipmentLogInDB = new ShipmentLog (2,"2", ShipmentStatus.SHIPPED, time1);
     private final ShipmentLog newShipmentLog = new ShipmentLog ("2", ShipmentStatus.DELIVERED, LocalDateTime.now());
     private final ShipmentLog shipmentLog1 = new ShipmentLog (1,"1", ShipmentStatus.SHIPPED, time);

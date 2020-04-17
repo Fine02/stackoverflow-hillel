@@ -2,9 +2,6 @@ package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
-import com.ra.course.aws.online.shopping.dao.AccountDao;
-import com.ra.course.aws.online.shopping.dao.ProductDao;
-import com.ra.course.aws.online.shopping.dao.ShoppingCartDao;
 import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.enums.PaymentStatus;
@@ -19,15 +16,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
@@ -37,7 +31,7 @@ public class PaymentServiceImplIntegrationTest {
     private PaymentService paymentService;
 
     Address address = new Address("Mira, 8", "Kyiv", "Kyiv", "14004", "Ukraine");
-    private Double amount = 777.77;
+    private Double amount = 5555.77;
 
     public ElectronicBankTransfer transferInDb = new ElectronicBankTransfer("GermanBank", "5265", "8542");
     public CreditCard creditCardInDb = new CreditCard("VISA", "5584",5662, address);
@@ -64,6 +58,7 @@ public class PaymentServiceImplIntegrationTest {
     @Test
     public void whenThePaymentByElectronicBankTransactionIsSuccessful() {
         var expectedResult = PaymentStatus.COMPLETED;
+        electronicBankTransaction.setAmount(amount);
         var actualResult = paymentService.processPaymentByElectronicBankTransaction(memberWithExistData, transferInDb, electronicBankTransaction, amount);
         assertEquals(expectedResult, actualResult);
     }

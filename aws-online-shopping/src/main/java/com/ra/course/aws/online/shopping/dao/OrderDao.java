@@ -20,5 +20,4 @@ public interface OrderDao {
     boolean isThisOrderLogExist(OrderLog orderLog);
 
     OrderLog findOrderLogById(Long orderLogId);
-
 }

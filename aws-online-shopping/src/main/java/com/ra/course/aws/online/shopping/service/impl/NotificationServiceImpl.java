@@ -106,7 +106,6 @@ public class NotificationServiceImpl implements NotificationService {
         return emailNotification;
     }
 
-
     public String messageMaker(final String messageBegin, final String orderNumber, final String status) {
         return messageBegin + " " + orderNumber + " " + END_MESSAGE + " " + status;
     }

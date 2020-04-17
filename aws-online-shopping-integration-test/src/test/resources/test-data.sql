@@ -56,6 +56,7 @@ INSERT INTO shipment_log (shipmentNumber, shipment_status_id, creationDate, ship
 INSERT INTO "order" (orderNumber, order_status_id, orderDate) VALUES ('1', 3,'2020-03-19 22:22:11');
 INSERT INTO "order" (orderNumber, order_status_id, orderDate) VALUES ('2', 3,'2020-03-20 22:22:11');
 INSERT INTO "order" (orderNumber, order_status_id, orderDate) VALUES ('3', 3,'2020-03-21 22:22:11');
+INSERT INTO "order" (orderNumber, order_status_id, orderDate) VALUES ('4', 4,'2021-03-21 22:22:11');
 
 INSERT INTO order_log (orderNumber, creationDate, order_status_id, order_id) VALUES ('1','2020-03-19 22:22:11', 2,1);
 INSERT INTO order_log (orderNumber, creationDate, order_status_id, order_id) VALUES ('2','2020-03-20 22:22:11', 2,2);

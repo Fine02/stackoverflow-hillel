@@ -95,10 +95,11 @@ public class OrderDaoImplIntegrationTest {
 
     //work correct
     @Test
-    public void getInstanceTest() {
+    public void getInstanceOfOrderTest() {
         Order result = orderDao.findByOrderNumber("2");
         System.out.println(result);
     }
+
 
     //work correct
     @Test

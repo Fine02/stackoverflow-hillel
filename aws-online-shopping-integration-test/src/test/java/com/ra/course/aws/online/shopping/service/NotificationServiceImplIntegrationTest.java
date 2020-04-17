@@ -2,9 +2,6 @@ package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
-import com.ra.course.aws.online.shopping.dao.AccountDao;
-import com.ra.course.aws.online.shopping.dao.ProductDao;
-import com.ra.course.aws.online.shopping.dao.ShoppingCartDao;
 import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.enums.OrderStatus;
@@ -21,8 +18,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
@@ -30,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
@@ -54,9 +48,6 @@ public class NotificationServiceImplIntegrationTest {
 
     private Account accountExist = makeAccount(emailExist, phoneExist);
     private Member memberExist = makeMember(accountExist);
-
-    //OrderLog newOrderLog = makeOrderLog(7, "5548541", LocalDateTime.now().minusDays(1), OrderStatus.PENDING);
-    //ShipmentLog newShipmentLog = makeShipmentLog(7, "55785", ShipmentStatus.ONHOLD, LocalDateTime.now().minusDays(1));
 
     OrderLog newOrderLog = new OrderLog(55555555,"5548541", LocalDateTime.now(), OrderStatus.PENDING);
     ShipmentLog newShipmentLog = new ShipmentLog( 8555555,"55785", ShipmentStatus.ONHOLD, LocalDateTime.now().minusDays(1));

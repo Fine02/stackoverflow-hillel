@@ -9,6 +9,7 @@ import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.OrderIsAlreadyShippedException;
 import com.ra.course.aws.online.shopping.exceptions.OrderLogIsAlreadyExistException;
+import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
 import com.ra.course.aws.online.shopping.service.impl.OrderServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,9 +26,10 @@ import static org.mockito.Mockito.*;
 public class OrderServiceImplTest {
     private OrderServiceImpl orderService;
     private OrderDao orderDao = mock(OrderDao.class);
-    private final String ORDER_IN_DB = "Ref123";
+    private final String ORDER_NUMBER_IN_DB = "Ref123";
     private final Long MEMBER_ID = 10L;
     private Order searchOrder;
+    private Order newOrder;
     private Member searchMember;
     private String orderNumber = "101010";
 
@@ -38,7 +40,8 @@ public class OrderServiceImplTest {
     @BeforeEach
     public void before() {
         orderService = new OrderServiceImpl(orderDao);
-        searchOrder = mockOrder(ORDER_IN_DB, OrderStatus.COMPLETE, LocalDateTime.now(), ORDER_LOG_LIST);
+        searchOrder = mockOrder(ORDER_NUMBER_IN_DB, OrderStatus.COMPLETE, LocalDateTime.now(), ORDER_LOG_LIST);
+        newOrder = mockOrder(ORDER_NUMBER_IN_DB, OrderStatus.COMPLETE, LocalDateTime.now().plusMonths(20), ORDER_LOG_LIST);
         searchMember = mockMember(MEMBER_ID);
         when(orderDao.findByOrderNumber(ORDER.getOrderNumber())).thenReturn(ORDER);
         when(orderDao.findLogListByOrder(ORDER.getOrderLog())).thenReturn(ORDER_LOG_LIST);
@@ -46,7 +49,7 @@ public class OrderServiceImplTest {
 
     @Test
     public void whenSendForShipmentOrderThanOrderStatusChange() {
-        when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(searchOrder);
+        when(orderDao.findByOrderNumber(ORDER_NUMBER_IN_DB)).thenReturn(searchOrder);
         orderService.sendForShipment(ORDER);
         assertEquals(ORDER.getStatus(), OrderStatus.SHIPPED);
     }
@@ -118,7 +121,7 @@ public class OrderServiceImplTest {
     @Test()
     public void shouldThrowNullPointerException() {
         when(orderDao.isFoundMemberID(searchMember.getMemberID())).thenReturn(true);
-        when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(null);
+        when(orderDao.findByOrderNumber(ORDER_NUMBER_IN_DB)).thenReturn(null);
 
         Throwable exception = Assertions.assertThrows(NullPointerException.class, () -> {
             orderService.cancelOrder(null, searchMember);
@@ -127,11 +130,24 @@ public class OrderServiceImplTest {
         assertEquals(exception.getClass(), NullPointerException.class);
     }
 
+    @Test()
+    public void shouldThrowOrderNotFoundExceptionException() {
+        when(orderDao.isFoundMemberID(searchMember.getMemberID())).thenReturn(true);
+        when(orderDao.findByOrderNumber(ORDER_NUMBER_IN_DB)).thenReturn(newOrder);
+
+        Throwable exception = Assertions.assertThrows(OrderNotFoundException.class, () -> {
+            orderService.cancelOrder(newOrder, searchMember);
+        });
+
+        assertEquals(exception.getMessage(), "You can not cancel the order");
+        assertEquals(exception.getClass(), OrderNotFoundException.class);
+    }
+
     @Test
     public void whenOrderDateIsAfterCurrentThenOrderCanBeCanceled() {
-        var InDbOrder = mockOrder(ORDER_IN_DB, OrderStatus.PENDING, LocalDateTime.now().minusDays(1), ORDER_LOG_LIST);
+        var InDbOrder = mockOrder(ORDER_NUMBER_IN_DB, OrderStatus.PENDING, LocalDateTime.now().minusDays(1), ORDER_LOG_LIST);
         when(orderDao.isFoundMemberID(searchMember.getMemberID())).thenReturn(true);
-        when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(InDbOrder);
+        when(orderDao.findByOrderNumber(ORDER_NUMBER_IN_DB)).thenReturn(InDbOrder);
         var resultOrder = orderService.cancelOrder(searchOrder, searchMember);
         Assertions.assertSame(resultOrder.getStatus(), OrderStatus.CANCELED);
         assertEquals(10L, searchMember.getMemberID());
