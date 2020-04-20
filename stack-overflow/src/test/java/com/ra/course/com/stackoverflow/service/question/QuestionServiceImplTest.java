@@ -7,6 +7,7 @@ import com.ra.course.com.stackoverflow.exception.service.TagAlreadyAddedExceptio
 import com.ra.course.com.stackoverflow.repository.AnswerRepository;
 import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import com.ra.course.com.stackoverflow.repository.TagRepository;
+import com.ra.course.com.stackoverflow.repository.TagQuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +25,7 @@ public class QuestionServiceImplTest {
     private final long ID = 1L;
     private AnswerRepository answerRepository;
     private QuestionRepository questionRepository;
+    private TagQuestionRepository tagQuestionRepository;
     private TagRepository tagRepository;
     private Account account = createNewAccount();
     private Member member = createNewMember(ID, account);
@@ -37,8 +39,9 @@ public class QuestionServiceImplTest {
         answerRepository = mock(AnswerRepository.class);
         questionRepository = mock(QuestionRepository.class);
         tagRepository = mock(TagRepository.class);
+        tagQuestionRepository = mock(TagQuestionRepository.class);
 
-        questionService = new QuestionServiceImpl(answerRepository, questionRepository, tagRepository);
+        questionService = new QuestionServiceImpl(answerRepository, questionRepository, tagRepository, tagQuestionRepository);
     }
 
     @Test

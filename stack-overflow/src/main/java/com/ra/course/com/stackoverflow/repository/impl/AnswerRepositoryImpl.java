@@ -70,8 +70,7 @@ public class AnswerRepositoryImpl implements AnswerRepository {
     public List<Answer> findByQuestionId(@NonNull final Long id) {
         return dslContext.selectFrom(ANSWER_TABLE)
                 .where(ANSWER_TABLE.QUESTION_ID.eq(id))
-                .fetch()
-                .stream()
+                .fetchStream()
                 .map(this::intoAnswer)
                 .collect(Collectors.toList());
     }
@@ -80,8 +79,7 @@ public class AnswerRepositoryImpl implements AnswerRepository {
     public List<Answer> findByMemberId(@NonNull final Long id) {
         return dslContext.selectFrom(ANSWER_TABLE)
                 .where(ANSWER_TABLE.AUTHOR_ID.eq(id))
-                .fetch()
-                .stream()
+                .fetchStream()
                 .map(this::intoAnswer)
                 .collect(Collectors.toList());
     }

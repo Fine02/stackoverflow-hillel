@@ -5,6 +5,7 @@ import com.ra.course.com.stackoverflow.entity.enums.QuestionClosingRemark;
 import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
 import com.ra.course.com.stackoverflow.repository.impl.QuestionRepositoryImpl;
 import com.ra.course.com.stackoverflow.repository.impl.TagRepositoryImpl;
+import com.ra.course.com.stackoverflow.service.question.QuestionService;
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class QuestionRepositoryImplIntegrationTest {
     private Account account = createNewAccount();
     private Member member = createNewMember(ID, account);
     private Question question = createNewQuestion(ID, member);
+    private Tag tag = new Tag(1L, "JAVA", "Some tag description");
+
 
     @Autowired
     private QuestionRepositoryImpl questionRepository;
@@ -36,6 +39,8 @@ public class QuestionRepositoryImplIntegrationTest {
     private TagRepositoryImpl tagRepository;
     @Autowired
     private DSLContext dslContext;
+    @Autowired
+    private QuestionService questionService;
 
 
     @Test
@@ -89,9 +94,11 @@ public class QuestionRepositoryImplIntegrationTest {
 
     @Test
     public void whenFindQuestionByTagThenReturnListOfQuestion() {
-        var result = questionRepository.findByTag(new Tag(1L, "JAVA", "Some tag description"));
+        questionService.addTagToQuestion(tag, question);
 
-        assertTrue(result.size() > 0);
+        var result = questionRepository.findByTag(tag);
+
+        assertTrue(result.contains(question));
     }
 
     @Test
@@ -103,7 +110,7 @@ public class QuestionRepositoryImplIntegrationTest {
 
     @Test
     public void whenQuestionFindByTitleAndTagThenReturnListOfQuestion() {
-        var result =  questionRepository.findByTitleAndTag( "title", new Tag(1L, "JAVA", "Some tag description"));
+        var result =  questionRepository.findByTitleAndTag( "title", new Tag(3L, "SQL", "Some tag description"));
 
         assertTrue(result.size() > 0);
     }

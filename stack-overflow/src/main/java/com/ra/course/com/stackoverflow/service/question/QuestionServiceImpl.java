@@ -12,6 +12,7 @@ import com.ra.course.com.stackoverflow.repository.AnswerRepository;
 import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import com.ra.course.com.stackoverflow.repository.TagRepository;
 
+import com.ra.course.com.stackoverflow.repository.TagQuestionRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class QuestionServiceImpl implements QuestionService {
     private final transient AnswerRepository answerRepo;
     private final transient QuestionRepository questionRepo;
     private final transient TagRepository tagRepo;
+    private final transient TagQuestionRepository tagQuestionRepo;
 
 
     /**Members able to add an answer to an open question.
@@ -64,6 +66,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         try {
             questionRepo.update(questionFromDB);
+            tagQuestionRepo.save(tagFromDB, questionFromDB);
         }catch (QuestionRepositoryException e) {
             tagRepo.delete(tag);
             return false;

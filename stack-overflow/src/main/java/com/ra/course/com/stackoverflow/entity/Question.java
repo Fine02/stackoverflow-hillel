@@ -48,7 +48,7 @@ public class Question {
     @NonNull
     @ToString.Exclude
 //    private Member author;
-    private Long authorId;
+    private final Long authorId;
 
     @Builder.Default
     private Optional<Bounty> bounty = Optional.empty();
