@@ -3,7 +3,6 @@ package com.ra.course.aws.online.shopping.dao.impl;
 import com.ra.course.aws.online.shopping.dao.OrderDao;
 import com.ra.course.aws.online.shopping.entity.order.Order;
 import com.ra.course.aws.online.shopping.entity.order.OrderLog;
-import com.ra.course.aws.online.shopping.exceptions.OrderNotFoundException;
 import com.ra.course.aws.online.shopping.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -70,7 +69,6 @@ public class JdbcOrderDaoImpl implements OrderDao {
             "WHERE \n" +
             "ol.orderNumber =?";
 
-    //work correct
     @Override
     public void updateOrder(Order order) {
         Integer getIdOfOrder = jdbcTemplate.queryForObject(GET_ORDER_ID, getIdRowMapper, order.getOrderNumber());
@@ -79,7 +77,6 @@ public class JdbcOrderDaoImpl implements OrderDao {
         jdbcTemplate.update(INSERT_ORDER_LOG, order.getOrderNumber(), LocalDateTime.now(), getNumberFromStatus, getIdOfOrder);
     }
 
-    //work correct
     @Override
     public void addOrderLogAndUpdateOrder(Order order, OrderLog orderLog) {
         Integer getIdOfOrder = jdbcTemplate.queryForObject(GET_ORDER_ID, getIdRowMapper, orderLog.getOrderNumber());
@@ -88,7 +85,6 @@ public class JdbcOrderDaoImpl implements OrderDao {
         jdbcTemplate.update(INSERT_ORDER_LOG, orderLog.getOrderNumber(), orderLog.getCreationDate(), getNumberOfStatus, getIdOfOrder);
     }
 
-    //work correct
     @Override
     public boolean isFoundMemberID(Long id) {
         try {
@@ -99,7 +95,6 @@ public class JdbcOrderDaoImpl implements OrderDao {
         }
     }
 
-    //work correct
     @Override
     public Order findByOrderNumber(String orderNumber) {
         try {
@@ -113,7 +108,6 @@ public class JdbcOrderDaoImpl implements OrderDao {
         }
     }
 
-    //work correct
     @Override
     public List<OrderLog> findLogListByOrder(List<OrderLog> orderLogList) {
         OrderLog orderLog = orderLogList.get(0);
@@ -122,7 +116,6 @@ public class JdbcOrderDaoImpl implements OrderDao {
         return orderLogsList;
     }
 
-    //work correct
     @Override
     public boolean isThisOrderLogExist(OrderLog orderLog) {
         try {
@@ -130,10 +123,11 @@ public class JdbcOrderDaoImpl implements OrderDao {
             return jdbcTemplate.queryForObject(FIND_ORDER_LOG_BY_FIELDS, booleanOrderLogRowMapper, foundId);
         } catch (NullPointerException ex) {
             return false;
+        }catch (EmptyResultDataAccessException e){
+            return false;
         }
     }
 
-    //work correct
     @Override
     public OrderLog findOrderLogById(Long orderLogId) {
         try {

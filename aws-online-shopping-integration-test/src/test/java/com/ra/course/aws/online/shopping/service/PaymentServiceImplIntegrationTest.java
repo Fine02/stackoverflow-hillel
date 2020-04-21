@@ -31,24 +31,33 @@ public class PaymentServiceImplIntegrationTest {
     private PaymentService paymentService;
 
     Address address = new Address("Mira, 8", "Kyiv", "Kyiv", "14004", "Ukraine");
-    private Double amount = 5555.77;
+    private Double amount = 859.77;
 
-    public ElectronicBankTransfer transferInDb = new ElectronicBankTransfer("GermanBank", "5265", "8542");
-    public CreditCard creditCardInDb = new CreditCard("VISA", "5584",5662, address);
     private ElectronicBankTransaction electronicBankTransaction = new ElectronicBankTransaction(PaymentStatus.PENDING, amount);
     private CreditCardTransaction creditCardTransaction = new CreditCardTransaction(PaymentStatus.PENDING, amount);
 
-    private Account accountWithExistData = makeAccount(makeListOfCreditCard(), makeElectronicBankTransferList());
-    private Member memberWithExistData = makeMember(accountWithExistData);
+    private Member memberWithExistData = makeMember(1L);
+    private Member memberAbsenceInDb = makeMember(565L);
 
     @Test
-    public void shouldThrowExceptionIfTransactionIsNotSuccessful() {
-        ElectronicBankTransfer transferNotExistInDb = new ElectronicBankTransfer("VBank", "1122", "5212");
-        CreditCard creditCardNotExistInDb = new CreditCard("VISA", "5655",5662, address);
+    public void thenTransactionIsNotSuccessfulBecauseOfIncorrectAmountShouldThrowException() {
+        Double amount = 0.0;
 
         Throwable exception = Assertions.assertThrows(PaymentNotProvidedException.class, () -> {
-            paymentService.processPaymentByElectronicBankTransaction(memberWithExistData, transferNotExistInDb, electronicBankTransaction, amount);
-            paymentService.processPaymentByCreditCardTransaction(memberWithExistData, creditCardNotExistInDb, creditCardTransaction, amount);
+            paymentService.processPaymentByElectronicBankTransaction(memberWithExistData, electronicBankTransaction, amount);
+            paymentService.processPaymentByCreditCardTransaction(memberWithExistData, creditCardTransaction, amount);
+        });
+
+        assertEquals(exception.getMessage(), "payment process is failed");
+        assertEquals(exception.getClass(), PaymentNotProvidedException.class);
+    }
+
+    @Test
+    public void thenTransactionIsNotSuccessfulBecauseOfAbsenceMemberInDbShouldThrowException() {
+
+        Throwable exception = Assertions.assertThrows(PaymentNotProvidedException.class, () -> {
+            paymentService.processPaymentByElectronicBankTransaction(memberAbsenceInDb, electronicBankTransaction, amount);
+            paymentService.processPaymentByCreditCardTransaction(memberAbsenceInDb, creditCardTransaction, amount);
         });
 
         assertEquals(exception.getMessage(), "payment process is failed");
@@ -59,34 +68,23 @@ public class PaymentServiceImplIntegrationTest {
     public void whenThePaymentByElectronicBankTransactionIsSuccessful() {
         var expectedResult = PaymentStatus.COMPLETED;
         electronicBankTransaction.setAmount(amount);
-        var actualResult = paymentService.processPaymentByElectronicBankTransaction(memberWithExistData, transferInDb, electronicBankTransaction, amount);
+        var actualResult = paymentService.processPaymentByElectronicBankTransaction(memberWithExistData, electronicBankTransaction, amount);
         assertEquals(expectedResult, actualResult);
     }
 
     @Test
     public void whenThePaymentByCreditCardIsSuccessful() {
         var expectedResult = PaymentStatus.COMPLETED;
-        var actualResult = paymentService.processPaymentByCreditCardTransaction(memberWithExistData, creditCardInDb, creditCardTransaction, amount);
+        var actualResult = paymentService.processPaymentByCreditCardTransaction(memberWithExistData, creditCardTransaction, amount);
         assertEquals(expectedResult, actualResult);
     }
 
-    public List<ElectronicBankTransfer> makeElectronicBankTransferList() {
-        List<ElectronicBankTransfer> transferList = new ArrayList<>();
-        transferList.add(transferInDb);
-        transferList.add(transferInDb);
-        transferList.add(transferInDb);
-        return transferList;
-    }
-
-    private List<CreditCard> makeListOfCreditCard() {
+    private Account makeAccount() {
         List<CreditCard> creditCardList = new ArrayList<>();
-        creditCardList.add(creditCardInDb);
-        return creditCardList;
-    }
-
-    private Account makeAccount( List<CreditCard> cardList, List<ElectronicBankTransfer> bankTransfers) {
+        creditCardList.add(new CreditCard("VISA", "77", 44, address));
+        List<ElectronicBankTransfer> bankTransfers = new ArrayList<>();
+        bankTransfers.add(new ElectronicBankTransfer("P8", "77", "10"));
         Account account = new Account(
-                1L,
                 "Ivan",
                 "1",
                 AccountStatus.ACTIVE,
@@ -94,16 +92,15 @@ public class PaymentServiceImplIntegrationTest {
                 address,
                 "111j@gmail.com",
                 "38012345111",
-                cardList,
+                creditCardList,
                 bankTransfers
         );
         return account;
     }
 
-    private Member makeMember(Account account) {
-        Member member = new Member(account);
-        member.setMemberID(1L);
+    private Member makeMember(Long id) {
+        Member member = new Member(makeAccount());
+        member.setMemberID(id);
         return member;
     }
-
 }

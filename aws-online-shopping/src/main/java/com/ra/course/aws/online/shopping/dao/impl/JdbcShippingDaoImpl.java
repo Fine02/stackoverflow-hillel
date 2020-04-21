@@ -75,7 +75,6 @@ public class JdbcShippingDaoImpl implements ShippingDao {
         this.memberBooleanRowMapper = memberBooleanRowMapper;
     }
 
-    //work correct
     @Override
     public ShipmentLog findShipmentLogById(Long shipmentLogId) {
         try{
@@ -85,7 +84,6 @@ public class JdbcShippingDaoImpl implements ShippingDao {
         }
     }
 
-    //work correct
     @Override
     public boolean isThisShipmentLogExist(ShipmentLog shipmentLog) {
         try {
@@ -93,10 +91,11 @@ public class JdbcShippingDaoImpl implements ShippingDao {
             return jdbcTemplate.queryForObject(FIND_SHIPMENT_LOG_BY_ID, booleanShipmentLogRowMapper, foundId);
         }catch (NullPointerException ex) {
             return false;
+        } catch (EmptyResultDataAccessException e){
+            return false;
         }
     }
 
-    //work correct
     @Override
     public List<ShipmentLog> findLogListByShipment(List<ShipmentLog> shipmentLogList) {
         ShipmentLog shipmentLog = shipmentLogList.get(0);
@@ -105,7 +104,6 @@ public class JdbcShippingDaoImpl implements ShippingDao {
         return shipmentLogsList;
     }
 
-    //work correct
     @Override
     public Shipment findByShipmentNumber(String shipmentNumber) {
         try {
@@ -119,7 +117,6 @@ public class JdbcShippingDaoImpl implements ShippingDao {
         }
     }
 
-    //work correct
     @Override
     public void addShipmentLog(ShipmentLog shipmentLog) {
         Integer getIdOfShipment = jdbcTemplate.queryForObject(GET_SHIPMENT_ID, getIdRowMapper, shipmentLog.getShipmentNumber());
@@ -127,7 +124,6 @@ public class JdbcShippingDaoImpl implements ShippingDao {
         jdbcTemplate.update(INSERT_SHIPMENT_LOG, shipmentLog.getShipmentNumber(), getNumberOfStatus, shipmentLog.getCreationDate(), getIdOfShipment);
     }
 
-    //work correct
     @Override
     public boolean isFoundMemberID(Long id) {
         try {
@@ -138,7 +134,6 @@ public class JdbcShippingDaoImpl implements ShippingDao {
         }
     }
 
-    //work correct
     @Override
     public void updateShippingAddress(Member member, Address address) {
       Integer addressId = jdbcTemplate.queryForObject(GET_ID_OF_ADDRESS_IN_ACCOUNT_BY_MEMBER_ID, getIdRowMapper ,member.getMemberID());

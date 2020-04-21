@@ -17,12 +17,10 @@ public class PaymentServiceImpl implements PaymentService {
         this.paymentDao = paymentDao;
     }
 
+
     @Override
-    public PaymentStatus processPaymentByElectronicBankTransaction(final Member member, final ElectronicBankTransfer bankTransfer, final ElectronicBankTransaction bankTransaction, final Double amount) {
-        final var foundMember = paymentDao.foundMemberById(member.getMemberID());
-        final var foundBTList = paymentDao.foundListOfBankTransfer(foundMember.getAccount().getElectronicBankTransferList());
-        if (foundBTList.contains(bankTransfer)) {
-            //bankTransaction.getAmount();
+    public PaymentStatus processPaymentByElectronicBankTransaction(final Member member,  final ElectronicBankTransaction bankTransaction, final Double amount ) {
+        if (amount>0 & paymentDao.isFoundMemberID(member.getMemberID())) {
             bankTransaction.setAmount(amount);
             bankTransaction.setStatus(PaymentStatus.COMPLETED);
             paymentDao.createTransaction(bankTransaction);
@@ -32,11 +30,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentStatus processPaymentByCreditCardTransaction(final Member member, final CreditCard creditCard, final CreditCardTransaction cardTransaction, final Double amount) {
-        final var foundMember = paymentDao.foundMemberById(member.getMemberID());
-        final var foundCardList = paymentDao.foundListOfCreditCard(foundMember.getAccount().getCreditCardList());
-        if (foundCardList.contains(creditCard)) {
-           // cardTransaction.getAmount();
+    public PaymentStatus processPaymentByCreditCardTransaction(final Member member,  final CreditCardTransaction cardTransaction,  final Double amount) {
+        if (amount>0 & paymentDao.isFoundMemberID(member.getMemberID())) {
             cardTransaction.setAmount(amount);
             cardTransaction.setStatus(PaymentStatus.COMPLETED);
             paymentDao.createTransaction(cardTransaction);

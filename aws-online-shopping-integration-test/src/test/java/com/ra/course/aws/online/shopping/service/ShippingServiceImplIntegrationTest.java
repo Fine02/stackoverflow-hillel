@@ -35,38 +35,34 @@ public class ShippingServiceImplIntegrationTest {
 
     LocalDateTime time = LocalDateTime.of(2020, 3, 19, 22, 22, 11);
     LocalDateTime time1 = LocalDateTime.of(2020, 3, 20, 22, 22, 11);
-    LocalDateTime time2 = LocalDateTime.of(2020, 3, 21, 22, 22, 11);
     LocalDateTime time3 = LocalDateTime.of(2020, 4, 19, 22, 22, 11);
-    LocalDateTime time4 = LocalDateTime.of(2020, 4, 15, 17, 12, 11);
-    private final Shipment shipmentInDb = new Shipment("2",time1, time3,"by air");
-    private final ShipmentLog shipmentLogInDB = new ShipmentLog (2,"2", ShipmentStatus.SHIPPED, time1);
-    private final ShipmentLog newShipmentLog = new ShipmentLog ("2", ShipmentStatus.DELIVERED, LocalDateTime.now());
-    private final ShipmentLog shipmentLog1 = new ShipmentLog (1,"1", ShipmentStatus.SHIPPED, time);
+
+    private final Shipment shipmentInDb = new Shipment("2", time1, time3, "by air");
+    private final ShipmentLog shipmentLogInDB = new ShipmentLog(2, "2", ShipmentStatus.SHIPPED, time1);
+    private final ShipmentLog newShipmentLog = new ShipmentLog("2", ShipmentStatus.DELIVERED, LocalDateTime.now());
+    private final ShipmentLog shipmentLog1 = new ShipmentLog(1, "1", ShipmentStatus.SHIPPED, time);
     Address addressForUpdate = new Address("Mira, 11", "Kyiv", "Kyiv", "14004", "Ukraine");
     Address addressInDb = new Address("Mira, 10", "Kyiv", "Kyiv", "14004", "Ukraine");
     Member memberInDb = makeMember(3L);
     Member wrongMember = makeMember(55523L);
 
-    //work correct
     @Test
     public void shouldGetShippingTrack() {
-        String shippingNumber ="1";
+        String shippingNumber = "1";
 
-        List<ShipmentLog> expectedResult =makeListOfShipmentLog(shipmentLog1); ;
+        List<ShipmentLog> expectedResult = makeListOfShipmentLog(shipmentLog1);
 
         List<ShipmentLog> actualResponse = shippingService.getShipmentTrack(shippingNumber);
 
         assertEquals(actualResponse, expectedResult);
     }
 
-    //work correct
     @Test
     public void shouldReturnEmptyListIfShippingNumberNotFound() {
         String notExistShipmentNumber = "102012";
         assertEquals(shippingService.getShipmentTrack(notExistShipmentNumber), Collections.emptyList());
     }
 
-    //work correct
     @Test
     public void whenAddShipmentLogToShipmentLogListThenReturnTrue() {
         boolean actualResponse = shippingService.addShipmentLogToShipment(shipmentInDb, newShipmentLog);
@@ -74,7 +70,6 @@ public class ShippingServiceImplIntegrationTest {
         assertEquals(actualResponse, true);
     }
 
-    //work correct
     @Test
     public void shouldThrowExceptionIfShipmentLogIsAlreadyExist() {
 
@@ -87,7 +82,7 @@ public class ShippingServiceImplIntegrationTest {
     }
 
     @Test
-    public void whenMemberShouldSpecifyShippingAddress() {
+    public void whenMemberSuccessfullySpecifiedShippingAddressThenReturnTrue() {
 
         var resultOfSpecifyShippingAddress = shippingService.specifyShippingAddress(memberInDb, addressForUpdate);
 
@@ -108,7 +103,7 @@ public class ShippingServiceImplIntegrationTest {
     }
 
 
-    private List<ShipmentLog> makeListOfShipmentLog(ShipmentLog shipmentLog1 ) {
+    private List<ShipmentLog> makeListOfShipmentLog(ShipmentLog shipmentLog1) {
         List<ShipmentLog> shipmentLogs = new ArrayList<>();
         shipmentLogs.add(shipmentLog1);
         return shipmentLogs;

@@ -7,35 +7,15 @@ import com.ra.course.aws.online.shopping.entity.notification.SMSNotification;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
 public class NotificationDaoImplIntegrationTest {
-
-    @Primary
-    @Bean
-    public AccountDao mockedAccountDao() {
-        return mock(AccountDao.class);
-    }
-
-    @Primary
-    @Bean
-    public ProductDao mockedProductDao() {
-        return mock(ProductDao.class);
-    }
-
-    @Primary
-    @Bean
-    public ShoppingCartDao mockedShoppingCartDao() {
-        return mock(ShoppingCartDao.class);
-    }
 
     @Autowired
     private NotificationDao notificationDao;
@@ -50,32 +30,46 @@ public class NotificationDaoImplIntegrationTest {
     SMSNotification smsNotification = new SMSNotification(time, content, phoneNumber);
 
 
-    //work correct
     @Test
     public void createSMSNotificationTest() {
         SMSNotification result = notificationDao.createSMSNotification(smsNotification);
-        System.out.println(result);
+
+        assertEquals(smsNotification, result);
     }
 
-    //work correct
     @Test
     public void createEmailNotificationTest() {
         EmailNotification result = notificationDao.createEmailNotification(emailNotification);
-        System.out.println(result);
+
+        assertEquals(emailNotification, result);
     }
 
-    //work correct
     @Test
-    public void foundMemberEmail() {
+    public void foundMemberEmailTest() {
         String result = notificationDao.foundMemberEmail(email);
-        System.out.println(result);
+
+        assertEquals(email, result);
     }
 
-    //work correct
+    @Test
+    public void ifMemberEmailWasNotFoundThenReturnNullTest() {
+        String result = notificationDao.foundMemberEmail("fhhg@gmail.com");
+
+        assertEquals(null, result);
+    }
+
     @Test
     public void foundMemberPhoneNumberTest() {
         String result = notificationDao.foundMemberPhoneNumber(phoneNumber);
-        System.out.println(result);
+
+        assertEquals(phoneNumber, result);
+    }
+
+    @Test
+    public void ifMemberPhoneNumberWasNotFoundReturnNullTest() {
+        String result = notificationDao.foundMemberPhoneNumber("855654");
+
+        assertEquals(null, result);
     }
 
 }

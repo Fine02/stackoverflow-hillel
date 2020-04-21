@@ -26,5 +26,4 @@ public class TestConfig {
     public ShoppingCartDao mockedShoppingCartDao() {
         return mock(ShoppingCartDao.class);
     }
-
 }

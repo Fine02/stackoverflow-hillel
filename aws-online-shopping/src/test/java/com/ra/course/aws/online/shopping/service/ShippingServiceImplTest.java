@@ -32,7 +32,6 @@ public class ShippingServiceImplTest {
     private final Long MEMBER_ID_IN_DB = 10L;
     private Account accountInDB;
     private Member memberInDB;
-    private Address shipmentAddress;
     private String shippingNumber = "101010";
 
     private final ShipmentLog SHIPMENT_LOG = mockShipmentLog("101010", ShipmentStatus.SHIPPED, LocalDateTime.now());
@@ -46,8 +45,6 @@ public class ShippingServiceImplTest {
         ADDRESS = new Address("Mira", "Kiyv", "Kyiv", "04114", "Ukraine");
         accountInDB = mockAccount(ADDRESS);
         memberInDB = mockMember(MEMBER_ID_IN_DB, accountInDB);
-        shipmentAddress = memberInDB.getAccount().getShippingAddress();
-        //when(shippingDao.findThatShippingAddress(memberInDB.getAccount().getShippingAddress())).thenReturn(ADDRESS_IN_DB);
         when(shippingDao.findByShipmentNumber(SHIPMENT.getShipmentNumber())).thenReturn(SHIPMENT);
         when(shippingDao.findLogListByShipment(SHIPMENT.getShipmentLogs())).thenReturn(SHIPMENT_LOG_LIST);
     }

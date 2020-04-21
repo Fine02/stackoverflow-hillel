@@ -14,106 +14,112 @@ import com.ra.course.aws.online.shopping.entity.user.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
 public class ShippingDaoImplIntegrationTest {
-
-    @Primary
-    @Bean
-    public AccountDao mockedAccountDao() {
-        return mock(AccountDao.class);
-    }
-
-    @Primary
-    @Bean
-    public ProductDao mockedProductDao() {
-        return mock(ProductDao.class);
-    }
-
-    @Primary
-    @Bean
-    public ShoppingCartDao mockedShoppingCartDao() {
-        return mock(ShoppingCartDao.class);
-    }
 
     @Autowired
     private ShippingDao shippingDao;
 
     LocalDateTime time = LocalDateTime.of(2020, 3, 19, 22, 22, 11);
     LocalDateTime time2 = LocalDateTime.of(2020, 4, 15, 17, 12, 11);
+    LocalDateTime time3 = LocalDateTime.of(2020, 4, 19, 22, 22, 11);
 
-    private final ShipmentLog existShipmentLog = makeShipmentLog(1,"1", ShipmentStatus.SHIPPED, time);
-    private final ShipmentLog notExistShipmentLog = makeShipmentLog(5,"1", ShipmentStatus.SHIPPED, time);
-    private final ShipmentLog shipmentLog = new ShipmentLog ("2",ShipmentStatus.SHIPPED, time);
+    private final ShipmentLog existShipmentLog = makeShipmentLog(1, "1", ShipmentStatus.SHIPPED, time);
+    private final ShipmentLog notExistShipmentLog = makeShipmentLog(85555, "85555", ShipmentStatus.SHIPPED, time);
     private final List<ShipmentLog> shipmentLogList = makeListOfShipmentLog(existShipmentLog);
-    private final List<ShipmentLog> listOfShipmentLog = makeListOfShipmentLog(shipmentLog);
     private final ShipmentLog shipmentLog1 = new ShipmentLog("3", ShipmentStatus.ONHOLD, time2);
     Address addressForUpdate = new Address("Mira, 11", "Kyiv", "Kyiv", "14004", "Ukraine");
     Address addressInDb = new Address("Mira, 10", "Kyiv", "Kyiv", "14004", "Ukraine");
     Member member = makeMember(3L);
 
-
-    //work correct
     @Test
-    public void getInstanceByShipmentLogById() {
+    public void getInstanceOfShipmentLogTest() {
         ShipmentLog result = shippingDao.findShipmentLogById(1L);
-        System.out.println(result);
+
+        assertEquals(existShipmentLog, result);
     }
 
-    //work correct
+    @Test
+    public void getNullIfShipmentLogByIdWasNotFoundTest() {
+        ShipmentLog result = shippingDao.findShipmentLogById(15552L);
+
+        assertEquals(null, result);
+    }
+
     @Test
     public void isThisShipmentLogExistTest() {
         boolean result = shippingDao.isThisShipmentLogExist(existShipmentLog);
-        System.out.println(result);
+
+        assertEquals(true, result);
     }
 
-    //work correct
     @Test
-    public void findByShipmentNumberTest() {
-       Shipment result = shippingDao.findByShipmentNumber("2");
-        System.out.println(result);
+    public void getFalseIfShipmentLogDoesNotExistTest() {
+        boolean result = shippingDao.isThisShipmentLogExist(notExistShipmentLog);
+
+        assertEquals(false, result);
     }
 
-    //work correct
     @Test
-    public void findLogListByShipmentTest() {
-        List<ShipmentLog> result = shippingDao.findLogListByShipment(listOfShipmentLog);
-        System.out.println(result);
+    public void getInstanceOfShipmentTest() {
+        Shipment shipmentInDb = new Shipment("1", time, time3, "by air");
+        shipmentInDb.setShipmentLogs(shipmentLogList);
+
+        Shipment result = shippingDao.findByShipmentNumber("1");
+
+        assertEquals(shipmentInDb, result);
     }
 
-    //work correct
     @Test
-    public void getInstanceIsFoundMemberIDTest() {
+    public void getNullIfShipmentWasNotFoundTest() {
+        Shipment result = shippingDao.findByShipmentNumber("99991");
+
+        assertEquals(null, result);
+    }
+
+    @Test
+    public void getInstanceOfLogListTest() {
+        List<ShipmentLog> result = shippingDao.findLogListByShipment(shipmentLogList);
+
+        assertEquals(shipmentLogList, result);
+    }
+
+    @Test
+    public void getTrueIfMemberExistInDBTest() {
         boolean result = shippingDao.isFoundMemberID(3L);
-        System.out.println(result);
+
+        assertEquals(true, result);
     }
 
-    //work correct
+    @Test
+    public void getFalseIfMemberDoesNotExistInDBTest() {
+        boolean result = shippingDao.isFoundMemberID(913L);
+
+        assertEquals(false, result);
+    }
+
     @Test
     public void addShipmentLogTest() {
         shippingDao.addShipmentLog(shipmentLog1);
     }
 
-    //work correct
     @Test
     public void updateShippingAddressTest() {
-        shippingDao.updateShippingAddress(member,addressForUpdate);
+        shippingDao.updateShippingAddress(member, addressForUpdate);
     }
 
     private ShipmentLog makeShipmentLog(long id, String shipmentNumber, ShipmentStatus status, LocalDateTime creationDate) {
         return new ShipmentLog(id, shipmentNumber, status, creationDate);
     }
-
 
     private List<ShipmentLog> makeListOfShipmentLog(ShipmentLog shipmentLog) {
         List<ShipmentLog> shipmentLogs = new ArrayList<>();

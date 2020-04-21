@@ -49,13 +49,12 @@ public class NotificationServiceImplIntegrationTest {
     private Account accountExist = makeAccount(emailExist, phoneExist);
     private Member memberExist = makeMember(accountExist);
 
-    OrderLog newOrderLog = new OrderLog(55555555,"5548541", LocalDateTime.now(), OrderStatus.PENDING);
-    ShipmentLog newShipmentLog = new ShipmentLog( 8555555,"55785", ShipmentStatus.ONHOLD, LocalDateTime.now().minusDays(1));
+    OrderLog newOrderLog = new OrderLog(55555555, "5548541", LocalDateTime.now(), OrderStatus.PENDING);
+    ShipmentLog newShipmentLog = new ShipmentLog(8555555, "55785", ShipmentStatus.ONHOLD, LocalDateTime.now().minusDays(1));
 
     OrderLog orderLogInDB = makeOrderLog(1, "1", time, OrderStatus.PENDING);
     ShipmentLog shipmentLogInDB = makeShipmentLog(1, "1", ShipmentStatus.SHIPPED, time);
 
-    //work correct
     @Test
     public void whenNotificationAboutShipmentStatusWasNotSentThanThrowNotificationException() {
 
@@ -74,7 +73,6 @@ public class NotificationServiceImplIntegrationTest {
         assertEquals(exceptionSMS.getClass(), NotificationException.class);
     }
 
-    //work correct
     @Test
     public void whenNotificationAboutOrderStatusWasNotSentThanThrowNotificationException() {
 
@@ -93,7 +91,6 @@ public class NotificationServiceImplIntegrationTest {
         assertEquals(exceptionEmail.getClass(), NotificationException.class);
     }
 
-    //work correct
     @Test
     public void whenShipmentStatusWasChangedSendSMSNotification() {
 
@@ -106,7 +103,6 @@ public class NotificationServiceImplIntegrationTest {
         assertEquals(exception.getClass(), MemberDataNotFoundException.class);
     }
 
-    //work correct
     @Test
     public void whenMemberPhoneNotFoundThenExceptionThrownMemberNotFoundException() {
 
@@ -119,10 +115,9 @@ public class NotificationServiceImplIntegrationTest {
         assertEquals(exception.getClass(), MemberDataNotFoundException.class);
     }
 
-    //work correct
     @Test
     public void whenShipmentStatusWasChangedSendNotification() {
-        ShipmentLog newShipmentLog = new ShipmentLog(11144555,"55785", ShipmentStatus.ONHOLD, LocalDateTime.now());
+        ShipmentLog newShipmentLog = new ShipmentLog(11144555, "55785", ShipmentStatus.ONHOLD, LocalDateTime.now());
         String expectedResult = "your shipment number 55785 has changed status on ONHOLD";
 
         var resultSMS = notificationService.sendSMSNotificationAboutShipmentStatus(newShipmentLog, memberExist);
@@ -132,10 +127,9 @@ public class NotificationServiceImplIntegrationTest {
         assertEquals(expectedResult, resultEmail.getContent());
     }
 
-    //work correct
     @Test
     public void whenOrderStatusWasChangedSendNotification() {
-        OrderLog newOrderLog = new OrderLog(855514477,"5548541", LocalDateTime.now(), OrderStatus.PENDING);
+        OrderLog newOrderLog = new OrderLog(855514477, "5548541", LocalDateTime.now(), OrderStatus.PENDING);
         String expectedResult = "your order number 5548541 has changed status on PENDING";
 
         var resultSMS = notificationService.sendSMSNotificationAboutOrderStatus(newOrderLog, memberExist);

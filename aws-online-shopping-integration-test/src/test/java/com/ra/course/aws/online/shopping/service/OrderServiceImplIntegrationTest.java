@@ -43,8 +43,8 @@ public class OrderServiceImplIntegrationTest {
     Order order = new Order("3", OrderStatus.UNSHIPPED, time);
     Order newOrder = new Order("4", OrderStatus.UNSHIPPED, time4);
 
-    public OrderLog orderLog1 = new OrderLog(2,"2", time2, OrderStatus.PENDING);
-    public OrderLog orderLog2 = new OrderLog(3,"2", time3, OrderStatus.PENDING);
+    public OrderLog orderLog1 = new OrderLog(2, "2", time2, OrderStatus.PENDING);
+    public OrderLog orderLog2 = new OrderLog(3, "2", time3, OrderStatus.PENDING);
     public OrderLog orderLog3 = new OrderLog("3", LocalDateTime.now(), OrderStatus.COMPLETE);
     public OrderLog existOrderLogInDB = new OrderLog("3", time3, OrderStatus.COMPLETE);
 
@@ -52,7 +52,6 @@ public class OrderServiceImplIntegrationTest {
     private Member memberExist = makeMember(makeAccount(), 1L);
     private Member memberNotExist = makeMember(makeAccount(), 156622L);
 
-    //work correct
     @Test
     public void whenSendForShipmentOrderThanOrderStatusChange() {
         orderService.sendForShipment(order);
@@ -60,7 +59,6 @@ public class OrderServiceImplIntegrationTest {
         assertEquals(order.getStatus(), OrderStatus.SHIPPED);
     }
 
-    //work correct
     @Test
     public void shouldThrowExceptionIfOrderIsAlreadyShipped() {
         Throwable exception = Assertions.assertThrows(OrderIsAlreadyShippedException.class, () -> {
@@ -71,7 +69,6 @@ public class OrderServiceImplIntegrationTest {
         assertEquals(exception.getClass(), OrderIsAlreadyShippedException.class);
     }
 
-    //work correct
     @Test
     public void shouldGetOrderTrack() {
         String orderNumber = "2";
@@ -82,14 +79,12 @@ public class OrderServiceImplIntegrationTest {
         assertEquals(expectedResult, actualResponse);
     }
 
-    //work correct
     @Test
     public void shouldReturnEmptyListIfOrderNumberNotFound() {
         String notExistOrderNumber = "102012";
         assertEquals(orderService.getOrderTrack(notExistOrderNumber), Collections.emptyList());
     }
 
-    //work correct
     @Test()
     public void shouldThrowMemberNotFoundException() {
         Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {
@@ -100,7 +95,6 @@ public class OrderServiceImplIntegrationTest {
         assertEquals(exception.getClass(), MemberDataNotFoundException.class);
     }
 
-    //work correct
     @Test()
     public void shouldThrowOrderNotFoundExceptionException() {
 
@@ -112,7 +106,6 @@ public class OrderServiceImplIntegrationTest {
         assertEquals(exception.getClass(), OrderNotFoundException.class);
     }
 
-    //work correct
     @Test
     public void whenOrderDateIsAfterCurrentThenOrderCanBeCanceled() {
         var resultOrder = orderService.cancelOrder(order, memberExist);
@@ -122,7 +115,6 @@ public class OrderServiceImplIntegrationTest {
         assertEquals(1L, memberExist.getMemberID());
     }
 
-    //work correct
     @Test
     public void whenAddOrderLogToOrderLogListThenReturnTrue() {
         boolean actualResponse = orderService.addOrderLogToOrder(order, orderLog3);
@@ -130,7 +122,6 @@ public class OrderServiceImplIntegrationTest {
         assertEquals(actualResponse, true);
     }
 
-    //work correct
     @Test
     public void shouldThrowExceptionIfOrderLogIsAlreadyExist() {
 
