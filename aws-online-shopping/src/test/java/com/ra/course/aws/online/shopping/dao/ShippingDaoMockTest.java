@@ -29,7 +29,6 @@ public class ShippingDaoMockTest {
 
     @BeforeEach
     public void before() {
-        //shippingDao = new JdbcShippingDaoImpl(jdbcTemplate, null, null, null,null);
         shippingDao = new JdbcShippingDaoImpl(jdbcTemplate, booleanShipmentLogRowMapper, getIdRowMapper, memberBooleanRowMapper, sLogRowMapper, shipmentRowMapper);
         sLogRowMapper = mock(ShipmentLogRowMapper.class);
         booleanShipmentLogRowMapper = mock(BooleanShipmentLogRowMapper.class);

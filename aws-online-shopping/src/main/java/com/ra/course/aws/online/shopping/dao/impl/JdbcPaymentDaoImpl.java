@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class JdbcPaymentDaoImpl implements PaymentDao {
-    private static final String INSERT_DATA_INTO_PAYMENT_TABLE = "INSERT INTO payment (payment_status_id, amount) VALUES (?, ?) RETURNING payment.id";
-    private static final String GET_ID_OF_PAYMENT_STATUS = "SELECT ps.id FROM payment_status ps WHERE ps.status=?";
-    private static final String INSERT_DATA_INTO_ELECTRONIC_BANK_TRANSACTION = "INSERT INTO electronic_bank_transaction (payment_id) VALUES (?)";
-    private static final String INSERT_DATA_INTO_CREDIT_CARD_TRANSACTION = "INSERT INTO credit_card_transaction (payment_id) VALUES (?)";
-    private static final String GET_DATA_OF_MEMBER_BY_ID = " SELECT \n" +
+    public static final String INSERT_DATA_INTO_PAYMENT_TABLE = "INSERT INTO payment (payment_status_id, amount) VALUES (?, ?) RETURNING payment.id";
+    public static final String GET_ID_OF_PAYMENT_STATUS = "SELECT ps.id FROM payment_status ps WHERE ps.status=?";
+    public static final String INSERT_DATA_INTO_ELECTRONIC_BANK_TRANSACTION = "INSERT INTO electronic_bank_transaction (payment_id) VALUES (?)";
+    public static final String INSERT_DATA_INTO_CREDIT_CARD_TRANSACTION = "INSERT INTO credit_card_transaction (payment_id) VALUES (?)";
+    public static final String GET_DATA_OF_MEMBER_BY_ID = " SELECT \n" +
             "\t    m.account_id,\n" +
             "        m.id member_id,\n" +
             "        a.userName, a.password,\n" +
@@ -46,16 +46,24 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
 
     @Override
     public void createTransaction(ElectronicBankTransaction bankTransaction) {
-        Integer paymentStatusID = jdbcTemplate.queryForObject(GET_ID_OF_PAYMENT_STATUS, getLastIdRowMapper, bankTransaction.getStatus().toString());
-        Integer lastInsertPaymentId = jdbcTemplate.queryForObject(INSERT_DATA_INTO_PAYMENT_TABLE, getLastIdRowMapper, paymentStatusID, bankTransaction.getAmount());
-        jdbcTemplate.update(INSERT_DATA_INTO_ELECTRONIC_BANK_TRANSACTION, lastInsertPaymentId);
+        try {
+            Integer paymentStatusID = jdbcTemplate.queryForObject(GET_ID_OF_PAYMENT_STATUS, getLastIdRowMapper, bankTransaction.getStatus().toString());
+            Integer lastInsertPaymentId = jdbcTemplate.queryForObject(INSERT_DATA_INTO_PAYMENT_TABLE, getLastIdRowMapper, paymentStatusID, bankTransaction.getAmount());
+            jdbcTemplate.update(INSERT_DATA_INTO_ELECTRONIC_BANK_TRANSACTION, lastInsertPaymentId);
+        } catch (NullPointerException ex){
+
+        }
     }
 
     @Override
     public void createTransaction(CreditCardTransaction cardTransaction) {
-        Integer paymentStatusID = jdbcTemplate.queryForObject(GET_ID_OF_PAYMENT_STATUS, getLastIdRowMapper, cardTransaction.getStatus().toString());
-        Integer lastInsertPaymentId = jdbcTemplate.queryForObject(INSERT_DATA_INTO_PAYMENT_TABLE, getLastIdRowMapper, paymentStatusID, cardTransaction.getAmount());
-        jdbcTemplate.update(INSERT_DATA_INTO_CREDIT_CARD_TRANSACTION, lastInsertPaymentId);
+        try {
+            Integer paymentStatusID = jdbcTemplate.queryForObject(GET_ID_OF_PAYMENT_STATUS, getLastIdRowMapper, cardTransaction.getStatus().toString());
+            Integer lastInsertPaymentId = jdbcTemplate.queryForObject(INSERT_DATA_INTO_PAYMENT_TABLE, getLastIdRowMapper, paymentStatusID, cardTransaction.getAmount());
+            jdbcTemplate.update(INSERT_DATA_INTO_CREDIT_CARD_TRANSACTION, lastInsertPaymentId);
+        } catch (NullPointerException ex){
+
+        }
     }
 
     @Override
@@ -64,6 +72,8 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
             var result = jdbcTemplate.queryForObject(GET_DATA_OF_MEMBER_BY_ID, memberBooleanRowMapper, id);
             return result;
         } catch (EmptyResultDataAccessException ex) {
+            return false;
+        } catch (NullPointerException ex){
             return false;
         }
     }
