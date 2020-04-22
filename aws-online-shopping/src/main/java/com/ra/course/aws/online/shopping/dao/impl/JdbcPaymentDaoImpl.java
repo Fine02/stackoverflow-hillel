@@ -46,24 +46,16 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
 
     @Override
     public void createTransaction(ElectronicBankTransaction bankTransaction) {
-        try {
             Integer paymentStatusID = jdbcTemplate.queryForObject(GET_ID_OF_PAYMENT_STATUS, getLastIdRowMapper, bankTransaction.getStatus().toString());
             Integer lastInsertPaymentId = jdbcTemplate.queryForObject(INSERT_DATA_INTO_PAYMENT_TABLE, getLastIdRowMapper, paymentStatusID, bankTransaction.getAmount());
             jdbcTemplate.update(INSERT_DATA_INTO_ELECTRONIC_BANK_TRANSACTION, lastInsertPaymentId);
-        } catch (NullPointerException ex){
-
-        }
     }
 
     @Override
     public void createTransaction(CreditCardTransaction cardTransaction) {
-        try {
             Integer paymentStatusID = jdbcTemplate.queryForObject(GET_ID_OF_PAYMENT_STATUS, getLastIdRowMapper, cardTransaction.getStatus().toString());
             Integer lastInsertPaymentId = jdbcTemplate.queryForObject(INSERT_DATA_INTO_PAYMENT_TABLE, getLastIdRowMapper, paymentStatusID, cardTransaction.getAmount());
             jdbcTemplate.update(INSERT_DATA_INTO_CREDIT_CARD_TRANSACTION, lastInsertPaymentId);
-        } catch (NullPointerException ex){
-
-        }
     }
 
     @Override
@@ -73,7 +65,7 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
             return result;
         } catch (EmptyResultDataAccessException ex) {
             return false;
-        } catch (NullPointerException ex){
+        }catch (NullPointerException ex) {
             return false;
         }
     }
