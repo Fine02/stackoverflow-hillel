@@ -1,4 +1,4 @@
-package com.ra.course.aws.online.shopping.service;
+package com.ra.course.aws.online.shopping;
 
 import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
