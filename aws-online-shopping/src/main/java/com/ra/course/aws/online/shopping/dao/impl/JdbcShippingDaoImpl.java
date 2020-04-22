@@ -5,9 +5,7 @@ import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.shipment.Shipment;
 import com.ra.course.aws.online.shopping.entity.shipment.ShipmentLog;
 import com.ra.course.aws.online.shopping.entity.user.Member;
-import com.ra.course.aws.online.shopping.mapper.BooleanShipmentLogRowMapper;
-import com.ra.course.aws.online.shopping.mapper.GetLastIdRowMapper;
-import com.ra.course.aws.online.shopping.mapper.MemberBooleanRowMapper;
+import com.ra.course.aws.online.shopping.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -18,18 +16,18 @@ import java.util.List;
 
 @Repository
 public class JdbcShippingDaoImpl implements ShippingDao {
-    private static final String FIND_SHIPMENT_LOG_BY_ID = "SELECT sl.id, sl.shipmentNumber, ss.status, sl.creationDate FROM shipment_log sl JOIN shipment_status ss ON sl.shipment_status_id = ss.id WHERE sl.id=? ";
-    private static final String GET_SHIPMENT_ID ="SELECT id FROM shipment  WHERE shipmentNumber=?";
-    private static final String GET_ID_OF_SHIPMENT_STATUS ="SELECT ss.id FROM shipment_status ss WHERE ss.status=?";
-    private static final String INSERT_SHIPMENT_LOG = "INSERT INTO shipment_log (shipmentNumber, shipment_status_id, creationDate, shipment_id) VALUES (?, ?, ?, ?)";
-    private  static final String UPDATE_ADDRESS ="UPDATE address SET streetAddress=?, city=?, state=?, zipCode=?, country=? WHERE id=?";
+    public static final String FIND_SHIPMENT_LOG_BY_ID = "SELECT sl.id, sl.shipmentNumber, ss.status, sl.creationDate FROM shipment_log sl JOIN shipment_status ss ON sl.shipment_status_id = ss.id WHERE sl.id=? ";
+    public static final String GET_SHIPMENT_ID ="SELECT id FROM shipment  WHERE shipmentNumber=?";
+    public static final String GET_ID_OF_SHIPMENT_STATUS ="SELECT ss.id FROM shipment_status ss WHERE ss.status=?";
+    public static final String INSERT_SHIPMENT_LOG = "INSERT INTO shipment_log (shipmentNumber, shipment_status_id, creationDate, shipment_id) VALUES (?, ?, ?, ?)";
+    public  static final String UPDATE_ADDRESS ="UPDATE address SET streetAddress=?, city=?, state=?, zipCode=?, country=? WHERE id=?";
 
-    private static final String GET_ID_OF_ADDRESS_IN_ACCOUNT_BY_MEMBER_ID = "SELECT \n" +
+    public static final String GET_ID_OF_ADDRESS_IN_ACCOUNT_BY_MEMBER_ID = "SELECT \n" +
             "a.address_id id\n" +
             "FROM member m JOIN account a ON m.account_id=a.id\n" +
             "WHERE m.id=?";
 
-    private static final String FIND_MEMBER_BY_ID = " SELECT \n" +
+    public static final String FIND_MEMBER_BY_ID = " SELECT \n" +
             "\t    m.account_id,\n" +
             "        m.id member_id,\n" +
             "        a.userName, a.password,\n" +
@@ -47,13 +45,13 @@ public class JdbcShippingDaoImpl implements ShippingDao {
             "JOIN electronic_bank_transfer ebt ON ebt.account_id = a.id\n" +
             "WHERE m.id=? ";
 
-    private static final String GET_SHIPMENT_BY_SHIPMENT_NUMBER = "SELECT \n" +
+    public static final String GET_SHIPMENT_BY_SHIPMENT_NUMBER = "SELECT \n" +
             "s.id, s.shipmentNumber, s.shipmentDate, s.estimatedArrival, s.shipmentMethod\n" +
             "FROM  shipment s \n" +
             "WHERE \n" +
             "s.shipmentNumber =?";
 
-    private static final String GET_SHIPMENT_LOG_BY_SHIPMENT_NUMBER = "SELECT \n" +
+    public static final String GET_SHIPMENT_LOG_BY_SHIPMENT_NUMBER = "SELECT \n" +
             "sl.id, sl.shipmentNumber,\n" +
             "ss.status, sl.creationDate\n" +
             "FROM  shipment_log sl\n" +
@@ -66,19 +64,23 @@ public class JdbcShippingDaoImpl implements ShippingDao {
     private final BooleanShipmentLogRowMapper booleanShipmentLogRowMapper;
     private final GetLastIdRowMapper getIdRowMapper;
     private final MemberBooleanRowMapper memberBooleanRowMapper;
+    private final ShipmentLogRowMapper sLogRowMapper;
+    private final ShipmentRowMapper shipmentRowMapper;
 
     @Autowired
-    public JdbcShippingDaoImpl(JdbcTemplate jdbcTemplate, BooleanShipmentLogRowMapper booleanShipmentLogRowMapper, GetLastIdRowMapper getIdRowMapper, MemberBooleanRowMapper memberBooleanRowMapper) {
+    public JdbcShippingDaoImpl(JdbcTemplate jdbcTemplate, BooleanShipmentLogRowMapper booleanShipmentLogRowMapper, GetLastIdRowMapper getIdRowMapper, MemberBooleanRowMapper memberBooleanRowMapper, ShipmentLogRowMapper sLogRowMapper, ShipmentRowMapper shipmentRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.booleanShipmentLogRowMapper = booleanShipmentLogRowMapper;
         this.getIdRowMapper = getIdRowMapper;
         this.memberBooleanRowMapper = memberBooleanRowMapper;
+        this.sLogRowMapper =sLogRowMapper;
+        this.shipmentRowMapper = shipmentRowMapper;
     }
 
     @Override
     public ShipmentLog findShipmentLogById(Long shipmentLogId) {
         try{
-            return jdbcTemplate.queryForObject(FIND_SHIPMENT_LOG_BY_ID, BeanPropertyRowMapper.newInstance(ShipmentLog.class), shipmentLogId);
+            return jdbcTemplate.queryForObject(FIND_SHIPMENT_LOG_BY_ID, sLogRowMapper, shipmentLogId);
         } catch (EmptyResultDataAccessException ex) {
             return null;
         }
@@ -100,19 +102,21 @@ public class JdbcShippingDaoImpl implements ShippingDao {
     public List<ShipmentLog> findLogListByShipment(List<ShipmentLog> shipmentLogList) {
         ShipmentLog shipmentLog = shipmentLogList.get(0);
         String shipmentNumber = shipmentLog.getShipmentNumber();
-        List<ShipmentLog> shipmentLogsList = jdbcTemplate.query(GET_SHIPMENT_LOG_BY_SHIPMENT_NUMBER, BeanPropertyRowMapper.newInstance(ShipmentLog.class), shipmentNumber);
+        List<ShipmentLog> shipmentLogsList = jdbcTemplate.query(GET_SHIPMENT_LOG_BY_SHIPMENT_NUMBER, sLogRowMapper, shipmentNumber);
         return shipmentLogsList;
     }
 
     @Override
     public Shipment findByShipmentNumber(String shipmentNumber) {
         try {
-            List<ShipmentLog> list = jdbcTemplate.query(GET_SHIPMENT_LOG_BY_SHIPMENT_NUMBER, BeanPropertyRowMapper.newInstance(ShipmentLog.class), shipmentNumber);
-            Shipment result = jdbcTemplate.queryForObject(GET_SHIPMENT_BY_SHIPMENT_NUMBER, BeanPropertyRowMapper.newInstance(Shipment.class), shipmentNumber);
+            List<ShipmentLog> list = jdbcTemplate.query(GET_SHIPMENT_LOG_BY_SHIPMENT_NUMBER, sLogRowMapper, shipmentNumber);
+            Shipment result = jdbcTemplate.queryForObject(GET_SHIPMENT_BY_SHIPMENT_NUMBER, shipmentRowMapper, shipmentNumber);
             Shipment shipment = result;
             shipment.setShipmentLogs(list);
             return shipment;
         } catch (EmptyResultDataAccessException ex) {
+            return null;
+        } catch (NullPointerException ex) {
             return null;
         }
     }
@@ -130,6 +134,8 @@ public class JdbcShippingDaoImpl implements ShippingDao {
             var result = jdbcTemplate.queryForObject(FIND_MEMBER_BY_ID, memberBooleanRowMapper, id);
             return result;
         } catch (EmptyResultDataAccessException ex) {
+            return false;
+        } catch (NullPointerException ex) {
             return false;
         }
     }
