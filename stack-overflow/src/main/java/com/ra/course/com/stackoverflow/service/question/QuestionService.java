@@ -6,7 +6,7 @@ import com.ra.course.com.stackoverflow.entity.Tag;
 
 public interface QuestionService {
 
-    Answer addAnswerToQuestion(Answer answer);
+    Question addAnswerToQuestion(Answer answer);
 
     boolean addTagToQuestion(Tag tag, Question question);
 }

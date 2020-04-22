@@ -26,7 +26,7 @@ public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
     public Member awardMember(@NonNull final Question question) {
 
         final int score = question.getVoteCount();
-        final Member author = question.getAuthor();
+        final Member author = memberRepository.findById(question.getAuthorId()).get();
         @NonNull final Map<Badge, Set<Question>> memberBadges = author.getQuestionBadges();
 
         awardStudentBadge(memberBadges, score, question);
@@ -34,7 +34,8 @@ public class QuestionScoreBadgeAwarder implements BadgeAwardService<Question> {
         awardGoodQuestionBadge(memberBadges, score, question);
         awardGreatQuestionBadge(memberBadges, score, question);
 
-        return memberRepository.update(author);
+        memberRepository.update(author);
+        return author;
     }
 
     private void awardStudentBadge(final Map<Badge, Set<Question>> memberBadges, final int score,

@@ -70,7 +70,7 @@ public class VoteQuestionService implements VoteService<Question> {
     }
 
     private void checkTheAuthorOfQuestion(final Question question, final Member member) {
-        if (question.getAuthor().getId() == member.getId()) {
+        if (question.getAuthorId() == member.getId()) {
             throw new CannotVoteOwnPostException("Can't vote your own question");
         }
     }

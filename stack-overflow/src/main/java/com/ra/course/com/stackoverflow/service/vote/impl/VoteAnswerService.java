@@ -67,7 +67,7 @@ public class VoteAnswerService implements VoteService<Answer> {
     }
 
     private void checkTheAuthorOfAnswer(final Answer answer, final Member member) {
-        if (answer.getAuthor().getId() == member.getId()) {
+        if (answer.getAuthorId() == member.getId()) {
             throw new CannotVoteOwnPostException("Can't vote your own answer");
         }
     }

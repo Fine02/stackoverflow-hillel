@@ -14,6 +14,7 @@ import com.ra.course.com.stackoverflow.service.vote.impl.VoteAnswerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -100,14 +101,12 @@ public class DownVoteAnswerServiceTest {
     }
 
     private Answer mockAnswer(Member member){
-        var question = Question.builder()
-                .id(ID2)
-                .title("title")
-                .author(member).build();
         return Answer.builder()
                 .id(ID1)
-                .author(member)
-                .question(question).build();
+                .answerText("Some answer")
+                .creationDate(LocalDateTime.now())
+                .authorId(member.getId())
+                .questionId(ID2).build();
     }
 
     private Member mockMember(long idMember) {

@@ -7,8 +7,11 @@ import lombok.NonNull;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static com.ra.course.com.stackoverflow.entity.jooq.tables.TagQuestionTable.TAG_QUESTION_TABLE;
 import static com.ra.course.com.stackoverflow.entity.jooq.tables.TagTable.TAG_TABLE;
 
 @Repository
@@ -55,4 +58,16 @@ public class TagRepositoryImpl implements TagRepository {
         return tagRecord != null ? Optional.of(tagRecord.into(Tag.class)) : Optional.empty();
     }
 
+    @Override
+    public List<Tag> findByQuestionId(@NonNull final Long id) {
+        return  dslContext.select(TAG_QUESTION_TABLE.TAG_ID)
+                .from(TAG_QUESTION_TABLE)
+                .where(TAG_QUESTION_TABLE.QUESTION_ID.eq(id))
+                .fetch()
+                .stream()
+                .map(s -> s.getValue(TAG_QUESTION_TABLE.TAG_ID))
+                .map(this::findById)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
 }

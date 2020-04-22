@@ -49,7 +49,7 @@ class SearchServiceTest {
                                         .id(id)
                                         .description(description)
                                         .title("title")
-                                        .author(member)
+                                        .authorId(member.getId())
                                         .tagList(List.of(tag))
                                         .build();
 

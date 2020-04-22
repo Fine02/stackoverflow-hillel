@@ -33,10 +33,10 @@ public class Answer {
     private final LocalDateTime creationDate = LocalDateTime.now();
 
     @NonNull
-    private final Member author;
+    private final Long authorId;
 
     @NonNull
-    private final Question question;
+    private final Long questionId;
 
     @Builder.Default
     @NonNull

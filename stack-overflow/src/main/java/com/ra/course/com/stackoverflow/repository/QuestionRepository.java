@@ -1,6 +1,5 @@
 package com.ra.course.com.stackoverflow.repository;
 
-import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.Tag;
 
@@ -11,19 +10,13 @@ public interface QuestionRepository  {
 
     Question save(Question question);
 
-    long getNextId();
-
-    Optional<Question> findById(long id);
+    Optional<Question> findById(Long id);
 
     void delete(Question question);
 
-    Question update (Question question);
+    void update (Question question);
 
-    List<Question> findAll();
-
-    List<Question> findAllByTitle(String title);
-
-    List<Question> findAllMemberQuestions(Member member);
+    List<Question> findByMemberId(Long id);
 
     List<Question> findByTag(Tag tag);
 
