@@ -87,9 +87,13 @@ public class QuestionRepositoryImplIntegrationTest {
 
     @Test
     public void whenFindQuestionByMemberIdThenReturnListOfQuestion() {
+        var tmpMember = createNewMember(2L, account);
+        var findingQuestion = createNewQuestion(2L, tmpMember);
+
+
         var result = questionRepository.findByMemberId(2L);
 
-        assertTrue(result.size() > 0);
+        assertTrue(result.contains(findingQuestion));
     }
 
     @Test
@@ -105,7 +109,11 @@ public class QuestionRepositoryImplIntegrationTest {
     public void whenFindQuestionByTitleThenReturnListOfQuestion() {
         var result = questionRepository.findByTitle("title");
 
-        assertTrue(result.size() > 0);
+        for (Question q : result) {
+            assertTrue(q.getTitle().contains("title"));
+
+        }
+
     }
 
     @Test
