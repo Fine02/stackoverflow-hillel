@@ -33,13 +33,13 @@ class SearchServiceTest {
     private List<Question> expectedResult;
 
     private Account account = Account.builder()
+                                     .id(id)
                                      .password("password")
                                      .email("email")
                                      .name("name")
                                      .build();
 
     private Member member = Member.builder()
-                                  .id(id)
                                   .account(account)
                                   .build();
 
@@ -49,7 +49,7 @@ class SearchServiceTest {
                                         .id(id)
                                         .description(description)
                                         .title("title")
-                                        .authorId(member.getId())
+                                        .authorId(member.getAccount().getId())
                                         .tagList(List.of(tag))
                                         .build();
 

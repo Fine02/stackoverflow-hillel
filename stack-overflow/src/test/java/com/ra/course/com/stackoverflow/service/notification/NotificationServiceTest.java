@@ -67,7 +67,6 @@ public class NotificationServiceTest {
                 .email("email")
                 .name("name").build();
         return Member.builder()
-                .id(ID)
                 .account(account).build();
     }
 }

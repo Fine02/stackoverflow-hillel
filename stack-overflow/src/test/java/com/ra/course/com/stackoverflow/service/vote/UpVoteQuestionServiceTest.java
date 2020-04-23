@@ -109,7 +109,7 @@ public class UpVoteQuestionServiceTest {
         return Question.builder()
                 .id(ID1)
                 .title("title")
-                .authorId(member.getId())
+                .authorId(member.getAccount().getId())
                 .description("Some description")
                 .creationTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
@@ -124,7 +124,6 @@ public class UpVoteQuestionServiceTest {
                 .email("email")
                 .name("name").build();
         return Member.builder()
-                .id(idMember)
                 .account(account).build();
     }
 }

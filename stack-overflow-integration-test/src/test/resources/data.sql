@@ -51,7 +51,15 @@ INSERT INTO member_badge_question (account_id, badge, question_id) VALUES (3, 's
 
 INSERT INTO member_voted_question (account_id, question_id, upvoted) VALUES (1, 1, true);
 INSERT INTO member_voted_question (account_id, question_id, upvoted) VALUES (2, 2, false);
-INSERT INTO member_voted_question (account_id, question_id, upvoted) VALUES (3, 3, null);
+INSERT INTO member_voted_question (account_id, question_id, upvoted) VALUES (3, 3, true);
+
+INSERT INTO member_voted_answer (account_id, answer_id, upvoted) VALUES (1, 1, true);
+INSERT INTO member_voted_answer (account_id, answer_id, upvoted) VALUES (2, 2, false);
+INSERT INTO member_voted_answer (account_id, answer_id, upvoted) VALUES (3, 3, true);
+
+INSERT INTO member_voted_comment (account_id, comment_id, upvoted) VALUES (1, 1, true);
+INSERT INTO member_voted_comment (account_id, comment_id, upvoted) VALUES (2, 2, false);
+INSERT INTO member_voted_comment (account_id, comment_id, upvoted) VALUES (3, 3, true);
 
 INSERT INTO question_member_question_closing_remark (question_id, account_id, closing_remark, marked_for_closing, marked_for_deleting)
 VALUES (1, 1, 'offtopic', true, false);

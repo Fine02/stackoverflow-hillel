@@ -12,9 +12,6 @@ import java.util.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Member {
 
-    @EqualsAndHashCode.Include
-    final private long id;
-
     @NonNull
     private Account account;
 

@@ -27,8 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ActiveProfiles("test")
 public class QuestionRepositoryImplIntegrationTest {
     private long ID = 1L;
-    private Account account = createNewAccount();
-    private Member member = createNewMember(ID, account);
+    private Account account = createNewAccount(ID);
+    private Member member = createNewMember(account);
     private Question question = createNewQuestion(ID, member);
     private Tag tag = new Tag(1L, "JAVA", "Some tag description");
 
@@ -87,7 +87,7 @@ public class QuestionRepositoryImplIntegrationTest {
 
     @Test
     public void whenFindQuestionByMemberIdThenReturnListOfQuestion() {
-        var tmpMember = createNewMember(2L, account);
+        var tmpMember = createNewMember(account);
         var findingQuestion = createNewQuestion(2L, tmpMember);
 
 
@@ -123,17 +123,17 @@ public class QuestionRepositoryImplIntegrationTest {
         assertTrue(result.size() > 0);
     }
 
-    private Account createNewAccount() {
+    private Account createNewAccount(long id) {
         return Account.builder()
+                .id(id)
                 .password("password")
                 .email("email")
                 .name("name")
                 .build();
     }
 
-    private Member createNewMember(long id, Account account) {
+    private Member createNewMember(Account account) {
         return Member.builder()
-                .id(id)
                 .account(account)
                 .build();
     }
@@ -149,8 +149,8 @@ public class QuestionRepositoryImplIntegrationTest {
                 .updateTime(LocalDateTime.now())
                 .status(QuestionStatus.OPEN)
                 .closingRemark(QuestionClosingRemark.NOT_MARKED_FOR_CLOSING)
-                .authorId(member.getId())
-                .bounty(Optional.of(new Bounty(1L, 10, LocalDateTime.MAX, member.getId())))
+                .authorId(member.getAccount().getId())
+                .bounty(Optional.of(new Bounty(1L, 10, LocalDateTime.MAX, member.getAccount().getId())))
                 .commentList(new ArrayList<>())
                 .answerList(new ArrayList<>())
                 .photoList(new ArrayList<>())
