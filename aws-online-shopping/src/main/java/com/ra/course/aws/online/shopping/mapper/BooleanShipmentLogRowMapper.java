@@ -22,8 +22,6 @@ public class BooleanShipmentLogRowMapper implements RowMapper<Boolean> {
     }
 
     private ShipmentStatus mapToShipmentStatusForLog(ResultSet rs, int rowNum) throws SQLException {
-//        ShipmentStatus shipmentStatus = ShipmentStatus.valueOf(ShipmentStatus.class, rs.getString("status"));
-//        return shipmentStatus;
         var status = rs.getString("status");
         return status ==null? null:ShipmentStatus.valueOf(ShipmentStatus.class, status);
     }

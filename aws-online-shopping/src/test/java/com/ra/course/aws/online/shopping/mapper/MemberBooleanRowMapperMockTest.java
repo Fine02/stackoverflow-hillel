@@ -1,5 +1,6 @@
 package com.ra.course.aws.online.shopping.mapper;
 
+import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +25,7 @@ public class MemberBooleanRowMapperMockTest {
         when(rs.getInt("member_id")).thenReturn(1);
         when(rs.getString("userName")).thenReturn("ivan1");
         when(rs.getString("password")).thenReturn("333");
-        when(rs.getString("status")).thenReturn(null);
+        when(rs.getString("status")).thenReturn(String.valueOf(AccountStatus.ARCHIVED));
         when((rs.getString("name"))).thenReturn("ivan");
         when((rs.getString("streetAddress"))).thenReturn("3");
         when((rs.getString("city"))).thenReturn("Kyiv");
