@@ -7,22 +7,30 @@ import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Service
 public class ShipmentLogRowMapper implements RowMapper<ShipmentLog> {
     @Override
     public ShipmentLog mapRow(ResultSet rs, int rowNum) throws SQLException {
         ShipmentStatus shipmentStatus = mapToShipmentStatusForLog (rs, rowNum);
+        LocalDateTime time = getLocalDate(rs, rowNum);
         ShipmentLog shipmentLog = new ShipmentLog();
         shipmentLog.setId(rs.getInt("id"));
         shipmentLog.setShipmentNumber(rs.getString("shipmentNumber"));
         shipmentLog.setStatus(shipmentStatus);
-        shipmentLog.setCreationDate(rs.getTimestamp("creationDate").toLocalDateTime());
+        shipmentLog.setCreationDate(time);
         return shipmentLog;
     }
 
     private ShipmentStatus mapToShipmentStatusForLog(ResultSet rs, int rowNum) throws SQLException {
-        ShipmentStatus shipmentStatus = ShipmentStatus.valueOf(ShipmentStatus.class, rs.getString("status"));
-        return shipmentStatus;
+        var status = rs.getString("status");
+        return status ==null? null:ShipmentStatus.valueOf(ShipmentStatus.class, status);
+    }
+
+    private LocalDateTime getLocalDate(ResultSet rs, int i) throws SQLException {
+        Timestamp ts = rs.getTimestamp("creationDate");
+        return ts == null ? null : ts.toLocalDateTime();
     }
 }

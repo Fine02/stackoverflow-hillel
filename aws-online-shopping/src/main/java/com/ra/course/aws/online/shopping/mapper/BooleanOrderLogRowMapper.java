@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Service
 public class BooleanOrderLogRowMapper implements RowMapper<Boolean> {
@@ -21,16 +23,22 @@ public class BooleanOrderLogRowMapper implements RowMapper<Boolean> {
     }
 
     private OrderStatus mapToOrderStatusForLog(ResultSet rs, int rowNum) throws SQLException {
-        OrderStatus orderStatus = OrderStatus.valueOf(OrderStatus.class, rs.getString("status"));
-        return orderStatus;
+        var status = rs.getString("status");
+        return status ==null? null: OrderStatus.valueOf(OrderStatus.class, status);
+    }
+
+    private LocalDateTime getLocalDate(ResultSet rs, int i) throws SQLException {
+        Timestamp ts = rs.getTimestamp("creationDate");
+        return ts == null ? null : ts.toLocalDateTime();
     }
 
     public OrderLog mapRowOrderLog(ResultSet rs, int rowNum) throws SQLException {
         OrderStatus orderStatus = mapToOrderStatusForLog(rs, rowNum);
+        LocalDateTime time = getLocalDate(rs, rowNum);
         OrderLog orderLog = new OrderLog();
         orderLog.setId(rs.getInt("id"));
         orderLog.setOrderNumber(rs.getString("orderNumber"));
-        orderLog.setCreationDate(rs.getTimestamp("creationDate").toLocalDateTime());
+        orderLog.setCreationDate(time);
         orderLog.setStatus(orderStatus);
         return orderLog;
     }

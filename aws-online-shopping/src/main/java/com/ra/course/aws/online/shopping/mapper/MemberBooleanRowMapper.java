@@ -58,8 +58,8 @@ public class MemberBooleanRowMapper implements RowMapper<Boolean> {
     }
 
     private AccountStatus mapToAccountStatus(ResultSet rs) throws SQLException, DataAccessException {
-        AccountStatus accountStatus = AccountStatus.valueOf(rs.getString("status"));
-        return accountStatus;
+        var status = rs.getString("status");
+        return status ==null? null: AccountStatus.valueOf(AccountStatus.class, status);
     }
 
     private Address mapToAddress(ResultSet rs) throws SQLException, DataAccessException {
@@ -91,6 +91,5 @@ public class MemberBooleanRowMapper implements RowMapper<Boolean> {
         electronicBankTransferList.add(electronicBankTransfer);
         return electronicBankTransferList;
     }
-
 
 }
