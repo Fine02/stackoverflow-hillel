@@ -10,6 +10,7 @@ import org.jooq.DSLContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
@@ -63,6 +64,7 @@ public class QuestionRepositoryImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenDeleteQuestionFromDataBaseAndTryFindItThenReturnOptionalEmpty() {
         //it's necessary only for deletion tag from db for this test!!!
         dslContext.execute("SET FOREIGN_KEY_CHECKS = 0;");
