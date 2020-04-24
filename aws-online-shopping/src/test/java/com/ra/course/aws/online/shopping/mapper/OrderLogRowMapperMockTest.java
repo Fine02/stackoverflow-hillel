@@ -35,4 +35,17 @@ public class OrderLogRowMapperMockTest {
         OrderLog result  = new OrderLogRowMapper().mapRow(rs,0);
         Assertions.assertEquals(orderLog, result);
     }
+
+    @Test
+    public void testWithNullValueMapRow() throws SQLException {
+        ResultSet rs = mock(ResultSet.class);
+        OrderLog orderLog = new OrderLog();
+        when(rs.getInt("id")).thenReturn(0);
+        when((rs.getString("orderNumber"))).thenReturn(null);
+        when(rs.getTimestamp("creationDate")).thenReturn(null);
+        when(rs.getString("status")).thenReturn(null);
+
+        OrderLog result  = new OrderLogRowMapper().mapRow(rs,0);
+        Assertions.assertEquals(orderLog, result);
+    }
 }

@@ -15,7 +15,7 @@ public class BooleanShipmentLogRowMapper implements RowMapper<Boolean> {
     @Override
     public Boolean mapRow(ResultSet rs, int rowNum) throws SQLException {
         ShipmentLog shipmentLog = mapRowOrderLog(rs, rowNum);
-        if (shipmentLog != null) {
+        if (shipmentLog != null & shipmentLog.getId()!=0) {
             return true;
         }
         return false;

@@ -34,4 +34,16 @@ public class EmailNotificationRowMapperMockTest {
         Assertions.assertEquals(eNotification, emailNotification);
     }
 
+    @Test
+    public void testWithNullValueMapRow() throws SQLException {
+        ResultSet rs = mock(ResultSet.class);
+        EmailNotification eNotification = new EmailNotification();
+        when(rs.getString("email")).thenReturn(null);
+        when((rs.getTimestamp("createdOn"))).thenReturn(null);
+        when(rs.getString("content")).thenReturn(null);
+
+        EmailNotification emailNotification = new EmailNotificationRowMapper().mapRow(rs,0);
+        Assertions.assertEquals(eNotification, emailNotification);
+    }
+
 }

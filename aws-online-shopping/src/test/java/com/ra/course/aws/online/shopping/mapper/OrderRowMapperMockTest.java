@@ -35,4 +35,15 @@ public class OrderRowMapperMockTest {
         Assertions.assertEquals(order, result);
     }
 
+    @Test
+    public void testWithNullValueMapRow() throws SQLException {
+        ResultSet rs = mock(ResultSet.class);
+        Order order = new Order();
+        when((rs.getString("orderNumber"))).thenReturn(null);
+        when(rs.getString("status")).thenReturn(null);
+        when(rs.getTimestamp("orderDate")).thenReturn(null);
+
+        Order result  = new OrderRowMapper().mapRow(rs,0);
+        Assertions.assertEquals(order, result);
+    }
 }

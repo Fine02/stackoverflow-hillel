@@ -1,6 +1,7 @@
 package com.ra.course.aws.online.shopping.mapper;
 
 import com.ra.course.aws.online.shopping.entity.enums.OrderStatus;
+import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,5 +33,18 @@ public class BooleanOrderLogRowMapperMockTest {
 
         Boolean result = new BooleanOrderLogRowMapper().mapRow(rs, 0);
         assertEquals(true, result);
+    }
+
+    @Test
+    public void testReturnFalseMapRow() throws SQLException {
+        ResultSet rs = mock(ResultSet.class);
+
+        when(rs.getInt("id")).thenReturn(0);
+        when((rs.getString("orderNumber"))).thenReturn(null);
+        when(rs.getTimestamp("creationDate")).thenReturn(null);
+        when(rs.getString("status")).thenReturn(null);
+
+        Boolean result = new BooleanOrderLogRowMapper().mapRow(rs, 0);
+        assertEquals(false, result);
     }
 }

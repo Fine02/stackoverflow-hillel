@@ -34,4 +34,17 @@ public class BooleanShipmentLogRowMapperMockTest {
         Boolean result  = new BooleanShipmentLogRowMapper().mapRow(rs,0);
         assertEquals(true, result);
     }
+
+    @Test
+    public void testReturnFalseMapRow() throws SQLException {
+        ResultSet rs = mock(ResultSet.class);
+
+        when(rs.getInt("id")).thenReturn(0);
+        when((rs.getString("shipmentNumber"))).thenReturn(null);
+        when(rs.getString("status")).thenReturn(null);
+        when(rs.getTimestamp("creationDate")).thenReturn(null);
+
+        Boolean result  = new BooleanShipmentLogRowMapper().mapRow(rs,0);
+        assertEquals(false, result);
+    }
 }

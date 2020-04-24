@@ -36,4 +36,17 @@ public class ShipmentLogRowMapperMockTest {
         Assertions.assertEquals(shipmentLog, result);
     }
 
+    @Test
+    public void testWithNullValueMapRow() throws SQLException {
+        ResultSet rs = mock(ResultSet.class);
+        ShipmentLog shipmentLog = new ShipmentLog();
+        when(rs.getInt("id")).thenReturn(0);
+        when((rs.getString("shipmentNumber"))).thenReturn(null);
+        when(rs.getString("status")).thenReturn(null);
+        when(rs.getTimestamp("creationDate")).thenReturn(null);
+
+        ShipmentLog result = new ShipmentLogRowMapper().mapRow(rs,0);
+        Assertions.assertEquals(shipmentLog, result);
+    }
+
 }
