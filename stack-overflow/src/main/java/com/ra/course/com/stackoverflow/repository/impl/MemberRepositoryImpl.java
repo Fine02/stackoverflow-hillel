@@ -101,13 +101,6 @@ public class MemberRepositoryImpl implements MemberRepository {
                     .set(MEMBER_VOTED_QUESTION_TABLE.UPVOTED, bool)
                     .execute();
         }
-//        for (final Long id : questionsId) {
-//            dslContext.insertInto(MEMBER_VOTED_QUESTION_TABLE, MEMBER_VOTED_QUESTION_TABLE.ACCOUNT_ID, MEMBER_VOTED_QUESTION_TABLE.QUESTION_ID, MEMBER_VOTED_QUESTION_TABLE.UPVOTED)
-//                    .values(member.getAccount().getId(), id, bool)
-//                    .onDuplicateKeyUpdate()
-//                    .set(MEMBER_VOTED_QUESTION_TABLE.UPVOTED, bool)
-//                    .execute();
-//        }
     }
 
     private void updateVotedAnswerId(final Member member, final Boolean bool) {
