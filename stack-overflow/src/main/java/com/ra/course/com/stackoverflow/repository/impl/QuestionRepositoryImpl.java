@@ -80,15 +80,16 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 .set(QUESTION_TABLE.BOUNTY_ID, question.getBounty().get().getId())
                 .where(QUESTION_TABLE.ID.eq(question.getId()))
                 .execute();
-        final Iterator<Map.Entry<Long, QuestionClosingRemark>> iterator = question.getMembersIdsWhoVotedQuestionToClose().entrySet().iterator();
-        while(iterator.hasNext()) {
-            final Map.Entry<Long, QuestionClosingRemark> entry = iterator.next();
-            dslContext.insertInto(QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE, QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE.QUESTION_ID, QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE.ACCOUNT_ID, QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE.CLOSING_REMARK)
-                    .values(question.getId(), entry.getKey(),QuestionClosingRemarkType.valueOf(entry.getValue().toString().toLowerCase(Locale.US)))
-                    .onDuplicateKeyUpdate()
-                    .set(QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE.CLOSING_REMARK, QuestionClosingRemarkType.valueOf(entry.getValue().toString().toLowerCase(Locale.US)))
-                    .execute();
-        }
+        //tmp
+//        final Iterator<Map.Entry<Long, QuestionClosingRemark>> iterator = question.getMembersIdsWhoVotedQuestionToClose().entrySet().iterator();
+//        while(iterator.hasNext()) {
+//            final Map.Entry<Long, QuestionClosingRemark> entry = iterator.next();
+//            dslContext.insertInto(QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE, QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE.QUESTION_ID, QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE.ACCOUNT_ID, QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE.CLOSING_REMARK)
+//                    .values(question.getId(), entry.getKey(),QuestionClosingRemarkType.valueOf(entry.getValue().toString().toLowerCase(Locale.US)))
+//                    .onDuplicateKeyUpdate()
+//                    .set(QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE.CLOSING_REMARK, QuestionClosingRemarkType.valueOf(entry.getValue().toString().toLowerCase(Locale.US)))
+//                    .execute();
+//        }
     }
 
     @Override
