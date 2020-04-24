@@ -60,14 +60,14 @@ public class VoteCommentService implements VoteService<Comment> {
     }
 
     private Member checkMember(final Member member) {
-        final var optionalMember = memberData.findById(member.getId());
+        final var optionalMember = memberData.findById(member.getAccount().getId());
         return optionalMember.orElseThrow(
                 () -> new MemberNotFoundException("No such member in DB"));
 
     }
 
     private void checkTheAuthorOfComment(final Comment comment, final Member member) {
-        if (comment.getAuthorId() == member.getId()) {
+        if (comment.getAuthorId() == member.getAccount().getId()) {
             throw new CannotVoteOwnPostException("Can't vote your own comment");
         }
     }

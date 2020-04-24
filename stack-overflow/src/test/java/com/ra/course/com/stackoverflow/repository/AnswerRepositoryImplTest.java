@@ -33,8 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AnswerRepositoryImplTest {
     private long ID = 1L;
-    private Account account = createNewAccount();
-    private Member member = createNewMember(ID, account);
+    private Account account = createNewAccount(ID);
+    private Member member = createNewMember(account);
     private Question question = createNewQuestion(ID, member);
     private Answer answer = createNewAnswer(ID, member, question);
 
@@ -143,17 +143,17 @@ public class AnswerRepositoryImplTest {
                 .isInstanceOf(NullPointerException.class);
     }
 
-    private Account createNewAccount() {
+    private Account createNewAccount(long id) {
         return Account.builder()
+                .id(id)
                 .password("password")
                 .email("email")
                 .name("name")
                 .build();
     }
 
-    private Member createNewMember(long id, Account account) {
+    private Member createNewMember(Account account) {
         return Member.builder()
-                .id(id)
                 .account(account)
                 .build();
     }
@@ -163,7 +163,7 @@ public class AnswerRepositoryImplTest {
                 .id(id)
                 .description("some_question")
                 .title("title")
-                .authorId(member.getId())
+                .authorId(member.getAccount().getId())
                 .build();
     }
 
@@ -172,7 +172,7 @@ public class AnswerRepositoryImplTest {
                 .id(id)
                 .answerText("answer_text")
                 .creationDate(LocalDateTime.now())
-                .authorId(member.getId())
+                .authorId(member.getAccount().getId())
                 .questionId(question.getId())
                 .photos(new ArrayList<>())
                 .comments(new ArrayList<>())

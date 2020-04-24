@@ -29,8 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class QuestionRepositoryImplTest {
     private long ID = 1L;
-    private Account account = createNewAccount();
-    private Member member = createNewMember(ID, account);
+    private Account account = createNewAccount(ID);
+    private Member member = createNewMember(account);
     private Question question = createNewQuestion(ID, member);
 
 
@@ -119,7 +119,7 @@ public class QuestionRepositoryImplTest {
 
     @Test
     public void whenTryFindQuestionByMemberIdThenReturnListOfQuestion() {
-        var result = questionRepository.findByMemberId(member.getId());
+        var result = questionRepository.findByMemberId(member.getAccount().getId());
 
         assertTrue(result.size() > 0);
     }
@@ -171,17 +171,17 @@ public class QuestionRepositoryImplTest {
                 .isInstanceOf(NullPointerException.class);
     }
 
-    private Account createNewAccount() {
+    private Account createNewAccount(long id) {
         return Account.builder()
+                .id(id)
                 .password("password")
                 .email("email")
                 .name("name")
                 .build();
     }
 
-    private Member createNewMember(long id, Account account) {
+    private Member createNewMember(Account account) {
         return Member.builder()
-                .id(id)
                 .account(account)
                 .build();
     }
@@ -191,7 +191,7 @@ public class QuestionRepositoryImplTest {
                 .id(id)
                 .description("some_question")
                 .title("title")
-                .authorId(member.getId())
+                .authorId(member.getAccount().getId())
                 .bounty(Optional.of(new Bounty(1L, 10, LocalDateTime.now(), 1L)))
                 .build();
     }

@@ -15,10 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.ra.course.com.stackoverflow.entity.jooq.Tables.QUESTION_TABLE;
@@ -83,6 +80,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 .set(QUESTION_TABLE.BOUNTY_ID, question.getBounty().get().getId())
                 .where(QUESTION_TABLE.ID.eq(question.getId()))
                 .execute();
+
     }
 
     @Override
@@ -135,7 +133,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     //convert QuestionRecord.class into Question.class
     private Question mapperQuestion(final QuestionRecord questionRecord) {
-        return  Question.builder()
+        return Question.builder()
                 .id(questionRecord.getId())
                 .title(questionRecord.getTitle())
                 .description(questionRecord.getDescription())

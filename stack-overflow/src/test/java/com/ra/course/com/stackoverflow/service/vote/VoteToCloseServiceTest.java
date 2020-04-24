@@ -67,7 +67,7 @@ public class VoteToCloseServiceTest {
     @Test
     public void whenMemberIsAlreadyVotedToCloseTheQuestionThenThrowsAlreadyVotedException() {
         //given
-        question.getMembersIdsWhoVotedQuestionToClose().put(member.getId(), remark);
+        question.getMembersIdsWhoVotedQuestionToClose().put(member.getAccount().getId(), remark);
         when(questionData.findById(ID)).thenReturn(Optional.of(question));
         when(memberData.findById(ID)).thenReturn(Optional.of(member));
         //when
@@ -95,7 +95,7 @@ public class VoteToCloseServiceTest {
         return Question.builder()
                 .id(ID)
                 .title("title")
-                .authorId(member.getId())
+                .authorId(member.getAccount().getId())
                 .description("Some description")
                 .creationTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
@@ -112,7 +112,6 @@ public class VoteToCloseServiceTest {
                 .email("email")
                 .name("name").build();
         return Member.builder()
-                .id(ID)
                 .account(account).build();
     }
 }

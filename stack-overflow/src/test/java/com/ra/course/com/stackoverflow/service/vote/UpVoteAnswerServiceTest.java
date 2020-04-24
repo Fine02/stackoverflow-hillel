@@ -105,7 +105,7 @@ public class UpVoteAnswerServiceTest {
                 .id(ID1)
                 .answerText("Some answer")
                 .creationDate(LocalDateTime.now())
-                .authorId(member.getId())
+                .authorId(member.getAccount().getId())
                 .questionId(ID2).build();
     }
 
@@ -116,7 +116,6 @@ public class UpVoteAnswerServiceTest {
                 .email("email")
                 .name("name").build();
         return Member.builder()
-                .id(idMember)
                 .account(account).build();
     }
 }

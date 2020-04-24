@@ -63,14 +63,14 @@ public class VoteQuestionService implements VoteService<Question> {
     }
 
     private Member checkMember(final Member member) {
-        final var optionalMember = memberData.findById(member.getId());
+        final var optionalMember = memberData.findById(member.getAccount().getId());
         return optionalMember.orElseThrow(
                 () -> new MemberNotFoundException("No such member in DB"));
 
     }
 
     private void checkTheAuthorOfQuestion(final Question question, final Member member) {
-        if (question.getAuthorId() == member.getId()) {
+        if (question.getAuthorId() == member.getAccount().getId()) {
             throw new CannotVoteOwnPostException("Can't vote your own question");
         }
     }

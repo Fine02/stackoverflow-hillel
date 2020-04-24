@@ -15,7 +15,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = RepositoryTestConfiguration.class)
+@SpringBootTest
 @ActiveProfiles("test")
 @Sql({"classpath:schema.sql", "classpath:data.sql"})
 public class PhotoRepositoryIntegrationTest {

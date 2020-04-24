@@ -174,9 +174,8 @@ public class QuestionScoreBadgeAwarderTest {
 
     private Member.MemberBuilder<?, ?> setUpMemberBuilder(long id) {
         return Member.builder()
-                .id(id)
                 .account(Account.builder()
-                        .id(24L)
+                        .id(1L)
                         .name("Test")
                         .password("test12345")
                         .email("test@gmail.com")
@@ -187,7 +186,7 @@ public class QuestionScoreBadgeAwarderTest {
         return Question.builder()
                 .id(id)
                 .title("test")
-                .authorId(author.getId())
+                .authorId(author.getAccount().getId())
                 .description("Some description")
                 .creationTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())

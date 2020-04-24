@@ -104,7 +104,7 @@ public class UpVoteCommentServiceTest {
                 .id(ID1)
                 .creationDate(LocalDateTime.now())
                 .text("text")
-                .authorId(member.getId())
+                .authorId(member.getAccount().getId())
                 .questionId(ID2).build();
     }
     private Member mockMember(long idMember){
@@ -114,7 +114,6 @@ public class UpVoteCommentServiceTest {
                 .email("email")
                 .name("name").build();
         return Member.builder()
-                .id(idMember)
                 .account(account).build();
     }
 }

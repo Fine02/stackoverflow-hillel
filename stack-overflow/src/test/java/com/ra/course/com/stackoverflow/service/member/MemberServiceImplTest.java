@@ -40,7 +40,6 @@ public class MemberServiceImplTest {
         Member givenMember = buildMember();
         givenQuestion = buildQuestion(givenMember);
 
-        when(mockedMemberRepository.update(givenMember)).thenReturn(expectedMember);
         when(mockedQuestionRepository.save(givenQuestion)).thenReturn(expectedQuestion);
         when(mockedMemberRepository.findById(42L)).thenReturn(Optional.ofNullable(expectedMember));
     }
@@ -56,7 +55,7 @@ public class MemberServiceImplTest {
 
     @Test
     public void whenPostQuestionCalledButMemberNotFoundInDBThenThrowException() {
-        when(mockedMemberRepository.findById(expectedMember.getId())).thenReturn(Optional.empty());
+        when(mockedMemberRepository.findById(expectedMember.getAccount().getId())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> memberService.postQuestion(expectedQuestion))
             .isInstanceOf(MemberNotFoundException.class);
@@ -78,9 +77,8 @@ public class MemberServiceImplTest {
 
     private Member buildMember() {
         return Member.builder()
-                .id(42L)
                 .account(Account.builder()
-                        .id(1L)
+                        .id(42L)
                         .name("Test")
                         .password("test1234")
                         .email("test@gmail.com")
@@ -92,7 +90,7 @@ public class MemberServiceImplTest {
         return Question.builder()
                 .id(24L)
                 .title("Test")
-                .authorId(member.getId())
+                .authorId(member.getAccount().getId())
                 .build();
     }
 }

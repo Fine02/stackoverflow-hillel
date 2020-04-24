@@ -6,8 +6,8 @@ import org.jooq.DSLContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,12 +18,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-@ContextConfiguration(classes = {RepositoryTestConfiguration.class})
 @ActiveProfiles("test")
 public class AnswerRepositoryImplIntegrationTest {
     private long ID = 1L;
-    private Account account = createNewAccount();
-    private Member member = createNewMember(ID, account);
+    private Account account = createNewAccount(ID);
+    private Member member = createNewMember(account);
     private Question question = createNewQuestion(ID, member);
     private Answer answer = createNewAnswer(ID, member, question);
     @Autowired
@@ -54,6 +53,7 @@ public class AnswerRepositoryImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenDeleteAnswerFromDataBaseAndTryFindItThenReturnOptionalEmpty() {
         //it's necessary only for deletion tag from db for this test!!!
         dslContext.execute("SET FOREIGN_KEY_CHECKS = 0;");
@@ -88,17 +88,17 @@ public class AnswerRepositoryImplIntegrationTest {
         assertThat(listResult.size() > 0).isTrue();
     }
 
-    private Account createNewAccount() {
+    private Account createNewAccount(long id) {
         return Account.builder()
+                .id(id)
                 .password("password")
                 .email("email")
                 .name("name")
                 .build();
     }
 
-    private Member createNewMember(long id, Account account) {
+    private Member createNewMember(Account account) {
         return Member.builder()
-                .id(id)
                 .account(account)
                 .build();
     }
@@ -108,7 +108,7 @@ public class AnswerRepositoryImplIntegrationTest {
                 .id(id)
                 .description("some_question")
                 .title("title")
-                .authorId(member.getId())
+                .authorId(member.getAccount().getId())
                 .build();
     }
 
@@ -117,7 +117,7 @@ public class AnswerRepositoryImplIntegrationTest {
                 .id(id)
                 .answerText("answer_text")
                 .creationDate(LocalDateTime.now())
-                .authorId(member.getId())
+                .authorId(member.getAccount().getId())
                 .questionId(question.getId())
                 .photos(new ArrayList<>())
                 .comments(new ArrayList<>())
