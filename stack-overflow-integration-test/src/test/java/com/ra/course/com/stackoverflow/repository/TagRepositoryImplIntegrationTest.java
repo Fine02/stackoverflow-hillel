@@ -6,7 +6,9 @@ import org.jooq.DSLContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Optional;
 
@@ -15,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Sql({"classpath:schema.sql", "classpath:data.sql"})
 public class TagRepositoryImplIntegrationTest {
     private long ID = 1L;
     private Tag tag = new Tag(ID, "Some Tag name", "Some Tag Description");
@@ -60,6 +63,7 @@ public class TagRepositoryImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenDeleteTagFromDataBaseAndTryFindItThenReturnOptionalEmpty() {
         //it's necessary only for deletion tag from db for this test!!!
         dslContext.execute("SET FOREIGN_KEY_CHECKS = 0;");

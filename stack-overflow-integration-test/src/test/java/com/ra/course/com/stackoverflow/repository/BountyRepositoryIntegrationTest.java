@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -48,6 +49,7 @@ public class BountyRepositoryIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void shouldDeleteBountyById() {
         bountyRepo.deleteById(savedBounty.getId());
 

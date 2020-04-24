@@ -35,13 +35,15 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     @Override
     public Question save(@NonNull final Question question) {
+        final var bountyId = question.getBounty().isPresent() ? question.getBounty().get().getId() : null;
+
         final var questionRecord = dslContext.insertInto(QUESTION_TABLE, QUESTION_TABLE.TITLE, QUESTION_TABLE.DESCRIPTION,
                 QUESTION_TABLE.VIEW_COUNT, QUESTION_TABLE.VOTE_COUNT, QUESTION_TABLE.CREATION_TIME, QUESTION_TABLE.UPDATE_TIME,
                 QUESTION_TABLE.STATUS, QUESTION_TABLE.CLOSING_REMARK, QUESTION_TABLE.AUTHOR_ID, QUESTION_TABLE.BOUNTY_ID)
                 .values(question.getTitle(), question.getDescription(), question.getViewCount(), question.getVoteCount(),
                         Timestamp.valueOf(question.getCreationTime()), Timestamp.valueOf(question.getUpdateTime()),
                         QuestionStatusType.valueOf(question.getStatus().toString().toLowerCase(Locale.US)), QuestionClosingRemarkType.valueOf(question.getClosingRemark().toString().toLowerCase(Locale.US)),
-                        question.getAuthorId(), question.getBounty().get().getId())
+                        question.getAuthorId(), bountyId)
                 .returning()
                 .fetchOne();
 

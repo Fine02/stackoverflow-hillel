@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Sql({"classpath:schema.sql", "classpath:data.sql"})
 public class QuestionRepositoryImplIntegrationTest {
     private long ID = 1L;
     private Account account = createNewAccount(ID);
@@ -40,7 +42,6 @@ public class QuestionRepositoryImplIntegrationTest {
 
 
     @Test
-    @Rollback
     public void whenFindQuestionByIdAndQuestionPresentInDataBaseThenReturnQuestion() {
         var question = questionRepository.findById(2L).get();
 
@@ -48,7 +49,6 @@ public class QuestionRepositoryImplIntegrationTest {
     }
 
     @Test
-    @Rollback
     public void whenFindQuestionByIdAndQuestionNotPresentInDataBaseThenReturnOptionalEmpty() {
         Optional<Question> question = questionRepository.findById(666L);
 
@@ -56,7 +56,6 @@ public class QuestionRepositoryImplIntegrationTest {
     }
 
     @Test
-    @Rollback
     public void whenSaveQuestionInDataBaseThenReturnQuestionWithId() {
         var savedQuestion = questionRepository.save(question);
 
@@ -76,7 +75,6 @@ public class QuestionRepositoryImplIntegrationTest {
     }
 
     @Test
-    @Rollback
     public void whenUpdateQuestionInDatabaseThenGetUpdatedQuestion() {
         var before = questionRepository.findById(2L).get();
         before.setTitle("Test111");
@@ -87,7 +85,6 @@ public class QuestionRepositoryImplIntegrationTest {
     }
 
     @Test
-    @Rollback
     public void whenFindQuestionByMemberIdThenReturnListOfQuestion() {
         var tmpMember = createNewMember(account);
         var findingQuestion = createNewQuestion(2L, tmpMember);
@@ -99,7 +96,6 @@ public class QuestionRepositoryImplIntegrationTest {
     }
 
     @Test
-    @Rollback
     public void whenFindQuestionByTagThenReturnListOfQuestion() {
         questionService.addTagToQuestion(tag, question);
 
@@ -109,7 +105,6 @@ public class QuestionRepositoryImplIntegrationTest {
     }
 
     @Test
-    @Rollback
     public void whenFindQuestionByTitleThenReturnListOfQuestion() {
         var result = questionRepository.findByTitle("title");
 
@@ -121,7 +116,6 @@ public class QuestionRepositoryImplIntegrationTest {
     }
 
     @Test
-    @Rollback
     public void whenQuestionFindByTitleAndTagThenReturnListOfQuestion() {
         var result =  questionRepository.findByTitleAndTag( "title", new Tag(3L, "SQL", "Some tag description"));
 
