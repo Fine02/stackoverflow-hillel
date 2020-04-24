@@ -4,7 +4,6 @@ import com.ra.course.com.stackoverflow.entity.*;
 import com.ra.course.com.stackoverflow.entity.enums.QuestionClosingRemark;
 import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
 import com.ra.course.com.stackoverflow.repository.impl.QuestionRepositoryImpl;
-import com.ra.course.com.stackoverflow.repository.impl.TagRepositoryImpl;
 import com.ra.course.com.stackoverflow.service.question.QuestionService;
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.Test;
@@ -35,14 +34,13 @@ public class QuestionRepositoryImplIntegrationTest {
     @Autowired
     private QuestionRepositoryImpl questionRepository;
     @Autowired
-    private TagRepositoryImpl tagRepository;
-    @Autowired
     private DSLContext dslContext;
     @Autowired
     private QuestionService questionService;
 
 
     @Test
+    @Rollback
     public void whenFindQuestionByIdAndQuestionPresentInDataBaseThenReturnQuestion() {
         var question = questionRepository.findById(2L).get();
 
@@ -50,6 +48,7 @@ public class QuestionRepositoryImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenFindQuestionByIdAndQuestionNotPresentInDataBaseThenReturnOptionalEmpty() {
         Optional<Question> question = questionRepository.findById(666L);
 
@@ -57,6 +56,7 @@ public class QuestionRepositoryImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenSaveQuestionInDataBaseThenReturnQuestionWithId() {
         var savedQuestion = questionRepository.save(question);
 
@@ -76,6 +76,7 @@ public class QuestionRepositoryImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenUpdateQuestionInDatabaseThenGetUpdatedQuestion() {
         var before = questionRepository.findById(2L).get();
         before.setTitle("Test111");
@@ -86,6 +87,7 @@ public class QuestionRepositoryImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenFindQuestionByMemberIdThenReturnListOfQuestion() {
         var tmpMember = createNewMember(account);
         var findingQuestion = createNewQuestion(2L, tmpMember);
@@ -97,6 +99,7 @@ public class QuestionRepositoryImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenFindQuestionByTagThenReturnListOfQuestion() {
         questionService.addTagToQuestion(tag, question);
 
@@ -106,6 +109,7 @@ public class QuestionRepositoryImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenFindQuestionByTitleThenReturnListOfQuestion() {
         var result = questionRepository.findByTitle("title");
 
@@ -117,6 +121,7 @@ public class QuestionRepositoryImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenQuestionFindByTitleAndTagThenReturnListOfQuestion() {
         var result =  questionRepository.findByTitleAndTag( "title", new Tag(3L, "SQL", "Some tag description"));
 
