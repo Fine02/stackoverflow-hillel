@@ -48,6 +48,7 @@ public class MemberRepositoryImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenDeleteMemberAndTryFindItThenReturnMemberWithAccountStatusArchived() {
         memberRepository.delete(member);
 
