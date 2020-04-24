@@ -6,8 +6,10 @@ import com.ra.course.com.stackoverflow.entity.enums.AccountStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,6 +73,26 @@ public class MemberRepositoryImplIntegrationTest {
         for (Member m : result) {
             assertTrue(m.getAccount().getName().contains("name"));
         }
+    }
+
+    @Test
+    @Rollback
+    public void whenUpdateMemberWithChangesInLists(){
+        var member = memberRepository.findById(1L).get();
+
+        member.getDownVotedQuestionsId().add(2L);
+        member.getUpVotedQuestionsId().add(3L);
+        member.getDownVotedAnswersId().add(2L);
+        member.getUpVotedAnswersId().add(3L);
+        member.getDownVotedCommentsId().add(2L);
+        member.getUpVotedCommentsId().add(3L);
+        memberRepository.update(member);
+        assertThat(memberRepository.findById(member.getAccount().getId()).get().getDownVotedQuestionsId().contains(2L));
+        assertThat(memberRepository.findById(member.getAccount().getId()).get().getUpVotedQuestionsId().contains(3L));
+        assertThat(memberRepository.findById(member.getAccount().getId()).get().getDownVotedAnswersId().contains(2L));
+        assertThat(memberRepository.findById(member.getAccount().getId()).get().getUpVotedAnswersId().contains(3L));
+        assertThat(memberRepository.findById(member.getAccount().getId()).get().getDownVotedCommentsId().contains(2L));
+        assertThat(memberRepository.findById(member.getAccount().getId()).get().getUpVotedCommentsId().contains(3L));
     }
 
     private Account createNewAccount(long id) {

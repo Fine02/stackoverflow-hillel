@@ -20,12 +20,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.ra.course.com.stackoverflow.entity.jooq.tables.AccountTable.ACCOUNT_TABLE;
-import static com.ra.course.com.stackoverflow.entity.jooq.tables.MemberVotedAnswerTable.MEMBER_VOTED_ANSWER_TABLE;
-import static com.ra.course.com.stackoverflow.entity.jooq.tables.MemberVotedCommentTable.MEMBER_VOTED_COMMENT_TABLE;
-import static com.ra.course.com.stackoverflow.entity.jooq.tables.MemberVotedQuestionTable.MEMBER_VOTED_QUESTION_TABLE;
+import static com.ra.course.com.stackoverflow.entity.jooq.tables.MemberVotedAnswerTable.*;
+import static com.ra.course.com.stackoverflow.entity.jooq.tables.MemberVotedCommentTable.*;
+import static com.ra.course.com.stackoverflow.entity.jooq.tables.MemberVotedQuestionTable.*;
 
 @Repository
 @AllArgsConstructor
@@ -80,6 +81,52 @@ public class MemberRepositoryImpl implements MemberRepository {
                 .set(ACCOUNT_TABLE.REPUTATION, member.getAccount().getReputation())
                 .where(ACCOUNT_TABLE.ID.eq(member.getAccount().getId()))
                 .execute();
+        updateVotedQuestionId(member, true); // upvote question
+        updateVotedQuestionId(member, false); // downvote question
+        updateVotedAnswerId(member, true); // upvote answer
+        updateVotedAnswerId(member, false); // downvote answer
+        updateVotedCommentId(member, true); // upvote comment
+        updateVotedCommentId(member, false); // downvote comment
+
+    }
+
+    private void updateVotedQuestionId(final Member member, final Boolean bool) {
+        final var questionsId = bool ? member.getUpVotedQuestionsId()
+                : member.getDownVotedQuestionsId();
+        for (int i = 0; i < questionsId.size(); i++) {
+            final var id = questionsId.get(i);
+            dslContext.insertInto(MEMBER_VOTED_QUESTION_TABLE, MEMBER_VOTED_QUESTION_TABLE.ACCOUNT_ID, MEMBER_VOTED_QUESTION_TABLE.QUESTION_ID, MEMBER_VOTED_QUESTION_TABLE.UPVOTED)
+                    .values(member.getAccount().getId(), id, bool)
+                    .onDuplicateKeyUpdate()
+                    .set(MEMBER_VOTED_QUESTION_TABLE.UPVOTED, bool)
+                    .execute();
+        }
+    }
+
+    private void updateVotedAnswerId(final Member member, final Boolean bool) {
+        final var answersId = bool ? member.getUpVotedAnswersId()
+                : member.getDownVotedAnswersId();
+        for (int i = 0; i < answersId.size(); i++) {
+            final var id = answersId.get(i);
+            dslContext.insertInto(MEMBER_VOTED_ANSWER_TABLE, MEMBER_VOTED_ANSWER_TABLE.ACCOUNT_ID, MEMBER_VOTED_ANSWER_TABLE.ANSWER_ID, MEMBER_VOTED_ANSWER_TABLE.UPVOTED)
+                    .values(member.getAccount().getId(), id, bool)
+                    .onDuplicateKeyUpdate()
+                    .set(MEMBER_VOTED_ANSWER_TABLE.UPVOTED, bool)
+                    .execute();
+        }
+    }
+
+    private void updateVotedCommentId(final Member member, final Boolean bool) {
+        final var commentsId = bool ? member.getUpVotedCommentsId()
+                : member.getDownVotedCommentsId();
+        for (int i = 0; i < commentsId.size(); i++) {
+            final var id = commentsId.get(i);
+            dslContext.insertInto(MEMBER_VOTED_COMMENT_TABLE, MEMBER_VOTED_COMMENT_TABLE.ACCOUNT_ID, MEMBER_VOTED_COMMENT_TABLE.COMMENT_ID, MEMBER_VOTED_COMMENT_TABLE.UPVOTED)
+                    .values(member.getAccount().getId(), id, bool)
+                    .onDuplicateKeyUpdate()
+                    .set(MEMBER_VOTED_COMMENT_TABLE.UPVOTED, bool)
+                    .execute();
+        }
     }
 
     @Override
@@ -102,78 +149,59 @@ public class MemberRepositoryImpl implements MemberRepository {
                 .reputation(accountRecord.getReputation())
                 .build();
 
-        return  Member.builder()
+        return Member.builder()
                 .account(account)
                 .questions(questionRepo.findByMemberId(account.getId()))
                 .answers(answerRepo.findByMemberId(account.getId()))
                 .comments(commentRepo.findByMemberId(account.getId()))
-                .upVotedQuestionsId(getUpVotedQuestionsId(account.getId()))
-                .upVotedAnswersId(getUpVotedAnswersId(account.getId()))
-                .upVotedCommentsId(getUpVotedCommentsId(account.getId()))
-                .downVotedQuestionsId(getDownVotedQuestionsId(account.getId()))
-                .downVotedAnswersId(getDownVotedAnswersId(account.getId()))
-                .downVotedCommentsId(getDownVotedCommentsId(account.getId()))
+                .upVotedQuestionsId(getVotedQuestionsId(account.getId(), true))
+                .upVotedAnswersId(getVotedAnswersId(account.getId(), true))
+                .upVotedCommentsId(getVotedCommentsId(account.getId(), true))
+                .downVotedQuestionsId(getVotedQuestionsId(account.getId(), false))
+                .downVotedAnswersId(getVotedAnswersId(account.getId(), false))
+                .downVotedCommentsId(getVotedCommentsId(account.getId(), false))
                 .build();
     }
 
 
-    private List<Long> getUpVotedQuestionsId(final long id) {
+    private List<Long> getVotedQuestionsId(final long id, final Boolean bool) {
+        final Predicate<MemberVotedQuestionRecord> predicate = bool
+                ? MemberVotedQuestionRecord::getUpvoted
+                : r -> !r.getUpvoted();
         return dslContext.selectFrom(MEMBER_VOTED_QUESTION_TABLE)
                 .where(MEMBER_VOTED_QUESTION_TABLE.ACCOUNT_ID.eq(id))
                 .fetch()
                 .stream()
-                .filter(MemberVotedQuestionRecord::getUpvoted)
+                .filter(predicate)
                 .map(MemberVotedQuestionRecord::getQuestionId)
                 .collect(Collectors.toList());
     }
 
-    private List<Long> getDownVotedQuestionsId(final long id) {
-        return dslContext.selectFrom(MEMBER_VOTED_QUESTION_TABLE)
-                .where(MEMBER_VOTED_QUESTION_TABLE.ACCOUNT_ID.eq(id))
-                .fetch()
-                .stream()
-                .filter(r -> !r.getUpvoted())
-                .map(MemberVotedQuestionRecord::getQuestionId)
-                .collect(Collectors.toList());
-    }
-
-    private List<Long> getUpVotedAnswersId(final long id) {
+    private List<Long> getVotedAnswersId(final long id, final Boolean bool) {
+        final Predicate<MemberVotedAnswerRecord> predicate = bool
+                ? MemberVotedAnswerRecord::getUpvoted
+                : r -> !r.getUpvoted();
         return dslContext.selectFrom(MEMBER_VOTED_ANSWER_TABLE)
                 .where(MEMBER_VOTED_ANSWER_TABLE.ACCOUNT_ID.eq(id))
                 .fetch()
                 .stream()
-                .filter(MemberVotedAnswerRecord::getUpvoted)
+                .filter(predicate)
                 .map(MemberVotedAnswerRecord::getAccountId)
                 .collect(Collectors.toList());
     }
 
-    private List<Long> getDownVotedAnswersId(final long id) {
-        return dslContext.selectFrom(MEMBER_VOTED_ANSWER_TABLE)
-                .where(MEMBER_VOTED_ANSWER_TABLE.ACCOUNT_ID.eq(id))
-                .fetch()
-                .stream()
-                .filter(r -> !r.getUpvoted())
-                .map(MemberVotedAnswerRecord::getAccountId)
-                .collect(Collectors.toList());
-    }
 
-    private List<Long> getUpVotedCommentsId(final long id) {
+    private List<Long> getVotedCommentsId(final long id, final Boolean bool) {
+        final Predicate<MemberVotedCommentRecord> predicate = bool
+                ? MemberVotedCommentRecord::getUpvoted
+                : r -> !r.getUpvoted();
         return dslContext.selectFrom(MEMBER_VOTED_COMMENT_TABLE)
                 .where(MEMBER_VOTED_COMMENT_TABLE.ACCOUNT_ID.eq(id))
                 .fetch()
                 .stream()
-                .filter(MemberVotedCommentRecord::getUpvoted)
+                .filter(predicate)
                 .map(MemberVotedCommentRecord::getCommentId)
                 .collect(Collectors.toList());
     }
 
-    private List<Long> getDownVotedCommentsId(final long id) {
-        return dslContext.selectFrom(MEMBER_VOTED_COMMENT_TABLE)
-                .where(MEMBER_VOTED_COMMENT_TABLE.ACCOUNT_ID.eq(id))
-                .fetch()
-                .stream()
-                .filter(r -> !r.getUpvoted())
-                .map(MemberVotedCommentRecord::getCommentId)
-                .collect(Collectors.toList());
-    }
 }

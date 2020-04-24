@@ -15,10 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.ra.course.com.stackoverflow.entity.jooq.Tables.QUESTION_TABLE;
@@ -83,6 +80,15 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 .set(QUESTION_TABLE.BOUNTY_ID, question.getBounty().get().getId())
                 .where(QUESTION_TABLE.ID.eq(question.getId()))
                 .execute();
+        final Iterator<Map.Entry<Long, QuestionClosingRemark>> iterator = question.getMembersIdsWhoVotedQuestionToClose().entrySet().iterator();
+        while(iterator.hasNext()) {
+            final Map.Entry<Long, QuestionClosingRemark> entry = iterator.next();
+            dslContext.insertInto(QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE, QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE.QUESTION_ID, QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE.ACCOUNT_ID, QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE.CLOSING_REMARK)
+                    .values(question.getId(), entry.getKey(),QuestionClosingRemarkType.valueOf(entry.getValue().toString().toLowerCase(Locale.US)))
+                    .onDuplicateKeyUpdate()
+                    .set(QUESTION_MEMBER_QUESTION_CLOSING_REMARK_TABLE.CLOSING_REMARK, QuestionClosingRemarkType.valueOf(entry.getValue().toString().toLowerCase(Locale.US)))
+                    .execute();
+        }
     }
 
     @Override
@@ -135,7 +141,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     //convert QuestionRecord.class into Question.class
     private Question mapperQuestion(final QuestionRecord questionRecord) {
-        return  Question.builder()
+        return Question.builder()
                 .id(questionRecord.getId())
                 .title(questionRecord.getTitle())
                 .description(questionRecord.getDescription())
