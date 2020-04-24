@@ -13,23 +13,23 @@ import java.time.LocalDateTime;
 @Service
 public class OrderRowMapper implements RowMapper<Order> {
     @Override
-    public Order mapRow(ResultSet rs, int rowNum) throws SQLException {
-        OrderStatus orderStatus =mapToOrderStatusForLog (rs,rowNum);
-        LocalDateTime time = getLocalDate(rs, rowNum);
-        Order order = new Order();
+    public Order mapRow(final ResultSet rs, final int rowNum) throws SQLException {
+        final OrderStatus orderStatus =mapToOrderStatusForLog (rs);
+        final LocalDateTime time = getLocalDate(rs);
+        final Order order = new Order();
         order.setOrderNumber(rs.getString("orderNumber"));
         order.setStatus(orderStatus);
         order.setOrderDate(time);
         return order;
     }
 
-    private OrderStatus mapToOrderStatusForLog(ResultSet rs, int rowNum) throws SQLException {
-        var status = rs.getString("status");
+    private OrderStatus mapToOrderStatusForLog(final ResultSet rs) throws SQLException {
+        final var status = rs.getString("status");
         return status ==null? null: OrderStatus.valueOf(OrderStatus.class, status);
     }
 
-    private LocalDateTime getLocalDate(ResultSet rs, int i) throws SQLException {
-        Timestamp ts = rs.getTimestamp("orderDate");
+    private LocalDateTime getLocalDate(final ResultSet rs) throws SQLException {
+        final Timestamp ts = rs.getTimestamp("orderDate");
         return ts == null ? null : ts.toLocalDateTime();
     }
 }

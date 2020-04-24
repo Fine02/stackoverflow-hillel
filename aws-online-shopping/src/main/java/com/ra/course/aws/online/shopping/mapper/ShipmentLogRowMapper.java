@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 @Service
 public class ShipmentLogRowMapper implements RowMapper<ShipmentLog> {
     @Override
-    public ShipmentLog mapRow(ResultSet rs, int rowNum) throws SQLException {
-        ShipmentStatus shipmentStatus = mapToShipmentStatusForLog (rs, rowNum);
-        LocalDateTime time = getLocalDate(rs, rowNum);
-        ShipmentLog shipmentLog = new ShipmentLog();
+    public ShipmentLog mapRow(final ResultSet rs, final int rowNum) throws SQLException {
+        final ShipmentStatus shipmentStatus = mapToShipmentStatusForLog (rs);
+        final LocalDateTime time = getLocalDate(rs);
+        final ShipmentLog shipmentLog = new ShipmentLog();
         shipmentLog.setId(rs.getInt("id"));
         shipmentLog.setShipmentNumber(rs.getString("shipmentNumber"));
         shipmentLog.setStatus(shipmentStatus);
@@ -24,13 +24,13 @@ public class ShipmentLogRowMapper implements RowMapper<ShipmentLog> {
         return shipmentLog;
     }
 
-    private ShipmentStatus mapToShipmentStatusForLog(ResultSet rs, int rowNum) throws SQLException {
-        var status = rs.getString("status");
+    private ShipmentStatus mapToShipmentStatusForLog(final ResultSet rs) throws SQLException {
+        final var status = rs.getString("status");
         return status ==null? null:ShipmentStatus.valueOf(ShipmentStatus.class, status);
     }
 
-    private LocalDateTime getLocalDate(ResultSet rs, int i) throws SQLException {
-        Timestamp ts = rs.getTimestamp("creationDate");
+    private LocalDateTime getLocalDate(final ResultSet rs) throws SQLException {
+        final Timestamp ts = rs.getTimestamp("creationDate");
         return ts == null ? null : ts.toLocalDateTime();
     }
 }

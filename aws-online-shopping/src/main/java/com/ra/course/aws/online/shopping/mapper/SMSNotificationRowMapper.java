@@ -12,17 +12,17 @@ import java.time.LocalDateTime;
 @Service
 public class SMSNotificationRowMapper implements RowMapper<SMSNotification> {
     @Override
-    public SMSNotification mapRow(ResultSet rs, int rowNum) throws SQLException {
-        SMSNotification smsNotification = new SMSNotification();
-        LocalDateTime time = getLocalDate(rs, rowNum);
+    public SMSNotification mapRow(final ResultSet rs, final int rowNum) throws SQLException {
+        final SMSNotification smsNotification = new SMSNotification();
+        final LocalDateTime time = getLocalDate(rs);
         smsNotification.setPhone(rs.getString("phone"));
         smsNotification.setCreatedOn(time);
         smsNotification.setContent(rs.getString("content"));
         return smsNotification;
     }
 
-    private LocalDateTime getLocalDate(ResultSet rs, int i) throws SQLException {
-        Timestamp ts = rs.getTimestamp("createdOn");
+    private LocalDateTime getLocalDate(final ResultSet rs) throws SQLException {
+        final Timestamp ts = rs.getTimestamp("createdOn");
         return ts == null ? null : ts.toLocalDateTime();
     }
 

@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class JdbcPaymentDaoImpl implements PaymentDao {
-    public static final String INSERT_DATA_INTO_PAYMENT_TABLE = "INSERT INTO payment (payment_status_id, amount) VALUES (?, ?) RETURNING payment.id";
-    public static final String GET_ID_OF_PAYMENT_STATUS = "SELECT ps.id FROM payment_status ps WHERE ps.status=?";
-    public static final String INSERT_DATA_INTO_ELECTRONIC_BANK_TRANSACTION = "INSERT INTO electronic_bank_transaction (payment_id) VALUES (?)";
-    public static final String INSERT_DATA_INTO_CREDIT_CARD_TRANSACTION = "INSERT INTO credit_card_transaction (payment_id) VALUES (?)";
-    public static final String GET_DATA_OF_MEMBER_BY_ID = " SELECT \n" +
+    public static final String INSERT_PAYMENT = "INSERT INTO payment (payment_status_id, amount) VALUES (?, ?) RETURNING payment.id";
+    public static final String GET_STATUS_ID = "SELECT ps.id FROM payment_status ps WHERE ps.status=?";
+    public static final String INSERT_ETRANS = "INSERT INTO electronic_bank_transaction (payment_id) VALUES (?)";
+    public static final String INSERT_CTRANS = "INSERT INTO credit_card_transaction (payment_id) VALUES (?)";
+    public static final String GET_MEMBER_DATA = " SELECT \n" +
             "\t    m.account_id,\n" +
             "        m.id member_id,\n" +
             "        a.userName, a.password,\n" +
@@ -33,40 +33,49 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
             "JOIN electronic_bank_transfer ebt ON ebt.account_id = a.id\n" +
             "WHERE m.id=? ";
 
-    private final JdbcTemplate jdbcTemplate;
-    private final GetLastIdRowMapper getLastIdRowMapper;
-    private final MemberBooleanRowMapper memberBooleanRowMapper;
+    private transient final JdbcTemplate jdbcTemplate;
+    private transient final GetLastIdRowMapper getLastId;
+    private transient final MemberBooleanRowMapper memberBoolean;
 
     @Autowired
-    public JdbcPaymentDaoImpl(JdbcTemplate jdbcTemplate, GetLastIdRowMapper getLastIdRowMapper, MemberBooleanRowMapper memberBooleanRowMapper) {
+    public JdbcPaymentDaoImpl(final JdbcTemplate jdbcTemplate, final GetLastIdRowMapper getLastId, final MemberBooleanRowMapper memberBoolean) {
         this.jdbcTemplate = jdbcTemplate;
-        this.getLastIdRowMapper = getLastIdRowMapper;
-        this.memberBooleanRowMapper = memberBooleanRowMapper;
+        this.getLastId = getLastId;
+        this.memberBoolean = memberBoolean;
     }
 
     @Override
-    public void createTransaction(ElectronicBankTransaction bankTransaction) {
-            Integer paymentStatusID = jdbcTemplate.queryForObject(GET_ID_OF_PAYMENT_STATUS, getLastIdRowMapper, bankTransaction.getStatus().toString());
-            Integer lastInsertPaymentId = jdbcTemplate.queryForObject(INSERT_DATA_INTO_PAYMENT_TABLE, getLastIdRowMapper, paymentStatusID, bankTransaction.getAmount());
-            jdbcTemplate.update(INSERT_DATA_INTO_ELECTRONIC_BANK_TRANSACTION, lastInsertPaymentId);
+    public void createTransaction(final ElectronicBankTransaction bankTransaction) {
+            final Integer paymentStatusID = jdbcTemplate.queryForObject(GET_STATUS_ID, getLastId, bankTransaction.getStatus().toString());
+            final Integer lastInsertId = jdbcTemplate.queryForObject(INSERT_PAYMENT, getLastId, paymentStatusID, bankTransaction.getAmount());
+            jdbcTemplate.update(INSERT_ETRANS, lastInsertId);
     }
 
     @Override
-    public void createTransaction(CreditCardTransaction cardTransaction) {
-            Integer paymentStatusID = jdbcTemplate.queryForObject(GET_ID_OF_PAYMENT_STATUS, getLastIdRowMapper, cardTransaction.getStatus().toString());
-            Integer lastInsertPaymentId = jdbcTemplate.queryForObject(INSERT_DATA_INTO_PAYMENT_TABLE, getLastIdRowMapper, paymentStatusID, cardTransaction.getAmount());
-            jdbcTemplate.update(INSERT_DATA_INTO_CREDIT_CARD_TRANSACTION, lastInsertPaymentId);
+    public void createTransaction(final CreditCardTransaction cardTransaction) {
+            final Integer paymentStatusID = jdbcTemplate.queryForObject(GET_STATUS_ID, getLastId, cardTransaction.getStatus().toString());
+            final Integer lastInsertId = jdbcTemplate.queryForObject(INSERT_PAYMENT, getLastId, paymentStatusID, cardTransaction.getAmount());
+            jdbcTemplate.update(INSERT_CTRANS, lastInsertId);
     }
 
     @Override
-    public boolean isFoundMemberID(Long id) {
+    public boolean isFoundMemberID(final Long id) {
         try {
-            var result = jdbcTemplate.queryForObject(GET_DATA_OF_MEMBER_BY_ID, memberBooleanRowMapper, id);
-            return result;
+            return jdbcTemplate.queryForObject(GET_MEMBER_DATA, memberBoolean, id);
         } catch (EmptyResultDataAccessException ex) {
             return false;
         }catch (NullPointerException ex) {
             return false;
         }
     }
+
+//    @Override
+//    public boolean isFoundMemberID(final Long id) {
+//        try {
+//            final var result = jdbcTemplate.queryForObject(GET_MEMBER_DATA, memberBoolean, id);
+//            return result==null?false:true;
+//        } catch (EmptyResultDataAccessException ex) {
+//            return false;
+//        }
+//    }
 }

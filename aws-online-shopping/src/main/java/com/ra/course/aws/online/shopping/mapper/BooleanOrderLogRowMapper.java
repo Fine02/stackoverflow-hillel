@@ -14,28 +14,28 @@ import java.time.LocalDateTime;
 public class BooleanOrderLogRowMapper implements RowMapper<Boolean> {
 
     @Override
-    public Boolean mapRow(ResultSet rs, int rowNum) throws SQLException {
-        OrderLog orderLog = mapRowOrderLog(rs, rowNum);
+    public Boolean mapRow(final ResultSet rs,final int rowNum) throws SQLException {
+        final OrderLog orderLog = mapRowOrderLog(rs);
         if (orderLog != null & orderLog.getId()!=0) {
             return true;
         }
         return false;
     }
 
-    private OrderStatus mapToOrderStatusForLog(ResultSet rs, int rowNum) throws SQLException {
-        var status = rs.getString("status");
+    private OrderStatus mapToOrderStatusForLog(final ResultSet rs) throws SQLException {
+        final var status = rs.getString("status");
         return status ==null? null: OrderStatus.valueOf(OrderStatus.class, status);
     }
 
-    private LocalDateTime getLocalDate(ResultSet rs, int i) throws SQLException {
-        Timestamp ts = rs.getTimestamp("creationDate");
+    private LocalDateTime getLocalDate(final ResultSet rs) throws SQLException {
+        final Timestamp ts = rs.getTimestamp("creationDate");
         return ts == null ? null : ts.toLocalDateTime();
     }
 
-    public OrderLog mapRowOrderLog(ResultSet rs, int rowNum) throws SQLException {
-        OrderStatus orderStatus = mapToOrderStatusForLog(rs, rowNum);
-        LocalDateTime time = getLocalDate(rs, rowNum);
-        OrderLog orderLog = new OrderLog();
+    public OrderLog mapRowOrderLog(final ResultSet rs) throws SQLException {
+        final OrderStatus orderStatus = mapToOrderStatusForLog(rs);
+        final LocalDateTime time = getLocalDate(rs);
+        final OrderLog orderLog = new OrderLog();
         orderLog.setId(rs.getInt("id"));
         orderLog.setOrderNumber(rs.getString("orderNumber"));
         orderLog.setCreationDate(time);

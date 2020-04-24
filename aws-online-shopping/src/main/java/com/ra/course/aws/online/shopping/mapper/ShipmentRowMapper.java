@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 @Service
 public class ShipmentRowMapper implements RowMapper<Shipment> {
     @Override
-    public Shipment mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Shipment shipment = new Shipment();
-        LocalDateTime dataShipment = getShipmentDate(rs, rowNum);
-        LocalDateTime dataArrival = getEstimatedArrival(rs, rowNum);
+    public Shipment mapRow(final ResultSet rs, final int rowNum) throws SQLException {
+        final Shipment shipment = new Shipment();
+        final LocalDateTime dataShipment = getShipmentDate(rs);
+        final LocalDateTime dataArrival = getEstimatedArrival(rs);
         shipment.setShipmentNumber(rs.getString("shipmentNumber"));
         shipment.setShipmentDate(dataShipment);
         shipment.setEstimatedArrival(dataArrival);
@@ -23,14 +23,14 @@ public class ShipmentRowMapper implements RowMapper<Shipment> {
         return shipment;
     }
 
-    private LocalDateTime getShipmentDate(ResultSet rs, int i) throws SQLException {
-        Timestamp ts = rs.getTimestamp("shipmentDate");
+    private LocalDateTime getShipmentDate(final ResultSet rs) throws SQLException {
+        final Timestamp ts = rs.getTimestamp("shipmentDate");
         return ts == null ? null : ts.toLocalDateTime();
     }
 
 
-    private LocalDateTime getEstimatedArrival(ResultSet rs, int i) throws SQLException {
-        Timestamp ts = rs.getTimestamp("estimatedArrival");
+    private LocalDateTime getEstimatedArrival(final ResultSet rs) throws SQLException {
+        final Timestamp ts = rs.getTimestamp("estimatedArrival");
         return ts == null ? null : ts.toLocalDateTime();
     }
 

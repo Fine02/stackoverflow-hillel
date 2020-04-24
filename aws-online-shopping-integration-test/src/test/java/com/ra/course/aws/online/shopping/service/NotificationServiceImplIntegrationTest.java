@@ -96,7 +96,7 @@ public class NotificationServiceImplIntegrationTest {
 
         Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {
             notificationService.sendSMSNotificationAboutOrderStatus(newOrderLog, memberWithNotExistData);
-            notificationService.sendSMSNotificationAboutShipmentStatus(newShipmentLog, memberWithNotExistData);
+            //notificationService.sendSMSNotificationAboutShipmentStatus(newShipmentLog, memberWithNotExistData);
         });
 
         assertEquals(exception.getMessage(), "There is not found the phone number");

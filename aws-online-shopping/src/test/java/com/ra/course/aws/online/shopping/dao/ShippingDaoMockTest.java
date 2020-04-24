@@ -30,7 +30,7 @@ public class ShippingDaoMockTest {
 
     @BeforeEach
     public void before() {
-        shippingDao = new JdbcShippingDaoImpl(jdbcTemplate, booleanShipmentLogRowMapper, getIdRowMapper, memberBooleanRowMapper, sLogRowMapper, shipmentRowMapper);
+        shippingDao = new JdbcShippingDaoImpl(jdbcTemplate, getIdRowMapper, sLogRowMapper);
         sLogRowMapper = mock(ShipmentLogRowMapper.class);
         booleanShipmentLogRowMapper = mock(BooleanShipmentLogRowMapper.class);
         getIdRowMapper = mock(GetLastIdRowMapper.class);
@@ -43,7 +43,7 @@ public class ShippingDaoMockTest {
         //given
         var logId = 1L;
         var resultLog = new ShipmentLog();
-        when(jdbcTemplate.queryForObject(JdbcShippingDaoImpl.FIND_SHIPMENT_LOG_BY_ID, sLogRowMapper, logId)).thenReturn(resultLog);
+        when(jdbcTemplate.queryForObject(JdbcShippingDaoImpl.FIND_SLOG, sLogRowMapper, logId)).thenReturn(resultLog);
         //when
         ShipmentLog result = shippingDao.findShipmentLogById(logId);
         Assert.assertTrue(result == null);
@@ -54,7 +54,7 @@ public class ShippingDaoMockTest {
         //given
         var foundId = 1L;
         var existShipmentLog = new ShipmentLog();
-        when(jdbcTemplate.queryForObject(JdbcShippingDaoImpl.FIND_SHIPMENT_LOG_BY_ID, booleanShipmentLogRowMapper, foundId)).thenReturn(false);
+        when(jdbcTemplate.queryForObject(JdbcShippingDaoImpl.FIND_SLOG, booleanShipmentLogRowMapper, foundId)).thenReturn(false);
         //when
         boolean result = shippingDao.isThisShipmentLogExist(existShipmentLog);
         Assert.assertTrue(result == false);
@@ -68,7 +68,7 @@ public class ShippingDaoMockTest {
         List<ShipmentLog> shipmentLogList = makeListOfShipmentLog(new ShipmentLog(1, "1", ShipmentStatus.SHIPPED, time));
         ShipmentLog shipmentLog = shipmentLogList.get(0);
         String shipmentNumber = shipmentLog.getShipmentNumber();
-        when(jdbcTemplate.query(JdbcShippingDaoImpl.GET_SHIPMENT_LOG_BY_SHIPMENT_NUMBER, sLogRowMapper, shipmentNumber)).thenReturn(shipmentLogsList);
+        when(jdbcTemplate.query(JdbcShippingDaoImpl.GET_SHIPMENT_LOG, sLogRowMapper, shipmentNumber)).thenReturn(shipmentLogsList);
 
         //when
         List<ShipmentLog> result = shippingDao.findLogListByShipment(shipmentLogList);
@@ -82,8 +82,8 @@ public class ShippingDaoMockTest {
         var shipmentNumber = "1";
         List<ShipmentLog> shipmentLogsList = new ArrayList<>();
         var shipment = new Shipment();
-        when(jdbcTemplate.query(JdbcShippingDaoImpl.GET_SHIPMENT_LOG_BY_SHIPMENT_NUMBER, sLogRowMapper, shipmentNumber)).thenReturn(shipmentLogsList);
-        when(jdbcTemplate.queryForObject(JdbcShippingDaoImpl.GET_SHIPMENT_BY_SHIPMENT_NUMBER, shipmentRowMapper, shipmentNumber)).thenReturn(shipment);
+        when(jdbcTemplate.query(JdbcShippingDaoImpl.GET_SHIPMENT_LOG, sLogRowMapper, shipmentNumber)).thenReturn(shipmentLogsList);
+        when(jdbcTemplate.queryForObject(JdbcShippingDaoImpl.GET_SHIPMENT, shipmentRowMapper, shipmentNumber)).thenReturn(shipment);
 
         //when
         Shipment result = shippingDao.findByShipmentNumber(shipmentNumber);
@@ -98,10 +98,10 @@ public class ShippingDaoMockTest {
         Integer getIdOfShipment = null;
         Integer getNumberOfStatus = null;
         when(jdbcTemplate.queryForObject(JdbcShippingDaoImpl.GET_SHIPMENT_ID, getIdRowMapper, shipmentLog.getShipmentNumber())).thenReturn(getIdOfShipment);
-        when(jdbcTemplate.queryForObject(JdbcShippingDaoImpl.GET_ID_OF_SHIPMENT_STATUS, getIdRowMapper, shipmentLog.getStatus().toString())).thenReturn(getNumberOfStatus);
+        when(jdbcTemplate.queryForObject(JdbcShippingDaoImpl.GET_STATUS_ID, getIdRowMapper, shipmentLog.getStatus().toString())).thenReturn(getNumberOfStatus);
         //when
         shippingDao.addShipmentLog(shipmentLog);
-        verify(jdbcTemplate).update(JdbcShippingDaoImpl.INSERT_SHIPMENT_LOG, shipmentLog.getShipmentNumber(), getNumberOfStatus, shipmentLog.getCreationDate(), getIdOfShipment);
+        verify(jdbcTemplate).update(JdbcShippingDaoImpl.INSERT_SLOG, shipmentLog.getShipmentNumber(), getNumberOfStatus, shipmentLog.getCreationDate(), getIdOfShipment);
     }
 
     @Test
@@ -120,7 +120,7 @@ public class ShippingDaoMockTest {
         Member member = new Member();
         Address address = new Address();
         Integer addressId = null;
-        when(jdbcTemplate.queryForObject(JdbcShippingDaoImpl.GET_ID_OF_ADDRESS_IN_ACCOUNT_BY_MEMBER_ID, getIdRowMapper, member.getMemberID())).thenReturn(addressId);
+        when(jdbcTemplate.queryForObject(JdbcShippingDaoImpl.GET_ADDRESS_ID, getIdRowMapper, member.getMemberID())).thenReturn(addressId);
         //when
         shippingDao.updateShippingAddress(member, address);
         verify(jdbcTemplate).update(JdbcShippingDaoImpl.UPDATE_ADDRESS, address.getStreetAddress(), address.getCity(), address.getState(), address.getZipCode(), address.getCountry(), addressId);

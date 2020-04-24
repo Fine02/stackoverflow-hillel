@@ -32,7 +32,7 @@ public class NotificationDaoMockTest {
 
     @BeforeEach
     public void before() {
-        notificationDao = new JdbcNotificationDaoImpl(getLastIdRowMapper, getStringFromObjectRowMapper, emailNotificationRowMapper, smsNotificationRowMapper, jdbcTemplate);
+        notificationDao = new JdbcNotificationDaoImpl(getLastIdRowMapper, getStringFromObjectRowMapper, jdbcTemplate);
         getStringFromObjectRowMapper = mock(GetStringFromObjectRowMapper.class);
         getLastIdRowMapper = mock(GetLastIdRowMapper.class);
         emailNotificationRowMapper = mock(EmailNotificationRowMapper.class);
@@ -42,7 +42,7 @@ public class NotificationDaoMockTest {
     @Test
     public void testFoundMemberPhoneNumber() {
         //given
-        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_PHONE_NUMBER_OF_MEMBER, getStringFromObjectRowMapper, phoneNumber)).thenReturn(phoneNumber);
+        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_MEMBER_PHONE, getStringFromObjectRowMapper, phoneNumber)).thenReturn(phoneNumber);
         //when
         String result = notificationDao.foundMemberPhoneNumber(phoneNumber);
         Assert.assertTrue(result == null);
@@ -51,7 +51,7 @@ public class NotificationDaoMockTest {
     @Test
     public void testFoundMemberEmail() {
         //given
-        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_EMAIL_OF_MEMBER, getStringFromObjectRowMapper, email)).thenReturn(email);
+        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_MEMBER_EMAIL, getStringFromObjectRowMapper, email)).thenReturn(email);
         //when
         String result = notificationDao.foundMemberEmail(email);
         Assert.assertTrue(result == null);
@@ -62,7 +62,7 @@ public class NotificationDaoMockTest {
         //given
         var lastInsertId = 5;
         EmailNotification emailNotification = new EmailNotification(time, content, email);
-        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_DATA_FROM_TABLES_OF_NOTIFICATION_FOR_EMAIL, emailNotificationRowMapper, lastInsertId)).thenReturn(emailNotification);
+        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_EMAIL, emailNotificationRowMapper, lastInsertId)).thenReturn(emailNotification);
         //when
         EmailNotification result = notificationDao.createEmailNotification(emailNotification);
         Assert.assertTrue(result == null);
@@ -73,7 +73,7 @@ public class NotificationDaoMockTest {
         //given
         var lastInsertId = 5;
         SMSNotification smsNotification = new SMSNotification(time, content, phoneNumber);
-        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_DATA_FROM_TABLES_OF_NOTIFICATION_FOR_SMS, smsNotificationRowMapper, lastInsertId)).thenReturn(smsNotification);
+        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_SMS, smsNotificationRowMapper, lastInsertId)).thenReturn(smsNotification);
         //when
         SMSNotification result = notificationDao.createSMSNotification(smsNotification);
         Assert.assertTrue(result == null);
