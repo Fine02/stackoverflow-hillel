@@ -31,7 +31,7 @@ public class VoteAnswerServiceIntegrationTest {
     private Member member;
 
     @Test
-    @DisplayName("Integration test for VoteAnswerService to upvote than throws AlreadyVotedException")
+    @DisplayName("Integration test for VoteAnswerService to upvote then throws AlreadyVotedException")
     public void whenMemberIsAlreadyUpVotedTheAnswerThenThrowsAlreadyVotedException(){
         injectAnswerAndMemberPair(1L, 2L);
         assertThatThrownBy(() -> voteAnswerService.upVote(answer, member))
@@ -39,7 +39,7 @@ public class VoteAnswerServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("Integration test for VoteAnswerService to downvote than throws AlreadyVotedException")
+    @DisplayName("Integration test for VoteAnswerService to downvote then throws AlreadyVotedException")
     public void whenMemberIsAlreadyDownVotedTheAnswerThenThrowsAlreadyVotedException(){
         injectAnswerAndMemberPair(2L, 1L);
         assertThatThrownBy(() -> voteAnswerService.downVote(answer, member))
@@ -47,7 +47,7 @@ public class VoteAnswerServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("Integration test for VoteAnswerService to up/downvote than throws CannotVoteOwnPostException")
+    @DisplayName("Integration test for VoteAnswerService to up/downvote then throws CannotVoteOwnPostException")
     public void whenMemberTryToVoteOwnAnswerThenThrowsCannotVoteOwnPostException(){
         injectAnswerAndMemberPair(1L, 1L);
         assertThatThrownBy(() -> voteAnswerService.upVote(answer, member))
@@ -57,7 +57,7 @@ public class VoteAnswerServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("Integration test for voteAnswerService to upvote than OK")
+    @DisplayName("Integration test for voteAnswerService to upvote then OK")
     public void whenMemberUpVotesTheAnswerThenVoteCountIncrementAndAddReputation() {
         injectAnswerAndMemberPair(3L, 1L);
         int voteCountBefore = answer.getVoteCount();
@@ -72,7 +72,7 @@ public class VoteAnswerServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("Integration test for voteAnswerService to downvote than OK")
+    @DisplayName("Integration test for voteAnswerService to downvote then OK")
     public void whenMemberDownVotesTheAnswerThenVoteCountIncrementAndAddReputation() {
         injectAnswerAndMemberPair(1L, 3L);
         int voteCountBefore = answer.getVoteCount();
