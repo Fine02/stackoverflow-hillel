@@ -49,12 +49,12 @@ INSERT INTO member_badge_question (account_id, badge, question_id) VALUES (2, 's
 INSERT INTO member_badge_question (account_id, badge, question_id) VALUES (2, 'teacher', 3);
 INSERT INTO member_badge_question (account_id, badge, question_id) VALUES (3, 'supporter', 1);
 
-INSERT INTO member_voted_question (account_id, question_id, upvoted) VALUES (1, 1, true);
-INSERT INTO member_voted_question (account_id, question_id, upvoted) VALUES (2, 2, false);
+INSERT INTO member_voted_question (account_id, question_id, upvoted) VALUES (2, 1, true);
+INSERT INTO member_voted_question (account_id, question_id, upvoted) VALUES (1, 2, false);
 INSERT INTO member_voted_question (account_id, question_id, upvoted) VALUES (3, 3, true);
 
-INSERT INTO member_voted_answer (account_id, answer_id, upvoted) VALUES (1, 1, true);
-INSERT INTO member_voted_answer (account_id, answer_id, upvoted) VALUES (2, 2, false);
+INSERT INTO member_voted_answer (account_id, answer_id, upvoted) VALUES (2, 1, true);
+INSERT INTO member_voted_answer (account_id, answer_id, upvoted) VALUES (1, 2, false);
 INSERT INTO member_voted_answer (account_id, answer_id, upvoted) VALUES (3, 3, true);
 
 INSERT INTO member_voted_comment (account_id, comment_id, upvoted) VALUES (1, 1, true);

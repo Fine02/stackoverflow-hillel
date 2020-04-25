@@ -186,7 +186,7 @@ public class MemberRepositoryImpl implements MemberRepository {
                 .fetch()
                 .stream()
                 .filter(predicate)
-                .map(MemberVotedAnswerRecord::getAccountId)
+                .map(MemberVotedAnswerRecord::getAnswerId)
                 .collect(Collectors.toList());
     }
 
