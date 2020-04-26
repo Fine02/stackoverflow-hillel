@@ -16,10 +16,10 @@ import java.util.List;
 @Repository
 public class JdbcShippingDaoImpl implements ShippingDao {
     public static final String FIND_SLOG = "SELECT sl.id, sl.shipmentNumber, ss.status, sl.creationDate FROM shipment_log sl JOIN shipment_status ss ON sl.shipment_status_id = ss.id WHERE sl.id=? ";
-    public static final String GET_SHIPMENT_ID ="SELECT id FROM shipment  WHERE shipmentNumber=?";
-    public static final String GET_STATUS_ID ="SELECT ss.id FROM shipment_status ss WHERE ss.status=?";
+    public static final String GET_SHIPMENT_ID = "SELECT id FROM shipment  WHERE shipmentNumber=?";
+    public static final String GET_STATUS_ID = "SELECT ss.id FROM shipment_status ss WHERE ss.status=?";
     public static final String INSERT_SLOG = "INSERT INTO shipment_log (shipmentNumber, shipment_status_id, creationDate, shipment_id) VALUES (?, ?, ?, ?)";
-    public  static final String UPDATE_ADDRESS ="UPDATE address SET streetAddress=?, city=?, state=?, zipCode=?, country=? WHERE id=?";
+    public static final String UPDATE_ADDRESS = "UPDATE address SET streetAddress=?, city=?, state=?, zipCode=?, country=? WHERE id=?";
 
     public static final String GET_ADDRESS_ID = "SELECT a.address_id id\n" +
             "FROM member m JOIN account a ON m.account_id=a.id WHERE m.id=?";
@@ -57,18 +57,24 @@ public class JdbcShippingDaoImpl implements ShippingDao {
     private transient final JdbcTemplate jdbcTemplate;
     private transient final GetLastIdRowMapper getId;
     private transient final ShipmentLogRowMapper sLogRowMapper;
+    private transient final BooleanShipmentLogRowMapper booleanLogMapper;
+    private transient final MemberBooleanRowMapper memberMapper;
+    private transient final ShipmentRowMapper shipmentRowMapper;
 
     @Autowired
 
-    public JdbcShippingDaoImpl(final JdbcTemplate jdbcTemplate, final GetLastIdRowMapper getId, final ShipmentLogRowMapper sLogRowMapper) {
+    public JdbcShippingDaoImpl(final JdbcTemplate jdbcTemplate, final GetLastIdRowMapper getId, final ShipmentLogRowMapper sLogRowMapper, final BooleanShipmentLogRowMapper booleanLogMapper, final MemberBooleanRowMapper memberMapper, final ShipmentRowMapper shipmentRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.getId = getId;
-        this.sLogRowMapper =sLogRowMapper;
+        this.sLogRowMapper = sLogRowMapper;
+        this.booleanLogMapper = booleanLogMapper;
+        this.memberMapper = memberMapper;
+        this.shipmentRowMapper = shipmentRowMapper;
     }
 
     @Override
     public ShipmentLog findShipmentLogById(final Long shipmentLogId) {
-        try{
+        try {
             return jdbcTemplate.queryForObject(FIND_SLOG, sLogRowMapper, shipmentLogId);
         } catch (EmptyResultDataAccessException ex) {
             return null;
@@ -79,10 +85,8 @@ public class JdbcShippingDaoImpl implements ShippingDao {
     public boolean isThisShipmentLogExist(final ShipmentLog shipmentLog) {
         try {
             final Long foundId = shipmentLog.getId();
-            return jdbcTemplate.queryForObject(FIND_SLOG, new BooleanShipmentLogRowMapper(), foundId);
-        }catch (NullPointerException ex) {
-            return false;
-        } catch (EmptyResultDataAccessException e){
+            return jdbcTemplate.queryForObject(FIND_SLOG, booleanLogMapper, foundId);
+        } catch (EmptyResultDataAccessException e) {
             return false;
         }
     }
@@ -96,15 +100,14 @@ public class JdbcShippingDaoImpl implements ShippingDao {
 
     @Override
     public Shipment findByShipmentNumber(final String shipmentNumber) {
+        final Shipment result = jdbcTemplate.queryForObject(GET_SHIPMENT, shipmentRowMapper, shipmentNumber);
         try {
-            final List<ShipmentLog> list = jdbcTemplate.query(GET_SHIPMENT_LOG, sLogRowMapper, shipmentNumber);
-            final Shipment result = jdbcTemplate.queryForObject(GET_SHIPMENT, new ShipmentRowMapper(), shipmentNumber);
-            final Shipment shipment = result;
-            shipment.setShipmentLogs(list);
-            return shipment;
+            if (result != null) {
+                final List<ShipmentLog> list = jdbcTemplate.query(GET_SHIPMENT_LOG, sLogRowMapper, shipmentNumber);
+                result.setShipmentLogs(list);
+            }
+            return result;
         } catch (EmptyResultDataAccessException ex) {
-            return null;
-        } catch (NullPointerException ex) {
             return null;
         }
     }
@@ -119,27 +122,15 @@ public class JdbcShippingDaoImpl implements ShippingDao {
     @Override
     public boolean isFoundMemberID(final Long id) {
         try {
-            return jdbcTemplate.queryForObject(FIND_MEMBER_BY_ID, new MemberBooleanRowMapper (), id);
+            return jdbcTemplate.queryForObject(FIND_MEMBER_BY_ID, memberMapper, id);
         } catch (EmptyResultDataAccessException ex) {
-            return false;
-        } catch (NullPointerException ex) {
             return false;
         }
     }
 
-//    @Override
-//    public boolean isFoundMemberID(final Long id) {
-//        try {
-//            final var result = jdbcTemplate.queryForObject(FIND_MEMBER_BY_ID, new MemberBooleanRowMapper (), id);
-//            return result==null?false:true;
-//        } catch (EmptyResultDataAccessException ex) {
-//            return false;
-//        }
-//    }
-
     @Override
     public void updateShippingAddress(final Member member, final Address address) {
-        final Integer addressId = jdbcTemplate.queryForObject(GET_ADDRESS_ID, getId,member.getMemberID());
-      jdbcTemplate.update(UPDATE_ADDRESS, address.getStreetAddress(),address.getCity(),address.getState(), address.getZipCode(), address.getCountry() ,addressId);
+        final Integer addressId = jdbcTemplate.queryForObject(GET_ADDRESS_ID, getId, member.getMemberID());
+        jdbcTemplate.update(UPDATE_ADDRESS, address.getStreetAddress(), address.getCity(), address.getState(), address.getZipCode(), address.getCountry(), addressId);
     }
 }

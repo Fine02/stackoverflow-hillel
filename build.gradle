@@ -59,6 +59,7 @@ project(':ams-airline-management-integration-test') {
 project(':aws-online-shopping') {
    dependencies{
        compile 'org.springframework.boot:spring-boot-starter-jdbc'
+       testCompile 'org.springframework.boot:spring-boot-starter-test'
    }
 }
 
@@ -70,7 +71,8 @@ project(':aws-online-shopping-integration-test') {
         }
         dependencies{
             //testCompile db.h2
-            compile db.postgres
+            //compile db.postgres
+            testCompile 'com.h2database:h2'
         }
     }
     bootJar {

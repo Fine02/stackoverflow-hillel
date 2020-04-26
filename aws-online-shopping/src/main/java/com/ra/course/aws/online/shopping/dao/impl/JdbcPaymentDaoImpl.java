@@ -46,16 +46,16 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
 
     @Override
     public void createTransaction(final ElectronicBankTransaction bankTransaction) {
-            final Integer paymentStatusID = jdbcTemplate.queryForObject(GET_STATUS_ID, getLastId, bankTransaction.getStatus().toString());
-            final Integer lastInsertId = jdbcTemplate.queryForObject(INSERT_PAYMENT, getLastId, paymentStatusID, bankTransaction.getAmount());
-            jdbcTemplate.update(INSERT_ETRANS, lastInsertId);
+        final Integer paymentStatusID = jdbcTemplate.queryForObject(GET_STATUS_ID, getLastId, bankTransaction.getStatus().toString());
+        final Integer lastInsertId = jdbcTemplate.queryForObject(INSERT_PAYMENT, getLastId, paymentStatusID, bankTransaction.getAmount());
+        jdbcTemplate.update(INSERT_ETRANS, lastInsertId);
     }
 
     @Override
     public void createTransaction(final CreditCardTransaction cardTransaction) {
-            final Integer paymentStatusID = jdbcTemplate.queryForObject(GET_STATUS_ID, getLastId, cardTransaction.getStatus().toString());
-            final Integer lastInsertId = jdbcTemplate.queryForObject(INSERT_PAYMENT, getLastId, paymentStatusID, cardTransaction.getAmount());
-            jdbcTemplate.update(INSERT_CTRANS, lastInsertId);
+        final Integer paymentStatusID = jdbcTemplate.queryForObject(GET_STATUS_ID, getLastId, cardTransaction.getStatus().toString());
+        final Integer lastInsertId = jdbcTemplate.queryForObject(INSERT_PAYMENT, getLastId, paymentStatusID, cardTransaction.getAmount());
+        jdbcTemplate.update(INSERT_CTRANS, lastInsertId);
     }
 
     @Override
@@ -64,18 +64,6 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
             return jdbcTemplate.queryForObject(GET_MEMBER_DATA, memberBoolean, id);
         } catch (EmptyResultDataAccessException ex) {
             return false;
-        }catch (NullPointerException ex) {
-            return false;
         }
     }
-
-//    @Override
-//    public boolean isFoundMemberID(final Long id) {
-//        try {
-//            final var result = jdbcTemplate.queryForObject(GET_MEMBER_DATA, memberBoolean, id);
-//            return result==null?false:true;
-//        } catch (EmptyResultDataAccessException ex) {
-//            return false;
-//        }
-//    }
 }

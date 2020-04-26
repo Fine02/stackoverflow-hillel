@@ -16,21 +16,20 @@ import static org.mockito.Mockito.*;
 public class PaymentDaoMockTest {
     private JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);
     PaymentDao paymentDao;
-    private GetLastIdRowMapper getLastIdRowMapper;
-    private MemberBooleanRowMapper memberBooleanRowMapper;
+
+    private GetLastIdRowMapper getLastIdRowMapper = mock(GetLastIdRowMapper.class);
+    private MemberBooleanRowMapper memberBooleanRowMapper = mock(MemberBooleanRowMapper.class);
 
     @BeforeEach
     public void before() {
         paymentDao = new JdbcPaymentDaoImpl(jdbcTemplate, getLastIdRowMapper, memberBooleanRowMapper);
-        getLastIdRowMapper = mock(GetLastIdRowMapper.class);
-        memberBooleanRowMapper = mock(MemberBooleanRowMapper.class);
     }
 
     @Test
     public void testCreateElectronicBankTransaction() {
         //given
-        Integer paymentStatusID = null;
-        Integer lastInsertPaymentId = null;
+        Integer paymentStatusID = 5;
+        Integer lastInsertPaymentId = 8;
         Double amount = 8549.77;
         ElectronicBankTransaction bankTransaction = new ElectronicBankTransaction(PaymentStatus.PENDING, amount);
         when(jdbcTemplate.queryForObject(JdbcPaymentDaoImpl.GET_STATUS_ID, getLastIdRowMapper, bankTransaction.getStatus().toString())).thenReturn(paymentStatusID);
@@ -43,8 +42,8 @@ public class PaymentDaoMockTest {
     @Test
     public void testCreateCreditCardTransaction() {
         //given
-        Integer paymentStatusID = null;
-        Integer lastInsertPaymentId = null;
+        Integer paymentStatusID = 5;
+        Integer lastInsertPaymentId = 5;
         Double amount = 9554.77;
         CreditCardTransaction cardTransaction = new CreditCardTransaction(PaymentStatus.PENDING, amount);
         when(jdbcTemplate.queryForObject(JdbcPaymentDaoImpl.GET_STATUS_ID, getLastIdRowMapper, cardTransaction.getStatus().toString())).thenReturn(paymentStatusID);
@@ -55,12 +54,22 @@ public class PaymentDaoMockTest {
     }
 
     @Test
-    public void testIsFoundMemberID() {
+    public void testIsFoundMemberIDReturnTrue() {
+        //given
+        var memberId = 1L;
+        when(jdbcTemplate.queryForObject(JdbcPaymentDaoImpl.GET_MEMBER_DATA, memberBooleanRowMapper, memberId)).thenReturn(true);
+        //when
+        var result = paymentDao.isFoundMemberID(memberId);
+        Assert.assertTrue(result == true);
+    }
+
+    @Test
+    public void testIsFoundMemberIDReturnFalse() {
         //given
         var memberId = 1L;
         when(jdbcTemplate.queryForObject(JdbcPaymentDaoImpl.GET_MEMBER_DATA, memberBooleanRowMapper, memberId)).thenReturn(false);
         //when
         var result = paymentDao.isFoundMemberID(memberId);
-        Assert.assertTrue(result == false);
+        Assert.assertEquals(false, result);
     }
 }

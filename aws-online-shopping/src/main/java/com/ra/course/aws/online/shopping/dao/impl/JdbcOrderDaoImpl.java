@@ -55,12 +55,18 @@ public class JdbcOrderDaoImpl implements OrderDao {
     private transient final JdbcTemplate jdbcTemplate;
     private transient final GetLastIdRowMapper getId;
     private transient final OrderLogRowMapper orderLog;
+    private transient final OrderRowMapper orderRowMapper;
+    private transient final BooleanOrderLogRowMapper booleanLogMapper;
+    private transient final MemberBooleanRowMapper memberRowMapper;
 
     @Autowired
-    public JdbcOrderDaoImpl(final JdbcTemplate jdbcTemplate, final GetLastIdRowMapper getId, final OrderLogRowMapper orderLog) {
+    public JdbcOrderDaoImpl(final JdbcTemplate jdbcTemplate, final GetLastIdRowMapper getId, final OrderLogRowMapper orderLog, final OrderRowMapper orderRowMapper, final BooleanOrderLogRowMapper booleanLogMapper, final MemberBooleanRowMapper memberRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.getId = getId;
         this.orderLog = orderLog;
+        this.orderRowMapper = orderRowMapper;
+        this.booleanLogMapper = booleanLogMapper;
+        this.memberRowMapper = memberRowMapper;
     }
 
     @Override
@@ -79,38 +85,26 @@ public class JdbcOrderDaoImpl implements OrderDao {
         jdbcTemplate.update(INSERT_ORDER_LOG, orderLog.getOrderNumber(), orderLog.getCreationDate(), getNumberOfStatus, getIdOfOrder);
     }
 
-//    @Override
-//    public boolean isFoundMemberID(final Long id) {
-//        try {
-//            final var result = jdbcTemplate.queryForObject(GET_MEMBER_BY_ID, new MemberBooleanRowMapper (), id);
-//            return result==null?false:true;
-//        } catch (EmptyResultDataAccessException ex) {
-//            return false;
-//        }
-//    }
-
     @Override
     public boolean isFoundMemberID(final Long id) {
         try {
-            return jdbcTemplate.queryForObject(GET_MEMBER_BY_ID, new MemberBooleanRowMapper (), id);
+            return jdbcTemplate.queryForObject(GET_MEMBER_BY_ID, memberRowMapper, id);
         } catch (EmptyResultDataAccessException ex) {
             return false;
-        }catch (NullPointerException ex) {
-           return false;
-       }
+        }
     }
 
     @Override
     public Order findByOrderNumber(final String orderNumber) {
+
+        final Order result = jdbcTemplate.queryForObject(GET_ORDER, orderRowMapper, orderNumber);
         try {
-            final List<OrderLog> list = jdbcTemplate.query(GET_ORDER_LOG, orderLog, orderNumber);
-            final Order result = jdbcTemplate.queryForObject(GET_ORDER, new OrderRowMapper (), orderNumber);
-            final Order order = result;
-            order.setOrderLog(list);
-            return order;
+            if (result != null) {
+                final List<OrderLog> list = jdbcTemplate.query(GET_ORDER_LOG, orderLog, orderNumber);
+                result.setOrderLog(list);
+            }
+            return result;
         } catch (EmptyResultDataAccessException ex) {
-            return null;
-        }catch (NullPointerException ex) {
             return null;
         }
     }
@@ -126,11 +120,8 @@ public class JdbcOrderDaoImpl implements OrderDao {
     public boolean isThisOrderLogExist(final OrderLog orderLog) {
         try {
             final Long foundId = orderLog.getId();
-            return jdbcTemplate.queryForObject(FIND_ORDER_LOG, new BooleanOrderLogRowMapper(), foundId);
-        }
-        catch (NullPointerException ex) {
-            return false;
-        }catch (EmptyResultDataAccessException e){
+            return jdbcTemplate.queryForObject(FIND_ORDER_LOG, booleanLogMapper, foundId);
+        } catch (EmptyResultDataAccessException e) {
             return false;
         }
     }
