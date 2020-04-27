@@ -146,6 +146,17 @@ public class OrderDaoMockTest {
     }
 
     @Test
+    public void testIsThisOrderLogNullThenReturnFalse() {
+        //given
+        OrderLog orderLog = null;
+        Long foundId = 1L;
+        when(jdbcTemplate.queryForObject(JdbcOrderDaoImpl.FIND_ORDER_LOG, booleanLogMapper, foundId)).thenReturn(false);
+        //when
+        var result = orderDao.isThisOrderLogExist(orderLog);
+        Assert.assertEquals(false, result);
+    }
+
+    @Test
     public void testFindOrderLogById() {
         //given
         OrderLog orderLog = new OrderLog();

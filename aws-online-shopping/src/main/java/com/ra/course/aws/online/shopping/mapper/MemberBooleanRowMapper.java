@@ -20,7 +20,7 @@ public class MemberBooleanRowMapper implements RowMapper<Boolean> {
     @Override
     public Boolean mapRow(final ResultSet rs, final int rowNum) throws SQLException {
         final Member member = extractDataMember(rs);
-        if (member != null & member.getMemberID()!=0) {
+        if (member != null && member.getMemberID()!=0) {
             return true;
         }
         return false;

@@ -25,31 +25,28 @@ import static org.mockito.Mockito.*;
 public class PaymentServiceImplTest {
     private PaymentServiceImpl paymentService;
     private PaymentDao paymentDao = mock(PaymentDao.class);
-    private Address address;
     private final Member MEMBER_IN_DB = mockMember(mockAccount());
     private Double amount = 777.77;
 
     private List<CreditCard> creditCardList = mockListOfCreditCard();
-    private CreditCardTransaction creditCardTransaction = new CreditCardTransaction(PaymentStatus.PENDING, amount);
-
+    private CreditCardTransaction cardTransaction = new CreditCardTransaction(PaymentStatus.PENDING, amount);
     private List<ElectronicBankTransfer> bankTransfersList = mockListOfBankTransfer();
-    private ElectronicBankTransaction electronicBankTransaction = new ElectronicBankTransaction(PaymentStatus.PENDING, amount);
-
+    private ElectronicBankTransaction bankTransaction = new ElectronicBankTransaction(PaymentStatus.PENDING, amount);
+    private Address address = new Address("Mira", "Kiyv", "Kyiv", "04114", "Ukraine");
 
     @BeforeEach
     public void before() {
         paymentService = new PaymentServiceImpl(paymentDao);
-        address = new Address("Mira", "Kiyv", "Kyiv", "04114", "Ukraine");
-        when(paymentDao.isFoundMemberID(MEMBER_IN_DB.getMemberID())).thenReturn(true);
     }
 
     @Test
     public void thenTransactionIsNotSuccessfulBecauseOfIncorrectAmountShouldThrowException() {
         Double amount = 0.0;
+        when(paymentDao.isFoundMemberID(MEMBER_IN_DB.getMemberID())).thenReturn(true);
 
         Throwable exception = Assertions.assertThrows(PaymentNotProvidedException.class, () -> {
-            paymentService.processPaymentByElectronicBankTransaction(MEMBER_IN_DB, electronicBankTransaction, amount);
-            paymentService.processPaymentByCreditCardTransaction(MEMBER_IN_DB, creditCardTransaction, amount);
+            paymentService.processPaymentByElectronicBankTransaction(MEMBER_IN_DB, bankTransaction, amount);
+            paymentService.processPaymentByCreditCardTransaction(MEMBER_IN_DB, cardTransaction, amount);
         });
 
         assertEquals(exception.getMessage(), "payment process is failed");
@@ -61,8 +58,8 @@ public class PaymentServiceImplTest {
         when(paymentDao.isFoundMemberID(MEMBER_IN_DB.getMemberID())).thenReturn(false);
 
         Throwable exception = Assertions.assertThrows(PaymentNotProvidedException.class, () -> {
-            paymentService.processPaymentByElectronicBankTransaction(MEMBER_IN_DB, electronicBankTransaction, amount);
-            paymentService.processPaymentByCreditCardTransaction(MEMBER_IN_DB, creditCardTransaction, amount);
+            paymentService.processPaymentByElectronicBankTransaction(MEMBER_IN_DB, bankTransaction, amount);
+            paymentService.processPaymentByCreditCardTransaction(MEMBER_IN_DB, cardTransaction, amount);
         });
 
         assertEquals(exception.getMessage(), "payment process is failed");
@@ -71,23 +68,24 @@ public class PaymentServiceImplTest {
 
     @Test
     public void whenThePaymentByElectronicBankTransactionIsSuccessful() {
+        when(paymentDao.isFoundMemberID(MEMBER_IN_DB.getMemberID())).thenReturn(true);
 
         var expectedResult = PaymentStatus.COMPLETED;
-
-        var actualResult = paymentService.processPaymentByElectronicBankTransaction(MEMBER_IN_DB, electronicBankTransaction, amount);
+        var actualResult = paymentService.processPaymentByElectronicBankTransaction(MEMBER_IN_DB, bankTransaction, amount);
 
         assertEquals(expectedResult, actualResult);
-        verify(paymentDao).createTransaction(electronicBankTransaction);
+        verify(paymentDao).createTransaction(bankTransaction);
     }
 
     @Test
     public void whenThePaymentByCreditCardIsSuccessful() {
+        when(paymentDao.isFoundMemberID(MEMBER_IN_DB.getMemberID())).thenReturn(true);
         var expectedResult = PaymentStatus.COMPLETED;
 
-        var actualResult = paymentService.processPaymentByCreditCardTransaction(MEMBER_IN_DB, creditCardTransaction, amount);
+        var actualResult = paymentService.processPaymentByCreditCardTransaction(MEMBER_IN_DB, cardTransaction, amount);
 
         assertEquals(expectedResult, actualResult);
-        verify(paymentDao).createTransaction(creditCardTransaction);
+        verify(paymentDao).createTransaction(cardTransaction);
     }
 
 

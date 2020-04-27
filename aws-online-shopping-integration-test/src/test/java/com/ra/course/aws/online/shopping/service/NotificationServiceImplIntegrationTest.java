@@ -44,12 +44,12 @@ public class NotificationServiceImplIntegrationTest {
     private Address address = new Address("Mira", "Kiyv", "Kyiv", "04114", "Ukraine");
 
     private Account accountWithNotExistData = makeAccount(emailNotExist, phoneNotExist);
-    private Member memberWithNotExistData = makeMember(accountWithNotExistData);
+    private Member memberWithNotExistData = makeMember(accountWithNotExistData, 855L);
 
     private Account accountExist = makeAccount(emailExist, phoneExist);
-    private Member memberExist = makeMember(accountExist);
+    private Member memberExist = makeMember(accountExist,1L);
 
-    OrderLog newOrderLog = new OrderLog(55555555, "5548541", LocalDateTime.now(), OrderStatus.PENDING);
+    OrderLog newOrderLog = makeOrderLog(555, "5548541", LocalDateTime.now(), OrderStatus.PENDING);
     ShipmentLog newShipmentLog = new ShipmentLog(8555555, "55785", ShipmentStatus.ONHOLD, LocalDateTime.now().minusDays(1));
 
     OrderLog orderLogInDB = makeOrderLog(1, "1", time, OrderStatus.PENDING);
@@ -96,7 +96,7 @@ public class NotificationServiceImplIntegrationTest {
 
         Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {
             notificationService.sendSMSNotificationAboutOrderStatus(newOrderLog, memberWithNotExistData);
-            //notificationService.sendSMSNotificationAboutShipmentStatus(newShipmentLog, memberWithNotExistData);
+            notificationService.sendSMSNotificationAboutShipmentStatus(newShipmentLog, memberWithNotExistData);
         });
 
         assertEquals(exception.getMessage(), "There is not found the phone number");
@@ -167,8 +167,9 @@ public class NotificationServiceImplIntegrationTest {
     }
 
 
-    private Member makeMember(Account account) {
+    private Member makeMember(Account account, Long id) {
         Member member = new Member(account);
+        member.setMemberID(id);
         return member;
     }
 }

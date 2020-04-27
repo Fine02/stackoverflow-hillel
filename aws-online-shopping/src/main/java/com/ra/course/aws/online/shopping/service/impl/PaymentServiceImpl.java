@@ -20,7 +20,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentStatus processPaymentByElectronicBankTransaction(final Member member,  final ElectronicBankTransaction bankTransaction, final Double amount ) {
-        if (amount>0 & paymentDao.isFoundMemberID(member.getMemberID())) {
+        if (amount>0 && paymentDao.isFoundMemberID(member.getMemberID())) {
             bankTransaction.setAmount(amount);
             bankTransaction.setStatus(PaymentStatus.COMPLETED);
             paymentDao.createTransaction(bankTransaction);
@@ -31,7 +31,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentStatus processPaymentByCreditCardTransaction(final Member member,  final CreditCardTransaction cardTransaction,  final Double amount) {
-        if (amount>0 & paymentDao.isFoundMemberID(member.getMemberID())) {
+        if (amount>0 && paymentDao.isFoundMemberID(member.getMemberID())) {
             cardTransaction.setAmount(amount);
             cardTransaction.setStatus(PaymentStatus.COMPLETED);
             paymentDao.createTransaction(cardTransaction);

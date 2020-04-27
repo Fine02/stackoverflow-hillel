@@ -70,6 +70,17 @@ public class ShippingDaoMockTest {
     }
 
     @Test
+    public void testIsThisShipmentLogNullThenReturnFalse() {
+        //given
+        ShipmentLog shipmentLog = null;
+        var foundId = 1L;
+        when(jdbcTemplate.queryForObject(JdbcShippingDaoImpl.FIND_SLOG, booleanLogMapper, foundId)).thenReturn(false);
+        //when
+        boolean result = shippingDao.isThisShipmentLogExist(shipmentLog);
+        Assert.assertEquals(false, result);
+    }
+
+    @Test
     public void testFindLogListByShipment() {
         //given
         List<ShipmentLog> shipmentLogList = new ArrayList<>();
@@ -118,6 +129,20 @@ public class ShippingDaoMockTest {
         //when
         Shipment result = shippingDao.findByShipmentNumber(shipmentNumber);
         Assert.assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void testFindByShipmentNumberIfShipmentNullThenReturnNull() {
+        //given
+        var shipmentNumber = "285";
+        Shipment shipment = null;
+
+        when(jdbcTemplate.query(JdbcShippingDaoImpl.GET_SHIPMENT_LOG, sLogRowMapper, shipmentNumber)).thenReturn(null);
+        when(jdbcTemplate.queryForObject(JdbcShippingDaoImpl.GET_SHIPMENT, shipmentRowMapper, shipmentNumber)).thenReturn(shipment);
+
+        //when
+        Shipment result = shippingDao.findByShipmentNumber(shipmentNumber);
+        Assert.assertEquals(null, result);
     }
 
     @Test

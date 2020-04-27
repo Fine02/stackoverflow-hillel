@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
-//@ActiveProfiles("local")
-@ActiveProfiles("test")
+@ActiveProfiles("local")
+//@ActiveProfiles("test")
 public class NotificationDaoImplIntegrationTest {
 
     @Autowired

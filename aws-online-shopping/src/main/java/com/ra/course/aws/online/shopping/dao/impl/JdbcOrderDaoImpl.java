@@ -96,9 +96,8 @@ public class JdbcOrderDaoImpl implements OrderDao {
 
     @Override
     public Order findByOrderNumber(final String orderNumber) {
-
-        final Order result = jdbcTemplate.queryForObject(GET_ORDER, orderRowMapper, orderNumber);
         try {
+            final Order result = jdbcTemplate.queryForObject(GET_ORDER, orderRowMapper, orderNumber);
             if (result != null) {
                 final List<OrderLog> list = jdbcTemplate.query(GET_ORDER_LOG, orderLog, orderNumber);
                 result.setOrderLog(list);
@@ -119,8 +118,11 @@ public class JdbcOrderDaoImpl implements OrderDao {
     @Override
     public boolean isThisOrderLogExist(final OrderLog orderLog) {
         try {
-            final Long foundId = orderLog.getId();
-            return jdbcTemplate.queryForObject(FIND_ORDER_LOG, booleanLogMapper, foundId);
+            if (orderLog!=null){
+                final Long foundId = orderLog.getId();
+                return jdbcTemplate.queryForObject(FIND_ORDER_LOG, booleanLogMapper, foundId);
+            }
+            return false;
         } catch (EmptyResultDataAccessException e) {
             return false;
         }

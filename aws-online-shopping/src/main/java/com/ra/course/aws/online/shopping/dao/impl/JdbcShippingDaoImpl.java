@@ -84,8 +84,11 @@ public class JdbcShippingDaoImpl implements ShippingDao {
     @Override
     public boolean isThisShipmentLogExist(final ShipmentLog shipmentLog) {
         try {
-            final Long foundId = shipmentLog.getId();
-            return jdbcTemplate.queryForObject(FIND_SLOG, booleanLogMapper, foundId);
+            if (shipmentLog!=null){
+                final Long foundId = shipmentLog.getId();
+                return jdbcTemplate.queryForObject(FIND_SLOG, booleanLogMapper, foundId);
+            }
+            return false;
         } catch (EmptyResultDataAccessException e) {
             return false;
         }
@@ -100,8 +103,8 @@ public class JdbcShippingDaoImpl implements ShippingDao {
 
     @Override
     public Shipment findByShipmentNumber(final String shipmentNumber) {
-        final Shipment result = jdbcTemplate.queryForObject(GET_SHIPMENT, shipmentRowMapper, shipmentNumber);
         try {
+            final Shipment result = jdbcTemplate.queryForObject(GET_SHIPMENT, shipmentRowMapper, shipmentNumber);
             if (result != null) {
                 final List<ShipmentLog> list = jdbcTemplate.query(GET_SHIPMENT_LOG, sLogRowMapper, shipmentNumber);
                 result.setShipmentLogs(list);
