@@ -70,8 +70,8 @@ project(':aws-online-shopping-integration-test') {
         }
         dependencies{
             //testCompile db.h2
-            compile db.postgres
-           //testCompile 'com.h2database:h2'
+            //compile db.postgres
+           testCompile 'com.h2database:h2'
         }
     }
     bootJar {

@@ -1,4 +1,3 @@
-
 INSERT INTO payment_status (status) VALUES ('UNPAID');
 INSERT INTO payment_status (status) VALUES ('PENDING');
 INSERT INTO payment_status (status) VALUES ('COMPLETED');
@@ -53,10 +52,10 @@ INSERT INTO shipment_log (shipmentNumber, shipment_status_id, creationDate, ship
 INSERT INTO shipment_log (shipmentNumber, shipment_status_id, creationDate, shipment_id) VALUES ('2',2,'2020-03-20 22:22:11',2);
 INSERT INTO shipment_log (shipmentNumber, shipment_status_id, creationDate, shipment_id) VALUES ('2',2,'2020-03-21 22:22:11',2);
 
-INSERT INTO "order" (orderNumber, order_status_id, orderDate) VALUES ('1', 3,'2020-03-19 22:22:11');
-INSERT INTO "order" (orderNumber, order_status_id, orderDate) VALUES ('2', 3,'2020-03-20 22:22:11');
-INSERT INTO "order" (orderNumber, order_status_id, orderDate) VALUES ('3', 3,'2020-03-21 22:22:11');
-INSERT INTO "order" (orderNumber, order_status_id, orderDate) VALUES ('4', 4,'2021-03-21 22:22:11');
+INSERT INTO `order` (orderNumber, order_status_id, orderDate) VALUES ('1', 3,'2020-03-19 22:22:11');
+INSERT INTO `order` (orderNumber, order_status_id, orderDate) VALUES ('2', 3,'2020-03-20 22:22:11');
+INSERT INTO `order` (orderNumber, order_status_id, orderDate) VALUES ('3', 3,'2020-03-21 22:22:11');
+INSERT INTO `order` (orderNumber, order_status_id, orderDate) VALUES ('4', 4,'2021-03-21 22:22:11');
 
 INSERT INTO order_log (orderNumber, creationDate, order_status_id, order_id) VALUES ('1','2020-03-19 22:22:11', 2,1);
 INSERT INTO order_log (orderNumber, creationDate, order_status_id, order_id) VALUES ('2','2020-03-20 22:22:11', 2,2);
@@ -83,23 +82,3 @@ INSERT INTO electronic_bank_transfer (bankName, routingNumber, accountNumber, ac
 INSERT INTO credit_card (nameOnCard, cardNumber, code, address_id, account_id) VALUES ('VISA', '5584', '5662', 1, 1);
 INSERT INTO credit_card (nameOnCard, cardNumber, code, address_id, account_id) VALUES ('MASTERCARD', '8545', '8554', 2, 2);
 INSERT INTO credit_card (nameOnCard, cardNumber, code, address_id, account_id) VALUES ('VISA', '7777', '7415', 3, 3);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

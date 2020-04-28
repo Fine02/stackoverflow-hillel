@@ -1,7 +1,5 @@
 package com.ra.course.aws.online.shopping;
 
-import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
-import com.ra.course.aws.online.shopping.TestConfig;
 import com.ra.course.aws.online.shopping.dao.AccountDao;
 import com.ra.course.aws.online.shopping.dao.ProductDao;
 import com.ra.course.aws.online.shopping.dao.ShoppingCartDao;
@@ -18,10 +16,12 @@ import static org.mockito.Mockito.mock;
 
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
-@ActiveProfiles("local")
-//@ActiveProfiles("test")
+//@ActiveProfiles("local")
+@ActiveProfiles("test")
 //@Sql(scripts = "classpath:schema.sql")
 //@Sql(scripts = "classpath:test-data.sql")
+//@Sql({"classpath:schema.sql", "classpath:test-data.sql"})
+@Sql({"classpath: mysqlschema.sql", "classpath: mysql-test-data.sql"})
 public class MainCreateDB {
 
     @Primary

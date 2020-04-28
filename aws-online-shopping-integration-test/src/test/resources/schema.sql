@@ -60,6 +60,15 @@ CREATE TABLE address
     country varchar (255) NOT NULL
 );
 
+CREATE SEQUENCE notification_seq;
+
+CREATE TABLE notification
+(
+    id INT PRIMARY KEY DEFAULT NEXTVAL ('notification_seq'),
+    createdOn TIMESTAMP(0) NOT NULL ,
+    content varchar (255) NOT NULL
+);
+
 CREATE SEQUENCE sms_notification_seq;
 
 CREATE TABLE sms_notification
@@ -80,15 +89,6 @@ CREATE TABLE email_notification
     notification_id INT NOT NULL,
     CONSTRAINT  fk_email_notification_id
     FOREIGN KEY (notification_id) REFERENCES notification (id) ON DELETE CASCADE
-);
-
-CREATE SEQUENCE notification_seq;
-
-CREATE TABLE notification
-(
-    id INT PRIMARY KEY DEFAULT NEXTVAL ('notification_seq'),
-    createdOn TIMESTAMP(0) NOT NULL ,
-    content varchar (255) NOT NULL
 );
 
 CREATE SEQUENCE shipment_seq;
