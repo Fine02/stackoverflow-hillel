@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
+//@ActiveProfiles("test")
 public class ShippingServiceImplIntegrationTest {
 
     @Autowired

@@ -16,8 +16,10 @@ import org.springframework.test.context.jdbc.Sql;
 
 import static org.mockito.Mockito.mock;
 
+
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("local")
+//@ActiveProfiles("test")
 //@Sql(scripts = "classpath:schema.sql")
 //@Sql(scripts = "classpath:test-data.sql")
 public class MainCreateDB {

@@ -26,12 +26,16 @@ public class JdbcNotificationDaoImpl implements NotificationDao {
 
     private transient final GetStringFromObjectRowMapper getString;
     private transient final GetLastIdRowMapper getLastId;
+    private transient final SMSNotificationRowMapper smsMapper;
+    private transient final EmailNotificationRowMapper emailMapper;
     private transient final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public JdbcNotificationDaoImpl(final GetLastIdRowMapper getLastId, final GetStringFromObjectRowMapper getString, final JdbcTemplate jdbcTemplate) {
+    public JdbcNotificationDaoImpl(final GetLastIdRowMapper getLastId, final GetStringFromObjectRowMapper getString, final SMSNotificationRowMapper smsMapper, final EmailNotificationRowMapper emailMapper, final JdbcTemplate jdbcTemplate) {
         this.getLastId = getLastId;
         this.getString = getString;
+        this.smsMapper = smsMapper;
+        this.emailMapper = emailMapper;
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -40,7 +44,7 @@ public class JdbcNotificationDaoImpl implements NotificationDao {
         try {
             final Integer lastInsertId = jdbcTemplate.queryForObject(INSERT_NOTIFIC, getLastId, smsNotification.getCreatedOn(), smsNotification.getContent());
             jdbcTemplate.update(INSERT_SNOTIFIC, smsNotification.getPhone(), lastInsertId);
-            return jdbcTemplate.queryForObject(GET_SMS, new SMSNotificationRowMapper(), lastInsertId);
+            return jdbcTemplate.queryForObject(GET_SMS, smsMapper, lastInsertId);
         } catch (EmptyResultDataAccessException ex) {
             return null;
         }
@@ -51,7 +55,7 @@ public class JdbcNotificationDaoImpl implements NotificationDao {
         try {
             final Integer lastInsertId = jdbcTemplate.queryForObject(INSERT_NOTIFIC, getLastId, emailNotification.getCreatedOn(), emailNotification.getContent());
             jdbcTemplate.update(INSERT_ENOTIFIC, emailNotification.getEmail(), lastInsertId);
-            return jdbcTemplate.queryForObject(GET_EMAIL, new EmailNotificationRowMapper(), lastInsertId);
+            return jdbcTemplate.queryForObject(GET_EMAIL, emailMapper, lastInsertId);
         } catch (EmptyResultDataAccessException ex) {
             return null;
         }

@@ -1,7 +1,6 @@
 package com.ra.course.aws.online.shopping.mapper;
 
 import com.ra.course.aws.online.shopping.entity.enums.OrderStatus;
-import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

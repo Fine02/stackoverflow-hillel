@@ -14,16 +14,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class NotificationDaoMockTest {
     NotificationDao notificationDao;
     private final JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);
-    private GetStringFromObjectRowMapper getStringFromObjectRowMapper;
-    private GetLastIdRowMapper getLastIdRowMapper;
-    private EmailNotificationRowMapper emailNotificationRowMapper;
-    private SMSNotificationRowMapper smsNotificationRowMapper;
+    private GetStringFromObjectRowMapper getStringMapper = mock(GetStringFromObjectRowMapper.class);
+    private GetLastIdRowMapper getLastIdMapper = mock(GetLastIdRowMapper.class);
+    private EmailNotificationRowMapper emailMapper = mock(EmailNotificationRowMapper.class);
+    private SMSNotificationRowMapper smsMapper = mock(SMSNotificationRowMapper.class);
 
     LocalDateTime time = LocalDateTime.of(2020, 3, 19, 12, 17, 27);
     String content = "some content + test+3";
@@ -32,29 +31,25 @@ public class NotificationDaoMockTest {
 
     @BeforeEach
     public void before() {
-        notificationDao = new JdbcNotificationDaoImpl(getLastIdRowMapper, getStringFromObjectRowMapper, jdbcTemplate);
-        getStringFromObjectRowMapper = mock(GetStringFromObjectRowMapper.class);
-        getLastIdRowMapper = mock(GetLastIdRowMapper.class);
-        emailNotificationRowMapper = mock(EmailNotificationRowMapper.class);
-        smsNotificationRowMapper = mock(SMSNotificationRowMapper.class);
+        notificationDao = new JdbcNotificationDaoImpl(getLastIdMapper, getStringMapper, smsMapper, emailMapper, jdbcTemplate);
     }
 
     @Test
     public void testFoundMemberPhoneNumber() {
         //given
-        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_MEMBER_PHONE, getStringFromObjectRowMapper, phoneNumber)).thenReturn(phoneNumber);
+        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_MEMBER_PHONE, getStringMapper, phoneNumber)).thenReturn(phoneNumber);
         //when
         String result = notificationDao.foundMemberPhoneNumber(phoneNumber);
-        Assert.assertTrue(result == null);
+        Assert.assertEquals(phoneNumber, result);
     }
 
     @Test
     public void testFoundMemberEmail() {
         //given
-        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_MEMBER_EMAIL, getStringFromObjectRowMapper, email)).thenReturn(email);
+        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_MEMBER_EMAIL, getStringMapper, email)).thenReturn(email);
         //when
         String result = notificationDao.foundMemberEmail(email);
-        Assert.assertTrue(result == null);
+        Assert.assertEquals(email, result);
     }
 
     @Test
@@ -62,10 +57,13 @@ public class NotificationDaoMockTest {
         //given
         var lastInsertId = 5;
         EmailNotification emailNotification = new EmailNotification(time, content, email);
-        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_EMAIL, emailNotificationRowMapper, lastInsertId)).thenReturn(emailNotification);
+        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.INSERT_NOTIFIC, getLastIdMapper, emailNotification.getCreatedOn(), emailNotification.getContent())).thenReturn(lastInsertId);
+        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_EMAIL, emailMapper, lastInsertId)).thenReturn(emailNotification);
         //when
+
         EmailNotification result = notificationDao.createEmailNotification(emailNotification);
-        Assert.assertTrue(result == null);
+        verify(jdbcTemplate).update(JdbcNotificationDaoImpl.INSERT_ENOTIFIC, emailNotification.getEmail(), lastInsertId);
+        Assert.assertEquals(emailNotification , result);
     }
 
     @Test
@@ -73,9 +71,12 @@ public class NotificationDaoMockTest {
         //given
         var lastInsertId = 5;
         SMSNotification smsNotification = new SMSNotification(time, content, phoneNumber);
-        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_SMS, smsNotificationRowMapper, lastInsertId)).thenReturn(smsNotification);
+
+        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.INSERT_NOTIFIC, getLastIdMapper, smsNotification.getCreatedOn(), smsNotification.getContent())).thenReturn(lastInsertId);
+        when(jdbcTemplate.queryForObject(JdbcNotificationDaoImpl.GET_SMS, smsMapper, lastInsertId)).thenReturn(smsNotification);
         //when
         SMSNotification result = notificationDao.createSMSNotification(smsNotification);
-        Assert.assertTrue(result == null);
+        verify(jdbcTemplate).update(JdbcNotificationDaoImpl.INSERT_SNOTIFIC, smsNotification.getPhone(), lastInsertId);
+        Assert.assertEquals(smsNotification, result);
     }
 }
