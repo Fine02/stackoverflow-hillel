@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 //@ActiveProfiles("local")
 @ActiveProfiles("test")
 //@Sql({"classpath:schema.sql", "classpath:test-data.sql"})
-@Sql({"classpath: mysqlschema.sql", "classpath: mysql-test-data.sql"})
+@Sql({"classpath:schema.sql", "classpath:test-data.sql"})
 
 public class OrderDaoImplIntegrationTest {
 

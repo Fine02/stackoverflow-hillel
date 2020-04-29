@@ -24,11 +24,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
-//@ActiveProfiles("local")
-//for H2
 @ActiveProfiles("test")
 //@Sql({"classpath:schema.sql", "classpath:test-data.sql"})
-@Sql({"classpath: mysqlschema.sql", "classpath: mysql-test-data.sql"})
 public class ShippingDaoImplIntegrationTest {
 
     @Autowired

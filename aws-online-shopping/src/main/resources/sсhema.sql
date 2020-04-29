@@ -1,3 +1,6 @@
+CREATE SCHEMA IF NOT EXISTS public1;
+USE public1;
+
 DROP TABLE IF EXISTS payment_status;
 DROP TABLE IF EXISTS shipment_status;
 DROP TABLE IF EXISTS account_status;

@@ -16,8 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 //@ActiveProfiles("local")
 @ActiveProfiles("test")
+
+@Sql(scripts = "classpath:test-data.sql")
 //@Sql({"classpath:schema.sql", "classpath:test-data.sql"})
-@Sql({"classpath: mysqlschema.sql", "classpath: mysql-test-data.sql"})
+//@Sql({"classpath:schema.sql", "classpath:test-data.sql"})
 public class PaymentDaoImplIntegrationTest {
 
     @Autowired
@@ -39,7 +41,7 @@ public class PaymentDaoImplIntegrationTest {
 
     @Test
     public void ifMemberByIdWasFoundReturnTrueTest() {
-        boolean result = paymentDao.isFoundMemberID(3L);
+        boolean result = paymentDao.isFoundMemberID(1L);
 
         assertEquals(true, result);
     }

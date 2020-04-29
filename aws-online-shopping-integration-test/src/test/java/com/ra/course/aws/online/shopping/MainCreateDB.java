@@ -16,12 +16,8 @@ import static org.mockito.Mockito.mock;
 
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
-//@ActiveProfiles("local")
 @ActiveProfiles("test")
-//@Sql(scripts = "classpath:schema.sql")
-//@Sql(scripts = "classpath:test-data.sql")
-//@Sql({"classpath:schema.sql", "classpath:test-data.sql"})
-@Sql({"classpath: mysqlschema.sql", "classpath: mysql-test-data.sql"})
+@Sql(scripts = "classpath:schema.sql")
 public class MainCreateDB {
 
     @Primary

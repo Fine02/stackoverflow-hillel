@@ -1,7 +1,23 @@
-CREATE SCHEMA IF NOT EXISTS public;
-USE public;
+CREATE SCHEMA IF NOT EXISTS public1;
+USE public1;
 
-
+DROP TABLE IF EXISTS payment_status;
+DROP TABLE IF EXISTS shipment_status;
+DROP TABLE IF EXISTS account_status;
+DROP TABLE IF EXISTS order_status;
+DROP TABLE IF EXISTS address;
+DROP TABLE IF EXISTS sms_notification;
+DROP TABLE IF EXISTS email_notification;
+DROP TABLE IF EXISTS notification;
+DROP TABLE IF EXISTS shipment;
+DROP TABLE IF EXISTS shipment_log;
+DROP TABLE IF EXISTS `order`;
+DROP TABLE IF EXISTS order_log;
+DROP TABLE IF EXISTS payment;
+DROP TABLE IF EXISTS payment;
+DROP TABLE IF EXISTS member;
+DROP TABLE IF EXISTS electronic_bank_transfer;
+DROP TABLE IF EXISTS credit_card;
 
 
 CREATE TABLE payment_status
@@ -51,7 +67,7 @@ CREATE TABLE `sms_notification`
     `phone` varchar (255) NOT NULL,
     `notification_id` INT NOT NULL,
     CONSTRAINT  `fk_sms_notification_id`
-        FOREIGN KEY (`notification_id`) REFERENCES `notification` (`id`) ON DELETE CASCADE
+    FOREIGN KEY (`notification_id`) REFERENCES `notification` (`id`) ON DELETE CASCADE
 );
 
 CREATE TABLE email_notification

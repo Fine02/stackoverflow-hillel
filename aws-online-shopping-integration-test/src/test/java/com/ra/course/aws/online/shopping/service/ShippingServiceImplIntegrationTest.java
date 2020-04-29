@@ -31,6 +31,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("test")
 public class ShippingServiceImplIntegrationTest {
 
+
+
     @Autowired
     private ShippingService shippingService;
 
