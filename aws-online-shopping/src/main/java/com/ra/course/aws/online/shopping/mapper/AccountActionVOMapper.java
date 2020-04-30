@@ -1,17 +1,12 @@
 package com.ra.course.aws.online.shopping.mapper;
 
-import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
-import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
-import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.entity.vo.AccountActionVO;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AccountActionVOMapper implements RowMapper<AccountActionVO> {
@@ -46,34 +41,7 @@ public class AccountActionVOMapper implements RowMapper<AccountActionVO> {
         accountVO.setBankName(rs.getString("bankName"));
         accountVO.setRoutingNumber(rs.getString("routingNumber"));
         accountVO.setAccountNumber(rs.getString("accountNumber"));
-       return accountVO;
-//        while (rs.next()) {
-//            CreditCard card = new CreditCard();
-//
-//            address.setStreetAddress(rs.getString("streetAddress"));
-//            address.setStreetAddress(rs.getString("city"));
-//            address.setStreetAddress(rs.getString("state"));
-//            address.setStreetAddress(rs.getString("zipcode"));
-//            address.setStreetAddress(rs.getString("country"));
-//
-//            card.setBillingAddress(address);
-//            card.setCardNumber(rs.getString("nameOnCard"));
-//            card.setCardNumber(rs.getString("cardNumber"));
-//            card.setCardNumber(rs.getString("code"));
-//
-//            creditCards.add(card);
-//
-//
-//            account.setUserName(rs.getString("userName"));
-//            account.setPassword(rs.getString("password"));
-//            account.setStatus(AccountStatus.valueOf(rs.getString("account_status")));
-//            account.setName(rs.getString("name"));
-//            account.setShippingAddress(address);
-//            account.setEmail(rs.getString("email"));
-//            account.setPhone(rs.getString("phone"));
-//            account.setCreditCardList(creditCards);
-//        }
-//        //account.setElectronicBankTransferList(rs.getString());
-//        return account;
+
+        return accountVO;
     }
 }

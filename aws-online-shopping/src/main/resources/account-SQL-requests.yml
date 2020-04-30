@@ -1,0 +1,29 @@
+GET_ACCOUNTS: SELECT acc.id, acc.userName, acc.password, acc.account_status, acc.name, acc.email, acc.phone, \
+  add.streetaddress, add.city, add.state, add.zipcode, add.country, \
+  cc.nameoncard, cc.cardnumber, cc.code, \
+  cadd.streetaddress AS billingStreetAddress, cadd.city AS billingCity, cadd.state AS billingState, cadd.zipcode AS billingZipcode, cadd.country AS billingCountry, \
+  ebt.bankName, ebt.routingNumber, ebt.accountNumber \
+  FROM account acc JOIN address add ON acc.address_id = add.id \
+  JOIN credit_card cc ON acc.id = cc.account_id \
+  JOIN address cadd ON cc.address_id = cadd.id \
+  JOIN electronic_bank_transfer ebt ON acc.id = ebt.account_id
+
+GET_ADDRESS_ID: SELECT address_id FROM account WHERE id=?
+
+INSERT_ACCOUNT: INSERT INTO account (userName, password, account_status, name, address_id, email, phone) \
+  VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id
+
+INSERT_ADDRESS: INSERT INTO address (streetaddress, city, state, zipcode, country) \
+  VALUES (?, ?, ?, ?, ?) RETURNING id
+
+INSERT_CREDIT_CARD: INSERT INTO credit_card (nameOnCard, cardNumber, code, address_id, account_id) \
+  VALUES (?, ?, ?, ?, ?)
+
+INSERT_ELECTRONIC_BANK_TRANSFER: INSERT INTO electronic_bank_transfer (bankName, routingNumber, AccountNumber, account_id) \
+  VALUES (?, ?, ?, ?)
+UPDATE_ACCOUNT: UPDATE account SET userName=?, password=?, account_status=?, name=?, email=?, phone=? WHERE id=?
+UPDATE_ADDRESS: UPDATE address SET streetaddress=?, city=?, state=?, zipcode=?, country=? WHERE id=?
+DELETE_ACCOUNT: DELETE FROM address AS add USING account AS acc WHERE add.id = acc.address_id AND acc.id=?
+DELETE_CREDIT_CARDS: DELETE FROM credit_card WHERE account_id=?
+DELETE_TRANSFERS: DELETE FROM electronic_bank_transfer where account_id=?
+

@@ -89,7 +89,6 @@ public class AccountDaoImplIntegrationTest {
 
     @Test
     public void findByIDTest() {
-        // Long savedProductId = accountDao.save(account);
         Account result = accountDao.findById(1L);
         System.out.println(result);
     }
@@ -99,12 +98,12 @@ public class AccountDaoImplIntegrationTest {
         CreditCard card1 = new CreditCard("Roger", "5525694123698541", 145, address2);
         CreditCard card2 = new CreditCard("Roger", "5525126354798541", 751, address3);
 
-//accountDao.saveCreditCard(card1, )
     }
 
     @Test
     public void findAllTest() {
         List<Account> result = accountDao.getAll();
+        int i = 0;
         System.out.println(result);
     }
 }

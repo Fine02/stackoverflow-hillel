@@ -9,6 +9,9 @@ import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
 import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.entity.vo.AccountActionVO;
 import com.ra.course.aws.online.shopping.mapper.AccountActionVOMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -23,74 +26,39 @@ import java.util.*;
 //        USING another_table
 //        WHERE table.id = another_table.id AND …
 @Repository
+@PropertySource("account-SQL-requests.yml")
 public class AccountDaoImpl implements AccountDao {
-    private static final String GET_ADDRESS_ID = "SELECT address_id FROM account WHERE id=?";
-    private static final String INSERT_ACCOUNT =
-            "INSERT INTO account (userName, password, account_status, name, address_id, email, phone) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id";
-    private static final String INSERT_ADDRESS = "INSERT INTO address (streetaddress, city, state, zipcode, country) " +
-            "VALUES (?, ?, ?, ?, ?) RETURNING id";
-    private static final String INSERT_CREDIT_CARD = "INSERT INTO credit_card (nameOnCard, cardNumber, code, address_id, account_id) " +
-            "VALUES (?, ?, ?, ?, ?)";
-    private static final String INSERT_ELECTRONIC_BANK_TRANSFER = "INSERT INTO electronic_bank_transfer (bankName, routingNumber, AccountNumber, account_id) " +
-            "VALUES (?, ?, ?, ?)";
-    private transient final String UPDATE_ACCOUNT = "UPDATE account " +
-            "SET userName=?, password=?, account_status=?, name=?, email=?, phone=? WHERE id=?";
-    private transient final String UPDATE_ADDRESS = "UPDATE address " +
-            "SET streetaddress=?, city=?, state=?, zipcode=?, country=? WHERE id=?";
-    private transient final String DELETE_ACCOUNT = "DELETE FROM address AS add USING account AS acc WHERE add.id = acc.address_id AND acc.id = ?";
-    private transient final String DELETE_CREDIT_CARDS = "DELETE FROM credit_card WHERE account_id=?";
-    private transient final String DELETE_TRANSFERS = "DELETE FROM electronic_bank_transfer where account_id=?";
-    private transient final String GET_ACCOUNT =
-//            "SELECT acc.id, acc.userName, acc.password, acc.account_status, acc.name, acc.email, acc.phone," +
-//                    "add.streetaddress, add.city, add.state, add.zipcode, add.country," +
-//                    "cc.nameoncard, cc.cardnumber, cc.code," +
-//                    "cadd.streetaddress, cadd.city, cadd.state, cadd.zipcode, cadd.country," +
-//                    "ebt.bankName, ebt.routingNumber, ebt.accountNumber" +
-//                    " FROM account acc, address add, credit_card cc, address cadd, electronic_bank_transfer ebt " +
-//                    "WHERE acc.id=? AND acc.address_id = add.id AND acc.id = cc.account_id AND cc.address_id = add.id " +
-//                    "AND acc.id = ebt.account_id";
-            "SELECT acc.id, acc.userName, acc.password, acc.account_status, acc.name, acc.email, acc.phone," +
-                    "add.streetaddress, add.city, add.state, add.zipcode, add.country," +
-                    "cc.nameoncard, cc.cardnumber, cc.code," +
-                    "cadd.streetaddress AS billingStreetAddress, cadd.city AS billingCity, cadd.state AS billingState, cadd.zipcode AS billingZipcode, cadd.country AS billingCountry," +
-                    "ebt.bankName, ebt.routingNumber, ebt.accountNumber " +
-                    "FROM account acc JOIN address add ON acc.address_id = add.id " +
-                    "JOIN credit_card cc ON acc.id = cc.account_id " +
-                    "JOIN address cadd ON cc.address_id = cadd.id " +
-                    "JOIN electronic_bank_transfer ebt ON acc.id = ebt.account_id " +
-                    "WHERE acc.id=? ";
-    private transient final String GET_ACCOUNTS = "SELECT acc.id, acc.userName, acc.password, acc.account_status, acc.name, acc.email, acc.phone," +
-            "add.streetaddress, add.city, add.state, add.zipcode, add.country," +
-            "cc.nameoncard, cc.cardnumber, cc.code," +
-            "cadd.streetaddress AS billingStreetAddress, cadd.city AS billingCity, cadd.state AS billingState, cadd.zipcode AS billingZipcode, cadd.country AS billingCountry," +
-            "ebt.bankName, ebt.routingNumber, ebt.accountNumber " +
-            "FROM account acc JOIN address add ON acc.address_id = add.id " +
-            "JOIN credit_card cc ON acc.id = cc.account_id " +
-            "JOIN address cadd ON cc.address_id = cadd.id " +
-            "JOIN electronic_bank_transfer ebt ON acc.id = ebt.account_id ";
-    //      " FROM account acc JOIN address add ON acc.address_id = add.id JOIN credit_card cc ON acc.id = cc.account_id " +
-//              "WHERE acc.id=?";
-//
-//"SELECT um.USER_ID, um.USERNAME, um.PASSWORD,  um.AGENCIA,  um.EMAIL, um.GRABADO_POR,  um.MOBILENUMBER,  um.USER_STATUS,  um.ZONE, " +
-//        " um.NAME, um.USER_TYPE,  urmm.USERROLEMAPPING_ID,  r.ROLE_ID,  r.ROLE_NAME,  r.PRIORITY,  rcmm.COMPONENT_ID,  am.ACTION_ID, " +
-//        " am.ACTION_NMAE,  cm.COMPONENTID,  cm.COMPONENTNAME,  cm.COMPONENTIDENTIFICATION, cm.COMPONENTSTATE " +
-//        "FROM USER_MASTER um, " +
-//        " role r, USER_ROLE_MAPPING_MASTER urmm, ACTION_MASTER am, ROLE_COMPONENT_MAPPING_MASTER rcmm, ACTION_COMPONENT_MAPPINGMASTER " +
-//        "acm,COMPONENT_MASTER cm WHERE upper(um.USERNAME)=upper(?) AND um.USER_ID          =urmm.USER_ID AND urmm.ROLE_ID      " +
-//        "  =r.ROLE_ID AND r.ROLE_ID           =rcmm.ROLE_ID AND urmm.ROLE_ID        =rcmm.ROLE_ID AND acm.ACTION_ID       " +
-//        "=am.ACTION_ID AND rcmm.COMPONENT_NAME =acm.COMPONENT_NAME AND acm.COMPONENT_NAME=cm.COMPONENTNAME(+)";
+    @Value("${GET_ADDRESS_ID}")
+    private transient String GET_ADDRESS_ID;
+    @Value("${INSERT_ACCOUNT}")
+    private transient String INSERT_ACCOUNT;
+    @Value("${INSERT_ADDRESS}")
+    private transient String INSERT_ADDRESS;
+    @Value("${INSERT_CREDIT_CARD}")
+    private transient String INSERT_CREDIT_CARD;
+    @Value("${INSERT_ELECTRONIC_BANK_TRANSFER}")
+    private transient String INSERT_ELECTRONIC_BANK_TRANSFER;
+    @Value("${UPDATE_ACCOUNT}")
+    private transient String UPDATE_ACCOUNT;
+    @Value("${UPDATE_ADDRESS}")
+    private transient String UPDATE_ADDRESS;
+    @Value("${DELETE_ACCOUNT}")
+    private transient String DELETE_ACCOUNT;
+    @Value("${DELETE_CREDIT_CARDS}")
+    private transient String DELETE_CREDIT_CARDS;
+    @Value("${DELETE_TRANSFERS}")
+    private transient String DELETE_TRANSFERS;
+    @Value("${GET_ACCOUNTS}")
+    private transient String GET_ACCOUNTS;
+
     private transient final JdbcTemplate jdbcTemplate;
-    private transient final AccountActionVOMapper accountActionVOMapper;
 
     public AccountDaoImpl(JdbcTemplate jdbcTemplate, AccountActionVOMapper accountActionVOMapper) {
         this.jdbcTemplate = jdbcTemplate;
-        this.accountActionVOMapper = accountActionVOMapper;
     }
 
     @Override
     public Long save(Account account) {
-
         Integer addressId = saveAddress(account.getShippingAddress());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
@@ -194,110 +162,17 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public Account findById(Long id) {
-//        final List<AccountActionVO> accountVOs;
-//        accountVOs = jdbcTemplate.query(GET_ACCOUNT, new Object[]{id}, new AccountActionVOMapper());
-//        Account account = new Account();
-//        CreditCard card = new CreditCard();
-//        ElectronicBankTransfer transfer = new ElectronicBankTransfer();
-//        Set<Account> accounts = new HashSet<>();
-//        Set<CreditCard> cards = new HashSet<>();
-//        Set<ElectronicBankTransfer> transfers = new HashSet<>();
-//        for (AccountActionVO accountVO : accountVOs) {
-//            accountVO.setId(rs.getLong("id"));
-//            accountVO.setUserName(rs.getString("userName"));
-//            accountVO.setPassword(rs.getString("password"));
-//            accountVO.setStatus(AccountStatus.valueOf(rs.getString("account_status")));
-//            accountVO.setName(rs.getString("name"));
-//
-//            accountVO.setStreetAddress(rs.getString("streetAddress"));
-//            accountVO.setState(rs.getString("state"));
-//            accountVO.setZipCode(rs.getString("zipcode"));
-//            accountVO.setCountry(rs.getString("country"));
-//            accountVO.setCity(rs.getString("city"));
-//
-//            accountVO.setEmail(rs.getString("email"));
-//            accountVO.setPhone(rs.getString("phone"));
-//
-//            accountVO.setNameOnCard(rs.getString("nameOnCard"));
-//            accountVO.setCardNumber(rs.getString("cardNumber"));
-//            accountVO.setCode(rs.getInt("code"));
-//
-//            accountVO.setBillingStreetAddress(rs.getString("billingStreetAddress"));
-//            accountVO.setBillingState(rs.getString("billingState"));
-//            accountVO.setBillingZipCode(rs.getString("billingZipcode"));
-//            accountVO.setBillingCountry(rs.getString("billingCountry"));
-//            accountVO.setBillingCity(rs.getString("billingCity"));
-//
-//            accountVO.setBankName(rs.getString("bankName"));
-//            accountVO.setRoutingNumber(rs.getString("routingNumber"));
-//            accountVO.setAccountNumber(rs.getString("accountNumber"));
-//        }
-        return null;
-//        Account account = jdbcTemplate.queryForObject(GET_ACCOUNT, accountActionVOMapper, id);
-//        account.setId(id);
-//        return account;
+        final String GET_ACCOUNT = GET_ACCOUNTS + " WHERE acc.id=? ";
+        final List<AccountActionVO> accountVOs;
+        accountVOs = jdbcTemplate.query(GET_ACCOUNT, new Object[]{id}, new AccountActionVOMapper());
+        return getMappedAccountsFromVO(accountVOs).stream().findAny().orElse(null);
     }
 
     @Override
     public List<Account> getAll() {
         final List<AccountActionVO> accountVOs;
         accountVOs = jdbcTemplate.query(GET_ACCOUNTS, new AccountActionVOMapper());
-        Account account;
-        CreditCard card = new CreditCard();
-        ElectronicBankTransfer transfer = new ElectronicBankTransfer();
-        Set<Account> accounts = new HashSet<>();
-//        Map<Account, CreditCard> cards = new HashMap<>();
-//        Map<Account, ElectronicBankTransfer> transfers = new HashMap<>();
-        Map<Long, Set<CreditCard>> cards = new HashMap<>();
-        Map<Long, Set<ElectronicBankTransfer>> transfers = new HashMap<>();
-//        for (Map.Entry e : phones.entrySet()) {
-//            notebook.computeIfAbsent((String) e.getValue(),
-//                    ph -> new ArrayList<>()).add((String) e.getKey());
-//        }
-        for (AccountActionVO accountVO : accountVOs) {
-            account = new Account();
-            account.setId(accountVO.getId());
-            account.setUserName(accountVO.getUserName());
-            account.setPassword(accountVO.getPassword());
-            account.setStatus(accountVO.getStatus());
-            account.setName(accountVO.getName());
-            account.setEmail(accountVO.getEmail());
-            account.setPhone(accountVO.getPhone());
-
-            Address shippingAddress = new Address();
-            shippingAddress.setStreetAddress(accountVO.getStreetAddress());
-            shippingAddress.setState(accountVO.getState());
-            shippingAddress.setZipCode(accountVO.getZipCode());
-            shippingAddress.setCountry(accountVO.getCountry());
-            shippingAddress.setCity(accountVO.getCity());
-            account.setShippingAddress(shippingAddress);
-
-            card = new CreditCard();
-            card.setNameOnCard(accountVO.getNameOnCard());
-            card.setCardNumber(accountVO.getCardNumber());
-            card.setCode(accountVO.getCode());
-            Address billingAddress = new Address();
-            billingAddress.setStreetAddress(accountVO.getBillingStreetAddress());
-            billingAddress.setState(accountVO.getBillingState());
-            billingAddress.setZipCode(accountVO.getBillingZipCode());
-            billingAddress.setCountry(accountVO.getBillingCountry());
-            billingAddress.setCity(accountVO.getBillingCity());
-            card.setBillingAddress(billingAddress);
-
-            transfer = new ElectronicBankTransfer();
-            transfer.setBankName(accountVO.getBankName());
-            transfer.setRoutingNumber(accountVO.getRoutingNumber());
-            transfer.setAccountNumber(accountVO.getAccountNumber());
-
-            cards.computeIfAbsent(account.getId(), cc -> new HashSet<>()).add(card);
-            transfers.computeIfAbsent(account.getId(), cc -> new HashSet<>()).add(transfer);
-            accounts.add(account);
-        }
-        for (Account acc : accounts) {
-            acc.setCreditCardList(new ArrayList<>(cards.get(acc.getId())));
-            acc.setElectronicBankTransferList(new ArrayList<>(transfers.get(acc.getId())));
-        }
-        return new ArrayList<>(accounts);
+        return getMappedAccountsFromVO(accountVOs);
     }
 
     @Override
@@ -323,5 +198,74 @@ public class AccountDaoImpl implements AccountDao {
         jdbcTemplate.update(INSERT_ELECTRONIC_BANK_TRANSFER, transfer.getBankName(), transfer.getRoutingNumber(),
                 transfer.getAccountNumber(), accountId.intValue());
         return true;
+    }
+
+    private List<Account> getMappedAccountsFromVO(List<AccountActionVO> accountVOs) {
+        Account account;
+        CreditCard card;
+        ElectronicBankTransfer transfer;
+
+        Set<Account> accounts = new HashSet<>();
+        Map<Long, Set<CreditCard>> cards = new HashMap<>();
+        Map<Long, Set<ElectronicBankTransfer>> transfers = new HashMap<>();
+
+        for (AccountActionVO accountVO : accountVOs) {
+            account = mapAccountFromVO(accountVO);
+            card = mapCreditCardFromVO(accountVO);
+            transfer = mapTransferFromVO(accountVO);
+
+            cards.computeIfAbsent(account.getId(), cc -> new HashSet<>()).add(card);
+            transfers.computeIfAbsent(account.getId(), cc -> new HashSet<>()).add(transfer);
+            accounts.add(account);
+        }
+        for (Account acc : accounts) {
+            acc.setCreditCardList(new ArrayList<>(cards.get(acc.getId())));
+            acc.setElectronicBankTransferList(new ArrayList<>(transfers.get(acc.getId())));
+        }
+        return new ArrayList<>(accounts);
+    }
+
+
+    private Account mapAccountFromVO(AccountActionVO accountVO) {
+        Account account = new Account();
+        account.setId(accountVO.getId());
+        account.setUserName(accountVO.getUserName());
+        account.setPassword(accountVO.getPassword());
+        account.setStatus(accountVO.getStatus());
+        account.setName(accountVO.getName());
+        account.setEmail(accountVO.getEmail());
+        account.setPhone(accountVO.getPhone());
+
+        Address shippingAddress = new Address();
+        shippingAddress.setStreetAddress(accountVO.getStreetAddress());
+        shippingAddress.setState(accountVO.getState());
+        shippingAddress.setZipCode(accountVO.getZipCode());
+        shippingAddress.setCountry(accountVO.getCountry());
+        shippingAddress.setCity(accountVO.getCity());
+        account.setShippingAddress(shippingAddress);
+        return account;
+    }
+
+    private CreditCard mapCreditCardFromVO(AccountActionVO accountVO) {
+        CreditCard card = new CreditCard();
+        card.setNameOnCard(accountVO.getNameOnCard());
+        card.setCardNumber(accountVO.getCardNumber());
+        card.setCode(accountVO.getCode());
+        Address billingAddress = new Address();
+        billingAddress.setStreetAddress(accountVO.getBillingStreetAddress());
+        billingAddress.setState(accountVO.getBillingState());
+        billingAddress.setZipCode(accountVO.getBillingZipCode());
+        billingAddress.setCountry(accountVO.getBillingCountry());
+        billingAddress.setCity(accountVO.getBillingCity());
+        card.setBillingAddress(billingAddress);
+        return card;
+    }
+
+    private ElectronicBankTransfer mapTransferFromVO(AccountActionVO accountVO) {
+        ElectronicBankTransfer transfer = new ElectronicBankTransfer();
+        transfer.setBankName(accountVO.getBankName());
+        transfer.setRoutingNumber(accountVO.getRoutingNumber());
+        transfer.setAccountNumber(accountVO.getAccountNumber());
+        return transfer;
     }
 }
