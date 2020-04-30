@@ -1,7 +1,5 @@
 package com.ra.course.aws.online.shopping.dao;
 
-import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
-import com.ra.course.aws.online.shopping.TestConfig;
 import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
@@ -11,9 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +16,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
-@ActiveProfiles("local")
-@Sql(scripts = {"classpath:schema.sql", "classpath:test-data.sql"})
-public class AccountDaoImplIntegrationTest {
+
+public class AccountDaoImplMockTest {
 
     @Autowired
     private AccountDao accountDao;

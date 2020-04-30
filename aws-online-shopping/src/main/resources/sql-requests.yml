@@ -9,6 +9,8 @@ GET_ACCOUNTS: SELECT acc.id, acc.userName, acc.password, acc.account_status, acc
   JOIN electronic_bank_transfer ebt ON acc.id = ebt.account_id
 
 GET_ADDRESS_ID: SELECT address_id FROM account WHERE id=?
+GET_ADDRESS: SELECT * FROM address WHERE id=?
+DELETE_ADDRESS: DELETE FROM address WHERE id=?
 
 INSERT_ACCOUNT: INSERT INTO account (userName, password, account_status, name, address_id, email, phone) \
   VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id

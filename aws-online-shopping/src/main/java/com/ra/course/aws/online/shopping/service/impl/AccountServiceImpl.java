@@ -4,6 +4,7 @@ import com.ra.course.aws.online.shopping.dao.AccountDao;
 import com.ra.course.aws.online.shopping.dao.AddressDao;
 import com.ra.course.aws.online.shopping.dao.CreditCardDao;
 import com.ra.course.aws.online.shopping.dao.ElectronicBankTransferDao;
+import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
 import com.ra.course.aws.online.shopping.entity.user.Account;
@@ -38,6 +39,9 @@ public class AccountServiceImpl implements AccountService {
     public boolean update(final Account accountToUpdate) {
         Optional.ofNullable(accountDao.findById(accountToUpdate.getId()))
                 .ifPresentOrElse(account -> {
+                    Address newAddress = accountToUpdate.getShippingAddress();
+                    newAddress.setId(account.getId());
+                    addressDao.update(accountToUpdate.getShippingAddress());
                     accountDao.update(accountToUpdate);
                 }, () -> {
                     throw new AccountNotFoundException("Account with id=" + accountToUpdate.getId() + " not found");

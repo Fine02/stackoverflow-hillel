@@ -1,6 +1,9 @@
 package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.dao.AccountDao;
+import com.ra.course.aws.online.shopping.dao.AddressDao;
+import com.ra.course.aws.online.shopping.dao.CreditCardDao;
+import com.ra.course.aws.online.shopping.dao.ElectronicBankTransferDao;
 import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.user.Account;
@@ -22,6 +25,9 @@ class AccountServiceImplTest {
 
     private AccountServiceImpl accountService;
     private AccountDao accountDao = mock(AccountDao.class);
+    private AddressDao addressDao = mock(AddressDao.class);
+    private CreditCardDao creditCardDao = mock(CreditCardDao.class);
+    private ElectronicBankTransferDao electronicBankTransferDao = mock(ElectronicBankTransferDao.class);
     private Account someAccount;
 
     @BeforeEach
