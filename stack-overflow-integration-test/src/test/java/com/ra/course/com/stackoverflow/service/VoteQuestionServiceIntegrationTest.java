@@ -1,95 +1,115 @@
 package com.ra.course.com.stackoverflow.service;
 
-import com.ra.course.com.stackoverflow.entity.Member;
-import com.ra.course.com.stackoverflow.entity.Question;
+import com.ra.course.com.stackoverflow.entity.*;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyVotedException;
 import com.ra.course.com.stackoverflow.exception.service.CannotVoteOwnPostException;
-import com.ra.course.com.stackoverflow.repository.MemberRepository;
-import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import com.ra.course.com.stackoverflow.service.vote.VoteService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @ActiveProfiles("test")
 public class VoteQuestionServiceIntegrationTest {
+    private Account accountID1 = createNewAccount(1L);
+    private Account accountID2 = createNewAccount(2L);
+    private Account accountID3 = createNewAccount(3L);
+    private Member memberID1 = createNewMember(accountID1);
+    private Member memberID2 = createNewMember(accountID2);
+    private Member memberID3 = createNewMember(accountID3);
+    private Question questionID1 = createNewQuestion(1L, memberID1);
+    private Question questionID2 = createNewQuestion(2L, memberID2);
+    private Question questionID3 = createNewQuestion(3L, memberID3);
 
-    @Autowired
-    private QuestionRepository questionRepository;
-    @Autowired
-    private MemberRepository memberRepository;
+
     @Autowired
     private VoteService<Question> voteQuestionService;
-    private Question question;
-    private Member member;
+
 
     @Test
+    @Rollback
     @DisplayName("Integration test for VoteQuestionService to upvote then throws AlreadyVotedException")
     public void whenMemberIsAlreadyUpVotedTheQuestionThenThrowsAlreadyVotedException(){
-        injectQuestionAndMemberPair(1L, 2L);
-        assertThatThrownBy(() -> voteQuestionService.upVote(question, member))
+
+        assertThatThrownBy(() -> voteQuestionService.upVote(questionID1, memberID2))
                 .isInstanceOf(AlreadyVotedException.class);
     }
 
     @Test
+    @Rollback
     @DisplayName("Integration test for VoteQuestionService to downvote then throws AlreadyVotedException")
     public void whenMemberIsAlreadyDownVotedTheQuestionThenThrowsAlreadyVotedException(){
-        injectQuestionAndMemberPair(2L, 1L);
-        assertThatThrownBy(() -> voteQuestionService.downVote(question, member))
+
+        assertThatThrownBy(() -> voteQuestionService.downVote(questionID2, memberID1))
                 .isInstanceOf(AlreadyVotedException.class);
     }
 
     @Test
+    @Rollback
     @DisplayName("Integration test for VoteQuestionService to up/downvote then throws CannotVoteOwnPostException")
     public void whenMemberTryToVoteOwnQuestionThenThrowsCannotVoteOwnPostException(){
-        injectQuestionAndMemberPair(1L, 1L);
-        assertThatThrownBy(() -> voteQuestionService.upVote(question, member))
+
+        assertThatThrownBy(() -> voteQuestionService.upVote(questionID1, memberID1))
                 .isInstanceOf(CannotVoteOwnPostException.class);
-        assertThatThrownBy(() -> voteQuestionService.downVote(question, member))
+        assertThatThrownBy(() -> voteQuestionService.downVote(questionID1, memberID1))
                 .isInstanceOf(CannotVoteOwnPostException.class);
     }
 
     @Test
+    @Rollback
     @DisplayName("Integration test for VoteQuestionService to upvote then OK")
-    public void whenMemberUpVotesTheQuestionThenVoteCountIncrementAndAddReputation() {
-        injectQuestionAndMemberPair(3L, 1L);
-        int voteCountBefore = question.getVoteCount();
-        int reputationBefore = member.getReputation();
+    public void whenMemberUpVotesTheQuestionThenVoteCountIncrement() {
 
-        voteQuestionService.upVote(question, member);
-        var member = memberRepository.findById(1L).get();
+        int voteCountBefore = questionID3.getVoteCount();
 
-        assertEquals(voteCountBefore+1, question.getVoteCount());
-        assertEquals(reputationBefore+5, member.getReputation());
-        assertTrue(member.getUpVotedQuestionsId().contains(question.getId()));
+        voteQuestionService.upVote(questionID3, memberID1);
+        int voteCountAfter = questionID3.getVoteCount();
+
+        assertThat(voteCountBefore < voteCountAfter).isTrue();
     }
 
     @Test
+    @Rollback
     @DisplayName("Integration test for VoteQuestionService to downvote then OK")
-    public void whenMemberDownVotesTheQuestionThenVoteCountIncrementAndAddReputation() {
-        injectQuestionAndMemberPair(1L, 3L);
-        int voteCountBefore = question.getVoteCount();
-        int reputationBefore = member.getReputation();
+    public void whenMemberDownVotesTheQuestionThenVoteCountDecrement() {
 
-        voteQuestionService.downVote(question, member);
-        var memberAfter = memberRepository.findById(3L).get();
+        int voteCountBefore = questionID1.getVoteCount();
 
-        assertEquals(voteCountBefore-1, question.getVoteCount());
-        assertEquals(reputationBefore+5, memberAfter.getReputation());
-        assertTrue(memberAfter.getDownVotedQuestionsId().contains(question.getId()));
+        voteQuestionService.upVote(questionID1, memberID3);
+        int voteCountAfter = questionID1.getVoteCount();
 
+        assertThat(voteCountBefore < voteCountAfter).isTrue();
     }
 
-    private void injectQuestionAndMemberPair(long commentId, long memberId) {
-        question = questionRepository.findById(commentId).get();
-        member = memberRepository.findById(memberId).get();
+
+    private Account createNewAccount(long id) {
+        return Account.builder()
+                .id(id)
+                .password("password")
+                .email("email")
+                .name("name")
+                .reputation(10)
+                .build();
     }
 
+    private Member createNewMember(Account account) {
+        return Member.builder()
+                .account(account)
+                .build();
+    }
+
+    private Question createNewQuestion(long id, Member member) {
+        return Question.builder()
+                .id(id)
+                .description("some question")
+                .title("title")
+                .authorId(member.getAccount().getId())
+                .build();
+    }
 }

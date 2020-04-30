@@ -1,95 +1,130 @@
 package com.ra.course.com.stackoverflow.service;
 
-import com.ra.course.com.stackoverflow.entity.Comment;
-import com.ra.course.com.stackoverflow.entity.Member;
+import com.ra.course.com.stackoverflow.entity.*;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyVotedException;
 import com.ra.course.com.stackoverflow.exception.service.CannotVoteOwnPostException;
-import com.ra.course.com.stackoverflow.repository.CommentRepository;
-import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import com.ra.course.com.stackoverflow.service.vote.VoteService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @ActiveProfiles("test")
 public class VoteCommentServiceIntegrationTest {
+    private Account accountID1 = createNewAccount(1L);
+    private Account accountID2 = createNewAccount(2L);
+    private Account accountID3 = createNewAccount(3L);
+    private Member memberID1 = createNewMember(accountID1);
+    private Member memberID2 = createNewMember(accountID2);
+    private Member memberID3 = createNewMember(accountID3);
+    private Question questionID1 = createNewQuestion(1L, memberID1);
+    private Question questionID2 = createNewQuestion(2L, memberID2);
+    private Comment commentID1 = createNewComment(1L, memberID1, questionID1);
+    private Comment commentID2 = createNewComment(2L, memberID2, questionID2);
+    private Comment commentID3 = createNewComment(3L, memberID3, questionID1);
 
-    @Autowired
-    private CommentRepository commentRepository;
-    @Autowired
-    private MemberRepository memberRepository;
+
     @Autowired
     private VoteService<Comment> voteCommentService;
-    private Comment comment;
-    private Member member;
+
 
     @Test
+    @Rollback
     @DisplayName("Integration test for VoteCommentService to upvote then throws AlreadyVotedException")
     public void whenMemberIsAlreadyUpVotedTheCommentThenThrowsAlreadyVotedException(){
-        injectCommentAndMemberPair(1L, 1L);
-        assertThatThrownBy(() -> voteCommentService.upVote(comment, member))
+
+        assertThatThrownBy(() -> voteCommentService.upVote(commentID1, memberID1))
                 .isInstanceOf(AlreadyVotedException.class);
     }
 
     @Test
+    @Rollback
     @DisplayName("Integration test for VoteCommentService to downvote then throws AlreadyVotedException")
     public void whenMemberIsAlreadyDownVotedTheCommentThenThrowsAlreadyVotedException(){
-        injectCommentAndMemberPair(2L, 2L);
-        assertThatThrownBy(() -> voteCommentService.downVote(comment, member))
+
+        assertThatThrownBy(() -> voteCommentService.downVote(commentID2, memberID2))
                 .isInstanceOf(AlreadyVotedException.class);
     }
 
     @Test
+    @Rollback
     @DisplayName("Integration test for VoteCommentService to up/downvote then throws CannotVoteOwnPostException")
     public void whenMemberTryToVoteOwnCommentThenThrowsCannotVoteOwnPostException(){
-        injectCommentAndMemberPair(1L, 3L);
-        assertThatThrownBy(() -> voteCommentService.upVote(comment, member))
+
+        assertThatThrownBy(() -> voteCommentService.upVote(commentID1, memberID3))
                 .isInstanceOf(CannotVoteOwnPostException.class);
-        assertThatThrownBy(() -> voteCommentService.downVote(comment, member))
+        assertThatThrownBy(() -> voteCommentService.downVote(commentID1, memberID3))
                 .isInstanceOf(CannotVoteOwnPostException.class);
     }
 
     @Test
+    @Rollback
     @DisplayName("Integration test for VoteCommentService to upvote then OK")
-    public void whenMemberUpVotesTheCommentThenVoteCountIncrementAndAddReputation() {
-        injectCommentAndMemberPair(3L, 2L);
-        int voteCountBefore = comment.getVoteCount();
-        int reputationBefore = member.getReputation();
+    public void whenMemberUpVotesTheCommentThenVoteCountIncrement() {
 
-        voteCommentService.upVote(comment, member);
-        var member = memberRepository.findById(2L).get();
+        int voteCountBefore = commentID3.getVoteCount();
 
-        assertEquals(voteCountBefore+1, comment.getVoteCount());
-        assertEquals(reputationBefore+5, member.getReputation());
-        assertTrue(member.getUpVotedCommentsId().contains(comment.getId()));
+        voteCommentService.upVote(commentID3, memberID2);
+        int voteCountAfter = commentID3.getVoteCount();
+
+        assertThat(voteCountBefore < voteCountAfter).isTrue();
     }
 
     @Test
+    @Rollback
     @DisplayName("Integration test for VoteCommentService to downvote then OK")
-    public void whenMemberDownVotesTheCommentThenVoteCountIncrementAndAddReputation() {
-        injectCommentAndMemberPair(2L, 3L);
-        int voteCountBefore = comment.getVoteCount();
-        int reputationBefore = member.getReputation();
+    public void whenMemberDownVotesTheCommentThenVoteCountDecrement() {
 
-        voteCommentService.downVote(comment, member);
-        var memberAfter = memberRepository.findById(3L).get();
+        int voteCountBefore = commentID2.getVoteCount();
 
-        assertEquals(voteCountBefore-1, comment.getVoteCount());
-        assertEquals(reputationBefore+5, memberAfter.getReputation());
-        assertTrue(memberAfter.getDownVotedCommentsId().contains(comment.getId()));
+        voteCommentService.downVote(commentID2, memberID3);
+        int voteCountAfter = commentID2.getVoteCount();
 
+        assertThat(voteCountBefore > voteCountAfter).isTrue();
     }
 
-    private void injectCommentAndMemberPair(long commentId, long memberId) {
-        comment = commentRepository.findById(commentId).get();
-        member = memberRepository.findById(memberId).get();
+
+    private Account createNewAccount(long id) {
+        return Account.builder()
+                .id(id)
+                .password("password")
+                .email("email")
+                .name("name")
+                .reputation(10)
+                .build();
     }
 
+    private Member createNewMember(Account account) {
+        return Member.builder()
+                .account(account)
+                .build();
+    }
+
+    private Question createNewQuestion(long id, Member member) {
+        return Question.builder()
+                .id(id)
+                .description("some question")
+                .title("title")
+                .authorId(member.getAccount().getId())
+                .build();
+    }
+
+    private Comment createNewComment(long id, Member member, Question question) {
+        return Comment.builder()
+                .id(id)
+                .text("Some_comment")
+                .creationDate(LocalDateTime.now())
+                .authorId(member.getAccount().getId())
+                .questionId(question.getId())
+                .voteCount(5)
+                .build();
+    }
 }
