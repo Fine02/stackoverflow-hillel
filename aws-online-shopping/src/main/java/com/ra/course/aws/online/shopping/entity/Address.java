@@ -1,6 +1,7 @@
 package com.ra.course.aws.online.shopping.entity;
 
 public class Address {
+    private Long id;
     private String streetAddress;
     private String city;
     private String state;
@@ -16,6 +17,14 @@ public class Address {
         this.state = state;
         this.zipCode = zipCode;
         this.country = country;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getStreetAddress() {

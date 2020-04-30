@@ -1,7 +1,6 @@
 package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.dao.AccountDao;
-import com.ra.course.aws.online.shopping.dao.Dao;
 import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.user.Account;
@@ -22,12 +21,12 @@ import static org.mockito.Mockito.when;
 class AccountServiceImplTest {
 
     private AccountServiceImpl accountService;
-    private Dao accountDao = mock(Dao.class);
+    private AccountDao accountDao = mock(AccountDao.class);
     private Account someAccount;
 
     @BeforeEach
     void setUp() {
-        accountService = new AccountServiceImpl(accountDao);
+        accountService = new AccountServiceImpl(accountDao, addressDao, creditCardDao, electronicBankTransferDao);
         someAccount = new Account(1L, "John1971", "123ASD", AccountStatus.ACTIVE, "John",
                 new Address(), "john1971@ukr.net", "9379992", new ArrayList<>(), new ArrayList<>());
     }
@@ -39,7 +38,7 @@ class AccountServiceImplTest {
         //given
         when(accountDao.save(someAccount)).thenReturn(expectedNewAccountId);
         //when
-        Long addedAccountID = accountService.save(someAccount);
+        Long addedAccountID = accountService.create(someAccount);
         //then
         assertEquals(expectedNewAccountId, addedAccountID);
     }
@@ -77,7 +76,7 @@ class AccountServiceImplTest {
         Long accountToRemoveId = 1L;
         when(accountDao.findById(accountToRemoveId)).thenReturn(someAccount);
         //when
-        boolean result = accountService.remove(accountToRemoveId);
+        boolean result = accountService.delete(accountToRemoveId);
         //then
         assertTrue(result);
     }
@@ -89,7 +88,7 @@ class AccountServiceImplTest {
         //given
         when(accountDao.findById(accountToRemoveId)).thenReturn(null);
         //when
-        Exception exception = assertThrows(AccountNotFoundException.class, () -> accountService.remove(accountToRemoveId));
+        Exception exception = assertThrows(AccountNotFoundException.class, () -> accountService.delete(accountToRemoveId));
         //then
         String expectedMessage = "Account with id = " + accountToRemoveId + " not found.";
         String actualMessage = exception.getMessage();

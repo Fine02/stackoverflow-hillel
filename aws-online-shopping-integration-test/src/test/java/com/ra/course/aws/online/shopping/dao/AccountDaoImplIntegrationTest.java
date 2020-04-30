@@ -54,16 +54,6 @@ public class AccountDaoImplIntegrationTest {
         }};
         account = new Account("Nick Mason", "123asd", AccountStatus.ACTIVE, "Roger",
                 address, "nick@gmail.com", "+380672710102", creditCards, transfers);
-//        List<CreditCard> newCards = new ArrayList<>() {{
-//            add(new CreditCard("Roger", "1111111111111111", 111, address2));
-//            add(new CreditCard("Roger", "2222222222222222", 222, address3));
-//        }};
-//        account.setCreditCardList(newCards);
-//
-//        List<ElectronicBankTransfer> newTransfers = new ArrayList<>() {{
-//            add(new ElectronicBankTransfer("AlfaBank", "3333333333333333", "333333333"));
-//            add(new ElectronicBankTransfer("PUMB", "4444444444444444", "444444444"));
-//        }};
     }
 
     @Test
@@ -96,15 +86,14 @@ public class AccountDaoImplIntegrationTest {
     @Test
     public void saveCreditCardTest() {
         CreditCard card1 = new CreditCard("Roger", "5525694123698541", 145, address2);
-        CreditCard card2 = new CreditCard("Roger", "5525126354798541", 751, address3);
+//        assertTrue(accountDao.saveCreditCard(card1, 2L));
 
     }
 
     @Test
     public void findAllTest() {
         List<Account> result = accountDao.getAll();
-        int i = 0;
-        System.out.println(result);
+        assertEquals(3, result.size());
     }
 }
 

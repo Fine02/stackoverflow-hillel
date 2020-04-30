@@ -1,18 +1,14 @@
 package com.ra.course.aws.online.shopping.dao.impl;
 
 import com.ra.course.aws.online.shopping.dao.AccountDao;
-import com.ra.course.aws.online.shopping.dao.Dao;
 import com.ra.course.aws.online.shopping.entity.Address;
-import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
 import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.entity.vo.AccountActionVO;
 import com.ra.course.aws.online.shopping.mapper.AccountActionVOMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -26,7 +22,7 @@ import java.util.*;
 //        USING another_table
 //        WHERE table.id = another_table.id AND …
 @Repository
-@PropertySource("account-SQL-requests.yml")
+@PropertySource("sql-requests.yml")
 public class AccountDaoImpl implements AccountDao {
     @Value("${GET_ADDRESS_ID}")
     private transient String GET_ADDRESS_ID;
@@ -44,10 +40,10 @@ public class AccountDaoImpl implements AccountDao {
     private transient String UPDATE_ADDRESS;
     @Value("${DELETE_ACCOUNT}")
     private transient String DELETE_ACCOUNT;
-    @Value("${DELETE_CREDIT_CARDS}")
-    private transient String DELETE_CREDIT_CARDS;
-    @Value("${DELETE_TRANSFERS}")
-    private transient String DELETE_TRANSFERS;
+    @Value("${DELETE_CREDIT_CARD}")
+    private transient String DELETE_CREDIT_CARD;
+    @Value("${DELETE_TRANSFER}")
+    private transient String DELETE_TRANSFER;
     @Value("${GET_ACCOUNTS}")
     private transient String GET_ACCOUNTS;
 
@@ -72,12 +68,8 @@ public class AccountDaoImpl implements AccountDao {
             ps.setString(7, account.getPhone());
             return ps;
         }, keyHolder);
-        Integer savedAccountId = keyHolder.getKey().intValue();
-        saveCreditCards(account.getCreditCardList(), savedAccountId, addressId);
-        saveElectronicBankTransfers(account.getElectronicBankTransferList(), savedAccountId);
-        return savedAccountId.longValue();
+        return keyHolder.getKey().longValue();
     }
-
 
     private Integer saveAddress(Address address) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -93,64 +85,16 @@ public class AccountDaoImpl implements AccountDao {
         return keyHolder.getKey().intValue();
     }
 
-    public void saveCreditCards(final List<CreditCard> creditCards, Integer savedAccountId, Integer addressId) {
-        final int batchSize = 500;
-        for (int j = 0; j < creditCards.size(); j += batchSize) {
-            final List<CreditCard> batchList = creditCards.subList(j, Math.min(j + batchSize, creditCards.size()));
-            jdbcTemplate.batchUpdate(INSERT_CREDIT_CARD,
-                    new BatchPreparedStatementSetter() {
-                        @Override
-                        public void setValues(PreparedStatement ps, int i)
-                                throws SQLException {
-                            CreditCard creditCard = batchList.get(i);
-                            ps.setString(1, creditCard.getNameOnCard());
-                            ps.setString(2, creditCard.getCardNumber());
-                            ps.setInt(3, creditCard.getCode());
-                            ps.setInt(4, addressId);
-                            ps.setInt(5, savedAccountId);
-                        }
-
-                        @Override
-                        public int getBatchSize() {
-                            return batchList.size();
-                        }
-                    });
-        }
-    }
-
-    public void saveElectronicBankTransfers(final List<ElectronicBankTransfer> transfers, Integer savedAccountId) {
-        final int batchSize = 500;
-        for (int j = 0; j < transfers.size(); j += batchSize) {
-            final List<ElectronicBankTransfer> batchList = transfers.subList(j, Math.min(j + batchSize, transfers.size()));
-            jdbcTemplate.batchUpdate(INSERT_ELECTRONIC_BANK_TRANSFER,
-                    new BatchPreparedStatementSetter() {
-                        @Override
-                        public void setValues(PreparedStatement ps, int i)
-                                throws SQLException {
-                            ElectronicBankTransfer transfer = batchList.get(i);
-                            ps.setString(1, transfer.getBankName());
-                            ps.setString(2, transfer.getRoutingNumber());
-                            ps.setString(3, transfer.getAccountNumber());
-                            ps.setInt(4, savedAccountId);
-                        }
-
-                        @Override
-                        public int getBatchSize() {
-                            return batchList.size();
-                        }
-                    });
-        }
-    }
-
     @Override
-    public boolean update(Account account) {   //
-        jdbcTemplate.update(UPDATE_ACCOUNT, account.getUserName(), account.getPassword(), account.getStatus().toString(), account.getName(),
-                account.getEmail(), account.getPhone(), account.getId());
+    public boolean update(Account account) {
+        jdbcTemplate.update(UPDATE_ACCOUNT, account.getUserName(), account.getPassword(), account.getStatus().toString(),
+                account.getName(), account.getEmail(), account.getPhone(), account.getId());
 
         Address newAddress = account.getShippingAddress();
         Integer addressId = jdbcTemplate.queryForObject(GET_ADDRESS_ID, Integer.class, account.getId());
-        jdbcTemplate.update(UPDATE_ADDRESS, newAddress.getStreetAddress(),
-                newAddress.getCity(), newAddress.getState(), newAddress.getZipCode(), newAddress.getCountry(), addressId);
+
+        jdbcTemplate.update(UPDATE_ADDRESS, newAddress.getStreetAddress(), newAddress.getCity(), newAddress.getState(),
+                newAddress.getZipCode(), newAddress.getCountry(), addressId);
         return true;
     }
 
@@ -173,31 +117,6 @@ public class AccountDaoImpl implements AccountDao {
         final List<AccountActionVO> accountVOs;
         accountVOs = jdbcTemplate.query(GET_ACCOUNTS, new AccountActionVOMapper());
         return getMappedAccountsFromVO(accountVOs);
-    }
-
-    @Override
-    public boolean saveCreditCard(CreditCard creditCard, Long accountId) {
-        Address address = creditCard.getBillingAddress();
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(con -> {
-            PreparedStatement ps = con.prepareStatement(INSERT_ADDRESS, new String[]{"id"});
-            ps.setString(1, address.getStreetAddress());
-            ps.setString(2, address.getCity());
-            ps.setString(3, address.getState());
-            ps.setString(4, address.getZipCode());
-            ps.setString(5, address.getCountry());
-            return ps;
-        }, keyHolder);
-        jdbcTemplate.update(INSERT_CREDIT_CARD, creditCard.getNameOnCard(), creditCard.getCardNumber(), creditCard.getCode(),
-                keyHolder.getKey().intValue(), accountId.intValue());
-        return true;
-    }
-
-    @Override
-    public boolean saveElectornicBankTransfer(ElectronicBankTransfer transfer, Long accountId) {
-        jdbcTemplate.update(INSERT_ELECTRONIC_BANK_TRANSFER, transfer.getBankName(), transfer.getRoutingNumber(),
-                transfer.getAccountNumber(), accountId.intValue());
-        return true;
     }
 
     private List<Account> getMappedAccountsFromVO(List<AccountActionVO> accountVOs) {
@@ -237,6 +156,7 @@ public class AccountDaoImpl implements AccountDao {
         account.setPhone(accountVO.getPhone());
 
         Address shippingAddress = new Address();
+        shippingAddress.setId(accountVO.getAddressId());//////////////
         shippingAddress.setStreetAddress(accountVO.getStreetAddress());
         shippingAddress.setState(accountVO.getState());
         shippingAddress.setZipCode(accountVO.getZipCode());
@@ -252,6 +172,7 @@ public class AccountDaoImpl implements AccountDao {
         card.setCardNumber(accountVO.getCardNumber());
         card.setCode(accountVO.getCode());
         Address billingAddress = new Address();
+        billingAddress.setId(accountVO.getBillingAddressId());///////////////
         billingAddress.setStreetAddress(accountVO.getBillingStreetAddress());
         billingAddress.setState(accountVO.getBillingState());
         billingAddress.setZipCode(accountVO.getBillingZipCode());

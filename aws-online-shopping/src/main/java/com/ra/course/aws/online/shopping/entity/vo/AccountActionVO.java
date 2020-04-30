@@ -14,6 +14,7 @@ public class AccountActionVO {
     private AccountStatus status;
     private String name;
 
+    private Long addressId;
     private String streetAddress;
     private String city;
     private String state;
@@ -27,6 +28,7 @@ public class AccountActionVO {
     private String cardNumber;
     private int code;
 
+    private Long billingAddressId;
     private String billingStreetAddress;
     private String billingCity;
     private String billingState;
@@ -75,6 +77,14 @@ public class AccountActionVO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
     }
 
     public String getStreetAddress() {
@@ -155,6 +165,14 @@ public class AccountActionVO {
 
     public void setCode(int code) {
         this.code = code;
+    }
+
+    public Long getBillingAddressId() {
+        return billingAddressId;
+    }
+
+    public void setBillingAddressId(Long billingAddressId) {
+        this.billingAddressId = billingAddressId;
     }
 
     public String getBillingStreetAddress() {
