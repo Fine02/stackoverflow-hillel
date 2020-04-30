@@ -72,7 +72,7 @@ public class OrderServiceImplTest {
 
         boolean actualResponse = orderService.addOrderLogToOrder(ORDER, newOrderLog);
 
-        assertEquals(actualResponse, true);
+        assertTrue(actualResponse);
         verify(orderDao).addOrderLog(ORDER.getOrderLog().add(newOrderLog));
         verify(orderDao).updateOrder(ORDER);
     }

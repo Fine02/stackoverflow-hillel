@@ -12,6 +12,6 @@ public interface Dao<T> {
 
     boolean remove(Long id);
 
-    Product findById(Long id);
+    T findById(Long id);
 
 }

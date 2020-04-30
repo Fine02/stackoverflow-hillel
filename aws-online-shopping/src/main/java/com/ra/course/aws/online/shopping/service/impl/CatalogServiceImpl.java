@@ -6,6 +6,8 @@ import com.ra.course.aws.online.shopping.entity.product.Product;
 import com.ra.course.aws.online.shopping.entity.product.ProductCategory;
 import com.ra.course.aws.online.shopping.exceptions.ProductNotFoundException;
 import com.ra.course.aws.online.shopping.service.CatalogService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,21 +15,21 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 @Service
 public class CatalogServiceImpl implements CatalogService {
-    private transient final Catalog catalog;
+    private transient Catalog catalog = null;
     private transient final ProductDao productDao;
 
     public CatalogServiceImpl(final ProductDao productDao) {
         this.productDao = productDao;
-        this.catalog = createCatalog();
     }
 
     public Catalog getCatalog() {
         return catalog;
     }
 
-    private Catalog createCatalog() {
+    public void createCatalog() {
         final Supplier<Stream<Product>> streamSupplier = () -> productDao.getAll().stream();
 
         final Map<String, List<Product>> productsByNames = streamSupplier
@@ -38,7 +40,7 @@ public class CatalogServiceImpl implements CatalogService {
                 .get()
                 .collect(Collectors.groupingBy(pr -> pr.getCategory().getName()));
 
-        return new Catalog(
+        catalog = new Catalog(
                 LocalDateTime.now(),
                 productsByNames,
                 productsByCat);

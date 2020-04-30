@@ -10,12 +10,14 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
 @SpringBootTest
+@ActiveProfiles("local")
 public class SpringBootContextTest {
     @Autowired
     private ApplicationContext context;
@@ -59,54 +61,10 @@ public class SpringBootContextTest {
     void checkContextForProductService() {
         assertNotNull(context.getBean(ProductService.class));
     }
+
     @Test
     void checkContextForShoppingCartService() {
         assertNotNull(context.getBean(ShoppingCartService.class));
     }
 
-//    @TestConfiguration
-//    static class SpringBootContextTestConfiguration {
-//
-//        @Primary
-//        @Bean
-//        public NotificationDao mockedNotificationDao() {
-//            return mock(NotificationDao.class);
-//        }
-//
-//        @Primary
-//        @Bean
-//        public OrderDao mockedOrderDao() {
-//            return mock(OrderDao.class);
-//        }
-//
-//        @Primary
-//        @Bean
-//        public PaymentDao mockedPaymentDao() {
-//            return mock(PaymentDao.class);
-//        }
-//
-//        @Primary
-//        @Bean
-//        public ShippingDao mockedShippingDao() {
-//            return mock(ShippingDao.class);
-//        }
-//
-//        @Primary
-//        @Bean
-//        public AccountDao mockedAccountDao() {
-//            return mock(AccountDao.class);
-//        }
-//
-//        @Primary
-//        @Bean
-//        public ProductDao mockedProductDao() {
-//            return mock(ProductDao.class);
-//        }
-//
-//        @Primary
-//        @Bean
-//        public ShoppingCartDao mockedShoppingCartDao() {
-//            return mock(ShoppingCartDao.class);
-//        }
-//  }
 }

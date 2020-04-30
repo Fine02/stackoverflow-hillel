@@ -31,10 +31,10 @@ public class TestConfig {
         return mock(ShippingDao.class);
     }
 
-    @Bean
-    public AccountDao mockedAccountDao() {
-        return mock(AccountDao.class);
-    }
+//    @Bean
+//    public AccountDao mockedAccountDao() {
+//        return mock(AccountDao.class);
+//    }
 
 //    @Bean
 //    public ProductDao mockedProductDao() {

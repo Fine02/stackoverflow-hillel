@@ -1,6 +1,7 @@
 package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.dao.AccountDao;
+import com.ra.course.aws.online.shopping.dao.Dao;
 import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.user.Account;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.when;
 class AccountServiceImplTest {
 
     private AccountServiceImpl accountService;
-    private AccountDao accountDao = mock(AccountDao.class);
+    private Dao accountDao = mock(Dao.class);
     private Account someAccount;
 
     @BeforeEach

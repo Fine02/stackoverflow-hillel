@@ -1,6 +1,7 @@
 package com.ra.course.aws.online.shopping.service.impl;
 
 import com.ra.course.aws.online.shopping.dao.AccountDao;
+import com.ra.course.aws.online.shopping.dao.Dao;
 import com.ra.course.aws.online.shopping.entity.user.Account;
 import com.ra.course.aws.online.shopping.exceptions.AccountNotFoundException;
 import com.ra.course.aws.online.shopping.service.AccountService;

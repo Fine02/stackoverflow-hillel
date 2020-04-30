@@ -6,6 +6,7 @@ import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -127,5 +128,20 @@ public class Account {
 
     public void setElectronicBankTransferList(List<ElectronicBankTransfer> electronicBankTransferList) {
         this.electronicBankTransferList = electronicBankTransferList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Account)) return false;
+        Account account = (Account) o;
+        return getId().equals(account.getId()) &&
+                getUserName().equals(account.getUserName()) &&
+                getEmail().equals(account.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUserName(), getEmail());
     }
 }

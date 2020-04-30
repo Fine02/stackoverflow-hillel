@@ -1,5 +1,6 @@
 package com.ra.course.aws.online.shopping.entity;
 import com.ra.course.aws.online.shopping.entity.product.Product;
+import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
 import java.util.List;
