@@ -14,9 +14,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.util.*;
 
-//DELETE FROM table
-//        USING another_table
-//        WHERE table.id = another_table.id AND …
 @Repository
 @PropertySource("sql-requests.yml")
 public class AccountDaoImpl implements AccountDao {
