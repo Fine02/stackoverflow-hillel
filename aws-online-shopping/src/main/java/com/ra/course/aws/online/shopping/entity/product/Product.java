@@ -39,7 +39,6 @@ public class Product {
         this.price = product.getPrice();
         this.availableItemCount = product.getAvailableItemCount();
         this.category = product.getCategory();
-        this.productReviews = getProductReviews();
     }
 
     public Long getId() {

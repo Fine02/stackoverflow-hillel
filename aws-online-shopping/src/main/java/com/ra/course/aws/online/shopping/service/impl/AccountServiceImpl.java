@@ -20,31 +20,32 @@ public class AccountServiceImpl implements AccountService {
     private transient final AccountDao accountDao;
     private transient final AddressDao addressDao;
     private transient final CreditCardDao creditCardDao;
-    private transient final ElectronicBankTransferDao electronicBankTransferDao;
+    private transient final ElectronicBankTransferDao transferDao;
 
     public AccountServiceImpl(final AccountDao accountDao, final AddressDao addressDao, final CreditCardDao creditCardDao,
-                              final ElectronicBankTransferDao electronicBankTransferDao) {
+                              final ElectronicBankTransferDao transferDao) {
         this.accountDao = accountDao;
         this.addressDao = addressDao;
         this.creditCardDao = creditCardDao;
-        this.electronicBankTransferDao = electronicBankTransferDao;
+        this.transferDao = transferDao;
     }
 
     @Override
     public Long create(final Account newAccount) {
-        return accountDao.save(newAccount);
+        final Long addressId = addressDao.save(newAccount.getShippingAddress());
+        return accountDao.save(newAccount, addressId);
     }
 
     @Override
     public boolean update(final Account accountToUpdate) {
         Optional.ofNullable(accountDao.findById(accountToUpdate.getId()))
                 .ifPresentOrElse(account -> {
-                    Address newAddress = accountToUpdate.getShippingAddress();
+                    final Address newAddress = accountToUpdate.getShippingAddress();
                     newAddress.setId(account.getId());
                     addressDao.update(accountToUpdate.getShippingAddress());
                     accountDao.update(accountToUpdate);
                 }, () -> {
-                    throw new AccountNotFoundException("Account with id=" + accountToUpdate.getId() + " not found");
+                    throw new AccountNotFoundException();
                 });
         return true;
     }
@@ -53,7 +54,7 @@ public class AccountServiceImpl implements AccountService {
     public boolean delete(final Long accountId) {
         Optional.ofNullable(accountDao.findById(accountId))
                 .ifPresentOrElse(account -> accountDao.remove(accountId), () -> {
-                    throw new AccountNotFoundException("Account with id = " + accountId + " not found.");
+                    throw new AccountNotFoundException();
                 });
         return true;
     }
@@ -69,34 +70,35 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean resetPassword(Long accountId, String password) {
-        Account account = accountDao.findById(accountId);
+    public boolean resetPassword(final Long accountId, final String password) {
+        final Account account = accountDao.findById(accountId);
         account.setPassword(password);
         accountDao.update(account);
         return true;
     }
 
     @Override
-    public boolean addCreditCard(Long accountId, CreditCard card) {
-        Long billingAddressId = addressDao.save(card.getBillingAddress());
+    public boolean addCreditCard(final Long accountId, final CreditCard card) {
+        final Long billingAddressId = addressDao.save(card.getBillingAddress());
         creditCardDao.save(accountId, card, billingAddressId);
         return true;
     }
 
     @Override
-    public boolean deleteCreditCard(String cardNumber) {
+    public boolean deleteCreditCard(final String cardNumber) {
         creditCardDao.remove(cardNumber);
         return true;
     }
 
     @Override
-    public boolean addElectronicBankTransfer(Long accountId, ElectronicBankTransfer transfer) {
-        electronicBankTransferDao.save(accountId, transfer);
+    public boolean addElectronicBankTransfer(final Long accountId, final ElectronicBankTransfer transfer) {
+        transferDao.save(accountId, transfer);
         return true;
     }
 
     @Override
-    public boolean deleteElectronicBankTransfer(String routingNumber) {
-        return false;
+    public boolean deleteElectronicBankTransfer(final String routingNumber) {
+        transferDao.remove(routingNumber);
+        return true;
     }
 }

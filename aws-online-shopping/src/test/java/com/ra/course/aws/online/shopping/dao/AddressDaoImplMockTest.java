@@ -24,9 +24,9 @@ import static org.mockito.Mockito.verify;
 public class AddressDaoImplMockTest {
 
     private AddressDao addressDao;
-    private Address address;
     private final JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);
     private KeyHolderFactory keyHolderFactory = mock(KeyHolderFactory.class);
+    private Address address;
 
     @BeforeEach
     void setUp() {
@@ -46,19 +46,9 @@ public class AddressDaoImplMockTest {
         when(keyHolder.getKey()).thenReturn(expectedId);
         when(jdbcTemplate.update(Mockito.any(PreparedStatementCreator.class), Mockito.any(KeyHolder.class))).thenReturn(1);
         //when
-        Long savedAccountId = addressDao.save(address);
+        Long savedAddressId = addressDao.save(address);
         //then
-        assertEquals(expectedId, savedAccountId);
-    }
-
-    @Test
-    public void findByIDTest() {
-        //given
-        when(jdbcTemplate.queryForObject(any(), eq(new Object[]{1L}), any(AddressRowMapper.class))).thenReturn(address);
-        //when
-        Address result = addressDao.findById(1L);
-        //then
-        assertEquals(result, address);
+        assertEquals(expectedId, savedAddressId);
     }
 
     @Test
@@ -79,5 +69,14 @@ public class AddressDaoImplMockTest {
         //then
         verify(jdbcTemplate).update(any(), eq(1L));
     }
-}
 
+    @Test
+    public void findByIDTest() {
+        //given
+        when(jdbcTemplate.queryForObject(any(), eq(new Object[]{1L}), any(AddressRowMapper.class))).thenReturn(address);
+        //when
+        Address result = addressDao.findById(1L);
+        //then
+        assertEquals(result, address);
+    }
+}

@@ -6,10 +6,10 @@ public interface AddressDao {
 
     Long save(Address address);
 
-    Address findById(Long id);
-
     boolean update(Address address);
 
     boolean remove(Long id);
+
+    Address findById(Long id);
 
 }

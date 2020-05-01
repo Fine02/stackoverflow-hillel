@@ -6,8 +6,6 @@ import com.ra.course.aws.online.shopping.entity.product.Product;
 import com.ra.course.aws.online.shopping.entity.product.ProductCategory;
 import com.ra.course.aws.online.shopping.exceptions.ProductNotFoundException;
 import com.ra.course.aws.online.shopping.service.CatalogService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

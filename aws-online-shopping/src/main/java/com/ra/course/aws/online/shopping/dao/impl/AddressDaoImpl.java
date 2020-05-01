@@ -15,28 +15,28 @@ import java.sql.PreparedStatement;
 @Repository
 @PropertySource("sql-requests.yml")
 public class AddressDaoImpl implements AddressDao {
-    @Value("${INSERT_ADDRESS}")
-    private transient String INSERT_ADDRESS;
-    @Value("${UPDATE_ADDRESS}")
-    private transient String UPDATE_ADDRESS;
-    @Value("${GET_ADDRESS}")
-    private transient String GET_ADDRESS;
-    @Value("${DELETE_ADDRESS}")
-    private transient String DELETE_ADDRESS;
+    @Value("${getAddress}")
+    private transient String getAddress;
+    @Value("${insertAddress}")
+    private transient String insertAddress;
+    @Value("${updateAddress}")
+    private transient String updateAddress;
+    @Value("${deleteAddress}")
+    private transient String deleteAddress;
 
     private transient final JdbcTemplate jdbcTemplate;
     private transient final KeyHolderFactory keyHolderFactory;
 
-    public AddressDaoImpl(JdbcTemplate jdbcTemplate, KeyHolderFactory keyHolderFactory) {
+    public AddressDaoImpl(final JdbcTemplate jdbcTemplate, final KeyHolderFactory keyHolderFactory) {
         this.jdbcTemplate = jdbcTemplate;
         this.keyHolderFactory = keyHolderFactory;
     }
 
     @Override
-    public Long save(Address address) {
-        KeyHolder keyHolder = keyHolderFactory.newKeyHolder();
+    public Long save(final Address address) {
+        final KeyHolder keyHolder = keyHolderFactory.newKeyHolder();
         jdbcTemplate.update(con -> {
-            PreparedStatement ps = con.prepareStatement(INSERT_ADDRESS, new String[]{"id"});
+            final PreparedStatement ps = con.prepareStatement(insertAddress, new String[]{"id"});
             ps.setString(1, address.getStreetAddress());
             ps.setString(2, address.getCity());
             ps.setString(3, address.getState());
@@ -48,20 +48,20 @@ public class AddressDaoImpl implements AddressDao {
     }
 
     @Override
-    public Address findById(Long id) {
-        return jdbcTemplate.queryForObject(GET_ADDRESS, new Object[]{id}, new AddressRowMapper());
+    public Address findById(final Long id) {
+        return jdbcTemplate.queryForObject(getAddress, new Object[]{id}, new AddressRowMapper());
     }
 
     @Override
-    public boolean update(Address address) {
-        jdbcTemplate.update(UPDATE_ADDRESS, address.getStreetAddress(), address.getCity(), address.getState(),
+    public boolean update(final Address address) {
+        jdbcTemplate.update(updateAddress, address.getStreetAddress(), address.getCity(), address.getState(),
                 address.getZipCode(), address.getCountry(), address.getId());
         return true;
     }
 
     @Override
-    public boolean remove(Long id) {
-        jdbcTemplate.update(DELETE_ADDRESS, id);
+    public boolean remove(final Long id) {
+        jdbcTemplate.update(deleteAddress, id);
         return true;
     }
 }

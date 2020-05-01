@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface AccountDao {
 
-    Long save(Account account);
-
-    Account findById(Long id);
+    Long save(Account account, Long addressId);
 
     boolean update(Account account);
 
     boolean remove(Long id);
+
+    Account findById(Long id);
 
     List<Account> getAll();
 

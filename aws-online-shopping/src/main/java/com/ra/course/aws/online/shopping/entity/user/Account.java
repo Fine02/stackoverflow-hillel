@@ -25,8 +25,7 @@ public class Account {
     public Account() {
     }
 
-    public Account(Long id, String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone, List<CreditCard> creditCardList, List<ElectronicBankTransfer> electronicBankTransferList) {
-        this.id = id;
+    public Account(String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone, List<CreditCard> creditCardList, List<ElectronicBankTransfer> electronicBankTransferList) {
         this.userName = userName;
         this.password = password;
         this.status = status;
@@ -38,7 +37,18 @@ public class Account {
         this.electronicBankTransferList = electronicBankTransferList;
     }
 
-    public Account(String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone, List<CreditCard> creditCardList, List<ElectronicBankTransfer> electronicBankTransferList) {
+    public Account(String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone) {
+        this.userName = userName;
+        this.password = password;
+        this.status = status;
+        this.name = name;
+        this.shippingAddress = shippingAddress;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public Account(Long id, String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone, List<CreditCard> creditCardList, List<ElectronicBankTransfer> electronicBankTransferList) {
+        this.id = id;
         this.userName = userName;
         this.password = password;
         this.status = status;

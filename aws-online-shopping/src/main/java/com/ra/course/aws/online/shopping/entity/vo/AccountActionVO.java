@@ -6,6 +6,7 @@ import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransfer;
 
 import java.util.List;
+import java.util.Objects;
 
 public class AccountActionVO {
     private Long id;
@@ -38,6 +39,41 @@ public class AccountActionVO {
     private String bankName;
     private String routingNumber;
     private String accountNumber;
+
+    public AccountActionVO() {
+    }
+
+    public AccountActionVO(Long id, String userName, String password, AccountStatus status, String name, Long addressId,
+                           String streetAddress, String city, String state, String zipCode, String country, String email,
+                           String phone, String nameOnCard, String cardNumber, int code, Long billingAddressId,
+                           String billingStreetAddress, String billingCity, String billingState, String billingZipCode,
+                           String billingCountry, String bankName, String routingNumber, String accountNumber) {
+        this.id = id;
+        this.userName = userName;
+        this.password = password;
+        this.status = status;
+        this.name = name;
+        this.addressId = addressId;
+        this.streetAddress = streetAddress;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
+        this.country = country;
+        this.email = email;
+        this.phone = phone;
+        this.nameOnCard = nameOnCard;
+        this.cardNumber = cardNumber;
+        this.code = code;
+        this.billingAddressId = billingAddressId;
+        this.billingStreetAddress = billingStreetAddress;
+        this.billingCity = billingCity;
+        this.billingState = billingState;
+        this.billingZipCode = billingZipCode;
+        this.billingCountry = billingCountry;
+        this.bankName = bankName;
+        this.routingNumber = routingNumber;
+        this.accountNumber = accountNumber;
+    }
 
     public Long getId() {
         return id;
@@ -237,5 +273,42 @@ public class AccountActionVO {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AccountActionVO)) return false;
+        AccountActionVO that = (AccountActionVO) o;
+        return getCode() == that.getCode() &&
+                Objects.equals(getId(), that.getId()) &&
+                Objects.equals(getUserName(), that.getUserName()) &&
+                Objects.equals(getPassword(), that.getPassword()) &&
+                getStatus() == that.getStatus() &&
+                Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getAddressId(), that.getAddressId()) &&
+                Objects.equals(getStreetAddress(), that.getStreetAddress()) &&
+                Objects.equals(getCity(), that.getCity()) &&
+                Objects.equals(getState(), that.getState()) &&
+                Objects.equals(getZipCode(), that.getZipCode()) &&
+                Objects.equals(getCountry(), that.getCountry()) &&
+                Objects.equals(getEmail(), that.getEmail()) &&
+                Objects.equals(getPhone(), that.getPhone()) &&
+                Objects.equals(getNameOnCard(), that.getNameOnCard()) &&
+                Objects.equals(getCardNumber(), that.getCardNumber()) &&
+                Objects.equals(getBillingAddressId(), that.getBillingAddressId()) &&
+                Objects.equals(getBillingStreetAddress(), that.getBillingStreetAddress()) &&
+                Objects.equals(getBillingCity(), that.getBillingCity()) &&
+                Objects.equals(getBillingState(), that.getBillingState()) &&
+                Objects.equals(getBillingZipCode(), that.getBillingZipCode()) &&
+                Objects.equals(getBillingCountry(), that.getBillingCountry()) &&
+                Objects.equals(getBankName(), that.getBankName()) &&
+                Objects.equals(getRoutingNumber(), that.getRoutingNumber()) &&
+                Objects.equals(getAccountNumber(), that.getAccountNumber());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUserName());
     }
 }

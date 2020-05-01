@@ -11,27 +11,27 @@ import org.springframework.stereotype.Repository;
 @PropertySource("sql-requests.yml")
 public class ElectronicBankTransferDaoImpl implements ElectronicBankTransferDao {
 
-    @Value("${INSERT_ELECTRONIC_BANK_TRANSFER}")
-    private transient String INSERT_ELECTRONIC_BANK_TRANSFER;
-    @Value("${DELETE_TRANSFER}")
-    private transient String DELETE_TRANSFER;
+    @Value("${insertTransfer}")
+    private transient String insertTransfer;
+    @Value("${deleteTransfer}")
+    private transient String deleteTransfer;
 
     private transient final JdbcTemplate jdbcTemplate;
 
-    public ElectronicBankTransferDaoImpl(JdbcTemplate jdbcTemplate) {
+    public ElectronicBankTransferDaoImpl(final JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public boolean save(Long accountId, ElectronicBankTransfer transfer) {
-        jdbcTemplate.update(INSERT_ELECTRONIC_BANK_TRANSFER, transfer.getBankName(), transfer.getRoutingNumber(),
+    public boolean save(final Long accountId, final ElectronicBankTransfer transfer) {
+        jdbcTemplate.update(insertTransfer, transfer.getBankName(), transfer.getRoutingNumber(),
                 transfer.getAccountNumber(), accountId.intValue());
         return true;
     }
 
     @Override
-    public boolean remove(String routingNumber) {
-        jdbcTemplate.update(DELETE_TRANSFER, routingNumber);
+    public boolean remove(final String routingNumber) {
+        jdbcTemplate.update(deleteTransfer, routingNumber);
         return true;
     }
 }

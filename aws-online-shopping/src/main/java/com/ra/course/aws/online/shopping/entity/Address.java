@@ -1,5 +1,7 @@
 package com.ra.course.aws.online.shopping.entity;
 
+import java.util.Objects;
+
 public class Address {
     private Long id;
     private String streetAddress;
@@ -65,5 +67,23 @@ public class Address {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Address)) return false;
+        Address address = (Address) o;
+        return Objects.equals(getId(), address.getId()) &&
+                Objects.equals(getStreetAddress(), address.getStreetAddress()) &&
+                Objects.equals(getCity(), address.getCity()) &&
+                Objects.equals(getState(), address.getState()) &&
+                Objects.equals(getZipCode(), address.getZipCode()) &&
+                Objects.equals(getCountry(), address.getCountry());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getStreetAddress(), getCity(), getState(), getZipCode(), getCountry());
     }
 }

@@ -1,31 +1,31 @@
-GET_ACCOUNTS: SELECT acc.id, acc.userName, acc.password, acc.account_status, acc.name, acc.email, acc.phone, \
-  add.id, add.streetaddress, add.city, add.state, add.zipcode, add.country, \
+getAccounts: SELECT acc.id, acc.userName, acc.password, acc.account_status, acc.name, acc.email, acc.phone, \
+  add.id AS addressID, add.streetaddress, add.city, add.state, add.zipcode, add.country, \
   cc.nameoncard, cc.cardnumber, cc.code, \
-  cadd.id, cadd.streetaddress AS billingStreetAddress, cadd.city AS billingCity, cadd.state AS billingState, cadd.zipcode AS billingZipcode, cadd.country AS billingCountry, \
+  cadd.id AS billingAddressId, cadd.streetaddress AS billingStreetAddress, cadd.city AS billingCity, cadd.state AS billingState, cadd.zipcode AS billingZipcode, cadd.country AS billingCountry, \
   ebt.bankName, ebt.routingNumber, ebt.accountNumber \
   FROM account acc JOIN address add ON acc.address_id = add.id \
   JOIN credit_card cc ON acc.id = cc.account_id \
   JOIN address cadd ON cc.address_id = cadd.id \
   JOIN electronic_bank_transfer ebt ON acc.id = ebt.account_id
-
-GET_ADDRESS_ID: SELECT address_id FROM account WHERE id=?
-GET_ADDRESS: SELECT * FROM address WHERE id=?
-DELETE_ADDRESS: DELETE FROM address WHERE id=?
-
-INSERT_ACCOUNT: INSERT INTO account (userName, password, account_status, name, address_id, email, phone) \
+insertAccount: INSERT INTO account (userName, password, account_status, name, address_id, email, phone) \
   VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id
+updateAccount: UPDATE account SET userName=?, password=?, account_status=?, name=?, email=?, phone=? WHERE id=?
+deleteAccount: DELETE FROM address AS add USING account AS acc WHERE add.id=acc.address_id AND acc.id=?
 
-INSERT_ADDRESS: INSERT INTO address (streetaddress, city, state, zipcode, country) \
+#GET_ADDRESS_ID: SELECT address_id FROM account WHERE id=?
+getAddress: SELECT * FROM address WHERE id=?
+insertAddress: INSERT INTO address (streetaddress, city, state, zipcode, country) \
   VALUES (?, ?, ?, ?, ?) RETURNING id
+updateAddress: UPDATE address SET streetaddress=?, city=?, state=?, zipcode=?, country=? WHERE id=?
+deleteAddress: DELETE FROM address WHERE id=?
 
-INSERT_CREDIT_CARD: INSERT INTO credit_card (nameOnCard, cardNumber, code, address_id, account_id) \
+
+
+insertCreditCard: INSERT INTO credit_card (nameOnCard, cardNumber, code, address_id, account_id) \
   VALUES (?, ?, ?, ?, ?)
+deleteCreditCard: DELETE FROM address AS add USING credit_card AS cc WHERE add.id=cc.address_id AND cc.cardNumber=?
 
-INSERT_ELECTRONIC_BANK_TRANSFER: INSERT INTO electronic_bank_transfer (bankName, routingNumber, AccountNumber, account_id) \
+insertTransfer: INSERT INTO electronic_bank_transfer (bankName, routingNumber, AccountNumber, account_id) \
   VALUES (?, ?, ?, ?)
-UPDATE_ACCOUNT: UPDATE account SET userName=?, password=?, account_status=?, name=?, email=?, phone=? WHERE id=?
-UPDATE_ADDRESS: UPDATE address SET streetaddress=?, city=?, state=?, zipcode=?, country=? WHERE id=?
-DELETE_ACCOUNT: DELETE FROM address AS add USING account AS acc WHERE add.id=acc.address_id AND acc.id=?
-DELETE_CREDIT_CARD: DELETE FROM address AS add USING credit_card AS cc WHERE add.id=cc.address_id AND cc.cardNumber=?
-DELETE_TRANSFER: DELETE FROM electronic_bank_transfer where routingNumber=?
+deleteTransfer: DELETE FROM electronic_bank_transfer where routingNumber=?
 

@@ -10,8 +10,8 @@ import java.sql.SQLException;
 @Service
 public class AddressRowMapper implements RowMapper<Address> {
     @Override
-    public Address mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Address address = new Address();
+    public Address mapRow(final ResultSet rs, final int rowNum) throws SQLException {
+        final Address address = new Address();
         address.setId(rs.getLong("id"));
         address.setStreetAddress(rs.getString("streetAddress"));
         address.setCity(rs.getString("city"));
