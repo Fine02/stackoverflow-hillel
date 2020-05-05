@@ -14,12 +14,14 @@ import java.util.List;
 
 @Repository
 public class JdbcOrderDaoImpl implements OrderDao {
-    public static final String UPDATE_ORDER = "UPDATE \"order\" SET  order_status_id=? WHERE orderNumber=?";
+    //public static final String UPDATE_ORDER = "UPDATE \"order\" SET  order_status_id=? WHERE orderNumber=?";
+    public static final String UPDATE_ORDER = "UPDATE `order` SET  order_status_id=? WHERE orderNumber=?";
     public static final String GET_ID_O_STATUS = "SELECT os.id FROM order_status os WHERE os.status=?";
     public static final String FIND_ORDER_LOG = "SELECT ol.id, ol.orderNumber, ol.creationDate, os.status, ol.order_id FROM order_log ol JOIN order_status os ON ol.order_status_id = os.id WHERE ol.id=?";
     public static final String GET_OLOG_BY_ID = "SELECT ol.id, ol.orderNumber, ol.creationDate, os.status FROM order_log ol JOIN order_status os ON ol.order_status_id = os.id WHERE ol.id=?";
     public static final String INSERT_ORDER_LOG = "INSERT INTO order_log (orderNumber, creationDate, order_status_id, order_id) VALUES (?, ?, ?, ?)";
-    public static final String GET_ORDER_ID = "SELECT id FROM \"order\"  WHERE orderNumber=?";
+    //public static final String GET_ORDER_ID = "SELECT id FROM \"order\"  WHERE orderNumber=?";
+    public static final String GET_ORDER_ID = "SELECT id FROM `order`  WHERE orderNumber=?";
 
     public static final String GET_MEMBER_BY_ID = " SELECT \n" +
             "\t    m.account_id,\n" +

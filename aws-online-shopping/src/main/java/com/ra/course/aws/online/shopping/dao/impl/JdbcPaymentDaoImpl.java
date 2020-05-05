@@ -3,15 +3,25 @@ package com.ra.course.aws.online.shopping.dao.impl;
 import com.ra.course.aws.online.shopping.dao.PaymentDao;
 import com.ra.course.aws.online.shopping.entity.payment.CreditCardTransaction;
 import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransaction;
+import com.ra.course.aws.online.shopping.keyholder.KeyHolderFactory;
 import com.ra.course.aws.online.shopping.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 @Repository
 public class JdbcPaymentDaoImpl implements PaymentDao {
-    public static final String INSERT_PAYMENT = "INSERT INTO payment (payment_status_id, amount) VALUES (?, ?) RETURNING payment.id";
+    //public static final String INSERT_PAYMENT = "INSERT INTO payment (payment_status_id, amount) VALUES (?, ?) RETURNING payment.id";
+    public static final String INSERT_PAYMENT = "INSERT INTO payment (payment_status_id, amount) VALUES (?, ?)";
     public static final String GET_STATUS_ID = "SELECT ps.id FROM payment_status ps WHERE ps.status=?";
     public static final String INSERT_ETRANS = "INSERT INTO electronic_bank_transaction (payment_id) VALUES (?)";
     public static final String INSERT_CTRANS = "INSERT INTO credit_card_transaction (payment_id) VALUES (?)";
@@ -36,26 +46,50 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
     private transient final JdbcTemplate jdbcTemplate;
     private transient final GetLastIdRowMapper getLastId;
     private transient final MemberBooleanRowMapper memberBoolean;
+    private transient final KeyHolderFactory keyHolderFactory;
+
 
     @Autowired
-    public JdbcPaymentDaoImpl(final JdbcTemplate jdbcTemplate, final GetLastIdRowMapper getLastId, final MemberBooleanRowMapper memberBoolean) {
+    public JdbcPaymentDaoImpl(final JdbcTemplate jdbcTemplate, final GetLastIdRowMapper getLastId, final MemberBooleanRowMapper memberBoolean, KeyHolderFactory keyHolderFactory) {
         this.jdbcTemplate = jdbcTemplate;
         this.getLastId = getLastId;
         this.memberBoolean = memberBoolean;
+        this.keyHolderFactory = keyHolderFactory;
     }
 
     @Override
     public void createTransaction(final ElectronicBankTransaction bankTransaction) {
         final Integer paymentStatusID = jdbcTemplate.queryForObject(GET_STATUS_ID, getLastId, bankTransaction.getStatus().toString());
-        final Integer lastInsertId = jdbcTemplate.queryForObject(INSERT_PAYMENT, getLastId, paymentStatusID, bankTransaction.getAmount());
-        jdbcTemplate.update(INSERT_ETRANS, lastInsertId);
+        final KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(final Connection con) throws SQLException {
+                final PreparedStatement pstm = con.prepareStatement(INSERT_PAYMENT, Statement.RETURN_GENERATED_KEYS);
+                pstm.setInt(1, paymentStatusID);
+                pstm.setDouble(2, bankTransaction.getAmount());
+                return pstm;
+            }
+        }, keyHolder);
+        Long insertId = keyHolder.getKey().longValue();
+        jdbcTemplate.update(INSERT_ETRANS, insertId);
     }
 
     @Override
     public void createTransaction(final CreditCardTransaction cardTransaction) {
         final Integer paymentStatusID = jdbcTemplate.queryForObject(GET_STATUS_ID, getLastId, cardTransaction.getStatus().toString());
-        final Integer lastInsertId = jdbcTemplate.queryForObject(INSERT_PAYMENT, getLastId, paymentStatusID, cardTransaction.getAmount());
-        jdbcTemplate.update(INSERT_CTRANS, lastInsertId);
+        final KeyHolder keyHolder = keyHolderFactory.newKeyHolder();
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(final Connection con) throws SQLException {
+                final PreparedStatement pstm = con.prepareStatement(INSERT_PAYMENT, Statement.RETURN_GENERATED_KEYS);
+                pstm.setInt(1, paymentStatusID);
+                pstm.setDouble(2, cardTransaction.getAmount());
+                return pstm;
+            }
+        }, keyHolder);
+
+        Long insertId = keyHolder.getKey().longValue();
+        jdbcTemplate.update(INSERT_CTRANS, insertId);
     }
 
     @Override

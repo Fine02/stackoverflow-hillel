@@ -11,15 +11,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
-//@ActiveProfiles("local")
 @ActiveProfiles("test")
-
-@Sql(scripts = "classpath:test-data.sql")
-//@Sql({"classpath:schema.sql", "classpath:test-data.sql"})
-//@Sql({"classpath:schema.sql", "classpath:test-data.sql"})
+@Sql({"classpath:schema.sql", "classpath:data.sql"})
 public class PaymentDaoImplIntegrationTest {
 
     @Autowired

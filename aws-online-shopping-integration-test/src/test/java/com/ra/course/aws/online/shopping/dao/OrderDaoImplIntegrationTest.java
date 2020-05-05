@@ -18,11 +18,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
-//@ActiveProfiles("local")
 @ActiveProfiles("test")
-//@Sql({"classpath:schema.sql", "classpath:test-data.sql"})
-@Sql({"classpath:schema.sql", "classpath:test-data.sql"})
-
+@Sql({"classpath:schema.sql", "classpath:data.sql"})
 public class OrderDaoImplIntegrationTest {
 
     @Autowired

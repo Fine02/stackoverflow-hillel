@@ -19,8 +19,7 @@ public class JdbcShippingDaoImpl implements ShippingDao {
     public static final String GET_SHIPMENT_ID = "SELECT id FROM shipment  WHERE shipmentNumber=?";
     public static final String GET_STATUS_ID = "SELECT ss.id FROM shipment_status ss WHERE ss.status=?";
     public static final String INSERT_SLOG = "INSERT INTO shipment_log (shipmentNumber, shipment_status_id, creationDate, shipment_id) VALUES (?, ?, ?, ?)";
-    public static final String UPDATE_ADDRESS = "UPDATE address SET streetAddress=?, city=?, state=?, zipCode=?, country=? WHERE id=?";
-
+    public static final String UPDATE_ADDRESS = "UPDATE address SET streetAddress=?, city=?, state=?, zipcode=?, country=? WHERE id=?";
     public static final String GET_ADDRESS_ID = "SELECT a.address_id id\n" +
             "FROM member m JOIN account a ON m.account_id=a.id WHERE m.id=?";
 

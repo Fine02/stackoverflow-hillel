@@ -14,7 +14,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class JdbcNotificationDaoImpl implements NotificationDao {
-    public static final String INSERT_NOTIFIC = "INSERT INTO notification (createdOn, content) VALUES (?, ?) RETURNING notification.id";
+    //public static final String INSERT_NOTIFIC = "INSERT INTO notification (createdOn, content) VALUES (?, ?) RETURNING notification.id";
+    //public static final String INSERT_NOTIFIC = "INSERT INTO notification (createdOn, content) VALUES (?, ?); SELECT LAST_INSERT_ID() ";
+
+    public static final String INSERT_NOTIFIC = "INSERT INTO notification (createdOn, content) VALUES (?, ?)";
+    public static final String GET_LAST_ID = "SELECT LAST_INSERT_ID()";
+
     public static final String INSERT_SNOTIFIC = "INSERT INTO sms_notification (phone, notification_id) VALUES (?, ?)";
     public static final String GET_SMS = "SELECT n. createdOn, n. content, sn.phone FROM sms_notification sn JOIN notification n ON sn.notification_id = n.id WHERE n.id=?";
 
@@ -49,6 +54,20 @@ public class JdbcNotificationDaoImpl implements NotificationDao {
             return null;
         }
     }
+
+//    @Override
+//    public SMSNotification createSMSNotification(final SMSNotification smsNotification) {
+//        try {
+//
+//
+//             jdbcTemplate.update(INSERT_NOTIFIC, smsNotification.getCreatedOn(), smsNotification.getContent());
+//            final Integer lastInsertId = jdbcTemplate.queryForObject(GET_LAST_ID, getLastId);
+//            jdbcTemplate.update(INSERT_SNOTIFIC, smsNotification.getPhone(), LAST_INSERT_ID());
+//            return jdbcTemplate.queryForObject(GET_SMS, smsMapper, lastInsertId);
+//        } catch (EmptyResultDataAccessException ex) {
+//            return null;
+//        }
+//    }
 
     @Override
     public EmailNotification createEmailNotification(final EmailNotification emailNotification) {
