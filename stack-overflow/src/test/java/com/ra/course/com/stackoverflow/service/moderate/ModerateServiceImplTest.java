@@ -28,17 +28,17 @@ public class ModerateServiceImplTest {
     private ModerateService moderateService;
 
     private Account account = Account.builder()
+                                     .id(id)
                                      .password("password")
                                      .email("email")
                                      .name("name")
                                      .build();
 
     private Member member = Member.builder()
-                                  .id(id)
                                   .account(account)
                                   .build();
 
-    private Tag tag = new Tag(id, TAG_NAME, description, List.of(), 1, 1);
+    private Tag tag = new Tag(id, TAG_NAME, description);
 
     private Question question = constructQuestion().build();
 
@@ -52,15 +52,10 @@ public class ModerateServiceImplTest {
     public void shouldCloseQuestion() {
         Question expectedResponse = constructCloseQuestion(question);
         when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
-        when(questionRepository.update(question)).thenReturn(expectedResponse);
 
         Question actualResponse = moderateService.closeQuestion(question);
 
         assertThat(actualResponse).isEqualTo(expectedResponse);
-
-        verify(questionRepository).findById(question.getId());
-        verify(questionRepository).update(question);
-        verifyNoMoreInteractions(questionRepository);
     }
 
     @Test
@@ -69,23 +64,15 @@ public class ModerateServiceImplTest {
 
         assertThatThrownBy(() -> moderateService.closeQuestion(question))
                 .isInstanceOf(QuestionNotFoundException.class);
-
-        verify(questionRepository).findById(question.getId());
-        verifyNoMoreInteractions(questionRepository);
     }
 
     @Test
     public void shouldReopenQuestion() {
         when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
-        when(questionRepository.update(question)).thenReturn(question);
 
         Question actualResponse = moderateService.reopenQuestion(question);
 
         assertThat(actualResponse).isEqualTo(question);
-
-        verify(questionRepository).findById(question.getId());
-        verify(questionRepository).update(question);
-        verifyNoMoreInteractions(questionRepository);
     }
 
     @Test
@@ -94,24 +81,16 @@ public class ModerateServiceImplTest {
 
         assertThatThrownBy(() -> moderateService.reopenQuestion(question))
                 .isInstanceOf(QuestionNotFoundException.class);
-
-        verify(questionRepository).findById(question.getId());
-        verifyNoMoreInteractions(questionRepository);
     }
 
     @Test
     public void shouldUnDeleteQuestion() {
         Question expectedResponse = constructUnDeleteQuestion(question);
         when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
-        when(questionRepository.update(question)).thenReturn(question);
 
         Question actualResponse = moderateService.undeleteQuestion(question);
 
         assertThat(actualResponse).isEqualTo(expectedResponse);
-
-        verify(questionRepository).findById(question.getId());
-        verify(questionRepository).update(question);
-        verifyNoMoreInteractions(questionRepository);
     }
 
     @Test
@@ -120,9 +99,6 @@ public class ModerateServiceImplTest {
 
         assertThatThrownBy(() -> moderateService.undeleteQuestion(question))
                 .isInstanceOf(QuestionNotFoundException.class);
-
-        verify(questionRepository).findById(question.getId());
-        verifyNoMoreInteractions(questionRepository);
     }
 
     private Question constructUnDeleteQuestion(Question question) {
@@ -140,7 +116,7 @@ public class ModerateServiceImplTest {
                        .id(id)
                        .description(description)
                        .title("title")
-                       .author(member)
+                       .authorId(member.getAccount().getId())
                        .tagList(List.of(tag));
 
     }

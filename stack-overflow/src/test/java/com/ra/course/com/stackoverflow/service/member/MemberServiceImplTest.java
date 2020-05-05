@@ -3,13 +3,16 @@ package com.ra.course.com.stackoverflow.service.member;
 import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
+import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -20,23 +23,25 @@ public class MemberServiceImplTest {
 
     private Question expectedQuestion;
     private Question givenQuestion;
+    private Member expectedMember;
+    MemberRepository mockedMemberRepository;
 
 
     @BeforeEach
     void setUp() {
-        MemberRepository mockedMemberRepository = mock(MemberRepository.class);
+        mockedMemberRepository = mock(MemberRepository.class);
         QuestionRepository mockedQuestionRepository = mock(QuestionRepository.class);
         memberService = new MemberServiceImpl(mockedQuestionRepository, mockedMemberRepository);
 
-        Member expectedMember = buildMember();
+        expectedMember = buildMember();
         expectedQuestion = buildQuestion(expectedMember);
         expectedMember.getQuestions().add(expectedQuestion);
 
         Member givenMember = buildMember();
         givenQuestion = buildQuestion(givenMember);
 
-        when(mockedMemberRepository.update(givenMember)).thenReturn(expectedMember);
         when(mockedQuestionRepository.save(givenQuestion)).thenReturn(expectedQuestion);
+        when(mockedMemberRepository.findById(42L)).thenReturn(Optional.ofNullable(expectedMember));
     }
 
     @Test
@@ -45,10 +50,16 @@ public class MemberServiceImplTest {
         Question actualQuestion = memberService.postQuestion(givenQuestion);
 
         //then
-        assertEquals(expectedQuestion.getAuthor().getQuestions(), actualQuestion.getAuthor().getQuestions());
+        assertTrue(expectedMember.getQuestions().contains(actualQuestion));
     }
 
+    @Test
+    public void whenPostQuestionCalledButMemberNotFoundInDBThenThrowException() {
+        when(mockedMemberRepository.findById(expectedMember.getAccount().getId())).thenReturn(Optional.empty());
 
+        assertThatThrownBy(() -> memberService.postQuestion(expectedQuestion))
+            .isInstanceOf(MemberNotFoundException.class);
+    }
 
     @Test
     public void whenPostQuestionCalledReturnExpectedQuestion() {
@@ -66,9 +77,8 @@ public class MemberServiceImplTest {
 
     private Member buildMember() {
         return Member.builder()
-                .id(42L)
                 .account(Account.builder()
-                        .id(1L)
+                        .id(42L)
                         .name("Test")
                         .password("test1234")
                         .email("test@gmail.com")
@@ -80,7 +90,7 @@ public class MemberServiceImplTest {
         return Question.builder()
                 .id(24L)
                 .title("Test")
-                .author(member)
+                .authorId(member.getAccount().getId())
                 .build();
     }
 }

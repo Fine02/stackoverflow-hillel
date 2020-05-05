@@ -18,10 +18,4 @@ public class Tag {
     @NonNull
     private String description;
 
-    @NonNull
-    private List<Question> questionList;
-
-    private int dailyAskedFrequency;
-
-    private int weeklyAskedFrequency;
 }

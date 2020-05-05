@@ -7,6 +7,7 @@ import com.ra.course.com.stackoverflow.exception.service.TagAlreadyAddedExceptio
 import com.ra.course.com.stackoverflow.repository.AnswerRepository;
 import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import com.ra.course.com.stackoverflow.repository.TagRepository;
+import com.ra.course.com.stackoverflow.repository.TagQuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,9 +25,10 @@ public class QuestionServiceImplTest {
     private final long ID = 1L;
     private AnswerRepository answerRepository;
     private QuestionRepository questionRepository;
+    private TagQuestionRepository tagQuestionRepository;
     private TagRepository tagRepository;
-    private Account account = createNewAccount();
-    private Member member = createNewMember(ID, account);
+    private Account account = createNewAccount(ID);
+    private Member member = createNewMember(account);
     private Question question = createNewQuestion(ID, member);
     private Answer answer = createNewAnswer(ID, member, question);
     private Tag tag = createNewTag(ID);
@@ -37,12 +39,13 @@ public class QuestionServiceImplTest {
         answerRepository = mock(AnswerRepository.class);
         questionRepository = mock(QuestionRepository.class);
         tagRepository = mock(TagRepository.class);
+        tagQuestionRepository = mock(TagQuestionRepository.class);
 
-        questionService = new QuestionServiceImpl(answerRepository, questionRepository, tagRepository);
+        questionService = new QuestionServiceImpl(answerRepository, questionRepository, tagRepository, tagQuestionRepository);
     }
 
     @Test
-    public void whenAddAnswerToOpenQuestionThenReturnNewAnswerWithId() {
+    public void whenAddAnswerToOpenQuestionThenReturnUpdatedQuestion() {
         //given
         question.setStatus(QuestionStatus.OPEN);
 
@@ -51,10 +54,9 @@ public class QuestionServiceImplTest {
         when(answerRepository.save(answer)).thenReturn(answer);
 
         //then
-        var resultAnswer = questionService.addAnswerToQuestion(answer);
+        var resultQuestion = questionService.addAnswerToQuestion(answer);
 
-        assertThat(resultAnswer.getId()).isEqualTo(ID);
-        assertThat(question.getAnswerList()).contains(resultAnswer);
+        assertThat(question.getAnswerList()).contains(answer);
     }
 
 
@@ -146,17 +148,17 @@ public class QuestionServiceImplTest {
     }
 
 
-    private Account createNewAccount() {
+    private Account createNewAccount(long id) {
         return Account.builder()
+                .id(id)
                 .password("password")
                 .email("email")
                 .name("name")
                 .build();
     }
 
-    private Member createNewMember(long id, Account account) {
+    private Member createNewMember(Account account) {
         return Member.builder()
-                .id(id)
                 .account(account)
                 .build();
     }
@@ -166,7 +168,7 @@ public class QuestionServiceImplTest {
                 .id(id)
                 .description("some_question")
                 .title("title")
-                .author(member)
+                .authorId(member.getAccount().getId())
                 .build();
     }
 
@@ -175,15 +177,14 @@ public class QuestionServiceImplTest {
                 .id(id)
                 .answerText("answer_text")
                 .creationDate(LocalDateTime.now())
-                .author(member)
-                .question(question)
+                .authorId(member.getAccount().getId())
+                .questionId(question.getId())
                 .photos(new ArrayList<>())
                 .comments(new ArrayList<>())
                 .build();
     }
 
     private Tag createNewTag(long id) {
-        return new Tag(id, "tag_name", "tag_description",
-                new ArrayList<>(), 1, 2);
+        return new Tag(id, "tag_name", "tag_description");
     }
 }

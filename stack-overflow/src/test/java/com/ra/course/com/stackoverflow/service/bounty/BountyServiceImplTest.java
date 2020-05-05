@@ -2,10 +2,10 @@ package com.ra.course.com.stackoverflow.service.bounty;
 
 import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Bounty;
-import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
+import com.ra.course.com.stackoverflow.entity.enums.QuestionClosingRemark;
+import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
 import com.ra.course.com.stackoverflow.exception.repository.QuestionRepositoryException;
-import com.ra.course.com.stackoverflow.exception.service.InternalServerErrorException;
 import com.ra.course.com.stackoverflow.repository.BountyRepository;
 import com.ra.course.com.stackoverflow.repository.QuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +40,7 @@ class BountyServiceImplTest {
         questionRepository = mock(QuestionRepository.class);
         bountyRepository = mock(BountyRepository.class);
         bountyService = new BountyServiceImpl(questionRepository, bountyRepository);
-        bounty = new Bounty(id, reputation, LocalDateTime.now(), Member.builder().account(account).build());
+        bounty = new Bounty(id, reputation, LocalDateTime.now(), 1L);
         questionWithBounty = constructQuestionWithBounty();
         questionWithoutBounty = constructQuestionWithoutBounty();
     }
@@ -50,7 +50,6 @@ class BountyServiceImplTest {
         when(questionRepository.findById(questionWithoutBounty.getId())).thenReturn(Optional.of(questionWithoutBounty));
         when(bountyRepository.findById(bounty.getId())).thenReturn(Optional.empty());
         when(bountyRepository.save(bounty)).thenReturn(bounty);
-        when(questionRepository.update(questionWithBounty)).thenReturn(questionWithBounty);
 
         Optional<Bounty> actualResult = bountyService.addBounty(questionWithoutBounty, bounty);
 
@@ -63,7 +62,6 @@ class BountyServiceImplTest {
     public void shouldAddExistingBountyToQuestion() {
         when(bountyRepository.findById(bounty.getId())).thenReturn(Optional.of(bounty));
         when(questionRepository.findById(questionWithoutBounty.getId())).thenReturn(Optional.of(questionWithoutBounty));
-        when(questionRepository.update(questionWithBounty)).thenReturn(questionWithBounty);
 
         Optional<Bounty> actualResult = bountyService.addBounty(questionWithoutBounty, bounty);
 
@@ -79,18 +77,6 @@ class BountyServiceImplTest {
         assertThatThrownBy(() -> bountyService.addBounty(questionWithoutBounty, bounty)).isInstanceOf(QuestionRepositoryException.class);
     }
 
-    @Test
-    public void shouldDeleteBountyIfQuestionUpdateThrowException() {
-        when(bountyRepository.findById(bounty.getId())).thenReturn(Optional.of(bounty));
-        when(questionRepository.findById(questionWithoutBounty.getId())).thenReturn(Optional.of(questionWithoutBounty));
-        when(questionRepository.update(questionWithBounty)).thenThrow(new InternalServerErrorException(""));
-
-        Optional<Bounty> actualResult = bountyService.addBounty(questionWithoutBounty, bounty);
-
-        assertThat(actualResult).isEmpty();
-
-        verify(questionRepository).update(questionWithBounty);
-    }
 
     private Question constructQuestionWithBounty() {
         Question question = constructQuestionWithoutBounty();
@@ -100,12 +86,15 @@ class BountyServiceImplTest {
 
     private Question constructQuestionWithoutBounty() {
         return Question.builder()
-                       .id(id)
-                       .title("title")
-                       .author(Member.builder()
-                                     .id(id)
-                                     .account(account)
-                                     .build())
-                       .build();
+                .id(id)
+                .title("title")
+                .authorId(id)
+                .description("Some description")
+                .creationTime(LocalDateTime.now())
+                .updateTime(LocalDateTime.now())
+                .status(QuestionStatus.OPEN)
+                .closingRemark(QuestionClosingRemark.NOT_MARKED_FOR_CLOSING)
+                .bounty(Optional.ofNullable(bounty))
+                .build();
     }
 }

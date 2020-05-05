@@ -1,7 +1,7 @@
 package com.ra.course.com.stackoverflow.entity.enums;
 
 public enum Badge {
-    STUDENT("First question with score of 1 or more ", BadgeLevel.BRONZE),
+    STUDENT("First question with score of 1 or more", BadgeLevel.BRONZE),
     TEACHER("Answer a question with score of 1 or more", BadgeLevel.BRONZE),
     COMMENTATOR("Leave 10 comments", BadgeLevel.BRONZE),
     CRITIC("First down vote", BadgeLevel.BRONZE),

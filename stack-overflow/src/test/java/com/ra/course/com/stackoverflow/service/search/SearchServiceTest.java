@@ -33,23 +33,23 @@ class SearchServiceTest {
     private List<Question> expectedResult;
 
     private Account account = Account.builder()
+                                     .id(id)
                                      .password("password")
                                      .email("email")
                                      .name("name")
                                      .build();
 
     private Member member = Member.builder()
-                                  .id(id)
                                   .account(account)
                                   .build();
 
-    private Tag tag = new Tag(id, TAG_NAME, description, List.of(), 1, 1);
+    private Tag tag = new Tag(id, TAG_NAME, description);
 
     private Question question = Question.builder()
                                         .id(id)
                                         .description(description)
                                         .title("title")
-                                        .author(member)
+                                        .authorId(member.getAccount().getId())
                                         .tagList(List.of(tag))
                                         .build();
 

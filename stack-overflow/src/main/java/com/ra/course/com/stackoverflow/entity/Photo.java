@@ -10,17 +10,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Photo<T> {
+public class Photo {
 
     @EqualsAndHashCode.Include
-    private final long Id;
+    private final long id;
 
     @NonNull
     private String photoPath;
 
     @NonNull
     private LocalDateTime creationDate;
-
-    @NonNull
-    private T commentable;
+    private final Long answerId;
+    private final Long questionId;
 }

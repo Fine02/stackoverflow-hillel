@@ -25,8 +25,8 @@ public class CommentServiceImplTest {
     private QuestionRepository questionRepository;
     private AnswerRepository answerRepository;
     private final long ID = 1L;
-    private Account account = createNewAccount();
-    private Member member = createNewMember(ID, account);
+    private Account account = createNewAccount(ID);
+    private Member member = createNewMember(account);
     private Question question = createNewQuestion(ID, member);
     private Answer answer = createNewAnswer(ID, member, question);
     private Comment comment = createNewComment(ID, member, question);
@@ -43,7 +43,7 @@ public class CommentServiceImplTest {
 
 
     @Test
-    public void whenAddCommentToOpenQuestionThenReturnNewCommentWithId() {
+    public void whenAddCommentToOpenQuestionThenReturnUpdatedQuestion() {
         //given
         question.setStatus(QuestionStatus.OPEN);
 
@@ -52,22 +52,20 @@ public class CommentServiceImplTest {
         when(questionRepository.findById(ID)).thenReturn(Optional.of(question));
 
         //then
-        var resultComment = commentService.addCommentToQuestion(comment, question);
-        assertThat(resultComment.getId()).isEqualTo(ID);
-        assertThat(question.getCommentList()).contains(resultComment);
+        var resultQuestion = commentService.addCommentToQuestion(comment, question);
+        assertThat(resultQuestion.getCommentList()).contains(comment);
     }
 
 
     @Test
-    public void whenAddCommentToAnswerThenReturnNewCommentWithId() {
+    public void whenAddCommentToAnswerThenReturnUpdatedAnswer() {
         //when
         when(commentRepository.save(comment)).thenReturn(comment);
         when(answerRepository.findById(ID)).thenReturn(Optional.of(answer));
 
         //then
-        var resultComment = commentService.addCommentToAnswer(comment, answer);
-        assertThat(resultComment.getId()).isEqualTo(ID);
-        assertThat(answer.getComments()).contains(resultComment);
+        var resultAnswer = commentService.addCommentToAnswer(comment, answer);
+        assertThat(answer.getComments()).contains(comment);
     }
 
 
@@ -101,17 +99,17 @@ public class CommentServiceImplTest {
     }
 
 
-    private Account createNewAccount() {
+    private Account createNewAccount(long id) {
         return Account.builder()
+                .id(id)
                 .password("password")
                 .email("email")
                 .name("name")
                 .build();
     }
 
-    private Member createNewMember(long id, Account account) {
+    private Member createNewMember(Account account) {
         return Member.builder()
-                .id(id)
                 .account(account)
                 .build();
     }
@@ -121,7 +119,7 @@ public class CommentServiceImplTest {
                 .id(id)
                 .description("some question")
                 .title("title")
-                .author(member)
+                .authorId(member.getAccount().getId())
                 .build();
     }
 
@@ -130,8 +128,8 @@ public class CommentServiceImplTest {
                 .id(id)
                 .answerText("answer_text")
                 .creationDate(LocalDateTime.now())
-                .author(member)
-                .question(question)
+                .authorId(member.getAccount().getId())
+                .questionId(question.getId())
                 .photos(new ArrayList<>())
                 .comments(new ArrayList<>())
                 .build();
@@ -142,8 +140,8 @@ public class CommentServiceImplTest {
                 .id(id)
                 .text("Some_comment")
                 .creationDate(LocalDateTime.now())
-                .author(member)
-                .commentable(question)
+                .authorId(member.getAccount().getId())
+                .questionId(question.getId())
                 .build();
     }
 }

@@ -3,6 +3,8 @@ package com.ra.course.com.stackoverflow.service.vote;
 import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
+import com.ra.course.com.stackoverflow.entity.enums.QuestionClosingRemark;
+import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import com.ra.course.com.stackoverflow.exception.service.QuestionNotFoundException;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyVotedException;
@@ -14,6 +16,8 @@ import com.ra.course.com.stackoverflow.service.system.QuestionScoreBadgeAwarder;
 import com.ra.course.com.stackoverflow.service.vote.impl.VoteQuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
 
 import java.util.Optional;
 
@@ -92,11 +96,12 @@ public class UpVoteQuestionServiceTest {
         //given
         when(questionData.findById(ID1)).thenReturn(Optional.of(question));
         when(memberData.findById(ID1)).thenReturn(Optional.of(member));
+        when(memberData.findById(ID2)).thenReturn(Optional.of(member));
         //when
         var questionAfterVoting = voteQuestionService.upVote(question, member);
         //then
         assertEquals(1, questionAfterVoting.getVoteCount());
-        assertEquals(5, member.getReputation());
+        assertEquals(5, member.getAccount().getReputation());
         assertTrue(member.getUpVotedQuestionsId().contains(question.getId()));
     }
 
@@ -104,7 +109,13 @@ public class UpVoteQuestionServiceTest {
         return Question.builder()
                 .id(ID1)
                 .title("title")
-                .author(member).build();
+                .authorId(member.getAccount().getId())
+                .description("Some description")
+                .creationTime(LocalDateTime.now())
+                .updateTime(LocalDateTime.now())
+                .status(QuestionStatus.OPEN)
+                .closingRemark(QuestionClosingRemark.NOT_MARKED_FOR_CLOSING)
+                .build();
     }
     private Member mockMember(long idMember){
         var account = Account.builder()
@@ -113,7 +124,6 @@ public class UpVoteQuestionServiceTest {
                 .email("email")
                 .name("name").build();
         return Member.builder()
-                .id(idMember)
                 .account(account).build();
     }
 }

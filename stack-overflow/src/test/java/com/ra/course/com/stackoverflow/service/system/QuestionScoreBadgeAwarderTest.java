@@ -4,12 +4,16 @@ import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.enums.Badge;
+import com.ra.course.com.stackoverflow.entity.enums.QuestionClosingRemark;
+import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,8 +22,8 @@ import static org.mockito.Mockito.when;
 
 public class QuestionScoreBadgeAwarderTest {
     private BadgeAwardService<Question> badgeAwardService;
-    private MemberRepository mockedMemberRepository;
     private Set<Badge> expectedBadges;
+    private Member author;
 
     private static final int SCR_FOR_STDNT_BDG = 1;
     private static final int SCR_FOR_NICE_BDG = 10;
@@ -28,9 +32,11 @@ public class QuestionScoreBadgeAwarderTest {
 
     @BeforeEach
     void setUp() {
-        mockedMemberRepository = mock(MemberRepository.class);
+        var mockedMemberRepository = mock(MemberRepository.class);
         badgeAwardService = new QuestionScoreBadgeAwarder(mockedMemberRepository);
 
+        author = setUpMemberBuilder(1L).build();
+        when(mockedMemberRepository.findById(1L)).thenReturn(Optional.of(author));
         expectedBadges = new HashSet<>();
         expectedBadges.add(Badge.STUDENT);
         expectedBadges.add(Badge.NICE_QUESTION);
@@ -41,18 +47,16 @@ public class QuestionScoreBadgeAwarderTest {
     @Test
     public void whenQuestionWithMoreThanGreatScorePassedThenAuthorShouldGetFourBadges() {
         //given
-        Question givenQuestion = setUpQuestionBuilder(1L, setUpMemberBuilder(1L).build())
+        Question givenQuestion = setUpQuestionBuilder(1L, author)
                 .voteCount(Integer.MAX_VALUE)
                 .build();
 
-        Member expectedAuthor = setUpMemberBuilder(1L).build();
-        Question expectedQuestion = setUpQuestionBuilder(1L, expectedAuthor)
+
+        Question expectedQuestion = setUpQuestionBuilder(1L, author)
                 .voteCount(Integer.MAX_VALUE)
                 .build();
 
-        Member actualAuthor = givenQuestion.getAuthor();
-        when(mockedMemberRepository.update(actualAuthor)).thenReturn(actualAuthor);
-        Map<Badge, Set<Question>> actualBadges = actualAuthor.getQuestionBadges();
+        Map<Badge, Set<Question>> actualBadges = author.getQuestionBadges();
 
         //when
         badgeAwardService.awardMember(givenQuestion);
@@ -69,18 +73,15 @@ public class QuestionScoreBadgeAwarderTest {
     @Test
     public void whenQuestionWithLessThanStudentScorePassedThenAuthorShouldGetOnlyStudentBadge() {
         //given
-        Question givenQuestion = setUpQuestionBuilder(1L, setUpMemberBuilder(1L).build())
+        Question givenQuestion = setUpQuestionBuilder(1L, author)
                 .voteCount(SCR_FOR_STDNT_BDG - 1)
                 .build();
 
         //when
-        Member actualAuthor = givenQuestion.getAuthor();
-        when(mockedMemberRepository.update(actualAuthor)).thenReturn(actualAuthor);
-
         badgeAwardService.awardMember(givenQuestion);
 
         //then
-        assertNull(actualAuthor.getQuestionBadges().get(Badge.STUDENT));
+        assertNull(author.getQuestionBadges().get(Badge.STUDENT));
     }
 
     @Test
@@ -89,27 +90,23 @@ public class QuestionScoreBadgeAwarderTest {
         Badge studentBadge = Badge.STUDENT;
         Badge niceQuestionBadge = Badge.NICE_QUESTION;
 
-        Question givenQuestion = setUpQuestionBuilder(1L, setUpMemberBuilder(1L).build())
+        Question givenQuestion = setUpQuestionBuilder(1L, author)
                 .voteCount(SCR_FOR_NICE_BDG - 1)
                 .build();
 
-        Member expectedAuthor = setUpMemberBuilder(1L).build();
-        Question expectedQuestion = setUpQuestionBuilder(1L, expectedAuthor)
+        Question expectedQuestion = setUpQuestionBuilder(1L, author)
                 .voteCount(SCR_FOR_NICE_BDG - 1)
                 .build();
-
-        Member actualAuthor = givenQuestion.getAuthor();
-        when(mockedMemberRepository.update(actualAuthor)).thenReturn(actualAuthor);
 
         //when
         badgeAwardService.awardMember(givenQuestion);
 
         //then
-        assertNull(actualAuthor.getQuestionBadges().get(niceQuestionBadge));
+        assertNull(author.getQuestionBadges().get(niceQuestionBadge));
 
-        assertEquals(1, actualAuthor.getQuestionBadges().size());
+        assertEquals(1, author.getQuestionBadges().size());
 
-        assertTrue(actualAuthor.getQuestionBadges().get(studentBadge).contains(expectedQuestion));
+        assertTrue(author.getQuestionBadges().get(studentBadge).contains(expectedQuestion));
     }
 
 
@@ -119,18 +116,15 @@ public class QuestionScoreBadgeAwarderTest {
         expectedBadges.remove(Badge.GREAT_QUESTION);
         expectedBadges.remove(Badge.GOOD_QUESTION);
 
-        Question givenQuestion = setUpQuestionBuilder(1L, setUpMemberBuilder(1L).build())
+        Question givenQuestion = setUpQuestionBuilder(1L, author)
                 .voteCount(SCR_FOR_GOOD_BDG - 1)
                 .build();
 
-        Member expectedAuthor = setUpMemberBuilder(1L).build();
-        Question expectedQuestion = setUpQuestionBuilder(1L, expectedAuthor)
+        Question expectedQuestion = setUpQuestionBuilder(1L, author)
                 .voteCount(SCR_FOR_GOOD_BDG - 1)
                 .build();
 
-        Member actualAuthor = givenQuestion.getAuthor();
-        when(mockedMemberRepository.update(actualAuthor)).thenReturn(actualAuthor);
-        Map<Badge, Set<Question>> actualBadges = actualAuthor.getQuestionBadges();
+        Map<Badge, Set<Question>> actualBadges = author.getQuestionBadges();
 
         //when
         badgeAwardService.awardMember(givenQuestion);
@@ -150,18 +144,15 @@ public class QuestionScoreBadgeAwarderTest {
         //given
         expectedBadges.remove(Badge.GREAT_QUESTION);
 
-        Question givenQuestion = setUpQuestionBuilder(1L, setUpMemberBuilder(1L).build())
+        Question givenQuestion = setUpQuestionBuilder(1L, author)
                 .voteCount(SCR_FOR_GREAT_BDG - 1)
                 .build();
 
-        Member expectedAuthor = setUpMemberBuilder(1L).build();
-        Question expectedQuestion = setUpQuestionBuilder(1L, expectedAuthor)
+        Question expectedQuestion = setUpQuestionBuilder(1L, author)
                 .voteCount(SCR_FOR_GREAT_BDG - 1)
                 .build();
 
-        Member actualAuthor = givenQuestion.getAuthor();
-        when(mockedMemberRepository.update(actualAuthor)).thenReturn(actualAuthor);
-        Map<Badge, Set<Question>> actualBadges = actualAuthor.getQuestionBadges();
+        Map<Badge, Set<Question>> actualBadges = author.getQuestionBadges();
 
         //when
         badgeAwardService.awardMember(givenQuestion);
@@ -183,9 +174,8 @@ public class QuestionScoreBadgeAwarderTest {
 
     private Member.MemberBuilder<?, ?> setUpMemberBuilder(long id) {
         return Member.builder()
-                .id(id)
                 .account(Account.builder()
-                        .id(24L)
+                        .id(1L)
                         .name("Test")
                         .password("test12345")
                         .email("test@gmail.com")
@@ -196,6 +186,11 @@ public class QuestionScoreBadgeAwarderTest {
         return Question.builder()
                 .id(id)
                 .title("test")
-                .author(author);
+                .authorId(author.getAccount().getId())
+                .description("Some description")
+                .creationTime(LocalDateTime.now())
+                .updateTime(LocalDateTime.now())
+                .status(QuestionStatus.OPEN)
+                .closingRemark(QuestionClosingRemark.NOT_MARKED_FOR_CLOSING);
     }
 }

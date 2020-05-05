@@ -6,7 +6,7 @@ import com.ra.course.com.stackoverflow.entity.Question;
 
 public interface CommentService {
 
-    Comment addCommentToQuestion(Comment comment, Question question);
+    Question addCommentToQuestion(Comment comment, Question question);
 
-    Comment addCommentToAnswer(Comment comment, Answer answer);
+    Answer addCommentToAnswer(Comment comment, Answer answer);
 }

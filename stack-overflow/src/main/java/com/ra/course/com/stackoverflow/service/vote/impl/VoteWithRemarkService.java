@@ -23,20 +23,10 @@ public class VoteWithRemarkService {
     public Question voteToClose(final Question question, final Member member, final QuestionClosingRemark remark) {
         final var questionFromDB = checkQuestion(question);
         final var memberFromDB = checkMember(member);
-        checkIsAlreadyVotedToCloseOrDelete(memberFromDB.getId(),
+        checkIsAlreadyVotedToCloseOrDelete(memberFromDB.getAccount().getId(),
                 questionFromDB.getMembersIdsWhoVotedQuestionToClose());
-        question.getMembersIdsWhoVotedQuestionToClose().put(memberFromDB.getId(), remark);
-        updateQuestionWithNewRemarkToClose(questionFromDB, memberFromDB.getId(), remark);
-        return question;
-    }
-
-    public Question voteToDelete(final Question question, final Member member, final QuestionClosingRemark remark) {
-        final var questionFromDB = checkQuestion(question);
-        final var memberFromDB = checkMember(member);
-        checkIsAlreadyVotedToCloseOrDelete(memberFromDB.getId(),
-                questionFromDB.getMembersIdsWhoVotedQuestionToDelete());
-        question.getMembersIdsWhoVotedQuestionToDelete().put(memberFromDB.getId(), remark);
-        updateQuestionWithNewRemarkToDelete(questionFromDB, memberFromDB.getId(), remark);
+        question.getMembersIdsWhoVotedQuestionToClose().put(memberFromDB.getAccount().getId(), remark);
+        updateQuestionWithNewRemarkToClose(questionFromDB, memberFromDB.getAccount().getId(), remark);
         return question;
     }
 
@@ -46,7 +36,7 @@ public class VoteWithRemarkService {
     }
 
     private Member checkMember(final Member member) {
-        return memberData.findById(member.getId()).orElseThrow(
+        return memberData.findById(member.getAccount().getId()).orElseThrow(
                 () -> new MemberNotFoundException("No such member in DB"));
 
     }
@@ -64,10 +54,4 @@ public class VoteWithRemarkService {
         questionData.update(question);
     }
 
-    private void updateQuestionWithNewRemarkToDelete(final Question question, final long memberId, final QuestionClosingRemark remark) {
-        final Map<Long, QuestionClosingRemark> idWithRemarks = question.getMembersIdsWhoVotedQuestionToDelete();
-        idWithRemarks.put(memberId, remark);
-        question.setMembersIdsWhoVotedQuestionToDelete(idWithRemarks);
-        questionData.update(question);
-    }
 }

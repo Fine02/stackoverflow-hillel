@@ -22,7 +22,8 @@ public class ModerateServiceImpl implements ModerateService {
 
         questionFromDB.setStatus(CLOSE);
 
-        return questionRepo.update(questionFromDB);
+        questionRepo.update(questionFromDB);
+        return questionRepo.findById(questionFromDB.getId()).get();
     }
 
     @Override
@@ -31,7 +32,8 @@ public class ModerateServiceImpl implements ModerateService {
 
         questionFromDB.setStatus(ON_HOLD);
 
-        return questionRepo.update(questionFromDB);
+        questionRepo.update(questionFromDB);
+        return questionRepo.findById(questionFromDB.getId()).get();
     }
 
     @Override
@@ -40,7 +42,8 @@ public class ModerateServiceImpl implements ModerateService {
 
         questionFromDB.setStatus(OPEN);
 
-        return questionRepo.update(questionFromDB);
+        questionRepo.update(questionFromDB);
+        return questionRepo.findById(questionFromDB.getId()).get();
     }
 
     private Question findQuestionById(final Question question) {

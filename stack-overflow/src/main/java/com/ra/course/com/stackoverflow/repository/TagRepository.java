@@ -9,17 +9,14 @@ public interface TagRepository  {
 
     Tag save(Tag tag);
 
-    long getNextId();
-
-    Optional<Tag> findById(long id);
+    Optional<Tag> findById(Long id);
 
     void delete(Tag tag);
 
-    Tag update (Tag tag);
-
-    List<Tag> findAll();
+    void update (Tag tag);
 
     Optional<Tag> findByTagName(String tagName);
 
-    long findIdByName(String tag);
+    List<Tag> findByQuestionId(Long id);
+
 }
