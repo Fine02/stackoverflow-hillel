@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 @Sql(scripts = {"classpath:schema.sql", "classpath:test-data.sql"})
 public class AccountDaoImplIntegrationTest {
 

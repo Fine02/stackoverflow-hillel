@@ -7,10 +7,14 @@ import com.ra.course.aws.online.shopping.mapper.AddressRowMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 @Repository
 @PropertySource("sql-requests.yml")
@@ -35,15 +39,18 @@ public class AddressDaoImpl implements AddressDao {
     @Override
     public Long save(final Address address) {
         final KeyHolder keyHolder = keyHolderFactory.newKeyHolder();
-        jdbcTemplate.update(con -> {
-            final PreparedStatement ps = con.prepareStatement(insertAddress, new String[]{"id"});
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(final Connection con)
+                    throws SQLException {
+            final PreparedStatement ps = con.prepareStatement(insertAddress, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, address.getStreetAddress());
             ps.setString(2, address.getCity());
             ps.setString(3, address.getState());
             ps.setString(4, address.getZipCode());
             ps.setString(5, address.getCountry());
             return ps;
-        }, keyHolder);
+        }}, keyHolder);
         return keyHolder.getKey().longValue();
     }
 

@@ -8,10 +8,14 @@ import com.ra.course.aws.online.shopping.mapper.AccountActionVOMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 @Repository
@@ -39,8 +43,11 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public Long save(final Account account, final Long addressId) {
         final KeyHolder keyHolder = keyHolderFactory.newKeyHolder();
-        jdbcTemplate.update(con -> {
-            final PreparedStatement ps = con.prepareStatement(insertAccount, new String[]{"id"});
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(final Connection con)
+                    throws SQLException {
+            final PreparedStatement ps = con.prepareStatement(insertAccount, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, account.getUserName());
             ps.setString(2, account.getPassword());
             ps.setString(3, account.getStatus().toString());
@@ -49,7 +56,7 @@ public class AccountDaoImpl implements AccountDao {
             ps.setString(6, account.getEmail());
             ps.setString(7, account.getPhone());
             return ps;
-        }, keyHolder);
+        }}, keyHolder);
         return keyHolder.getKey().longValue();
     }
 

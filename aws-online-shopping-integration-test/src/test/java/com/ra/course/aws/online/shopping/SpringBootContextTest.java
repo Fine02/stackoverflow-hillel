@@ -11,8 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest
-@ActiveProfiles("local")
+@SpringBootTest(classes ={AwsOnlineShoppingApplication.class, TestConfig.class})
+//@ActiveProfiles("local")
 public class SpringBootContextTest {
     @Autowired
     private ApplicationContext context;

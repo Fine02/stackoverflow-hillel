@@ -10,8 +10,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
-@ActiveProfiles("local")
-@Sql(scripts = {"classpath:schema.sql", "classpath:test-data.sql"})
+@ActiveProfiles("test")
+//@Sql(scripts = {"classpath:schema.sql", "classpath:test-data.sql"})
 //@Sql(scripts= "classpath:test-data.sql")
 public class AccountServiceImplIntegrationTest {
 
