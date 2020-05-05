@@ -48,11 +48,6 @@ public class SpringBootContextTest {
     }
 
     @Test
-    void checkContextForCatalogService() {
-        assertNotNull(context.getBean(CatalogService.class));
-    }
-
-    @Test
     void checkContextForProductService() {
         assertNotNull(context.getBean(ProductService.class));
     }
