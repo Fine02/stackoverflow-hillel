@@ -61,7 +61,6 @@ public class JdbcShippingDaoImpl implements ShippingDao {
     private transient final ShipmentRowMapper shipmentRowMapper;
 
     @Autowired
-
     public JdbcShippingDaoImpl(final JdbcTemplate jdbcTemplate, final GetLastIdRowMapper getId, final ShipmentLogRowMapper sLogRowMapper, final BooleanShipmentLogRowMapper booleanLogMapper, final MemberBooleanRowMapper memberMapper, final ShipmentRowMapper shipmentRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.getId = getId;
@@ -83,7 +82,7 @@ public class JdbcShippingDaoImpl implements ShippingDao {
     @Override
     public boolean isThisShipmentLogExist(final ShipmentLog shipmentLog) {
         try {
-            if (shipmentLog!=null){
+            if (shipmentLog != null) {
                 final Long foundId = shipmentLog.getId();
                 return jdbcTemplate.queryForObject(FIND_SLOG, booleanLogMapper, foundId);
             }

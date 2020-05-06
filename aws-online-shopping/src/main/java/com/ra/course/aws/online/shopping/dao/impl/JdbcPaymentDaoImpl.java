@@ -19,7 +19,6 @@ import java.sql.Statement;
 
 @Repository
 public class JdbcPaymentDaoImpl implements PaymentDao {
-    //public static final String INSERT_PAYMENT = "INSERT INTO payment (payment_status_id, amount) VALUES (?, ?) RETURNING payment.id";
     public static final String INSERT_PAYMENT = "INSERT INTO payment (payment_status_id, amount) VALUES (?, ?)";
     public static final String GET_STATUS_ID = "SELECT ps.id FROM payment_status ps WHERE ps.status=?";
     public static final String INSERT_ETRANS = "INSERT INTO electronic_bank_transaction (payment_id) VALUES (?)";

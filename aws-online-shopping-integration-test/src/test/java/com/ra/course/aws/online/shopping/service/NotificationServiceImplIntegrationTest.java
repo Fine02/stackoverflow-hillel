@@ -29,7 +29,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
-//@ActiveProfiles("local")
 @ActiveProfiles("test")
 @Sql({"classpath:schema.sql", "classpath:data.sql"})
 public class NotificationServiceImplIntegrationTest {
@@ -175,8 +174,7 @@ public class NotificationServiceImplIntegrationTest {
         );
         return account;
     }
-
-
+    
     private Member makeMember(Account account, Long id) {
         Member member = new Member(account);
         member.setMemberID(id);

@@ -26,7 +26,6 @@ public class NotificationDaoMockTest {
     NotificationDao notificationDao;
     private final JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);
     private GetStringFromObjectRowMapper getStringMapper = mock(GetStringFromObjectRowMapper.class);
-    //private GetLastIdRowMapper getLastIdMapper = mock(GetLastIdRowMapper.class);
     private EmailNotificationRowMapper emailMapper = mock(EmailNotificationRowMapper.class);
     private SMSNotificationRowMapper smsMapper = mock(SMSNotificationRowMapper.class);
     private KeyHolderFactory keyHolderFactory = mock(KeyHolderFactory.class);

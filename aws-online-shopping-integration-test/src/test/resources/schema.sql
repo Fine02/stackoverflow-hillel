@@ -1,5 +1,5 @@
-CREATE SCHEMA IF NOT EXISTS public;
-USE public;
+CREATE SCHEMA IF NOT EXISTS shopping;
+USE shopping;
 
 DROP TABLE IF EXISTS payment_status, shipment_status, account_status, order_status,
     address, notification, `sms_notification`, email_notification, shipment, shipment_log,

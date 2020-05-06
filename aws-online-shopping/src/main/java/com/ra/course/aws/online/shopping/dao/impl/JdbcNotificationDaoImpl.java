@@ -18,22 +18,15 @@ import java.sql.*;
 
 @Repository
 public class JdbcNotificationDaoImpl implements NotificationDao {
-    //public static final String INSERT_NOTIFIC = "INSERT INTO notification (createdOn, content) VALUES (?, ?) RETURNING notification.id";
-    //public static final String INSERT_NOTIFIC = "INSERT INTO notification (createdOn, content) VALUES (?, ?); SELECT LAST_INSERT_ID() ";
-
     public static final String INSERT_NOTIFIC = "INSERT INTO notification (createdOn, content) VALUES (?, ?)";
-
     public static final String INSERT_SNOTIFIC = "INSERT INTO sms_notification (phone, notification_id) VALUES (?, ?)";
     public static final String GET_SMS = "SELECT n. createdOn, n. content, sn.phone FROM sms_notification sn JOIN notification n ON sn.notification_id = n.id WHERE n.id=?";
-
     public static final String INSERT_ENOTIFIC = "INSERT INTO email_notification (email, notification_id) VALUES (?, ?)";
     public static final String GET_EMAIL = "SELECT n. createdOn, n. content, en.email FROM email_notification en JOIN notification n ON en.notification_id = n.id WHERE n.id=?";
-
     public static final String GET_MEMBER_EMAIL = "SELECT a.email FROM member m JOIN account a ON m.account_id= a.id WHERE a.email=?";
     public static final String GET_MEMBER_PHONE = "SELECT a.phone FROM member m JOIN account a ON m.account_id= a.id WHERE a.phone=?";
 
     private transient final GetStringFromObjectRowMapper getString;
-    //private transient final GetLastIdRowMapper getLastId;
     private transient final SMSNotificationRowMapper smsMapper;
     private transient final EmailNotificationRowMapper emailMapper;
     private transient final JdbcTemplate jdbcTemplate;
@@ -56,7 +49,6 @@ public class JdbcNotificationDaoImpl implements NotificationDao {
                 @Override
                 public PreparedStatement createPreparedStatement(final Connection con) throws SQLException {
                     final PreparedStatement pstm = con.prepareStatement(INSERT_NOTIFIC, Statement.RETURN_GENERATED_KEYS);
-                    //Timestamp timestamp = Timestamp.valueOf(smsNotification.getCreatedOn());
                     pstm.setTimestamp(1, Timestamp.valueOf(smsNotification.getCreatedOn()));
                     pstm.setString(2, smsNotification.getContent());
                     return pstm;
@@ -80,7 +72,6 @@ public class JdbcNotificationDaoImpl implements NotificationDao {
                 @Override
                 public PreparedStatement createPreparedStatement(final Connection con) throws SQLException {
                     final PreparedStatement pstm = con.prepareStatement(INSERT_NOTIFIC, Statement.RETURN_GENERATED_KEYS);
-                    //Timestamp timestamp = Timestamp.valueOf(emailNotification.getCreatedOn());
                     pstm.setTimestamp(1, Timestamp.valueOf(emailNotification.getCreatedOn()));
                     pstm.setString(2, emailNotification.getContent());
                     return pstm;

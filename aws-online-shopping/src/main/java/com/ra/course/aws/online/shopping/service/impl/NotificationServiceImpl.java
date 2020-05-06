@@ -12,6 +12,7 @@ import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.NotificationException;
 import com.ra.course.aws.online.shopping.service.NotificationService;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 
 @Service
@@ -41,7 +42,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         final var foundPhoneNumber = notificationDao.foundMemberPhoneNumber(member.getAccount().getPhone());
-        if (foundPhoneNumber==null) {
+        if (foundPhoneNumber == null) {
             throw new MemberDataNotFoundException(MESSAGE_NO_PHONE);
         }
 
@@ -49,7 +50,6 @@ public class NotificationServiceImpl implements NotificationService {
         final var smsNotification = new SMSNotification(LocalDateTime.now(), contextMessage, member.getAccount().getPhone());
         notificationDao.createSMSNotification(smsNotification);
         return smsNotification;
-
     }
 
     @Override
@@ -60,7 +60,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         final var foundPhoneNumber = notificationDao.foundMemberPhoneNumber(member.getAccount().getPhone());
-        if (foundPhoneNumber==null) {
+        if (foundPhoneNumber == null) {
             throw new MemberDataNotFoundException(MESSAGE_NO_PHONE);
         }
 
@@ -78,7 +78,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         final var foundEmail = notificationDao.foundMemberEmail(member.getAccount().getEmail());
-        if (foundEmail==null) {
+        if (foundEmail == null) {
             throw new MemberDataNotFoundException(MESSAGE_NO_EMAIL);
         }
 
@@ -96,7 +96,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         final var foundEmail = notificationDao.foundMemberEmail(member.getAccount().getEmail());
-        if (foundEmail==null) {
+        if (foundEmail == null) {
             throw new MemberDataNotFoundException(MESSAGE_NO_EMAIL);
         }
 

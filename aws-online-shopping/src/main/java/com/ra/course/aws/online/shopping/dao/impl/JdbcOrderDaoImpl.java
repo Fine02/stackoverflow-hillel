@@ -118,7 +118,7 @@ public class JdbcOrderDaoImpl implements OrderDao {
     @Override
     public boolean isThisOrderLogExist(final OrderLog orderLog) {
         try {
-            if (orderLog!=null){
+            if (orderLog != null) {
                 final Long foundId = orderLog.getId();
                 return jdbcTemplate.queryForObject(FIND_ORDER_LOG, booleanLogMapper, foundId);
             }
