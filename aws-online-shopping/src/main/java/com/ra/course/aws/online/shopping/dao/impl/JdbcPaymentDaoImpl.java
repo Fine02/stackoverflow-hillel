@@ -60,7 +60,7 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
     @Override
     public void createTransaction(final ElectronicBankTransaction bankTransaction) {
         final Integer paymentStatusID = jdbcTemplate.queryForObject(GET_STATUS_ID, getLastId, bankTransaction.getStatus().toString());
-        final KeyHolder keyHolder = new GeneratedKeyHolder();
+        final KeyHolder keyHolder = keyHolderFactory.newKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(final Connection con) throws SQLException {
