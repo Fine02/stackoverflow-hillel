@@ -19,7 +19,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,8 +31,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
-//@ActiveProfiles("local")
 @ActiveProfiles("test")
+@Sql({"classpath:schema.sql", "classpath:data.sql"})
 public class OrderServiceImplIntegrationTest {
 
     @Autowired
@@ -40,20 +42,23 @@ public class OrderServiceImplIntegrationTest {
     LocalDateTime time2 = LocalDateTime.of(2020, 3, 20, 22, 22, 11);
     LocalDateTime time3 = LocalDateTime.of(2020, 3, 21, 22, 22, 11);
     LocalDateTime time4 = LocalDateTime.of(2021, 9, 21, 22, 22, 11);
+    LocalDateTime time5 = LocalDateTime.of(2020, 3, 19, 22, 22, 11);
 
     Order order = new Order("3", OrderStatus.UNSHIPPED, time);
+    Order orderInDB = new Order("1", OrderStatus.SHIPPED, time5);
     Order newOrder = new Order("4", OrderStatus.UNSHIPPED, time4);
 
     public OrderLog orderLog1 = new OrderLog(2, "2", time2, OrderStatus.PENDING);
     public OrderLog orderLog2 = new OrderLog(3, "2", time3, OrderStatus.PENDING);
     public OrderLog orderLog3 = new OrderLog("3", LocalDateTime.now(), OrderStatus.COMPLETE);
-    public OrderLog existOrderLogInDB = new OrderLog("3", time3, OrderStatus.COMPLETE);
+    public OrderLog orderLogInDB = new OrderLog( "1", time5, OrderStatus.PENDING);
 
     Order orderIsAlreadyShipped = new Order("3", OrderStatus.SHIPPED, time);
     private Member memberExist = makeMember(makeAccount(), 1L);
     private Member memberNotExist = makeMember(makeAccount(), 156622L);
 
     @Test
+    @Rollback
     public void whenSendForShipmentOrderThanOrderStatusChange() {
         orderService.sendForShipment(order);
 
@@ -61,6 +66,7 @@ public class OrderServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void shouldThrowExceptionIfOrderIsAlreadyShipped() {
         Throwable exception = Assertions.assertThrows(OrderIsAlreadyShippedException.class, () -> {
             orderService.sendForShipment(orderIsAlreadyShipped);
@@ -71,6 +77,7 @@ public class OrderServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void shouldGetOrderTrack() {
         String orderNumber = "2";
         List<OrderLog> expectedResult = makeOrderLogList();
@@ -81,12 +88,14 @@ public class OrderServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void shouldReturnEmptyListIfOrderNumberNotFound() {
         String notExistOrderNumber = "102012";
         assertEquals(orderService.getOrderTrack(notExistOrderNumber), Collections.emptyList());
     }
 
-    @Test()
+    @Test
+    @Rollback
     public void shouldThrowMemberNotFoundException() {
         Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {
             orderService.cancelOrder(order, memberNotExist);
@@ -96,7 +105,8 @@ public class OrderServiceImplIntegrationTest {
         assertEquals(exception.getClass(), MemberDataNotFoundException.class);
     }
 
-    @Test()
+    @Test
+    @Rollback
     public void shouldThrowOrderNotFoundExceptionException() {
 
         Throwable exception = Assertions.assertThrows(OrderNotFoundException.class, () -> {
@@ -108,6 +118,7 @@ public class OrderServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenOrderDateIsAfterCurrentThenOrderCanBeCanceled() {
         var resultOrder = orderService.cancelOrder(order, memberExist);
 
@@ -117,6 +128,7 @@ public class OrderServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenAddOrderLogToOrderLogListThenReturnTrue() {
         boolean actualResponse = orderService.addOrderLogToOrder(order, orderLog3);
 
@@ -124,10 +136,11 @@ public class OrderServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void shouldThrowExceptionIfOrderLogIsAlreadyExist() {
 
         Throwable exception = Assertions.assertThrows(OrderLogIsAlreadyExistException.class, () -> {
-            orderService.addOrderLogToOrder(order, existOrderLogInDB);
+            orderService.addOrderLogToOrder(orderInDB, orderLogInDB);
         });
 
         assertEquals(exception.getMessage(), "This OrderLog is already exist");
@@ -136,8 +149,8 @@ public class OrderServiceImplIntegrationTest {
 
     public List<OrderLog> makeOrderLogList() {
         List<OrderLog> orderLogList = new ArrayList<>();
-        orderLogList.add(orderLog2);
         orderLogList.add(orderLog1);
+        orderLogList.add(orderLog2);
         return orderLogList;
     }
 

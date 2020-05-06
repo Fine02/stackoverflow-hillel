@@ -16,7 +16,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 //@ActiveProfiles("local")
 @ActiveProfiles("test")
+@Sql({"classpath:schema.sql", "classpath:data.sql"})
 public class PaymentServiceImplIntegrationTest {
 
     @Autowired
@@ -41,6 +44,7 @@ public class PaymentServiceImplIntegrationTest {
     private Member memberAbsenceInDb = makeMember(565L);
 
     @Test
+    @Rollback
     public void thenTransactionIsNotSuccessfulBecauseOfIncorrectAmountShouldThrowException() {
         Double amount = 0.0;
 
@@ -54,6 +58,7 @@ public class PaymentServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void thenTransactionIsNotSuccessfulBecauseOfAbsenceMemberInDbShouldThrowException() {
 
         Throwable exception = Assertions.assertThrows(PaymentNotProvidedException.class, () -> {
@@ -66,6 +71,7 @@ public class PaymentServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenThePaymentByElectronicBankTransactionIsSuccessful() {
         var expectedResult = PaymentStatus.COMPLETED;
         electronicBankTransaction.setAmount(amount);
@@ -74,6 +80,7 @@ public class PaymentServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenThePaymentByCreditCardIsSuccessful() {
         var expectedResult = PaymentStatus.COMPLETED;
         var actualResult = paymentService.processPaymentByCreditCardTransaction(memberWithExistData, creditCardTransaction, amount);

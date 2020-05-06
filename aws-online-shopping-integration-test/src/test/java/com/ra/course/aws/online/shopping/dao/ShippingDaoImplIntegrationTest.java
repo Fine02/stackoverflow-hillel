@@ -14,6 +14,7 @@ import com.ra.course.aws.online.shopping.entity.user.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -44,6 +45,7 @@ public class ShippingDaoImplIntegrationTest {
     Member member = makeMember(3L);
 
     @Test
+    @Rollback
     public void getInstanceOfShipmentLogTest() {
         ShipmentLog result = shippingDao.findShipmentLogById(1L);
 
@@ -51,6 +53,7 @@ public class ShippingDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void getNullIfShipmentLogByIdWasNotFoundTest() {
         ShipmentLog result = shippingDao.findShipmentLogById(15552L);
 
@@ -58,6 +61,7 @@ public class ShippingDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void isThisShipmentLogExistTest() {
         boolean result = shippingDao.isThisShipmentLogExist(existShipmentLog);
 
@@ -65,6 +69,7 @@ public class ShippingDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void getFalseIfShipmentLogDoesNotExistTest() {
         boolean result = shippingDao.isThisShipmentLogExist(notExistShipmentLog);
 
@@ -72,6 +77,7 @@ public class ShippingDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void getInstanceOfShipmentTest() {
         Shipment shipmentInDb = new Shipment("1", time, time3, "by air");
         shipmentInDb.setShipmentLogs(shipmentLogList);
@@ -82,6 +88,7 @@ public class ShippingDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void getNullIfShipmentWasNotFoundTest() {
         Shipment result = shippingDao.findByShipmentNumber("99991");
 
@@ -89,6 +96,7 @@ public class ShippingDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void getInstanceOfLogListTest() {
         List<ShipmentLog> result = shippingDao.findLogListByShipment(shipmentLogList);
 
@@ -96,6 +104,7 @@ public class ShippingDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void getTrueIfMemberExistInDBTest() {
         boolean result = shippingDao.isFoundMemberID(3L);
 
@@ -103,6 +112,7 @@ public class ShippingDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void getFalseIfMemberDoesNotExistInDBTest() {
         boolean result = shippingDao.isFoundMemberID(913L);
 
@@ -110,11 +120,13 @@ public class ShippingDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void addShipmentLogTest() {
         shippingDao.addShipmentLog(shipmentLog1);
     }
 
     @Test
+    @Rollback
     public void updateShippingAddressTest() {
 
         shippingDao.updateShippingAddress(member, addressForUpdate);

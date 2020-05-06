@@ -18,7 +18,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 //@ActiveProfiles("local")
 @ActiveProfiles("test")
+@Sql({"classpath:schema.sql", "classpath:data.sql"})
 public class NotificationServiceImplIntegrationTest {
 
     @Autowired
@@ -57,6 +60,7 @@ public class NotificationServiceImplIntegrationTest {
     ShipmentLog shipmentLogInDB = makeShipmentLog(1, "1", ShipmentStatus.SHIPPED, time);
 
     @Test
+    @Rollback
     public void whenNotificationAboutShipmentStatusWasNotSentThanThrowNotificationException() {
 
         Throwable exceptionEmail = Assertions.assertThrows(NotificationException.class, () -> {
@@ -75,6 +79,7 @@ public class NotificationServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenNotificationAboutOrderStatusWasNotSentThanThrowNotificationException() {
 
         Throwable exceptionEmail = Assertions.assertThrows(NotificationException.class, () -> {
@@ -93,6 +98,7 @@ public class NotificationServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenShipmentStatusWasChangedSendSMSNotification() {
 
         Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {
@@ -105,6 +111,7 @@ public class NotificationServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenMemberPhoneNotFoundThenExceptionThrownMemberNotFoundException() {
 
         Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {
@@ -117,6 +124,7 @@ public class NotificationServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenShipmentStatusWasChangedSendNotification() {
         ShipmentLog newShipmentLog = new ShipmentLog(11144555, "55785", ShipmentStatus.ONHOLD, LocalDateTime.now());
         String expectedResult = "your shipment number 55785 has changed status on ONHOLD";
@@ -129,6 +137,7 @@ public class NotificationServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenOrderStatusWasChangedSendNotification() {
         OrderLog newOrderLog = new OrderLog(855514477, "5548541", LocalDateTime.now(), OrderStatus.PENDING);
         String expectedResult = "your order number 5548541 has changed status on PENDING";

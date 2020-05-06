@@ -17,7 +17,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("test")
+@Sql({"classpath:schema.sql", "classpath:data.sql"})
 public class ShippingServiceImplIntegrationTest {
 
     @Autowired
@@ -47,6 +50,7 @@ public class ShippingServiceImplIntegrationTest {
     Member wrongMember = makeMember(55523L);
 
     @Test
+    @Rollback
     public void shouldGetShippingTrack() {
         String shippingNumber = "1";
 
@@ -58,12 +62,14 @@ public class ShippingServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void shouldReturnEmptyListIfShippingNumberNotFound() {
         String notExistShipmentNumber = "102012";
         assertEquals(shippingService.getShipmentTrack(notExistShipmentNumber), Collections.emptyList());
     }
 
     @Test
+    @Rollback
     public void whenAddShipmentLogToShipmentLogListThenReturnTrue() {
         boolean actualResponse = shippingService.addShipmentLogToShipment(shipmentInDb, newShipmentLog);
 
@@ -71,6 +77,7 @@ public class ShippingServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void shouldThrowExceptionIfShipmentLogIsAlreadyExist() {
 
         Throwable exception = Assertions.assertThrows(ShipmentLogIsAlreadyExistException.class, () -> {
@@ -82,6 +89,7 @@ public class ShippingServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void whenMemberSuccessfullySpecifiedShippingAddressThenReturnTrue() {
 
         var resultOfSpecifyShippingAddress = shippingService.specifyShippingAddress(memberInDb, addressForUpdate);
@@ -92,6 +100,7 @@ public class ShippingServiceImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void shouldThrowMemberNotFoundException() {
 
         Throwable exception = Assertions.assertThrows(MemberDataNotFoundException.class, () -> {

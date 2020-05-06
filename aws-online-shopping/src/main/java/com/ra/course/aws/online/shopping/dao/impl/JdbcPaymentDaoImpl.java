@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
@@ -50,7 +49,7 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
 
 
     @Autowired
-    public JdbcPaymentDaoImpl(final JdbcTemplate jdbcTemplate, final GetLastIdRowMapper getLastId, final MemberBooleanRowMapper memberBoolean, KeyHolderFactory keyHolderFactory) {
+    public JdbcPaymentDaoImpl(final JdbcTemplate jdbcTemplate, final GetLastIdRowMapper getLastId, final MemberBooleanRowMapper memberBoolean, final KeyHolderFactory keyHolderFactory) {
         this.jdbcTemplate = jdbcTemplate;
         this.getLastId = getLastId;
         this.memberBoolean = memberBoolean;
@@ -70,7 +69,7 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
                 return pstm;
             }
         }, keyHolder);
-        Long insertId = keyHolder.getKey().longValue();
+        final Long insertId = keyHolder.getKey().longValue();
         jdbcTemplate.update(INSERT_ETRANS, insertId);
     }
 
@@ -88,7 +87,7 @@ public class JdbcPaymentDaoImpl implements PaymentDao {
             }
         }, keyHolder);
 
-        Long insertId = keyHolder.getKey().longValue();
+        final Long insertId = keyHolder.getKey().longValue();
         jdbcTemplate.update(INSERT_CTRANS, insertId);
     }
 

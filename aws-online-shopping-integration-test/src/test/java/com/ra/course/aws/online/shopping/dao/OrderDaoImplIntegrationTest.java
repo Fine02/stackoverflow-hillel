@@ -8,6 +8,7 @@ import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -40,11 +41,13 @@ public class OrderDaoImplIntegrationTest {
     Order order = new Order("3", OrderStatus.SHIPPED, time1);
 
     @Test
+    @Rollback
     public void updateOrderTest() {
         orderDao.updateOrder(order);
     }
 
     @Test
+    @Rollback
     public void ifMemberWasFoundByIdThenReturnTrueTest() {
         boolean result = orderDao.isFoundMemberID(3L);
 
@@ -52,6 +55,7 @@ public class OrderDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void ifMemberWasNotFoundByIdThenReturnFalseTest() {
         boolean result = orderDao.isFoundMemberID(8543L);
 
@@ -59,15 +63,17 @@ public class OrderDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void getInstanceOfFindingLogListByOrderTest() {
         List<OrderLog> result = orderDao.findLogListByOrder(makeOrderLogList(orderLog1, orderLog2));
 
-        assertEquals(makeOrderLogList(orderLog1, orderLog2), result);
+        assertEquals(makeOrderLogList(orderLog2, orderLog1), result);
     }
 
     @Test
+    @Rollback
     public void getInstanceOfFoundOrderByOrderNumberTest() {
-        Order expectedResult = new Order("1", OrderStatus.UNSHIPPED, time1);
+        Order expectedResult = new Order("1", OrderStatus.SHIPPED, time);
         expectedResult.setOrderLog(makeOrderLogList(orderLog4));
 
         Order actualResult = orderDao.findByOrderNumber("1");
@@ -76,6 +82,7 @@ public class OrderDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void getNullIfOrderByOrderNumberWasNotFoundTest() {
         Order actualResult = orderDao.findByOrderNumber("95554441");
 
@@ -83,6 +90,7 @@ public class OrderDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void getInstanceOfFoundOrderLogIfItExistTest() {
         OrderLog result = orderDao.findOrderLogById(3L);
 
@@ -90,6 +98,7 @@ public class OrderDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void getNullIfOrderLogByIdWasNotFound() {
         OrderLog result = orderDao.findOrderLogById(1555L);
 
@@ -97,6 +106,7 @@ public class OrderDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void ifOrderLogExistThenReturnTrueTest() {
         boolean result = orderDao.isThisOrderLogExist(orderLog4);
 
@@ -104,6 +114,7 @@ public class OrderDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void ifOrderLogExistThenReturnFalseTest() {
 
         boolean result = orderDao.isThisOrderLogExist(orderLog3);
@@ -112,6 +123,7 @@ public class OrderDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void addOrderLogAndUpdateOrderTest() {
         orderDao.addOrderLogAndUpdateOrder(order, orderLog5);
     }

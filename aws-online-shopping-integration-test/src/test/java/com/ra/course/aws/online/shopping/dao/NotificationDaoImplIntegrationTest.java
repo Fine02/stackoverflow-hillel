@@ -7,6 +7,7 @@ import com.ra.course.aws.online.shopping.entity.notification.SMSNotification;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -33,6 +34,7 @@ public class NotificationDaoImplIntegrationTest {
 
 
     @Test
+    @Rollback
     public void createSMSNotificationTest() {
         SMSNotification result = notificationDao.createSMSNotification(smsNotification);
 
@@ -40,6 +42,7 @@ public class NotificationDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void createEmailNotificationTest() {
         EmailNotification result = notificationDao.createEmailNotification(emailNotification);
 
@@ -47,6 +50,7 @@ public class NotificationDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void foundMemberEmailTest() {
         String result = notificationDao.foundMemberEmail(email);
 
@@ -54,6 +58,7 @@ public class NotificationDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void ifMemberEmailWasNotFoundThenReturnNullTest() {
         String result = notificationDao.foundMemberEmail("fhhg@gmail.com");
 
@@ -61,6 +66,7 @@ public class NotificationDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void foundMemberPhoneNumberTest() {
         String result = notificationDao.foundMemberPhoneNumber(phoneNumber);
 
@@ -68,6 +74,7 @@ public class NotificationDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void ifMemberPhoneNumberWasNotFoundReturnNullTest() {
         String result = notificationDao.foundMemberPhoneNumber("855654");
 

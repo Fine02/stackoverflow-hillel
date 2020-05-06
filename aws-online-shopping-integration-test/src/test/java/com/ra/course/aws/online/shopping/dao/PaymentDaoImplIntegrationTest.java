@@ -8,6 +8,7 @@ import com.ra.course.aws.online.shopping.entity.payment.ElectronicBankTransactio
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -27,11 +28,13 @@ public class PaymentDaoImplIntegrationTest {
     private CreditCardTransaction creditCardTransaction = new CreditCardTransaction(PaymentStatus.PENDING, amount);
 
     @Test
+    @Rollback
     public void createElectronicBankTransactionTest() {
         paymentDao.createTransaction(electronicBankTransaction);
     }
 
     @Test
+    @Rollback
     public void createCreditCardTransactionTest() {
         paymentDao.createTransaction(creditCardTransaction);
     }
@@ -44,6 +47,7 @@ public class PaymentDaoImplIntegrationTest {
     }
 
     @Test
+    @Rollback
     public void ifMemberByIdWasFoundReturnFalseTest() {
         boolean result = paymentDao.isFoundMemberID(8553L);
 
