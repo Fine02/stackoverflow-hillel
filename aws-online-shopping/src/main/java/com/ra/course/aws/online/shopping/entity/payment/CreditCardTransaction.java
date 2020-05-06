@@ -7,4 +7,5 @@ public class CreditCardTransaction extends Payment {
     public CreditCardTransaction(PaymentStatus status, double amount) {
         super(status, amount);
     }
+
 }

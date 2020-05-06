@@ -6,7 +6,6 @@ import com.ra.course.aws.online.shopping.entity.order.OrderLog;
 import com.ra.course.aws.online.shopping.entity.shipment.ShipmentLog;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 
-
 public interface NotificationService {
     SMSNotification sendSMSNotificationAboutOrderStatus(OrderLog orderLog, Member member);
 

@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
-@SpringBootTest
+@SpringBootTest(classes ={AwsOnlineShoppingApplication.class, TestConfig.class})
 public class SpringBootContextTest {
     @Autowired
     private ApplicationContext context;
@@ -69,30 +69,6 @@ public class SpringBootContextTest {
 
         @Primary
         @Bean
-        public NotificationDao mockedNotificationDao() {
-            return mock(NotificationDao.class);
-        }
-
-        @Primary
-        @Bean
-        public OrderDao mockedOrderDao() {
-            return mock(OrderDao.class);
-        }
-
-        @Primary
-        @Bean
-        public PaymentDao mockedPaymentDao() {
-            return mock(PaymentDao.class);
-        }
-
-        @Primary
-        @Bean
-        public ShippingDao mockedShippingDao() {
-            return mock(ShippingDao.class);
-        }
-
-        @Primary
-        @Bean
         public AccountDao mockedAccountDao() {
             return mock(AccountDao.class);
         }
@@ -108,5 +84,6 @@ public class SpringBootContextTest {
         public ShoppingCartDao mockedShoppingCartDao() {
             return mock(ShoppingCartDao.class);
         }
+
     }
 }

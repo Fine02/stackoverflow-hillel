@@ -26,9 +26,10 @@ import static org.mockito.Mockito.*;
 public class OrderServiceImplTest {
     private OrderServiceImpl orderService;
     private OrderDao orderDao = mock(OrderDao.class);
-    private final String ORDER_IN_DB = "Ref123";
+    private final String ORDER_NUMBER_IN_DB = "Ref123";
     private final Long MEMBER_ID = 10L;
     private Order searchOrder;
+    private Order newOrder;
     private Member searchMember;
     private String orderNumber = "101010";
 
@@ -36,25 +37,25 @@ public class OrderServiceImplTest {
     private final List<OrderLog> ORDER_LOG_LIST = mockOrderLogList(ORDER_LOG);
     private final Order ORDER = mockOrder("855", OrderStatus.PENDING, LocalDateTime.now(), ORDER_LOG_LIST);
 
-
     @BeforeEach
     public void before() {
         orderService = new OrderServiceImpl(orderDao);
-        searchOrder = mockOrder(ORDER_IN_DB, OrderStatus.COMPLETE, LocalDateTime.now(),ORDER_LOG_LIST);
+        searchOrder = mockOrder(ORDER_NUMBER_IN_DB, OrderStatus.COMPLETE, LocalDateTime.now(), ORDER_LOG_LIST);
+        newOrder = mockOrder(ORDER_NUMBER_IN_DB, OrderStatus.COMPLETE, LocalDateTime.now().plusMonths(20), ORDER_LOG_LIST);
         searchMember = mockMember(MEMBER_ID);
         when(orderDao.findByOrderNumber(ORDER.getOrderNumber())).thenReturn(ORDER);
         when(orderDao.findLogListByOrder(ORDER.getOrderLog())).thenReturn(ORDER_LOG_LIST);
     }
 
     @Test
-    public void whenSendForShipmentOrderThanOrderStatusChange(){
-        when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(searchOrder);
+    public void whenSendForShipmentOrderThanOrderStatusChange() {
+        when(orderDao.findByOrderNumber(ORDER_NUMBER_IN_DB)).thenReturn(searchOrder);
         orderService.sendForShipment(ORDER);
         assertEquals(ORDER.getStatus(), OrderStatus.SHIPPED);
     }
 
     @Test
-    public void shouldThrowExceptionIfOrderIsAlreadyShipped(){
+    public void shouldThrowExceptionIfOrderIsAlreadyShipped() {
         var alreadyShippedOrder = mockOrder("8554", OrderStatus.SHIPPED, LocalDateTime.now(), ORDER_LOG_LIST);
 
         Throwable exception = Assertions.assertThrows(OrderIsAlreadyShippedException.class, () -> {
@@ -73,8 +74,6 @@ public class OrderServiceImplTest {
         boolean actualResponse = orderService.addOrderLogToOrder(ORDER, newOrderLog);
 
         assertEquals(actualResponse, true);
-        verify(orderDao).addOrderLog(ORDER.getOrderLog().add(newOrderLog));
-        verify(orderDao).updateOrder(ORDER);
     }
 
     @Test
@@ -87,6 +86,7 @@ public class OrderServiceImplTest {
         assertEquals(exception.getMessage(), "This OrderLog is already exist");
         assertEquals(exception.getClass(), OrderLogIsAlreadyExistException.class);
     }
+
 
     @Test
     public void shouldGetOrderTrack() {
@@ -116,30 +116,38 @@ public class OrderServiceImplTest {
 
         assertEquals(exception.getMessage(), "There is not found the Member by this ID");
         assertEquals(exception.getClass(), MemberDataNotFoundException.class);
-
-
     }
 
     @Test()
-    public void shouldThrowOrderNotFoundException() {
-        var InDbOrder = mockOrder(ORDER_IN_DB, OrderStatus.PENDING, LocalDateTime.now().plusDays(8),ORDER_LOG_LIST);
-
+    public void shouldThrowNullPointerException() {
         when(orderDao.isFoundMemberID(searchMember.getMemberID())).thenReturn(true);
-        when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(InDbOrder);
+        when(orderDao.findByOrderNumber(ORDER_NUMBER_IN_DB)).thenReturn(null);
 
-        Throwable exception = Assertions.assertThrows(OrderNotFoundException.class, () -> {
-            orderService.cancelOrder(searchOrder, searchMember);
+        Throwable exception = Assertions.assertThrows(NullPointerException.class, () -> {
+            orderService.cancelOrder(null, searchMember);
         });
 
-        assertEquals(exception.getMessage(), "There is not found the Order by this number");
+        assertEquals(exception.getClass(), NullPointerException.class);
+    }
+
+    @Test()
+    public void shouldThrowOrderNotFoundExceptionException() {
+        when(orderDao.isFoundMemberID(searchMember.getMemberID())).thenReturn(true);
+        when(orderDao.findByOrderNumber(ORDER_NUMBER_IN_DB)).thenReturn(newOrder);
+
+        Throwable exception = Assertions.assertThrows(OrderNotFoundException.class, () -> {
+            orderService.cancelOrder(newOrder, searchMember);
+        });
+
+        assertEquals(exception.getMessage(), "You can not cancel the order");
         assertEquals(exception.getClass(), OrderNotFoundException.class);
     }
 
     @Test
     public void whenOrderDateIsAfterCurrentThenOrderCanBeCanceled() {
-        var InDbOrder = mockOrder(ORDER_IN_DB,OrderStatus.PENDING, LocalDateTime.now().minusDays(1),ORDER_LOG_LIST );
+        var InDbOrder = mockOrder(ORDER_NUMBER_IN_DB, OrderStatus.PENDING, LocalDateTime.now().minusDays(1), ORDER_LOG_LIST);
         when(orderDao.isFoundMemberID(searchMember.getMemberID())).thenReturn(true);
-        when(orderDao.findByOrderNumber(ORDER_IN_DB)).thenReturn(InDbOrder);
+        when(orderDao.findByOrderNumber(ORDER_NUMBER_IN_DB)).thenReturn(InDbOrder);
         var resultOrder = orderService.cancelOrder(searchOrder, searchMember);
         Assertions.assertSame(resultOrder.getStatus(), OrderStatus.CANCELED);
         assertEquals(10L, searchMember.getMemberID());

@@ -32,6 +32,9 @@ public class OrderLog {
         this.status = status;
     }
 
+    public OrderLog(String orderNumber) {
+    }
+
     public long getId() {
         return id;
     }

@@ -7,7 +7,6 @@ import com.ra.course.aws.online.shopping.entity.shipment.ShipmentLog;
 import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.MemberDataNotFoundException;
 import com.ra.course.aws.online.shopping.exceptions.ShipmentLogIsAlreadyExistException;
-import com.ra.course.aws.online.shopping.exceptions.ShippingAddressNotFoundException;
 import com.ra.course.aws.online.shopping.service.ShippingService;
 import org.springframework.stereotype.Service;
 
@@ -23,16 +22,11 @@ public class ShippingServiceImpl implements ShippingService {
     }
 
     @Override
-    public Address specifyShippingAddress(final Member member, final Address address) {
+    public boolean specifyShippingAddress(final Member member, final Address address) {
         if (shippingDao.isFoundMemberID(member.getMemberID())) {
-            final var shipmentAddress = member.getAccount().getShippingAddress();
-            if (shippingDao.findShippingAddress(shipmentAddress)) {
-                return shipmentAddress;
-            } else {
-                member.getAccount().setShippingAddress(address);
-                shippingDao.updateShippingAddress(member);
-            }
-            throw new ShippingAddressNotFoundException("There is not found shipping address");
+            member.getAccount().setShippingAddress(address);
+            shippingDao.updateShippingAddress(member, address);
+            return true;
         }
         throw new MemberDataNotFoundException("There is not found the Member by this ID");
     }
@@ -49,13 +43,11 @@ public class ShippingServiceImpl implements ShippingService {
 
     @Override
     public boolean addShipmentLogToShipment(final Shipment shipment, final ShipmentLog shipmentLog) {
-        final var  foundShipment = shippingDao.findByShipmentNumber(shipment.getShipmentNumber());
-        if (foundShipment.getShipmentLogs().contains(shipmentLog)){
+        final var foundShipment = shippingDao.findByShipmentNumber(shipment.getShipmentNumber());
+        if (foundShipment.getShipmentLogs().contains(shipmentLog)) {
             throw new ShipmentLogIsAlreadyExistException("This ShipmentLog is already exist");
         }
-        final var foundShipmentList = shippingDao.findLogListByShipment(shipment.getShipmentLogs());
-        shippingDao.addShipmentLog(foundShipmentList.add(shipmentLog));
-        shippingDao.updateShipment(foundShipment);
+        shippingDao.addShipmentLog(shipmentLog);
         return true;
     }
 }

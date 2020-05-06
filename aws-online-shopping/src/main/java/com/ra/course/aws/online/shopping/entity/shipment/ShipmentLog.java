@@ -2,6 +2,7 @@ package com.ra.course.aws.online.shopping.entity.shipment;
 import com.ra.course.aws.online.shopping.entity.enums.ShipmentStatus;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class ShipmentLog {
     private long id;
@@ -23,6 +24,9 @@ public class ShipmentLog {
         this.shipmentNumber = shipmentNumber;
         this.status = status;
         this.creationDate = creationDate;
+    }
+
+    public ShipmentLog(String orderNumber) {
     }
 
     public String getShipmentNumber() {
@@ -55,5 +59,21 @@ public class ShipmentLog {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShipmentLog that = (ShipmentLog) o;
+        return id == that.id &&
+                Objects.equals(shipmentNumber, that.shipmentNumber) &&
+                status == that.status &&
+                Objects.equals(creationDate, that.creationDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, shipmentNumber, status, creationDate);
     }
 }

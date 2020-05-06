@@ -1,9 +1,13 @@
 package com.ra.course.aws.online.shopping.entity.notification;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class SMSNotification extends Notification {
     private String phone;
+
+    public SMSNotification() {
+    }
 
     public SMSNotification(String phone) {
         this.phone = phone;
@@ -25,5 +29,19 @@ public class SMSNotification extends Notification {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SMSNotification that = (SMSNotification) o;
+        return Objects.equals(phone, that.phone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), phone);
     }
 }

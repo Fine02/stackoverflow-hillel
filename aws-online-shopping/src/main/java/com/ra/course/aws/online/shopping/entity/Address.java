@@ -1,5 +1,7 @@
 package com.ra.course.aws.online.shopping.entity;
 
+import java.util.Objects;
+
 public class Address {
     private String streetAddress;
     private String city;
@@ -56,5 +58,22 @@ public class Address {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return Objects.equals(streetAddress, address.streetAddress) &&
+                Objects.equals(city, address.city) &&
+                Objects.equals(state, address.state) &&
+                Objects.equals(zipCode, address.zipCode) &&
+                Objects.equals(country, address.country);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(streetAddress, city, state, zipCode, country);
     }
 }
