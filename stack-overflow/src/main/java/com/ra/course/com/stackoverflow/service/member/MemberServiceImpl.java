@@ -5,18 +5,15 @@ import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import com.ra.course.com.stackoverflow.repository.QuestionRepository;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Service
 public class MemberServiceImpl implements MemberService<Question> {
 
-    @NonNull
     private transient final QuestionRepository questionRep;
-
-    @NonNull
     private transient final MemberRepository memberRep;
 
     @Override
