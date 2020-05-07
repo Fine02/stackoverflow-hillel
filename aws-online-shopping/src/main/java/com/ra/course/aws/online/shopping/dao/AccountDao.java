@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface AccountDao {
 
-    Long save(Account account, Long addressId);
+    Long save(Account account);
 
     boolean update(Account account);
 

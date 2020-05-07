@@ -41,7 +41,7 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     @Override
-    public Long save(final Account account, final Long addressId) {
+    public Long save(final Account account) {
         final KeyHolder keyHolder = keyHolderFactory.newKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
             @Override
@@ -52,9 +52,9 @@ public class AccountDaoImpl implements AccountDao {
             ps.setString(2, account.getPassword());
             ps.setString(3, account.getStatus().toString());
             ps.setString(4, account.getName());
-            ps.setInt(5, addressId.intValue());
-            ps.setString(6, account.getEmail());
-            ps.setString(7, account.getPhone());
+            //ps.setInt(5, addressId.intValue());
+            ps.setString(5, account.getEmail());
+            ps.setString(6, account.getPhone());
             return ps;
         }}, keyHolder);
         return keyHolder.getKey().longValue();
@@ -85,6 +85,8 @@ public class AccountDaoImpl implements AccountDao {
     public List<Account> getAll() {
         final List<AccountActionVO> accountVOs;
         accountVOs = jdbcTemplate.query(getAccounts, voMapper);
+        List<Account> ll = voMapper.getMappedAccountsFromVO(accountVOs);
+        int i = 0;
         return voMapper.getMappedAccountsFromVO(accountVOs);
     }
 }

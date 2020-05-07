@@ -18,8 +18,6 @@ public interface AccountService {
 
     List<Account> findAll();
 
-    boolean resetPassword(Long accountId, String password);
-
     boolean addCreditCard(Long accountId, CreditCard card);
 
     boolean deleteCreditCard(String cardNumber);

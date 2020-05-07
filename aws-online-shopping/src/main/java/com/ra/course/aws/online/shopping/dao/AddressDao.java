@@ -4,12 +4,11 @@ import com.ra.course.aws.online.shopping.entity.Address;
 
 public interface AddressDao {
 
-    Long save(Address address);
+    Long saveAccAdd(Address address, Long accountId);
+
+    Long saveBillAdd(Address address, Long cardId);
 
     boolean update(Address address);
 
-    boolean remove(Long id);
-
     Address findById(Long id);
-
 }

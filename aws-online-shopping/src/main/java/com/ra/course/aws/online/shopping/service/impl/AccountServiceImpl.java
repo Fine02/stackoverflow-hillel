@@ -32,8 +32,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Long create(final Account newAccount) {
-        final Long addressId = addressDao.save(newAccount.getShippingAddress());
-        return accountDao.save(newAccount, addressId);
+        final Long accountId = accountDao.save(newAccount);
+        addressDao.saveAccAdd(newAccount.getShippingAddress(), accountId);
+        return accountId;
     }
 
     @Override
@@ -41,8 +42,8 @@ public class AccountServiceImpl implements AccountService {
         Optional.ofNullable(accountDao.findById(accountToUpdate.getId()))
                 .ifPresentOrElse(account -> {
                     final Address newAddress = accountToUpdate.getShippingAddress();
-                    newAddress.setId(account.getId());
-                    addressDao.update(accountToUpdate.getShippingAddress());
+                    newAddress.setId(account.getShippingAddress().getId());
+                    addressDao.update(newAddress);
                     accountDao.update(accountToUpdate);
                 }, () -> {
                     throw new AccountNotFoundException();
@@ -52,10 +53,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean delete(final Long accountId) {
-        Optional.ofNullable(accountDao.findById(accountId))
-                .ifPresentOrElse(account -> accountDao.remove(accountId), () -> {
-                    throw new AccountNotFoundException();
-                });
+        accountDao.remove(accountId);
         return true;
     }
 
@@ -70,24 +68,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean resetPassword(final Long accountId, final String password) {
-        final Account account = accountDao.findById(accountId);
-        account.setPassword(password);
-        accountDao.update(account);
-        return true;
-    }
-
-    @Override
     public boolean addCreditCard(final Long accountId, final CreditCard card) {
-        final Long billingAddressId = addressDao.save(card.getBillingAddress());
-        creditCardDao.save(accountId, card, billingAddressId);
+        final Long cardId = creditCardDao.save(accountId, card);
+        addressDao.saveBillAdd(card.getBillingAddress(), cardId);
         return true;
     }
 
     @Override
     public boolean deleteCreditCard(final String cardNumber) {
-        creditCardDao.remove(cardNumber);
-        return true;
+      return creditCardDao.remove(cardNumber);
     }
 
     @Override

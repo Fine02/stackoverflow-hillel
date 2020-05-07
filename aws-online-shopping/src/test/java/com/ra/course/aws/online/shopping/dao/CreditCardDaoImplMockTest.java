@@ -21,7 +21,7 @@ public class CreditCardDaoImplMockTest {
 
     @BeforeEach
     void setUp() {
-        creditCardDao = new CreditCardDaoImpl(jdbcTemplate);
+        creditCardDao = new CreditCardDaoImpl(jdbcTemplate, keyHolderFactory);
     }
 
     @Test

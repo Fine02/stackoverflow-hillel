@@ -21,13 +21,13 @@ import java.sql.Statement;
 public class AddressDaoImpl implements AddressDao {
     @Value("${getAddress}")
     private transient String getAddress;
-    @Value("${insertAddress}")
-    private transient String insertAddress;
+    @Value("${insertAccAddress}")
+    private transient String insertAccAddress;
+    @Value("${insertBillAddress}")
+    private transient String insertBillAddress;
     @Value("${updateAddress}")
-    private transient String updateAddress;
-    @Value("${deleteAddress}")
-    private transient String deleteAddress;
 
+    private transient String updateAddress;
     private transient final JdbcTemplate jdbcTemplate;
     private transient final KeyHolderFactory keyHolderFactory;
 
@@ -37,22 +37,15 @@ public class AddressDaoImpl implements AddressDao {
     }
 
     @Override
-    public Long save(final Address address) {
-        final KeyHolder keyHolder = keyHolderFactory.newKeyHolder();
-        jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(final Connection con)
-                    throws SQLException {
-            final PreparedStatement ps = con.prepareStatement(insertAddress, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, address.getStreetAddress());
-            ps.setString(2, address.getCity());
-            ps.setString(3, address.getState());
-            ps.setString(4, address.getZipCode());
-            ps.setString(5, address.getCountry());
-            return ps;
-        }}, keyHolder);
-        return keyHolder.getKey().longValue();
+    public Long saveAccAdd(final Address address, final Long accountId) {
+        return saveAddress(address, accountId, insertAccAddress);
     }
+
+    @Override
+    public Long saveBillAdd(final Address address, final Long cardId) {
+        return saveAddress(address, cardId, insertBillAddress);
+    }
+
 
     @Override
     public Address findById(final Long id) {
@@ -66,9 +59,24 @@ public class AddressDaoImpl implements AddressDao {
         return true;
     }
 
-    @Override
-    public boolean remove(final Long id) {
-        jdbcTemplate.update(deleteAddress, id);
-        return true;
+
+
+    private Long saveAddress(Address address, Long id, String sql) {
+        final KeyHolder keyHolder = keyHolderFactory.newKeyHolder();
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(final Connection con)
+                    throws SQLException {
+                final PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, address.getStreetAddress());
+                ps.setString(2, address.getCity());
+                ps.setString(3, address.getState());
+                ps.setString(4, address.getZipCode());
+                ps.setString(5, address.getCountry());
+                ps.setInt(6, id.intValue());
+                return ps;
+            }
+        }, keyHolder);
+        return keyHolder.getKey().longValue();
     }
 }

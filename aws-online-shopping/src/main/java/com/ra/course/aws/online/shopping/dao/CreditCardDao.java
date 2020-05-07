@@ -4,8 +4,9 @@ import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
 
 public interface CreditCardDao {
 
-    boolean save(Long accountId, CreditCard card, Long billingAddressId);
+    Long save(Long accountId, CreditCard card);
 
     boolean remove(String cardNumber);
 
+    Integer find(String cardNumber);
 }
