@@ -39,15 +39,16 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean update(final Account accountToUpdate) {
-        Optional.ofNullable(accountDao.findById(accountToUpdate.getId()))
-                .ifPresentOrElse(account -> {
-                    final Address newAddress = accountToUpdate.getShippingAddress();
-                    newAddress.setId(account.getShippingAddress().getId());
-                    addressDao.update(newAddress);
-                    accountDao.update(accountToUpdate);
-                }, () -> {
-                    throw new AccountNotFoundException();
-                });
+        Optional<Account> accountOpt = Optional.ofNullable(accountDao.findById(accountToUpdate.getId()));
+        if (accountOpt.isPresent()) {
+            Account account = accountOpt.get();
+            final Address newAddress = accountToUpdate.getShippingAddress();
+            newAddress.setId(account.getShippingAddress().getId());
+            addressDao.updateAccAdd(newAddress);
+            accountDao.update(accountToUpdate);
+        } else {
+            throw new AccountNotFoundException();
+        }
         return true;
     }
 
@@ -76,7 +77,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean deleteCreditCard(final String cardNumber) {
-      return creditCardDao.remove(cardNumber);
+        return creditCardDao.remove(cardNumber);
     }
 
     @Override

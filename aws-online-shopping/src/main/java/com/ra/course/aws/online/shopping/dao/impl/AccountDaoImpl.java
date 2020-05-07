@@ -21,20 +21,23 @@ import java.util.*;
 @Repository
 @PropertySource("sql-requests.yml")
 public class AccountDaoImpl implements AccountDao {
-    @Value("${getAccounts}")
-    private transient String getAccounts;
     @Value("${insertAccount}")
     private transient String insertAccount;
     @Value("${updateAccount}")
     private transient String updateAccount;
     @Value("${deleteAccount}")
     private transient String deleteAccount;
+    @Value("${getAccount}")
+    private transient String getAccount;
+    @Value("${getAccounts}")
+    private transient String getAccounts;
 
     private transient final JdbcTemplate jdbcTemplate;
     private transient final AccountActionVOMapper voMapper;
     private transient final KeyHolderFactory keyHolderFactory;
 
-    public AccountDaoImpl(final JdbcTemplate jdbcTemplate, final AccountActionVOMapper accVOMapper, final KeyHolderFactory keyHolderFactory) {
+    public AccountDaoImpl(final JdbcTemplate jdbcTemplate, final AccountActionVOMapper accVOMapper,
+                          final KeyHolderFactory keyHolderFactory) {
         this.jdbcTemplate = jdbcTemplate;
         this.voMapper = accVOMapper;
         this.keyHolderFactory = keyHolderFactory;
@@ -47,16 +50,16 @@ public class AccountDaoImpl implements AccountDao {
             @Override
             public PreparedStatement createPreparedStatement(final Connection con)
                     throws SQLException {
-            final PreparedStatement ps = con.prepareStatement(insertAccount, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, account.getUserName());
-            ps.setString(2, account.getPassword());
-            ps.setString(3, account.getStatus().toString());
-            ps.setString(4, account.getName());
-            //ps.setInt(5, addressId.intValue());
-            ps.setString(5, account.getEmail());
-            ps.setString(6, account.getPhone());
-            return ps;
-        }}, keyHolder);
+                final PreparedStatement ps = con.prepareStatement(insertAccount, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, account.getUserName());
+                ps.setString(2, account.getPassword());
+                ps.setString(3, account.getStatus().toString());
+                ps.setString(4, account.getName());
+                ps.setString(5, account.getEmail());
+                ps.setString(6, account.getPhone());
+                return ps;
+            }
+        }, keyHolder);
         return keyHolder.getKey().longValue();
     }
 
@@ -75,7 +78,6 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public Account findById(final Long id) {
-        final String getAccount = getAccounts + " WHERE acc.id=? ";
         final List<AccountActionVO> accountVOs;
         accountVOs = jdbcTemplate.query(getAccount, new Object[]{id}, voMapper);
         return voMapper.getMappedAccountsFromVO(accountVOs).stream().findAny().orElse(null);

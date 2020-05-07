@@ -23,8 +23,6 @@ public class CreditCardDaoImpl implements CreditCardDao {
     private transient String insertCreditCard;
     @Value("${deleteCreditCard}")
     private transient String deleteCreditCard;
-    @Value("${find}")
-    private transient String find;
 
     private transient final JdbcTemplate jdbcTemplate;
     private transient final KeyHolderFactory keyHolderFactory;
@@ -45,25 +43,16 @@ public class CreditCardDaoImpl implements CreditCardDao {
                 ps.setString(1, card.getNameOnCard());
                 ps.setString(2, card.getCardNumber());
                 ps.setInt(3, card.getCode());
-              //  ps.setInt(4, null);
-                ps.setInt(5, accountId.intValue());
+                ps.setInt(4, accountId.intValue());
                 return ps;
             }
         }, keyHolder);
         return keyHolder.getKey().longValue();
     }
 
-
     @Override
     public boolean remove(final String cardNumber) {
         jdbcTemplate.update(deleteCreditCard, cardNumber);
         return true;
-    }
-
-    @Override
-    public Integer find(String cardNumber) {
-        return jdbcTemplate.queryForObject(find, new Object[]{cardNumber}, Integer.class);
-        // return jdbcTemplate.queryForObject(getAddress, new Object[]{id}, new AddressRowMapper());
-
     }
 }

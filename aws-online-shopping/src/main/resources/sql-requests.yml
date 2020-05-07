@@ -1,3 +1,16 @@
+insertAccount: INSERT INTO account (userName, password, account_status, name, email, phone) \
+  VALUES (?, ?, ?, ?, ?, ?)
+updateAccount: UPDATE account SET userName=?, password=?, account_status=?, name=?, email=?, phone=? WHERE id=?
+deleteAccount: DELETE FROM account WHERE id=?
+getAccount: SELECT acc.id, acc.userName, acc.password, acc.account_status, acc.name, acc.email, acc.phone, \
+  add.id AS addressID, add.streetaddress, add.city, add.state, add.zipcode, add.country, \
+  cc.nameOnCard, cc.cardNumber, cc.code, \
+  badd.id AS billingAddressId, badd.streetaddress AS billingStreetAddress, badd.city AS billingCity, badd.state AS billingState, badd.zipcode AS billingZipcode, badd.country AS billingCountry, \
+  ebt.bankName, ebt.routingNumber, ebt.accountNumber \
+  FROM account acc JOIN address add ON acc.address_id = add.id \
+  JOIN credit_card cc ON acc.id = cc.account_id \
+  JOIN billing_address badd ON cc.id = badd.credit_card_id \
+  JOIN electronic_bank_transfer ebt ON acc.id = ebt.account_id WHERE acc.id=?
 getAccounts: SELECT acc.id, acc.userName, acc.password, acc.account_status, acc.name, acc.email, acc.phone, \
   add.id AS addressID, add.streetaddress, add.city, add.state, add.zipcode, add.country, \
   cc.nameOnCard, cc.cardNumber, cc.code, \
@@ -7,31 +20,16 @@ getAccounts: SELECT acc.id, acc.userName, acc.password, acc.account_status, acc.
   JOIN credit_card cc ON acc.id = cc.account_id \
   JOIN billing_address badd ON cc.id = badd.credit_card_id \
   JOIN electronic_bank_transfer ebt ON acc.id = ebt.account_id
-insertAccount: INSERT INTO account (userName, password, account_status, name, email, phone) \
-  VALUES (?, ?, ?, ?, ?, ?)
-updateAccount: UPDATE account SET userName=?, password=?, account_status=?, name=?, email=?, phone=? WHERE id=?
-deleteAccount: DELETE FROM account WHERE id=?
 
-#GET_ADDRESS_ID: SELECT address_id FROM account WHERE id=?
-getAddress: SELECT * FROM address WHERE id=?
 insertAccAddress: INSERT INTO address (streetaddress, city, state, zipcode, country, account_id) VALUES (?, ?, ?, ?, ?, ?)
 insertBillAddress: INSERT INTO billing_address (streetaddress, city, state, zipcode, country, credit_card_id) \
   VALUES (?, ?, ?, ?, ?, ?)
 updateAddress: UPDATE address SET streetaddress=?, city=?, state=?, zipcode=?, country=? WHERE id=?
-deleteAddress: DELETE FROM address add WHERE add.id IN (SELECT acc.address_id FROM account acc WHERE acc.id = ?)
-delBilAddress: DELETE FROM address add WHERE add.id IN (SELECT address_id FROM credit_card WHERE cardNumber = ?)
-#delAccAddress: DELETE FROM address add WHERE add.id IN (SELECT acc.address_id, cc.address_id FROM account AS acc JOIN credit_card AS cc ON cc.account_id = acc.id WHERE acc.id = ?)
-
-delBillAddresses: DELETE FROM address add WHERE add.id IN (SELECT cc.address_id FROM credit_card cc WHERE cc.account_id = ?)
-
-#delAccAddresses: DELETE FROM address add WHERE add.id IN (SELECT cc.address_id FROM credit_card cc WHERE cc.account_id = ?)
-
-
+getAddress: SELECT * FROM address WHERE id=?
 
 insertCreditCard: INSERT INTO credit_card (nameOnCard, cardNumber, code, account_id) \
   VALUES (?, ?, ?, ?)
 deleteCreditCard: DELETE FROM credit_card WHERE cardNumber=?
-find: SELECT id from credit_card Where cardNumber = ?
 
 insertTransfer: INSERT INTO electronic_bank_transfer (bankName, routingNumber, accountNumber, account_id) \
   VALUES (?, ?, ?, ?)

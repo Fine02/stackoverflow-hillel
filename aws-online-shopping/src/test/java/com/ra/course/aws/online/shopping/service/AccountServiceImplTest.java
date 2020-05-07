@@ -67,11 +67,12 @@ class AccountServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should return saved account id")
+    @DisplayName("Should return saved account id when account saved")
     void shouldAddNewAccount() {
         Long expectedNewAccountId = 1L;
         //given
-        when(accountDao.save(eq(someAccount), any(Long.class))).thenReturn(expectedNewAccountId);
+        when(accountDao.save(eq(someAccount))).thenReturn(expectedNewAccountId);
+        when(addressDao.saveAccAdd(any(Address.class), any(Long.class))).thenReturn(true);
         //when
         Long addedAccountID = accountService.create(someAccount);
         //then
@@ -83,7 +84,7 @@ class AccountServiceImplTest {
     void shouldUpdateExistingAccount() {
         //given
         Address address = new Address("Garmatna", "Kyiv", "Kyiv", "01135", "Ukraine");
-        Account accountToUpdate = new Account(1L, "Nick Mason", "123asd", AccountStatus.ACTIVE, "Roger",
+        Account accountToUpdate = new Account(1L, "Nick Mason", "123asd", AccountStatus.ACTIVE, "Nick",
                 address, "nick@gmail.com", "+380672710102", new ArrayList<>(), new ArrayList<>());
         accountToUpdate.setId(someAccount.getId());
         accountToUpdate.setEmail("john1971@protonmail.com");
@@ -152,27 +153,18 @@ class AccountServiceImplTest {
         assertEquals(accounts.size(), 3);
     }
 
-    @Test
-    @DisplayName("Should update account with new password")
-    void resetPasswordTest() {
-        //given
-        when(accountDao.findById(any(Long.class))).thenReturn(account);
-        //when
-        assertTrue(accountService.resetPassword(account.getId(), "PasSworD"));
-        //then
-        verify(accountDao).update(eq(account));
-    }
+
 
     @Test
     @DisplayName("Should save new credit card and billing address")
     void addCreditCardTest() {
-        Long addressId = 34L;
+        Long cardId = 34L;
         //given
-        when(addressDao.save(any(Address.class))).thenReturn(addressId);
+      //  when(addressDao.saveBillAdd(any(Address.class), any(Long.class))).thenReturn(addressId);
         //when
         assertTrue(accountService.addCreditCard(account.getId(), card1));
         //then
-        verify(creditCardDao).save(eq(account.getId()), any(CreditCard.class), eq(addressId));
+        verify(creditCardDao).save(eq(account.getId()), any(CreditCard.class));
     }
 
     @Test
