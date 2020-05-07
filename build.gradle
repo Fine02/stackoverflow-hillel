@@ -49,7 +49,7 @@ project(':ams-airline-manag-system') {
 
 project(':ams-airline-management-integration-test') {
     dependencies {
-        testCompile project(':ams-airline-manag-system') {
+        testCompile project(':ams-airline-manag-system'){
             bootJar.enabled = false
             jar.enabled = true
         }
@@ -80,12 +80,11 @@ project(':stack-overflow') {
         compileOnly utils.lombok
         annotationProcessor utils.lombok
         compile 'org.springframework.boot:spring-boot-starter-jooq'
-        compile 'com.h2database:h2'
     }
 }
 project(':stack-overflow-integration-test') {
     dependencies {
-        testCompile project(':stack-overflow') {
+        testCompile project(':stack-overflow'){
             bootJar.enabled = false
             jar.enabled = true
         }
