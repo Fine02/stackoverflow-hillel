@@ -17,7 +17,7 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.verify;
 
 
-public class AddressDaoImplMockTest {
+public class AddressDaoImplTest {
 
     private AddressDao addressDao;
     private final JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);
@@ -48,7 +48,7 @@ public class AddressDaoImplMockTest {
         when(jdbcTemplate.update(anyString(), eq("Garmatna"), eq("Kyiv"), eq("Kyiv"),
                 eq("01135"), eq("Ukraine"), eq(cardId))).thenReturn(1);
         //then
-        assertTrue(addressDao.saveAccAdd(address, cardId));
+        assertTrue(addressDao.saveBillAdd(address, cardId));
     }
 
     @Test

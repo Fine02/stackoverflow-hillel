@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class ElBanTrDaoImplMockTest {
+public class ElBanTrDaoImplTest {
 
     private ElectronicBankTransferDao electronicBankTransferDao;
     private final JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);

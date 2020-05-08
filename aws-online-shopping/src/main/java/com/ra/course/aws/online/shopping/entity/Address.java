@@ -21,6 +21,15 @@ public class Address {
         this.country = country;
     }
 
+    public Address(Long id, String streetAddress, String city, String state, String zipCode, String country) {
+        this.id = id;
+        this.streetAddress = streetAddress;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
+        this.country = country;
+    }
+
     public Long getId() {
         return id;
     }

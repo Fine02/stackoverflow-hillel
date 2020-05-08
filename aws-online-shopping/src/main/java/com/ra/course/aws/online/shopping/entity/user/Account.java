@@ -47,6 +47,17 @@ public class Account {
         this.phone = phone;
     }
 
+    public Account(Long id, String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone) {
+        this.id = id;
+        this.userName = userName;
+        this.password = password;
+        this.status = status;
+        this.name = name;
+        this.shippingAddress = shippingAddress;
+        this.email = email;
+        this.phone = phone;
+    }
+
     public Account(Long id, String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone, List<CreditCard> creditCardList, List<ElectronicBankTransfer> electronicBankTransferList) {
         this.id = id;
         this.userName = userName;

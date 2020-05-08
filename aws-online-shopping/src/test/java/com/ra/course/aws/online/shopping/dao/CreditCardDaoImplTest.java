@@ -19,7 +19,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
-public class CreditCardDaoImplMockTest {
+public class CreditCardDaoImplTest {
 
     private CreditCardDao creditCardDao;
     private final JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(classes ={AwsOnlineShoppingApplication.class, TestConfig.class})
-//@ActiveProfiles("local")
+@ActiveProfiles("test")
 public class SpringBootContextTest {
     @Autowired
     private ApplicationContext context;

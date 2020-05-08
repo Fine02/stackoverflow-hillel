@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 
-public class AccountDaoImplMockTest {
+public class AccountDaoImplTest {
     private AccountDao accountDao;
     private final JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);
     private AccountActionVOMapper accountActionVOMapper = mock(AccountActionVOMapper.class);
