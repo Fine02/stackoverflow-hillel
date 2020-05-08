@@ -21,6 +21,7 @@ import java.util.*;
 @Repository
 @PropertySource("sql-requests.yml")
 public class AccountDaoImpl implements AccountDao {
+
     @Value("${insertAccount}")
     private transient String insertAccount;
     @Value("${updateAccount}")

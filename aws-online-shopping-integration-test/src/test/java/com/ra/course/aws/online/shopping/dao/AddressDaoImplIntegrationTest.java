@@ -40,7 +40,7 @@ public class AddressDaoImplIntegrationTest {
     }
 
     @Test
-    @DisplayName("Should return account address by following id")
+    @DisplayName("Returned account should be equal to expected")
     public void findAccAddByIDTest() {
         Address address = addressDao.findAccAddById(1L);
         assertAll(() -> {

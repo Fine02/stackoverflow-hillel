@@ -64,7 +64,8 @@ CREATE TABLE electronic_bank_transfer
     routingNumber varchar(255) NOT NULL,
     accountNumber varchar(255) NOT NULL,
     account_id    INT          NOT NULL,
-    CONSTRAINT account_id_fk
+        CONSTRAINT account_id_fk
         FOREIGN KEY (account_id) REFERENCES account (id)
-            ON UPDATE NO ACTION ON DELETE CASCADE
+        ON UPDATE NO ACTION ON DELETE CASCADE
+
 );

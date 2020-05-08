@@ -16,11 +16,11 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.verify;
 
-
 public class AddressDaoImplTest {
 
     private AddressDao addressDao;
     private final JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);
+
     private Address address;
 
     @BeforeEach
@@ -52,7 +52,7 @@ public class AddressDaoImplTest {
     }
 
     @Test
-    @DisplayName("Should return account address by following id")
+    @DisplayName("Finded address should be equal to expected")
     public void findAccAddByIDTest() {
         //given
         when(jdbcTemplate.queryForObject(any(), eq(new Object[]{1L}), any(AddressRowMapper.class))).thenReturn(address);

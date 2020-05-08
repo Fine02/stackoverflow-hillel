@@ -79,7 +79,7 @@ public class AccountDaoImplIntegrationTest {
 
     @Test
     public void findByIDTest() {
-        Account result = accountDao.findById(1L);
+        Account result = accountDao.findById(3L);
         System.out.println(result);
     }
 

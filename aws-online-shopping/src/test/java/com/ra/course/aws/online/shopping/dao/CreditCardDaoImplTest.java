@@ -32,7 +32,7 @@ public class CreditCardDaoImplTest {
     }
 
     @Test
-    @DisplayName("Should return true when credit card inserted")
+    @DisplayName("Returned credit card id should be equal to expected")
     public void saveTest() {
         //given
         Long accountId = 1L;
