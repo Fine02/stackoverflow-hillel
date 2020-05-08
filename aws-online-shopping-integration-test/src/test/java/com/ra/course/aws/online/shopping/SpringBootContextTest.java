@@ -56,5 +56,4 @@ public class SpringBootContextTest {
     void checkContextForShoppingCartService() {
         assertNotNull(context.getBean(ShoppingCartService.class));
     }
-
 }

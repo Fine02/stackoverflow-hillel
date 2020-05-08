@@ -53,7 +53,6 @@ public class AccountServiceImplIntegrationTest {
         Long addedAccountID = accountService.create(account);
 
         assertEquals(expectedNewAccountId, addedAccountID);
-
     }
 
     @Test
@@ -90,7 +89,6 @@ public class AccountServiceImplIntegrationTest {
         account.setId(999L);
         assertThrows(AccountNotFoundException.class, () -> accountService.update(account));
     }
-
 
     @Test
     @Rollback
@@ -137,6 +135,14 @@ public class AccountServiceImplIntegrationTest {
     }
 
     @Test
+    @DisplayName("Should return null when there is no account with following id in DB")
+    @Rollback
+    public void findByIDNullTest() {
+        Long accountId = 999L;
+        assertNull(accountService.findById(accountId));
+    }
+
+    @Test
     @DisplayName("Accoutns list size should be equals to actual")
     @Rollback
     void shouldGetAllAccounts() {
@@ -151,6 +157,16 @@ public class AccountServiceImplIntegrationTest {
 
         accounts = accountService.findAll();
         assertEquals(accounts.size(), ++expectedListSize);
+    }
+
+    @Test
+    @DisplayName("Should return empty list when there are no accounts in DB")
+    @Rollback
+    public void findAllEmptyTest() {
+        accountService.delete(1L);
+        accountService.delete(2L);
+        accountService.delete(3L);
+        assertTrue(accountService.findAll().isEmpty());
     }
 
     @Test

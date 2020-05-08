@@ -5,6 +5,7 @@ import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.mapper.AddressRowMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -39,7 +40,11 @@ public class AddressDaoImpl implements AddressDao {
 
     @Override
     public Address findAccAddById(final Long id) {
-        return jdbcTemplate.queryForObject(getAddress, new Object[]{id}, new AddressRowMapper());
+        try {
+            return jdbcTemplate.queryForObject(getAddress, new Object[]{id}, new AddressRowMapper());
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override

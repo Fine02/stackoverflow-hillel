@@ -7,4 +7,5 @@ public interface ElectronicBankTransferDao {
     boolean save(Long accountId, ElectronicBankTransfer transfer);
 
     boolean remove(String routingNumber);
+
 }

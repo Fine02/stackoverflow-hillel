@@ -7,6 +7,7 @@ import com.ra.course.aws.online.shopping.keyholder.KeyHolderFactory;
 import com.ra.course.aws.online.shopping.mapper.AccountActionVOMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.KeyHolder;
@@ -80,14 +81,22 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public Account findById(final Long id) {
         final List<AccountActionVO> accountVOs;
-        accountVOs = jdbcTemplate.query(getAccount, new Object[]{id}, voMapper);
-        return voMapper.getMappedAccountsFromVO(accountVOs).stream().findAny().orElse(null);
+        try {
+            accountVOs = jdbcTemplate.query(getAccount, new Object[]{id}, voMapper);
+            return voMapper.getMappedAccountsFromVO(accountVOs).stream().findAny().orElse(null);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
     public List<Account> getAll() {
         final List<AccountActionVO> accountVOs;
-        accountVOs = jdbcTemplate.query(getAccounts, voMapper);
-        return voMapper.getMappedAccountsFromVO(accountVOs);
+        try {
+            accountVOs = jdbcTemplate.query(getAccounts, voMapper);
+            return voMapper.getMappedAccountsFromVO(accountVOs);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 }

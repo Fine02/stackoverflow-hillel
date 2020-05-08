@@ -11,6 +11,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class AddressRowMapperTest {
+
     @Test
     public void test() throws SQLException {
         AddressRowMapper rowMapper = new AddressRowMapper();

@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class AccountActionVOMapper implements RowMapper<AccountActionVO> {
+
     @Override
     public AccountActionVO mapRow(final ResultSet rs, final int rowNum) throws SQLException {
         final AccountActionVO accountVO = new AccountActionVO();
@@ -134,4 +135,3 @@ public class AccountActionVOMapper implements RowMapper<AccountActionVO> {
         transfers.computeIfAbsent(accountId, cc -> new HashSet<>()).add(transfer);
     }
 }
-

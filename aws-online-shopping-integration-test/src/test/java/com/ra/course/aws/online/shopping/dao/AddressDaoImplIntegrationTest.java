@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -29,18 +30,21 @@ public class AddressDaoImplIntegrationTest {
 
     @Test
     @DisplayName("Should return true when account address inserted")
+    @Rollback
     public void saveAccAddTest() {
         assertTrue(addressDao.saveAccAdd(address, 3L));
     }
 
     @Test
     @DisplayName("Should return true when billing address inserted")
+    @Rollback
     public void saveBilAddTest() {
         assertTrue(addressDao.saveBillAdd(address, 3L));
     }
 
     @Test
     @DisplayName("Returned account should be equal to expected")
+    @Rollback
     public void findAccAddByIDTest() {
         Address address = addressDao.findAccAddById(1L);
         assertAll(() -> {
@@ -54,7 +58,15 @@ public class AddressDaoImplIntegrationTest {
     }
 
     @Test
+    @DisplayName("Should return null when there is no address with following id in DB")
+    @Rollback
+    public void findAccAddByIDNullTest() {
+        assertNull(addressDao.findAccAddById(999L));
+    }
+
+    @Test
     @DisplayName("Should return true when account address updated")
+    @Rollback
     public void updateAccAddTest() {
         address.setId(1L);
         boolean result = addressDao.updateAccAdd(address);
