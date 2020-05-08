@@ -2,7 +2,6 @@ package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
-import com.ra.course.aws.online.shopping.dao.AddressDao;
 import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.enums.AccountStatus;
 import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
@@ -14,19 +13,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("test")
@@ -59,6 +53,7 @@ public class AccountServiceImplIntegrationTest {
         Long addedAccountID = accountService.create(account);
 
         assertEquals(expectedNewAccountId, addedAccountID);
+
     }
 
     @Test
@@ -109,7 +104,7 @@ public class AccountServiceImplIntegrationTest {
     }
 
     @Test
-    @DisplayName("Finded account should be equal to expected in DB")
+    @DisplayName("Finded account should be equal to expected")
     @Rollback
     void shouldSearchAccountsByID() {
         Long accountId = 2L;
@@ -139,15 +134,23 @@ public class AccountServiceImplIntegrationTest {
             assertEquals(1, findedAccount.getElectronicBankTransferList().size());
             assertTrue(findedAccount.getElectronicBankTransferList().contains(expectedTransfer));
         });
-
     }
 
     @Test
-    @DisplayName("Should return list of all accounts")
+    @DisplayName("Accoutns list size should be equals to actual")
     @Rollback
     void shouldGetAllAccounts() {
+        int expectedListSize = 3;
+
         List<Account> accounts = accountService.findAll();
-        assertEquals(accounts.size(), 3);
+        assertEquals(accounts.size(), expectedListSize);
+
+        Long accountId = accountService.create(account);
+        accountService.addCreditCard(accountId, card);
+        accountService.addElectronicBankTransfer(accountId, transfer);
+
+        accounts = accountService.findAll();
+        assertEquals(accounts.size(), ++expectedListSize);
     }
 
     @Test
@@ -172,64 +175,54 @@ public class AccountServiceImplIntegrationTest {
     public void deleteCreditCardTest() {
         Long accountId = 3L;
         String cardNumber = "000000";
-        CreditCard card = new CreditCard("Barret Syd", "000000", 000,
+        CreditCard cardToDelete = new CreditCard("Barret Syd", cardNumber, 000,
                 new Address(6L, "DerybasivskaB", "Odesa", "Odesa", "25144", "Ukraine"));
 
         Account oldAccount = accountService.findById(accountId);
         assertAll(() -> {
             assertEquals(oldAccount.getCreditCardList().size(), 2);
-            assertTrue(oldAccount.getCreditCardList().contains(card));
+            assertTrue(oldAccount.getCreditCardList().contains(cardToDelete));
         });
 
-        accountService.deleteCreditCard("000000");
+        accountService.deleteCreditCard(cardNumber);
 
         Account updCardsAcc = accountService.findById(accountId);
         assertEquals(updCardsAcc.getCreditCardList().size(), 1);
     }
+
+    @Test
+    void addTransferTest() {
+        Long accountId = 1L;
+
+        Account oldAccount = accountService.findById(accountId);
+        assertEquals(oldAccount.getElectronicBankTransferList().size(), 2);
+
+        accountService.addElectronicBankTransfer(accountId, transfer);
+
+        Account updTrsnfAcc = accountService.findById(accountId);
+        assertAll(() -> {
+            assertEquals(updTrsnfAcc.getElectronicBankTransferList().size(), 3);
+            assertTrue(updTrsnfAcc.getElectronicBankTransferList().contains(transfer));
+        });
+    }
+
+    @Test
+    @DisplayName("Should return true when electronic bank deleted")
+    void deleteTransferTest() {
+        Long accountId = 1L;
+        String routingNumber = "111111";
+        ElectronicBankTransfer transferToDelete = new ElectronicBankTransfer("Privat",
+                routingNumber, "111111");
+
+        Account oldAccount = accountService.findById(accountId);
+        assertAll(() -> {
+            assertEquals(oldAccount.getElectronicBankTransferList().size(), 2);
+            assertTrue(oldAccount.getElectronicBankTransferList().contains(transferToDelete));
+        });
+
+        accountService.deleteElectronicBankTransfer(routingNumber);
+
+        Account updTransfAcc = accountService.findById(accountId);
+        assertEquals(updTransfAcc.getElectronicBankTransferList().size(), 1);
+    }
 }
-
-
-//
-//    @Test
-//    @DisplayName("Should return true when credit card saved")
-//    void addCreditCardTest() {
-//        Long expectedCardId = 34L;
-//        Long accountId = 1L;
-//
-//        //given
-//        when(creditCardDao.save(accountId, card)).thenReturn(expectedCardId);
-//        when(addressDao.saveBillAdd(eq(address), eq(accountId))).thenReturn(true);
-//        //when
-//        assertTrue(accountService.addCreditCard(accountId, card));
-//        //then
-//        verify(creditCardDao).save(eq(accountId), eq(card));
-//    }
-//
-//    @Test
-//    @DisplayName("Should return true when credit card deleted")
-//    void deleteCreditCardTest() {
-//        //given
-//        when((creditCardDao).remove(eq(card.getCardNumber()))).thenReturn(true);
-//        //then
-//        assertTrue(accountService.deleteCreditCard(card.getCardNumber()));
-//    }
-//
-//    @Test
-//    @DisplayName("Should return true when electronic bank saved")
-//    void addTransferTest() {
-//        //given
-//        Long accountId = 1L;
-//        when(electronicBankTransferDao.save(eq(accountId), eq(transfer))).thenReturn(true);
-//        //then
-//        assertTrue(accountService.addElectronicBankTransfer(accountId, transfer));
-//    }
-//
-//    @Test
-//    @DisplayName("Should return true when electronic bank deleted")
-//    void deleteTransferTest() {
-//        //given
-//        when(electronicBankTransferDao.remove(eq(transfer.getRoutingNumber()))).thenReturn(true);
-//        //then
-//        assertTrue(accountService.deleteElectronicBankTransfer(transfer.getRoutingNumber()));
-//    }
-//}

@@ -4,7 +4,6 @@ import com.ra.course.aws.online.shopping.AwsOnlineShoppingApplication;
 import com.ra.course.aws.online.shopping.TestConfig;
 import com.ra.course.aws.online.shopping.entity.Address;
 import com.ra.course.aws.online.shopping.entity.payment.CreditCard;
-import com.ra.course.aws.online.shopping.entity.user.Account;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +35,6 @@ public class CreditCardDaoImplIntegrationTest {
 
         Long cardId = (creditCardDao.save(accountId, card));
         assertEquals(expectedId, cardId);
-
-        Account account = accountDao.findById(2L);
-        int i = 0;
     }
 
     @Test
@@ -46,4 +42,3 @@ public class CreditCardDaoImplIntegrationTest {
         assertTrue(creditCardDao.remove("000000"));
     }
 }
-
