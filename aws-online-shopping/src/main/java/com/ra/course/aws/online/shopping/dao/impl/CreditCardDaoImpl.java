@@ -27,7 +27,7 @@ public class CreditCardDaoImpl implements CreditCardDao {
     private transient final JdbcTemplate jdbcTemplate;
     private transient final KeyHolderFactory keyHolderFactory;
 
-    public CreditCardDaoImpl(final JdbcTemplate jdbcTemplate, KeyHolderFactory keyHolderFactory) {
+    public CreditCardDaoImpl(final JdbcTemplate jdbcTemplate, final KeyHolderFactory keyHolderFactory) {
         this.jdbcTemplate = jdbcTemplate;
         this.keyHolderFactory = keyHolderFactory;
     }

@@ -7,7 +7,7 @@ getAccount: SELECT acc.id, acc.userName, acc.password, acc.account_status, acc.n
   cc.nameOnCard, cc.cardNumber, cc.code, \
   badd.id AS billingAddressId, badd.streetaddress AS billingStreetAddress, badd.city AS billingCity, badd.state AS billingState, badd.zipcode AS billingZipcode, badd.country AS billingCountry, \
   ebt.bankName, ebt.routingNumber, ebt.accountNumber \
-  FROM account acc JOIN address add ON acc.address_id = add.id \
+  FROM account acc JOIN address add ON add.account_id = acc.id \
   JOIN credit_card cc ON acc.id = cc.account_id \
   JOIN billing_address badd ON cc.id = badd.credit_card_id \
   JOIN electronic_bank_transfer ebt ON acc.id = ebt.account_id WHERE acc.id=?
@@ -16,7 +16,7 @@ getAccounts: SELECT acc.id, acc.userName, acc.password, acc.account_status, acc.
   cc.nameOnCard, cc.cardNumber, cc.code, \
   badd.id AS billingAddressId, badd.streetaddress AS billingStreetAddress, badd.city AS billingCity, badd.state AS billingState, badd.zipcode AS billingZipcode, badd.country AS billingCountry, \
   ebt.bankName, ebt.routingNumber, ebt.accountNumber \
-  FROM account acc JOIN address add ON acc.address_id = add.id \
+  FROM account acc JOIN address add ON add.account_id = acc.id \
   JOIN credit_card cc ON acc.id = cc.account_id \
   JOIN billing_address badd ON cc.id = badd.credit_card_id \
   JOIN electronic_bank_transfer ebt ON acc.id = ebt.account_id

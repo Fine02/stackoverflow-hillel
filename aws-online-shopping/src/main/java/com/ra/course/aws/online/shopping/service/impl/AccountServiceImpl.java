@@ -39,9 +39,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean update(final Account accountToUpdate) {
-        Optional<Account> accountOpt = Optional.ofNullable(accountDao.findById(accountToUpdate.getId()));
+        final        Optional<Account> accountOpt = Optional.ofNullable(accountDao.findById(accountToUpdate.getId()));
         if (accountOpt.isPresent()) {
-            Account account = accountOpt.get();
+            final            Account account = accountOpt.get();
             final Address newAddress = accountToUpdate.getShippingAddress();
             newAddress.setId(account.getShippingAddress().getId());
             addressDao.updateAccAdd(newAddress);

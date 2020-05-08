@@ -49,7 +49,7 @@ public class AddressDaoImpl implements AddressDao {
         return true;
     }
 
-    private boolean saveAddress(Address address, Long id, String sql) {
+    private boolean saveAddress(final Address address, final Long id, final String sql) {
         jdbcTemplate.update(sql, address.getStreetAddress(), address.getCity(), address.getState(),
                 address.getZipCode(), address.getCountry(), id.intValue());
         return true;

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class AccountActionVOMapper implements RowMapper<AccountActionVO> {
@@ -23,32 +24,26 @@ public class AccountActionVOMapper implements RowMapper<AccountActionVO> {
         accountVO.setPassword(rs.getString("password"));
         accountVO.setStatus(AccountStatus.valueOf(rs.getString("account_status")));
         accountVO.setName(rs.getString("name"));
-
         accountVO.setAddressId(rs.getLong("addressId"));
         accountVO.setStreetAddress(rs.getString("streetAddress"));
         accountVO.setState(rs.getString("state"));
         accountVO.setZipCode(rs.getString("zipcode"));
         accountVO.setCountry(rs.getString("country"));
         accountVO.setCity(rs.getString("city"));
-
         accountVO.setEmail(rs.getString("email"));
         accountVO.setPhone(rs.getString("phone"));
-
         accountVO.setNameOnCard(rs.getString("nameOnCard"));
         accountVO.setCardNumber(rs.getString("cardNumber"));
         accountVO.setCode(rs.getInt("code"));
-
         accountVO.setBillingAddressId(rs.getLong("billingAddressId"));
         accountVO.setBillingStreetAddress(rs.getString("billingStreetAddress"));
         accountVO.setBillingState(rs.getString("billingState"));
         accountVO.setBillingZipCode(rs.getString("billingZipcode"));
         accountVO.setBillingCountry(rs.getString("billingCountry"));
         accountVO.setBillingCity(rs.getString("billingCity"));
-
         accountVO.setBankName(rs.getString("bankName"));
         accountVO.setRoutingNumber(rs.getString("routingNumber"));
         accountVO.setAccountNumber(rs.getString("accountNumber"));
-
         return accountVO;
     }
 
@@ -56,27 +51,30 @@ public class AccountActionVOMapper implements RowMapper<AccountActionVO> {
         Account account;
         CreditCard card;
         ElectronicBankTransfer transfer;
-
         final Set<Account> accounts = new HashSet<>();
-        final Map<Long, Set<CreditCard>> cards = new HashMap<>();
-        final Map<Long, Set<ElectronicBankTransfer>> transfers = new HashMap<>();
-
-        for (final AccountActionVO accountVO : accountVOs) {
+        final Map<Long, Set<CreditCard>> cards = new ConcurrentHashMap<>();
+        final Map<Long, Set<ElectronicBankTransfer>> transfers = new ConcurrentHashMap<>();
+        cards.put(-1L, new HashSet<>());
+        transfers.put(-1L, new HashSet<>());
+        final Iterator<AccountActionVO> itrVO = accountVOs.iterator();
+        AccountActionVO accountVO;
+        while (itrVO.hasNext()) {
+            accountVO = itrVO.next();
             account = mapAccountFromVO(accountVO);
             card = mapCreditCardFromVO(accountVO);
             transfer = mapTransferFromVO(accountVO);
-
-            cards.computeIfAbsent(account.getId(), cc -> new HashSet<>()).add(card);
-            transfers.computeIfAbsent(account.getId(), cc -> new HashSet<>()).add(transfer);
+            computeCreditCard(account.getId(), cards, card);
+            computeTransfer(account.getId(), transfers, transfer);
             accounts.add(account);
         }
-        for (final Account acc : accounts) {
-            acc.setCreditCardList(new ArrayList<>(cards.get(acc.getId())));
-            acc.setElectronicBankTransferList(new ArrayList<>(transfers.get(acc.getId())));
+        final Iterator<Account> itrAcc = accounts.iterator();
+        while (itrAcc.hasNext()) {
+            account = itrAcc.next();
+            account.getCreditCardList().addAll(cards.get(account.getId()));
+            account.getElectronicBankTransferList().addAll(transfers.get(account.getId()));
         }
         return new ArrayList<>(accounts);
     }
-
 
     private Account mapAccountFromVO(final AccountActionVO accountVO) {
         final Account account = new Account();
@@ -96,6 +94,11 @@ public class AccountActionVOMapper implements RowMapper<AccountActionVO> {
         shippingAddress.setCountry(accountVO.getCountry());
         shippingAddress.setCity(accountVO.getCity());
         account.setShippingAddress(shippingAddress);
+
+        final List<CreditCard> cardsList = new ArrayList<>();
+        final List<ElectronicBankTransfer> transfersList = new ArrayList<>();
+        account.setCreditCardList(cardsList);
+        account.setElectronicBankTransferList(transfersList);
         return account;
     }
 
@@ -122,4 +125,13 @@ public class AccountActionVOMapper implements RowMapper<AccountActionVO> {
         transfer.setAccountNumber(accountVO.getAccountNumber());
         return transfer;
     }
+
+    private void computeCreditCard(final Long accountId, final Map<Long, Set<CreditCard>> cards, final CreditCard card) {
+        cards.computeIfAbsent(accountId, cc -> new HashSet<>()).add(card);
+    }
+
+    private void computeTransfer(final Long accountId, final Map<Long, Set<ElectronicBankTransfer>> transfers, final ElectronicBankTransfer transfer) {
+        transfers.computeIfAbsent(accountId, cc -> new HashSet<>()).add(transfer);
+    }
 }
+

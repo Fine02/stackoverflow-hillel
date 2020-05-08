@@ -87,8 +87,6 @@ public class AccountDaoImpl implements AccountDao {
     public List<Account> getAll() {
         final List<AccountActionVO> accountVOs;
         accountVOs = jdbcTemplate.query(getAccounts, voMapper);
-        List<Account> ll = voMapper.getMappedAccountsFromVO(accountVOs);
-        int i = 0;
         return voMapper.getMappedAccountsFromVO(accountVOs);
     }
 }
