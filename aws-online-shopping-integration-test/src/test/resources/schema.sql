@@ -4,7 +4,7 @@ USE shopping;
 DROP TABLE IF EXISTS payment_status, shipment_status, account_status, order_status,
     address, notification, `sms_notification`, email_notification, shipment, shipment_log,
     `order`, order_log, payment, account, member, electronic_bank_transfer, credit_card,
-    electronic_bank_transaction, credit_card_transaction;
+    electronic_bank_transaction, credit_card_transaction, billing_address;
 
 CREATE TABLE payment_status
 (
@@ -156,16 +156,29 @@ CREATE TABLE electronic_bank_transfer
 
 CREATE TABLE credit_card
 (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nameOnCard varchar (255) NOT NULL,
-    cardNumber varchar (255) NOT NULL,
-    code INT NOT NULL,
-    address_id INT NOT NULL,
-    account_id INT NOT NULL,
-    CONSTRAINT  address_id_fk
-        FOREIGN KEY (address_id) REFERENCES address (id),
-    CONSTRAINT  fk_account_id_cc
+    id         INT PRIMARY KEY AUTO_INCREMENT,
+    nameOnCard varchar(255) NOT NULL,
+    cardNumber varchar(255) NOT NULL,
+    code       INT          NOT NULL,
+    address_id INT,
+    account_id INT          NOT NULL,
+    CONSTRAINT fk_account_id_cc
         FOREIGN KEY (account_id) REFERENCES account (id)
+            ON UPDATE NO ACTION ON DELETE CASCADE
+);
+
+CREATE TABLE billing_address
+(
+    id             INT PRIMARY KEY AUTO_INCREMENT,
+    streetaddress  varchar(255) NOT NULL,
+    city           varchar(255) NOT NULL,
+    state          varchar(255) NOT NULL,
+    zipcode        varchar(255) NOT NULL,
+    country        varchar(255) NOT NULL,
+    credit_card_id INT,
+    CONSTRAINT fk_credit_card_id
+        FOREIGN KEY (credit_card_id) REFERENCES credit_card (id)
+            ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
 CREATE TABLE electronic_bank_transaction
