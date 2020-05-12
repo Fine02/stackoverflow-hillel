@@ -30,14 +30,31 @@ CREATE TABLE order_status
     status varchar (255) NOT NULL
 );
 
+CREATE TABLE account
+(
+    id             INT PRIMARY KEY AUTO_INCREMENT,
+    userName       varchar(255) NOT NULL,
+    password       varchar(255) NOT NULL,
+    account_status_id INT,
+    account_status varchar(255),
+    name           varchar(255) NOT NULL,
+    address_id     INT,
+    email          varchar(255) NOT NULL,
+    phone          varchar(255) NOT NULL
+);
+
 CREATE TABLE address
 (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    streetAddress varchar (255) NOT NULL,
-    city varchar (255) NOT NULL,
-    state varchar (255) NOT NULL,
-    zipcode varchar (255) NOT NULL,
-    country varchar (255) NOT NULL
+    id            INT PRIMARY KEY AUTO_INCREMENT,
+    streetAddress varchar(255) NOT NULL,
+    city          varchar(255) NOT NULL,
+    state         varchar(255) NOT NULL,
+    zipcode       varchar(255) NOT NULL,
+    country       varchar(255) NOT NULL,
+    account_id    INT,
+    CONSTRAINT fk_account_id1
+        FOREIGN KEY (account_id) REFERENCES account (id)
+            ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
 CREATE TABLE notification
@@ -119,21 +136,8 @@ CREATE TABLE payment
         FOREIGN KEY (payment_status_id) REFERENCES payment_status (id)
 );
 
-CREATE TABLE account
-(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    userName varchar (255) NOT NULL,
-    password varchar (255) NOT NULL,
-    account_status_id INT NOT NULL,
-    name varchar (255) NOT NULL,
-    address_id INT NOT NULL,
-    email varchar (255) NOT NULL,
-    phone varchar (255) NOT NULL,
-    CONSTRAINT  fk_account_status_id
-        FOREIGN KEY (account_status_id) REFERENCES account_status (id),
-    CONSTRAINT  fk_address_id
-        FOREIGN KEY (address_id) REFERENCES address (id)
-);
+
+
 
 CREATE TABLE member
 (
