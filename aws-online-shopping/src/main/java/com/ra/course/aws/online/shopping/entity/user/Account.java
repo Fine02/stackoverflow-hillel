@@ -25,8 +25,7 @@ public class Account {
     public Account() {
     }
 
-    public Account(Long id, String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone, List<CreditCard> creditCardList, List<ElectronicBankTransfer> electronicBankTransferList) {
-        this.id = id;
+    public Account(String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone, List<CreditCard> creditCardList, List<ElectronicBankTransfer> electronicBankTransferList) {
         this.userName = userName;
         this.password = password;
         this.status = status;
@@ -38,7 +37,29 @@ public class Account {
         this.electronicBankTransferList = electronicBankTransferList;
     }
 
-    public Account(String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone, List<CreditCard> creditCardList, List<ElectronicBankTransfer> electronicBankTransferList) {
+    public Account(String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone) {
+        this.userName = userName;
+        this.password = password;
+        this.status = status;
+        this.name = name;
+        this.shippingAddress = shippingAddress;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public Account(Long id, String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone) {
+        this.id = id;
+        this.userName = userName;
+        this.password = password;
+        this.status = status;
+        this.name = name;
+        this.shippingAddress = shippingAddress;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public Account(Long id, String userName, String password, AccountStatus status, String name, Address shippingAddress, String email, String phone, List<CreditCard> creditCardList, List<ElectronicBankTransfer> electronicBankTransferList) {
+        this.id = id;
         this.userName = userName;
         this.password = password;
         this.status = status;
@@ -133,22 +154,15 @@ public class Account {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Account)) return false;
         Account account = (Account) o;
-        return Objects.equals(id, account.id) &&
-                Objects.equals(userName, account.userName) &&
-                Objects.equals(password, account.password) &&
-                status == account.status &&
-                Objects.equals(name, account.name) &&
-                Objects.equals(shippingAddress, account.shippingAddress) &&
-                Objects.equals(email, account.email) &&
-                Objects.equals(phone, account.phone) &&
-                Objects.equals(creditCardList, account.creditCardList) &&
-                Objects.equals(electronicBankTransferList, account.electronicBankTransferList);
+        return getId().equals(account.getId()) &&
+                getUserName().equals(account.getUserName()) &&
+                getEmail().equals(account.getEmail());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, password, status, name, shippingAddress, email, phone, creditCardList, electronicBankTransferList);
+        return Objects.hash(getId(), getUserName(), getEmail());
     }
 }

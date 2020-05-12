@@ -46,7 +46,7 @@ project(':ams-airline-manag-system') {
 
 project(':ams-airline-management-integration-test') {
     dependencies {
-        testCompile project(':ams-airline-manag-system'){
+        testCompile project(':ams-airline-manag-system') {
             bootJar.enabled = false
             jar.enabled = true
         }
@@ -57,21 +57,19 @@ project(':ams-airline-management-integration-test') {
 }
 
 project(':aws-online-shopping') {
-   dependencies{
-       compile 'org.springframework.boot:spring-boot-starter-jdbc'
-   }
+    dependencies {
+        compile 'org.springframework.boot:spring-boot-starter-jdbc'
+    }
 }
 
 project(':aws-online-shopping-integration-test') {
     dependencies {
-        testCompile project(':aws-online-shopping'){
+        testCompile project(':aws-online-shopping') {
             bootJar.enabled = false
             jar.enabled = true
         }
-        dependencies{
-            //testCompile db.h2
-            //compile db.postgres
-           testCompile 'com.h2database:h2'
+        dependencies {
+            testCompile 'com.h2database:h2'
         }
     }
     bootJar {
@@ -86,7 +84,7 @@ project(':stack-overflow') {
 }
 project(':stack-overflow-integration-test') {
     dependencies {
-        testCompile project(':stack-overflow'){
+        testCompile project(':stack-overflow') {
             bootJar.enabled = false
             jar.enabled = true
         }
