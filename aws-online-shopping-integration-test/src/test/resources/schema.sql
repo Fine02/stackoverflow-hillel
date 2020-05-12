@@ -70,8 +70,8 @@ CREATE TABLE `sms_notification`
     `phone` varchar (255) NOT NULL,
     `notification_id` INT NOT NULL,
     CONSTRAINT  `fk_sms_notification_id`
-        FOREIGN KEY (`notification_id`) REFERENCES notification (`id`) ON DELETE CASCADE
-);
+    FOREIGN KEY (`notification_id`) REFERENCES notification (`id`) ON DELETE CASCADE
+    );
 
 CREATE TABLE email_notification
 (
@@ -111,8 +111,8 @@ CREATE TABLE `order`
     order_status_id INT NOT NULL,
     orderDate DATETIME NOT NULL,
     CONSTRAINT  fk_order_status
-        FOREIGN KEY (order_status_id) REFERENCES order_status (id)
-);
+    FOREIGN KEY (order_status_id) REFERENCES order_status (id)
+    );
 
 CREATE TABLE order_log
 (
@@ -156,6 +156,7 @@ CREATE TABLE electronic_bank_transfer
     account_id INT NOT NULL,
     CONSTRAINT  account_id_fk
         FOREIGN KEY (account_id) REFERENCES account (id)
+            ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
 CREATE TABLE credit_card
@@ -174,7 +175,7 @@ CREATE TABLE credit_card
 CREATE TABLE billing_address
 (
     id             INT PRIMARY KEY AUTO_INCREMENT,
-    streetaddress  varchar(255) NOT NULL,
+    streetAddress  varchar(255) NOT NULL,
     city           varchar(255) NOT NULL,
     state          varchar(255) NOT NULL,
     zipcode        varchar(255) NOT NULL,
