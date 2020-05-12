@@ -54,17 +54,16 @@ public class CreditCard {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof CreditCard)) return false;
         CreditCard that = (CreditCard) o;
-        return code == that.code &&
-                Objects.equals(nameOnCard, that.nameOnCard) &&
-                Objects.equals(cardNumber, that.cardNumber) &&
-                Objects.equals(billingAddress, that.billingAddress);
+        return getCode() == that.getCode() &&
+                getNameOnCard().equals(that.getNameOnCard()) &&
+                getCardNumber().equals(that.getCardNumber());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nameOnCard, cardNumber, code, billingAddress);
+        return Objects.hash(getNameOnCard(), getCardNumber(), getCode());
     }
 }
 
