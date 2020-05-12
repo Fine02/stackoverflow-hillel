@@ -5,11 +5,11 @@ VALUES ('roger', '123123', 'COMPROMISED', 'Roger Waters', 'waters@gmail.com', '+
 INSERT INTO account (userName, password, account_status, name, email, phone)
 VALUES ('syd', '321321', 'ARCHIVED', 'Syd Barret', 'barret@gmail.com', '+7858789656458');
 
-INSERT INTO address (streetaddress, city, state, zipcode, country, account_id)
+INSERT INTO address (streetAddress, city, state, zipcode, country, account_id)
 VALUES ('Gonchara', 'Kyiv', 'Kyiv', '01134', 'Ukraine', 1);
-INSERT INTO address (streetaddress, city, state, zipcode, country, account_id)
+INSERT INTO address (streetAddress, city, state, zipcode, country, account_id)
 VALUES ('Zlayoustivska', 'Kyiv', 'Kyiv', '01135', 'Ukraine', 2);
-INSERT INTO address (streetaddress, city, state, zipcode, country, account_id)
+INSERT INTO address (streetAddress, city, state, zipcode, country, account_id)
 VALUES ('Kirova', 'Dnirpo', 'Dnipro', '14569', 'Ukraine', 3);
 
 INSERT INTO credit_card (nameOnCard, cardNumber, code, account_id)
@@ -25,17 +25,17 @@ VALUES ('Syd Barret', '999999', 999, 3);
 INSERT INTO credit_card (nameOnCard, cardNumber, code, account_id)
 VALUES ('Barret Syd', '000000', 000, 3);
 
-INSERT INTO billing_address (streetaddress, city, state, zipcode, country, credit_card_id)
+INSERT INTO billing_address (streetAddress, city, state, zipcode, country, credit_card_id)
 VALUES ('GoncharaB', 'Kyiv', 'Kyiv', '01134', 'Ukraine', 1);
-INSERT INTO billing_address (streetaddress, city, state, zipcode, country, credit_card_id)
+INSERT INTO billing_address (streetAddress, city, state, zipcode, country, credit_card_id)
 VALUES ('ZlayoustivskaB', 'Kyiv', 'Kyiv', '01135', 'Ukraine', 2);
-INSERT INTO billing_address (streetaddress, city, state, zipcode, country, credit_card_id)
+INSERT INTO billing_address (streetAddress, city, state, zipcode, country, credit_card_id)
 VALUES ('KirovaB', 'Dnirpo', 'Dnipro', '14569', 'Ukraine', 3);
-INSERT INTO billing_address (streetaddress, city, state, zipcode, country, credit_card_id)
+INSERT INTO billing_address (streetAddress, city, state, zipcode, country, credit_card_id)
 VALUES ('SadovaB', 'Dnirpo', 'Dnipro', '14568', 'Ukraine', 4);
-INSERT INTO billing_address (streetaddress, city, state, zipcode, country, credit_card_id)
+INSERT INTO billing_address (streetAddress, city, state, zipcode, country, credit_card_id)
 VALUES ('ArnautskaB', 'Odesa', 'Odesa', '25147', 'Ukraine', 5);
-INSERT INTO billing_address (streetaddress, city, state, zipcode, country, credit_card_id)
+INSERT INTO billing_address (streetAddress, city, state, zipcode, country, credit_card_id)
 VALUES ('DerybasivskaB', 'Odesa', 'Odesa', '25144', 'Ukraine', 6);
 
 INSERT INTO electronic_bank_transfer (bankName, routingNumber, accountNumber, account_id)

@@ -3,28 +3,28 @@ insertAccount: INSERT INTO account (userName, password, account_status, name, em
 updateAccount: UPDATE account SET userName=?, password=?, account_status=?, name=?, email=?, phone=? WHERE id=?
 deleteAccount: DELETE FROM account WHERE id=?
 getAccount: SELECT acc.id, acc.userName, acc.password, acc.account_status, acc.name, acc.email, acc.phone, \
-  add.id AS addressID, add.streetaddress, add.city, add.state, add.zipcode, add.country, \
+  add.id AS addressID, add.streetAddress, add.city, add.state, add.zipcode, add.country, \
   cc.nameOnCard, cc.cardNumber, cc.code, \
-  badd.id AS billingAddressId, badd.streetaddress AS billingStreetAddress, badd.city AS billingCity, badd.state AS billingState, badd.zipcode AS billingZipcode, badd.country AS billingCountry, \
+  badd.id AS billingAddressId, badd.streetAddress AS billingStreetAddress, badd.city AS billingCity, badd.state AS billingState, badd.zipcode AS billingZipcode, badd.country AS billingCountry, \
   ebt.bankName, ebt.routingNumber, ebt.accountNumber \
   FROM account acc JOIN address add ON add.account_id = acc.id \
   JOIN credit_card cc ON cc.account_id = acc.id  \
   JOIN billing_address badd ON badd.credit_card_id = cc.id \
   JOIN electronic_bank_transfer ebt ON acc.id = ebt.account_id WHERE acc.id=?
 getAccounts: SELECT acc.id, acc.userName, acc.password, acc.account_status, acc.name, acc.email, acc.phone, \
-  add.id AS addressID, add.streetaddress, add.city, add.state, add.zipcode, add.country, \
+  add.id AS addressID, add.streetAddress, add.city, add.state, add.zipcode, add.country, \
   cc.nameOnCard, cc.cardNumber, cc.code, \
-  badd.id AS billingAddressId, badd.streetaddress AS billingStreetAddress, badd.city AS billingCity, badd.state AS billingState, badd.zipcode AS billingZipcode, badd.country AS billingCountry, \
+  badd.id AS billingAddressId, badd.streetAddress AS billingStreetAddress, badd.city AS billingCity, badd.state AS billingState, badd.zipcode AS billingZipcode, badd.country AS billingCountry, \
   ebt.bankName, ebt.routingNumber, ebt.accountNumber \
   FROM account acc JOIN address add ON add.account_id = acc.id \
   JOIN credit_card cc ON acc.id = cc.account_id \
   JOIN billing_address badd ON cc.id = badd.credit_card_id \
   JOIN electronic_bank_transfer ebt ON acc.id = ebt.account_id
 
-insertAccAddress: INSERT INTO address (streetaddress, city, state, zipcode, country, account_id) VALUES (?, ?, ?, ?, ?, ?)
-insertBillAddress: INSERT INTO billing_address (streetaddress, city, state, zipcode, country, credit_card_id) \
+insertAccAddress: INSERT INTO address (streetAddress, city, state, zipcode, country, account_id) VALUES (?, ?, ?, ?, ?, ?)
+insertBillAddress: INSERT INTO billing_address (streetAddress, city, state, zipcode, country, credit_card_id) \
   VALUES (?, ?, ?, ?, ?, ?)
-updateAddress: UPDATE address SET streetaddress=?, city=?, state=?, zipcode=?, country=? WHERE id=?
+updateAddress: UPDATE address SET streetAddress=?, city=?, state=?, zipcode=?, country=? WHERE id=?
 getAddress: SELECT * FROM address WHERE id=?
 
 insertCreditCard: INSERT INTO credit_card (nameOnCard, cardNumber, code, account_id) \

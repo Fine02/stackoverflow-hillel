@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = {AwsOnlineShoppingApplication.class, TestConfig.class})
 @ActiveProfiles("test")
-@Sql(scripts = {"classpath:schema.sql", "classpath:test-data.sql"})
+@Sql(scripts = {"classpath:schema.sql", "classpath:test-data-account.sql"})
 public class AddressDaoImplIntegrationTest {
 
     @Autowired

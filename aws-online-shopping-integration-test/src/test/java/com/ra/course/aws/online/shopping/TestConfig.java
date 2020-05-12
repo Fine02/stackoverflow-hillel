@@ -10,26 +10,6 @@ import static org.mockito.Mockito.mock;
 public class TestConfig {
 
     @Bean
-    public NotificationDao mockedNotificationDao() {
-        return mock(NotificationDao.class);
-    }
-
-    @Bean
-    public OrderDao mockedOrderDao() {
-        return mock(OrderDao.class);
-    }
-
-    @Bean
-    public PaymentDao mockedPaymentDao() {
-        return mock(PaymentDao.class);
-    }
-
-    @Bean
-    public ShippingDao mockedShippingDao() {
-        return mock(ShippingDao.class);
-    }
-
-    @Bean
     public ProductDao mockedProductDao() {
         return mock(ProductDao.class);
     }
@@ -39,4 +19,3 @@ public class TestConfig {
         return mock(ShoppingCartDao.class);
     }
 }
-

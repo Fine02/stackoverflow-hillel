@@ -69,8 +69,6 @@ project(':aws-online-shopping-integration-test') {
             jar.enabled = true
         }
         dependencies {
-           // testCompile db.h2
-            // testCompile db.postgres
             testCompile 'com.h2database:h2'
         }
     }
