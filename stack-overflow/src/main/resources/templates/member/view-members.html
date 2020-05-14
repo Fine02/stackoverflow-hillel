@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>StackOverflow Member View</title>
+    <link rel="stylesheet" href="css/index.css"
+          th:href="@{../../public/css/index.css}"/>
+    <style>
+        h1.exception {
+            color: brown;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="~{toolbar::header}"></div>
+
+<div class="main">
+    <div class="container">
+        <h1 class="exception" th:text="${text}"></h1>
+        <div th:if="${not #lists.isEmpty(viewMembers)}">
+            <div th:each="viewMember : ${viewMembers}">
+                <h3 th:text="'Hello, ' + ${viewMember.getName()} +'!!!'"></h3>
+                <p th:text="'Id: ' + ${viewMember.getId()} "></p>
+                <p th:text="'Reputation: ' + ${viewMember.getReputation()} "></p>
+                <p th:text="'Status: ' + ${viewMember.getStatus()} "></p>
+            </div>
+        </div>
+    </div>
+
+    <div th:insert="~{toolbar::footer}"></div>
+</body>
+</html>

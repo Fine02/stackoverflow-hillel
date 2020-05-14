@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>StackOverflow Greeting</title>
+    <link rel="stylesheet" href="css/index.css"
+          th:href="@{../../public/css/index.css}" />
+</head>
+<body>
+<div th:insert="~{toolbar::header}"></div>
+
+<div class="main">
+    <div class="container" th:object="${memberDto}">
+        <p th:text="${text}"></p>
+        <p th:text="'Hello, ' + ${memberDto.getName()} +'!!!'"></p>
+        <p th:text="'Your id is ' + ${memberDto.getId()} "></p>
+
+    </div>
+</div>
+
+<div th:insert="~{toolbar::footer}"></div>
+
+</body>
+</html>

@@ -2,7 +2,7 @@ package com.ra.course.com.stackoverflow.service.storage;
 
 import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
-import com.ra.course.com.stackoverflow.exception.service.AlreadyExistAccount;
+import com.ra.course.com.stackoverflow.exception.service.AlreadyExistAccountException;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -85,7 +85,7 @@ public class MemberStorageServiceTest {
         //when
         //then
         assertThatThrownBy(() -> memberStorageService.saveMemberToDB(member))
-                .isInstanceOf(AlreadyExistAccount.class);
+                .isInstanceOf(AlreadyExistAccountException.class);
     }
     @Test
     @DisplayName("MemberStorageService find member by name then return list")

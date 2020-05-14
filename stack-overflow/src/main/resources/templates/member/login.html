@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Log In Form</title>
+    <link rel="stylesheet" href="css/index.css"
+          th:href="@{../../public/css/index.css}" />
+</head>
+<body>
+    <div th:insert="~{toolbar::header}"></div>
+<div class="main">
+    <div class="container">
+        <h3>Login Form</h3>
+        <form action="#" th:object="${memberDto}" method="post">
+            <p th:text="${text}"></p>
+            <p>Email: </p>
+            <p><label>
+                <input type="text" placeholder="Enter email" required th:field="*{email}" />
+            </label>
+            <p>Password: </p>
+            <p><label>
+                <input type="password" placeholder="Enter Password" required th:field="*{password}" />
+            </label>
+            <p><input type="submit" value="Submit" />
+                <input type="reset" value="Reset" /></p>
+        </form>
+    </div>
+</div>
+
+<div th:insert="~{toolbar::footer}"></div>
+
+</body>
+</html>

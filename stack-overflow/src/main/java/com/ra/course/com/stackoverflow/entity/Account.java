@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 public class Account {
 
     @EqualsAndHashCode.Include
-    final private long id;
+    final private Long id;
 
     @NonNull
     private String password;

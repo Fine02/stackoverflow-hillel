@@ -35,41 +35,11 @@ configure(subprojects) { project ->
     }
 
     dependencies {
-        compile 'org.springframework.boot:spring-boot-starter'
+        compile 'org.springframework.boot:spring-boot-starter-web'
         testCompile 'org.springframework.boot:spring-boot-starter-test'
-    }
-}
+        compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
+        compile hibernate.validator
 
-project(':ams-airline-manag-system') {
-
-}
-
-project(':ams-airline-management-integration-test') {
-    dependencies {
-        testCompile project(':ams-airline-manag-system'){
-            bootJar.enabled = false
-            jar.enabled = true
-        }
-    }
-    bootJar {
-        enabled = false
-    }
-}
-
-project(':aws-online-shopping') {
-
-}
-
-project(':aws-online-shopping-integration-test') {
-    dependencies {
-        testCompile project(':aws-online-shopping'){
-            bootJar.enabled = false
-            jar.enabled = true
-        }
-    }
-
-    bootJar {
-        enabled = false
     }
 }
 project(':stack-overflow') {
@@ -77,11 +47,12 @@ project(':stack-overflow') {
         compileOnly utils.lombok
         annotationProcessor utils.lombok
         compile 'org.springframework.boot:spring-boot-starter-jooq'
+        compile 'com.h2database:h2'
     }
 }
 project(':stack-overflow-integration-test') {
     dependencies {
-        testCompile project(':stack-overflow'){
+        testCompile project(':stack-overflow') {
             bootJar.enabled = false
             jar.enabled = true
         }

@@ -16,7 +16,7 @@ import java.util.List;
 public class Answer {
 
     @EqualsAndHashCode.Include
-    final private long id;
+    final private Long id;
 
     @Builder.Default
     @NonNull
