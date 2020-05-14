@@ -63,6 +63,18 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
+    public Optional<Member> findByEmail(@NonNull final String email) {
+        final var accountRecord = dslContext.fetchOne(ACCOUNT_TABLE, ACCOUNT_TABLE.EMAIL.eq(email));
+
+        if (accountRecord == null) {
+            return Optional.empty();
+        }
+
+        final Member returningMember = mapperMember(accountRecord);
+        return Optional.of(returningMember);
+    }
+
+    @Override
     public void delete(@NonNull final Member member) {
         final var memberFromDb = findById(member.getAccount().getId());
 

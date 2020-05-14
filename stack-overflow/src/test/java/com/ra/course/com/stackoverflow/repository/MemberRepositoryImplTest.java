@@ -59,6 +59,19 @@ class MemberRepositoryImplTest {
 
         assertThat(member.isEmpty()).isTrue();
     }
+    @Test
+    public void whenFindMemberByEmailAndMemberPresentInDataBaseThenReturnMember() {
+        var result = memberRepository.findByEmail("email1@gmail.com").get();
+
+        assertEquals(result.getAccount().getEmail(), "email1@gmail.com");
+    }
+
+    @Test
+    public void whenFindMemberByEmailAndMemberNotPresentInDataBaseThenReturnOptionalEmpty() {
+        Optional<Member> member = memberRepository.findByEmail("some email");
+
+        assertThat(member.isEmpty()).isTrue();
+    }
 
     @Test
     public void whenSaveMemberInDataBaseThenReturnMemberWithId() {
@@ -174,7 +187,8 @@ class MemberRepositoryImplTest {
                 resultAccount.add(accountRecordID1);
 
                 mock[0] = new MockResult(1, resultAccount);
-            }else if (sql.startsWith("INSERT") || (sql.startsWith("SELECT \"PUBLIC\".\"ACCOUNT\"") && value[0].equals(1L))) {
+            }else if (sql.startsWith("INSERT") || (sql.startsWith("SELECT \"PUBLIC\".\"ACCOUNT\"") && value[0].equals(1L))
+            ||(sql.startsWith("SELECT \"PUBLIC\".\"ACCOUNT\"") && value[0].equals("email1@gmail.com"))) {
                 resultAccount.add(accountRecordID1);
 
                 mock[0] = new MockResult(1, resultAccount);

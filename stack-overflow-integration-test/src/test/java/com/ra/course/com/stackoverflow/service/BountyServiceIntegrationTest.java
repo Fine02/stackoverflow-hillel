@@ -43,7 +43,7 @@ public class BountyServiceIntegrationTest {
         Optional<Bounty> actualBounty = bountyService.addBounty(questionWithBounty, bounty);
 
         assertThat(actualBounty.get())
-                .isEqualToIgnoringGivenFields(bounty, "id");
+                .isEqualToIgnoringGivenFields(bounty, "id", "expiry");
     }
 
     private Question constructQuestionWithBounty() {
