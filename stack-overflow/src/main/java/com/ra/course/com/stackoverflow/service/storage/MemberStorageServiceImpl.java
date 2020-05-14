@@ -2,6 +2,7 @@ package com.ra.course.com.stackoverflow.service.storage;
 
 import com.ra.course.com.stackoverflow.dto.MemberDto;
 import com.ra.course.com.stackoverflow.dto.mapper.Mapper;
+import com.ra.course.com.stackoverflow.dto.mapper.impl.MemberMapper;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.enums.AccountStatus;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyExistAccountException;
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class MemberStorageServiceImpl implements MemberStorageService {
 
     private transient final MemberRepository memberRepository;
-    private transient final Mapper mapper;
+    private transient final MemberMapper mapper;
 
 
     @Override
@@ -54,15 +55,16 @@ public class MemberStorageServiceImpl implements MemberStorageService {
     }
 
     @Override
-    public List<Member> findByMemberName(final String name) {
+    public List<MemberDto> findByMemberName(final String name) {
 
-        return memberRepository.findByMemberName(name);
+        final var byMemberName = memberRepository.findByMemberName(name);
+
+        return mapper.dtoFromEntity(byMemberName);
     }
 
     @Override
     public MemberDto saveMemberToDB(final MemberDto memberDto){
         final var newMember = mapper.entityFromDto(memberDto);
-        newMember.getAccount().setStatus(AccountStatus.ACTIVE);
         if(memberRepository.findByEmail(newMember.getAccount().getEmail()).isEmpty()) {
             Member savedMember = memberRepository.save(newMember);
             return mapper.dtoFromEntity(savedMember);

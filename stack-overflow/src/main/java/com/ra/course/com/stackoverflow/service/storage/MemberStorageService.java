@@ -18,5 +18,5 @@ public interface MemberStorageService {
 
     void updateMember (Member member);
 
-    List<Member> findByMemberName(String name);
+    List<MemberDto> findByMemberName(String name);
 }
