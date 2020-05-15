@@ -41,8 +41,8 @@ public class NotificationServiceImplIntegrationTest {
     private String emailNotExist = "hhhhh@gmail.com";
     private String phoneNotExist = "456522";
 
-    private String emailExist = "111j@gmail.com";
-    private String phoneExist = "38012345111";
+    private String emailExist = "123@gmail.com";
+    private String phoneExist = "380672554554";
 
     private Address address = new Address("Mira", "Kiyv", "Kyiv", "04114", "Ukraine");
 

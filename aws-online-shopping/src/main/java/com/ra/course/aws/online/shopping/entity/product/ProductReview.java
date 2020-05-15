@@ -3,25 +3,28 @@ package com.ra.course.aws.online.shopping.entity.product;
 import java.util.Objects;
 
 public class ProductReview {
-    private Long productID;
+    private Long id;
     private int rating;
     private String review;
 
     public ProductReview() {
     }
 
-    public ProductReview(Long productID, int rating, String review) {
-        this.productID = productID;
+    public ProductReview(int rating, String review) {
         this.rating = rating;
         this.review = review;
     }
 
-    public Long getProductID() {
-        return productID;
+    public ProductReview(Long id, int rating, String s) {
+
     }
 
-    public void setProductID(Long productID) {
-        this.productID = productID;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int getRating() {
@@ -46,19 +49,18 @@ public class ProductReview {
         if (o == null || getClass() != o.getClass()) return false;
         ProductReview that = (ProductReview) o;
         return rating == that.rating &&
-                productID.equals(that.productID) &&
-                review.equals(that.review);
+                Objects.equals(review, that.review);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productID, rating, review);
+        return Objects.hash(rating, review);
     }
 
     @Override
     public String toString() {
         return "ProductReview{" +
-                "productID=" + productID +
+                "id=" + id +
                 ", rating=" + rating +
                 ", review='" + review + '\'' +
                 '}';

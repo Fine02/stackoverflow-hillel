@@ -4,7 +4,62 @@ USE shopping;
 DROP TABLE IF EXISTS payment_status, shipment_status, account_status, order_status,
     address, notification, `sms_notification`, email_notification, shipment, shipment_log,
     `order`, order_log, payment, account, member, electronic_bank_transfer, credit_card,
-    electronic_bank_transaction, credit_card_transaction, billing_address;
+    electronic_bank_transaction, credit_card_transaction, billing_address, product_category, product,
+    shopping_cart, item, product_review;
+
+create table product_category
+(
+    pr_cat_id IDENTITY NOT NULL PRIMARY KEY,
+    cat_name varchar(255) not null,
+    cat_description varchar(255),
+    constraint UK_category_name unique (cat_name)
+
+);
+create table product
+(
+    pr_id IDENTITY NOT NULL PRIMARY KEY,
+    availableItemCount int not null,
+    name varchar(255) not null,
+    description varchar(255),
+    price float not null,
+    product_category_id int not null,
+    constraint FK_product_category_id
+        foreign key (product_category_id)
+            references product_category(pr_cat_id) ON DELETE CASCADE
+);
+
+create table shopping_cart
+(
+    s_cart_id IDENTITY NOT NULL PRIMARY KEY,
+    member_id int not null,
+    constraint UK_member_id unique (member_id)
+);
+create table item
+(
+    item_id IDENTITY NOT NULL PRIMARY KEY,
+    price float not null,
+    quantity int not null,
+    shopping_cart_id int not null,
+    product_id int not null,
+    constraint FK_shopping_cart_id
+        foreign key (shopping_cart_id)
+            references shopping_cart(s_cart_id) ON DELETE CASCADE,
+    constraint FK_item_product_id
+        foreign key (product_id)
+            references product(pr_id) ON DELETE CASCADE
+
+);
+
+create table product_review
+(
+    pr_rev_id IDENTITY NOT NULL PRIMARY KEY,
+    rating int not null,
+    review varchar(255),
+    product_id int not null,
+    constraint FK_product_id
+        foreign key (product_id)
+            references product(pr_id) ON DELETE CASCADE
+);
 
 CREATE TABLE payment_status
 (
@@ -30,17 +85,19 @@ CREATE TABLE order_status
     status varchar (255) NOT NULL
 );
 
+
+
 CREATE TABLE account
 (
-    id             INT PRIMARY KEY AUTO_INCREMENT,
-    userName       varchar(255) NOT NULL,
-    password       varchar(255) NOT NULL,
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    userName varchar (255) NOT NULL,
+    password varchar (255) NOT NULL,
     account_status_id INT,
     account_status varchar(255),
-    name           varchar(255) NOT NULL,
-    address_id     INT,
-    email          varchar(255) NOT NULL,
-    phone          varchar(255) NOT NULL
+    name varchar (255) NOT NULL,
+    address_id INT,
+    email varchar (255) NOT NULL,
+    phone varchar (255) NOT NULL
 );
 
 CREATE TABLE address
@@ -53,9 +110,24 @@ CREATE TABLE address
     country       varchar(255) NOT NULL,
     account_id    INT,
     CONSTRAINT fk_account_id1
-        FOREIGN KEY (account_id) REFERENCES account (id)
+        FOREIGN KEY (account_id) REFERENCES account(id)
             ON UPDATE NO ACTION ON DELETE CASCADE
 );
+
+CREATE TABLE member
+(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    account_id INT NOT NULL,
+    shopping_cart_id INT NOT NULL,
+    constraint FK_account_id
+        foreign key (account_id)
+            references account(id),
+    constraint FK_shop_cart_id
+        foreign key (shopping_cart_id)
+            references shopping_cart (s_cart_id)
+);
+
+
 
 CREATE TABLE notification
 (
@@ -70,8 +142,8 @@ CREATE TABLE `sms_notification`
     `phone` varchar (255) NOT NULL,
     `notification_id` INT NOT NULL,
     CONSTRAINT  `fk_sms_notification_id`
-    FOREIGN KEY (`notification_id`) REFERENCES notification (`id`) ON DELETE CASCADE
-    );
+        FOREIGN KEY (`notification_id`) REFERENCES notification (`id`) ON DELETE CASCADE
+);
 
 CREATE TABLE email_notification
 (
@@ -111,8 +183,8 @@ CREATE TABLE `order`
     order_status_id INT NOT NULL,
     orderDate DATETIME NOT NULL,
     CONSTRAINT  fk_order_status
-    FOREIGN KEY (order_status_id) REFERENCES order_status (id)
-    );
+        FOREIGN KEY (order_status_id) REFERENCES order_status (id)
+);
 
 CREATE TABLE order_log
 (
@@ -134,17 +206,6 @@ CREATE TABLE payment
     amount DOUBLE PRECISION NOT NULL,
     CONSTRAINT  fk_payment_status
         FOREIGN KEY (payment_status_id) REFERENCES payment_status (id)
-);
-
-
-
-
-CREATE TABLE member
-(
-    account_id INT NOT NULL,
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    CONSTRAINT  fk_account_id
-        FOREIGN KEY (account_id) REFERENCES account (id)
 );
 
 CREATE TABLE electronic_bank_transfer
@@ -201,3 +262,4 @@ CREATE TABLE credit_card_transaction
     CONSTRAINT  payment_id_fk
         FOREIGN KEY (payment_id) REFERENCES payment (id)
 );
+

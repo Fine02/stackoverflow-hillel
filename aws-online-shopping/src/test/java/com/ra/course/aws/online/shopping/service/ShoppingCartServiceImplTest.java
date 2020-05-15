@@ -1,10 +1,13 @@
 package com.ra.course.aws.online.shopping.service;
 
+import com.ra.course.aws.online.shopping.dao.ProductDao;
 import com.ra.course.aws.online.shopping.dao.ShoppingCartDao;
 import com.ra.course.aws.online.shopping.entity.Item;
+import com.ra.course.aws.online.shopping.entity.ShoppingCart;
 import com.ra.course.aws.online.shopping.entity.enums.PaymentStatus;
 import com.ra.course.aws.online.shopping.entity.product.Product;
 import com.ra.course.aws.online.shopping.entity.product.ProductCategory;
+import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.exceptions.ElementNotFoundException;
 import com.ra.course.aws.online.shopping.service.impl.ShoppingCartServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -23,103 +26,132 @@ import static org.mockito.Mockito.when;
 class ShoppingCartServiceImplTest {
     private ShoppingCartServiceImpl shoppingCartService;
     private ShoppingCartDao shoppingCartDao = mock(ShoppingCartDao.class);
-    private final Long productID = 1L;
-    Product newProduct;
-    Item newItem;
+    private ProductDao productDao = mock(ProductDao.class);
+    private Product newProduct;
+    private Member member;
+    private Item newItem;
 
 
 
     @BeforeEach
     public void before(){
-        shoppingCartService = new ShoppingCartServiceImpl(shoppingCartDao);
+        shoppingCartService = new ShoppingCartServiceImpl(shoppingCartDao, productDao);
+        Long productID = 1L;
         newProduct = mockProduct(productID);
+        member = mockMember();
         newItem = mockItem(1L,1);
     }
 
     @Test
     public void WhenAddProductShouldBeMinOneNumberOfInvocation(){
         //when
-        shoppingCartService.addProductToCart(newProduct);
+        shoppingCartService.addProductToCart(newProduct, member);
         //then
         verify(shoppingCartDao).addItemToCart(Mockito.any());
 
     }
     @Test
     public void WhenAddProductGivenProductMustNotBeNull(){
-        //when
-        Product productForDel = null;
-        //then
-        Assertions.assertThrows(NullPointerException.class, () -> shoppingCartService.addProductToCart(productForDel));
+        Assertions.assertAll(
+                () -> assertDoesNotThrow(()-> shoppingCartService.addProductToCart(null, member)),
+                () -> assertDoesNotThrow(()-> shoppingCartService.addProductToCart(newProduct, null)),
+                () -> assertDoesNotThrow(()-> shoppingCartService.addProductToCart(null, null))
+
+        );
     }
 
     @Test
-    public void WhenAddProductToCartThenReturnProductID(){
+    public void WhenAddProductToCartThenReturnItemID(){
         //given
         Long expectedID = 1L;
         when(shoppingCartDao.addItemToCart(newItem)).thenReturn(expectedID);
         //when
-        Long productIDActual = shoppingCartService.addProductToCart(newProduct);
+        Long itemIDActual = shoppingCartService.addProductToCart(newProduct, member);
         //then
-        Assertions.assertEquals(expectedID, productIDActual);
+        Assertions.assertEquals(expectedID, itemIDActual);
+    }
+    @Test
+    public void WhenAddProductToCartIfItemExistThenUpdateItemData(){
+        //given
+        Long expectedID = 1L;
+        when(shoppingCartDao.findItem(1L)).thenReturn(newItem);
+        when(shoppingCartDao.updateItemInCart(newItem)).thenReturn(true);
+        //when
+        Long itemIDActual = shoppingCartService.addProductToCart(newProduct, member);
+        //then
+        assertAll(
+                ()-> assertEquals(expectedID, itemIDActual),
+                ()-> assertEquals(2, newItem.getQuantity()),
+                ()-> assertEquals(25, newItem.getPrice())
+        );
+
     }
 
     @Test
     public void RemoveProductFromCartShouldBeMinOneNumberOfInvocation(){
         //given
-        Product mockProduct = mockProduct(productID);
-        when(shoppingCartDao.getItemFromCart(mockProduct.getId())).thenReturn(newItem);
+        Item itemToDel = mockItem(1L, 1);
+        when(shoppingCartDao.findItem(newItem.getProductId())).thenReturn(newItem);
+        when(productDao.findById(newProduct.getId())).thenReturn(newProduct);
         //when
-        shoppingCartService.removeProductFromCart(mockProduct);
+        shoppingCartService.removeItemFromCart(itemToDel);
         //then
-        verify(shoppingCartDao, times(1)).getItemFromCart(1L);
+        verify(shoppingCartDao, times(1)).findItem(1L);
         verify(shoppingCartDao).removeItemFromCart(Mockito.any());
 
     }
     @Test
     public void WhenRemoveProductFromCartWhenQuantityMoreThenOneShouldBeMinOneNumberOfInvocation(){
         //given
-        Item itemFromDB2 = new Item(1L, 2, 12.5);
-        when(shoppingCartDao.getItemFromCart(newProduct.getId())).thenReturn(itemFromDB2);
+        Item item = new Item(1L, 2, 12.50, 1L,1L);
+        when(shoppingCartDao.findItem(newItem.getItemId())).thenReturn(item);
+        when(productDao.findById(newProduct.getId())).thenReturn(newProduct);
+        when(shoppingCartDao.updateItemInCart(item)).thenReturn(true);
         //when
-        shoppingCartService.removeProductFromCart(newProduct);
+        shoppingCartService.removeItemFromCart(item);
         //then
-        verify(shoppingCartDao, atLeastOnce()).updateItemInCart(itemFromDB2);
+        verify(shoppingCartDao, atLeastOnce()).updateItemInCart(item);
     }
     @Test
     public void WhenRemoveProductFromCartGivenProductMustNotBeNull() {
         //when
-        shoppingCartService.removeProductFromCart(null);
+        shoppingCartService.removeItemFromCart(null);
         //then
         Assertions.assertDoesNotThrow((ThrowingSupplier<NullPointerException>) NullPointerException::new);
     }
 
     @Test
-    public void WhenRemoveProductFromCartIfCatchExceptionThenThrowsElementNotFoundException(){
-        //given
-        when(shoppingCartDao.getItemFromCart(newProduct.getId())).thenThrow(new IllegalArgumentException());
+    public void WhenRemoveProductFromCartIfReturnNullThenThrowsNullPointerException(){
         //when
-        Throwable exception = Assertions.assertThrows(IllegalArgumentException.class, () -> shoppingCartService.removeProductFromCart(newProduct));
+        when(shoppingCartDao.findItem(newProduct.getId())).thenReturn(null);
         //then
-        assertEquals(exception.getClass(), ElementNotFoundException.class);
+        assertThrows(NullPointerException.class, ()-> shoppingCartService.removeItemFromCart(newItem));
+
+    }
+    @Test
+    public void WhenRemoveProductFromCartIfReturnedProductIsNullThenThrowsNullPointerException(){
+        //when
+        when(productDao.findById(newProduct.getId())).thenReturn(null);
+        //then
+        assertThrows(NullPointerException.class, ()-> shoppingCartService.removeItemFromCart(newItem));
     }
     @Test
     public void WhenCheckoutItemInCartIfPresentsThenReturnTrue(){
         //given
         Item searchItem = mockItem(1L, 1);
-        when(shoppingCartDao.getItemFromCart(1L)).thenReturn(newItem);
+        when(shoppingCartDao.findItem(1L)).thenReturn(newItem);
         //when
-        boolean actualResult = shoppingCartService.checkoutItemInCart(searchItem);
+        boolean actualResult = shoppingCartService.checkoutItemInCart(searchItem.getItemId());
         //then
         Assertions.assertTrue(actualResult);
     }
     @Test
     public void WhenCheckoutItemInCartIfNotPresentsThenReturnFalse(){
         //given
-        Item itemFromDB = mockItem(5L, 0);
         Item searchItem = mockItem(5L, 1);
-        when(shoppingCartDao.getItemFromCart(searchItem.getProductID())).thenReturn(itemFromDB);
+        when(shoppingCartDao.findItem(searchItem.getItemId())).thenReturn(null);
         //when
-        boolean actualResult = shoppingCartService.checkoutItemInCart(searchItem);
+        boolean actualResult = shoppingCartService.checkoutItemInCart(searchItem.getItemId());
         //then
         Assertions.assertFalse(actualResult);
     }
@@ -128,58 +160,43 @@ class ShoppingCartServiceImplTest {
     public void WhenCheckoutItemInCartShouldBeMinOneNumberOfInvocation(){
         //given
         Item itemToCheck = mockItem(1L, 1);
-        when(shoppingCartDao.getItemFromCart(1L)).thenReturn(newItem);
+        when(shoppingCartDao.findItem(1L)).thenReturn(newItem);
         //when
-        shoppingCartService.checkoutItemInCart(itemToCheck);
+        shoppingCartService.checkoutItemInCart(itemToCheck.getItemId());
         //then
-        verify(shoppingCartDao,atLeast(1)).getItemFromCart(Mockito.any());
+        verify(shoppingCartDao,atLeast(1)).findItem(Mockito.any());
 
-    }
-
-    @Test
-    public void WhenCheckoutItemInCartGivenItemMustNotBeNull(){
-        //when
-        Item itemToCheck = null;
-        //then
-        Assertions.assertThrows(NullPointerException.class, () -> shoppingCartService.checkoutItemInCart(itemToCheck));
-
-    }
-
-    @Test
-    public void WhenBuyItemsInCartShouldBeMinOneNumberOfInvocation(){
-        //given
-        List<Item> itemsInCart = mockItems();
-        when(shoppingCartDao.getAllItems()).thenReturn(itemsInCart);
-        //when
-        shoppingCartService.buyItems();
-        //then
-        verify(shoppingCartDao,atLeast(1)).makePayment(Mockito.any());
     }
     @Test
-    public void WhenBuyItemsInCartThenReturnedPaymentStatusCOMPLETED(){
-        //given
-        PaymentStatus expected = PaymentStatus.COMPLETED;
-        List<Item> itemsInCart = mockItems();
-        when(shoppingCartDao.getAllItems()).thenReturn(itemsInCart);
-        when(shoppingCartDao.makePayment(itemsInCart)).thenReturn(PaymentStatus.COMPLETED);
+    public void shouldFindItemByProductID() {
+        Long productID = 1L;
         //when
-        PaymentStatus actual = shoppingCartService.buyItems();
+        shoppingCartService.findItemById(1L);
         //then
-        Assertions.assertEquals(expected,actual);
+        verify(shoppingCartDao).findItem(productID);
     }
+
 
     private Product mockProduct(Long productID){
         return new Product(productID,"pen", "device", 12.5,5, new ProductCategory(1L, "office", "office aquipment"));
     }
+    private Member mockMember(){
+        Member member = new Member();
+        ShoppingCart cart = new ShoppingCart();
+        cart.setId(1L);
+        member.setCart(cart);
+        return member;
+    }
 
     private Item mockItem(Long ID , int quantity){
-        return new Item(ID, quantity, 12.5);
+
+        return new Item(ID, quantity, 12.50, 1L, 1L   );
     }
     private List<Item> mockItems(){
         return  new ArrayList<>(){{
-            add(new Item(1L, 1, 12.5));
-            add(new Item(2L, 2, 22.6));
-            add(new Item(5L, 2, 25.0));
+            add(new Item(1L, 1, 12.50, 1L, 1L));
+            add(new Item(2L, 2, 22.60, 1L, 1L));
+            add(new Item(5L, 2, 25.00, 1L,1L));
         }};
     }
 

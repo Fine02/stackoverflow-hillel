@@ -1,3 +1,45 @@
+INSERT INTO product_category (cat_name, cat_description) VALUES('Cameras', 'some description for cameras');
+INSERT INTO product_category (cat_name, cat_description) VALUES ('Cell_phones', 'some description for cell phones');
+INSERT INTO product_category (cat_name, cat_description) VALUES  ('Clothing', 'some description for clothing');
+INSERT INTO product_category (cat_name, cat_description) VALUES  ('Music', 'some description for music');
+
+INSERT INTO product (availableItemCount, name, description, price, product_category_id)
+VALUES ('1','samsung smart camera', 'description for camera', '125.25', (select pr_cat_id from product_category where cat_name='Cameras')),
+       ('10','apple iphone6s', 'description for iphone', '150.00', (select pr_cat_id from product_category where cat_name='Cell_phones')),
+       ('20','apple iphone6s', 'description for iphone6s', '175.00', (select pr_cat_id from product_category where cat_name='Cell_phones')),
+       ('59','samsung S9', 'description for S9', '350.00', (select pr_cat_id from product_category where cat_name='Cell_phones')),
+       ('50','jeans', 'clothing for men', '30.00', (select pr_cat_id from product_category where cat_name='Clothing')),
+       ('100','Queen', 'The Best Records', '99.00', (select pr_cat_id from product_category where cat_name='Music'));
+
+INSERT INTO shopping_cart (member_id) VALUES(1);
+INSERT INTO shopping_cart (member_id) VALUES(2);
+INSERT INTO shopping_cart (member_id) VALUES(3);
+
+INSERT INTO item (price, quantity, shopping_cart_id, product_id)
+VALUES('175.00', '1', (select s_cart_id from shopping_cart where member_id =1), (select pr_id from product where price = '175.00' and name ='apple iphone6s'));
+INSERT INTO item (price, quantity, shopping_cart_id, product_id)
+VALUES  ('300.00', '2', (select s_cart_id from shopping_cart where member_id =2), (select pr_id from product where price = '150.00' and name ='apple iphone6s'));
+INSERT INTO item (price, quantity, shopping_cart_id, product_id)
+VALUES  ('150.00', '5', (select s_cart_id from shopping_cart where member_id =1), (select pr_id from product where name ='jeans'));
+INSERT INTO item (price, quantity, shopping_cart_id, product_id)
+VALUES  ('125.25', '1', (select s_cart_id from shopping_cart where member_id =1), (select pr_id from product where name ='samsung smart camera'));
+
+INSERT INTO product_review (rating, review, product_id)
+VALUES('7', 'some review', (select pr_id from product where name='apple iphone6s' and price = '175.00')),
+      ('10', 'some review for samsung ', (select pr_id from product where name='samsung S9'));
+INSERT INTO address (streetAddress, city, state, zipcode, country) VALUES ('Sobornosti, 4', 'Kyiv','Kyiv','14021', 'Ukraine');
+INSERT INTO address (streetAddress, city, state, zipcode, country) VALUES ('Lugova, 10 ', 'Dnipro','Dnipro','34044', 'Ukraine');
+INSERT INTO address (streetAddress, city, state, zipcode, country) VALUES ('Mira, 5 ', 'Lviv','Lviv','22004', 'Ukraine');
+
+INSERT INTO account (userName, password, account_status, name, address_id, email, phone) VALUES ('Ivan021','1111', 'ACTIVE', 'Ivan', 1, '123@gmail.com', '380672554554');
+INSERT INTO account (userName, password, account_status, name, address_id, email, phone) VALUES ('Rom_Ko','1234', 'ACTIVE', 'Roman', 2, '2555jl@gmail.com', '380504228800');
+INSERT INTO account (userName, password, account_status, name, address_id, email, phone) VALUES ('ThirdAccount','12345', 'ACTIVE', 'Boris', 3, 'boris@gmail.com', '380505585565');
+
+INSERT INTO member (account_id, shopping_cart_id) VALUES ((select id from account where userName='Ivan021'), (select s_cart_id from shopping_cart where member_id= 1));
+INSERT INTO member (account_id, shopping_cart_id) VALUES ((select id from account where userName='Rom_Ko'), (select s_cart_id from shopping_cart where member_id= 2));
+INSERT INTO member (account_id, shopping_cart_id) VALUES ((select id from account where userName='ThirdAccount'), (select s_cart_id from shopping_cart where member_id= 3));
+
+
 INSERT INTO payment_status (status) VALUES ('UNPAID');
 INSERT INTO payment_status (status) VALUES ('PENDING');
 INSERT INTO payment_status (status) VALUES ('COMPLETED');
@@ -71,10 +113,6 @@ INSERT INTO account (userName, password, account_status_id, name, address_id, em
 
 INSERT INTO account (userName, password, account_status_id, name, address_id, email, phone) VALUES ('egor','111', 3, 'egor', 3, '333j@gmail.com', '38012345333');
 
-INSERT INTO member (account_id) VALUES (1);
-INSERT INTO member (account_id) VALUES (2);
-INSERT INTO member (account_id) VALUES (3);
-
 INSERT INTO electronic_bank_transfer (bankName, routingNumber, accountNumber, account_id) VALUES ('GermanBank', '5265', '8542',1);
 INSERT INTO electronic_bank_transfer (bankName, routingNumber, accountNumber, account_id) VALUES ('UniversalBank', '5548', '1254',2);
 INSERT INTO electronic_bank_transfer (bankName, routingNumber, accountNumber, account_id) VALUES ('AmericanExpress', '7777', '7415',3);
@@ -82,3 +120,4 @@ INSERT INTO electronic_bank_transfer (bankName, routingNumber, accountNumber, ac
 INSERT INTO credit_card (nameOnCard, cardNumber, code, address_id, account_id) VALUES ('VISA', '5584', '5662', 1, 1);
 INSERT INTO credit_card (nameOnCard, cardNumber, code, address_id, account_id) VALUES ('MASTERCARD', '8545', '8554', 2, 2);
 INSERT INTO credit_card (nameOnCard, cardNumber, code, address_id, account_id) VALUES ('VISA', '7777', '7415', 3, 3);
+

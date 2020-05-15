@@ -3,104 +3,232 @@ package com.ra.course.aws.online.shopping.service;
 import com.ra.course.aws.online.shopping.dao.ProductDao;
 import com.ra.course.aws.online.shopping.entity.product.Product;
 import com.ra.course.aws.online.shopping.entity.product.ProductCategory;
+import com.ra.course.aws.online.shopping.entity.product.ProductReview;
 import com.ra.course.aws.online.shopping.exceptions.ProductNotFoundException;
 import com.ra.course.aws.online.shopping.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.ThrowingSupplier;
+import org.mockito.Mockito;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ProductServiceImplTest {
-
     private ProductServiceImpl productService;
     private ProductDao productDao = mock(ProductDao.class);
-    private Product someProduct;
+    private Product newProduct;
+    private List<Product> mockProductsListFromDao;
+    private Product productWithReview;
+    private Product productFromDb;
 
     @BeforeEach
-    void setUp() {
+    public void before() {
         productService = new ProductServiceImpl(productDao);
-        someProduct = new Product(1L, "Sunglasses", "RayBan Wayfarer", 199.9,
+        newProduct = new Product("Sunglasses", "RayBan Wayfarer", 199.9,
                 10, new ProductCategory("Accessories", "Accessories description"));
+        mockProductsListFromDao = new ArrayList<>(Arrays.asList(
+                new Product(1L, "Sunglasses", "RayBan Wayfarer", 199.9,
+                        10, new ProductCategory("Accessories", "Accessories description")),
+                new Product(2L, "Sunglasses", "RayBan Aviator", 119.9,
+                        15, new ProductCategory("Accessories", "Accessories description")),
+                new Product(3L, "Sunglasses", "RayBan Clubmaster", 249.9,
+                        5, new ProductCategory("Accessories", "Accessories description"))
+        ));
+        productWithReview = getMockProductWithReview(5L);
+        productFromDb = getMockProductFromDbt(5L);
     }
 
     @Test
-    @DisplayName("Should return saved product id")
-    void shouldAddNewProduct() {
-        Long expectedNewProductId = 1L;
+    public void shouldAddNewProduct() throws SQLException {
+        Long expectedNewProductId = 4L;
         //given
-        when(productDao.save(someProduct)).thenReturn(expectedNewProductId);
+        when(productDao.save(newProduct)).thenReturn(expectedNewProductId);
         //when
-        Long addedProductID = productService.save(someProduct);
+        Long addedProductID = productService.save(newProduct);
         //then
         assertEquals(expectedNewProductId, addedProductID);
     }
 
     @Test
-    @DisplayName("Should return true when product updated")
-    void shouldUpdateExistingProduct() {
-        //given
-        Product productToUpdate = new Product(someProduct);
-        productToUpdate.setAvailableItemCount(0);
-        when(productDao.findById(productToUpdate.getId())).thenReturn(someProduct);
+    public void shouldUpdateProduct() {
+        newProduct.setAvailableItemCount(0);
         //when
-        boolean result = productService.update(productToUpdate);
+        productService.update(newProduct);
         //then
-        assertTrue(result);
+        verify(productDao).update(newProduct);
     }
 
     @Test
-    @DisplayName("Should throw an exception when product to update does not exist")
-    void shouldNotUpdateProduct() {
-        //given
-        when(productDao.findById(someProduct.getId())).thenReturn(null);
+    public void shouldRemoveProduct() {
+        Long productID = 1L;
         //when
-        Exception exception = assertThrows(ProductNotFoundException.class, () -> productService.update(someProduct));
+        productService.remove(1L);
         //then
-        String expectedMessage = "Product with id=" + someProduct.getId() + " not found";
-        String actualMessage = exception.getMessage();
-        Assertions.assertTrue(actualMessage.contains(expectedMessage));
+        verify(productDao).remove(productID);
     }
 
     @Test
-    @DisplayName("Should return true when product removed")
-    void shouldRemoveProduct() {
-        Long productToRemoveId = 1L;
-        when(productDao.findById(productToRemoveId)).thenReturn(someProduct);
+    public void shouldSearchProductsByID() {
+        Long productID = 1L;
         //when
-        boolean result = productService.remove(productToRemoveId);
+        productService.findByID(1L);
         //then
-        assertTrue(result);
+        verify(productDao).findById(productID);
     }
 
     @Test
-    @DisplayName("Should throw an exception when product to remove does not exist")
-    void shouldNotRemoveProduct() {
-        Long productToRemoveId = 999L;
+    public void shouldSearchProductsByName() {
         //given
-        when(productDao.findById(productToRemoveId)).thenReturn(null);
+        String productName = "Sunglasses";
+        when(productDao.searchProductsByName(productName)).thenReturn(mockProductsListFromDao);
         //when
-        Exception exception = assertThrows(ProductNotFoundException.class, () -> productService.remove(productToRemoveId));
+        List<Product> expectedProductsList = productService.searchByName(productName);
         //then
-        String expectedMessage = "Product with id = " + productToRemoveId + " not found.";
-        String actualMessage = exception.getMessage();
-        Assertions.assertTrue(actualMessage.contains(expectedMessage));
+        for (Product pr : expectedProductsList) {
+            Assertions.assertTrue(pr.getName().contains(productName));
+        }
     }
 
     @Test
-    @DisplayName("Finded product should be equal to expected")
-    void shouldSearchProductsByID() {
+    public void shouldSearchProductsByCategory() {
         //given
-        Long productId = 1L;
-        Product expectedProduct = someProduct;
-        when(productDao.findById(productId)).thenReturn(expectedProduct);
+        ProductCategory productCategory = new ProductCategory("Accessories", "Accessories description");
+        when(productDao.searchProductsByCategory(productCategory)).thenReturn(mockProductsListFromDao);
         //when
-        Product findedProduct = productService.findByID(productId);
+        List<Product> expectedProductsList = productService.searchByCategory(productCategory);
         //then
-        assertEquals(expectedProduct, findedProduct);
+        for (Product pr : expectedProductsList) {
+            Assertions.assertEquals(pr.getCategory(), productCategory);
+        }
     }
+
+    @Test
+    public void shouldReturnAllProductsList() {
+        //given
+        when(productDao.getAll()).thenReturn(mockProductsListFromDao);
+        //when
+        List<Product> expectedAllProducts = productService.getAll();
+        //then
+        Assertions.assertEquals(expectedAllProducts.size(), mockProductsListFromDao.size());
+    }
+
+    /*------------------------------------*/
+
+
+    @Test
+    public void WhenAddProductReviewShouldBeMinOneNumberOfInvocationForUpdateProduct() {
+        //given
+        when(productDao.findById(5L)).thenReturn(productFromDb);
+        //when
+        productService.addProductReview(productWithReview);
+        //then
+        verify(productDao, times(1)).update(productFromDb);
+
+    }
+
+    @Test
+    public void WhenAddProductReviewGivenProductShouldNotBeNull() {
+        //when
+        productService.addProductReview(null);
+        //then
+        Assertions.assertDoesNotThrow((ThrowingSupplier<NullPointerException>) NullPointerException::new);
+
+    }
+
+    @Test
+    public void WhenAddProductReviewShouldBeAnyInvocationForMethod() {
+        //given
+        when(productDao.findById(5L)).thenReturn(productFromDb);
+        //when
+        productService.addProductReview(productWithReview);
+        //then
+        verify(productDao).findById(Mockito.any());
+    }
+
+    @Test
+    public void WhenAddProductReviewProductInDBShouldBeWithNewReview() {
+        //given
+        when(productDao.findById(5L)).thenReturn(productFromDb);
+        //when
+        productService.addProductReview(productWithReview);
+        //then
+        Assertions.assertEquals(productWithReview, productFromDb);
+    }
+
+    @Test
+    public void WhenAddProductReviewShouldHaveMinOneInvocation() {
+        //given
+        when(productDao.findById(productWithReview.getId())).thenReturn(productFromDb);
+        when(productDao.update(productFromDb)).thenReturn(true);
+        //when
+        productService.addProductReview(productWithReview);
+        //then
+        verify(productDao, times(1)).update(productFromDb);
+
+    }
+
+    @Test
+    public void WhenAddProductRatingShouldBeMinOneNumberOfInvocationForUpdateProduct() {
+        //given
+        when(productDao.findById(5L)).thenReturn(productWithReview);
+        //when
+        productService.addProductRating(productWithReview, 9);
+        //then
+        verify(productDao, times(1)).update(productWithReview);
+
+    }
+
+    @Test
+    public void WhenAddProductRatingGivenProductShouldNotBeNull() {
+        //when
+        productService.addProductRating(null, 1);
+        //then
+        Assertions.assertDoesNotThrow((ThrowingSupplier<NullPointerException>) NullPointerException::new);
+
+    }
+
+    @Test
+    public void WhenAddProductRatingShouldBeSavedWithNewRating() {
+        //given
+        when(productDao.findById(5L)).thenReturn(productWithReview);
+        //when
+        productService.addProductRating(productWithReview, 9);
+        //then
+        Assertions.assertEquals(9, productWithReview.getProductReview().getRating());
+
+    }
+
+    @Test
+    public void WhenAddProductRatingIfReturnedProductHasNoReviewAddingDefaultReviewWithNewRating() {
+        //given
+        ProductReview defaultProductReview = new ProductReview(9, null);
+        when(productDao.findById(5L)).thenReturn(productFromDb);
+        //when
+        productService.addProductRating(productFromDb, 9);
+        //then
+        Assertions.assertEquals(defaultProductReview, productFromDb.getProductReview());
+
+    }
+
+    private Product getMockProductWithReview(Long productID) {
+        Product productWithReview = new Product(productID, "pen", "device", 12.5, 5, new ProductCategory(1L, "office", "office aquipment"));
+        productWithReview.setProductReview(new ProductReview(1L, 10, "someReview"));
+
+        return productWithReview;
+    }
+
+    private Product getMockProductFromDbt(Long productID) {
+        return new Product(productID, "pen", "device", 12.5, 5, new ProductCategory(1L, "office", "office aquipment"));
+
+    }
+
 }
-
 

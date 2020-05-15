@@ -25,8 +25,8 @@ public class NotificationDaoImplIntegrationTest {
 
     LocalDateTime time = LocalDateTime.of(2020, 3, 19, 12, 17, 27);
     String content = "some content + test+3";
-    String phoneNumber = "38012345111";
-    String email = "111j@gmail.com";
+    String phoneNumber = "380672554554";
+    String email = "123@gmail.com";
 
 
     EmailNotification emailNotification = new EmailNotification(time, content, email);
