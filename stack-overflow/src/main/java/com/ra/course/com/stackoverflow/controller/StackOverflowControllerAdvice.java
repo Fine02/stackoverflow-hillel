@@ -1,6 +1,8 @@
 package com.ra.course.com.stackoverflow.controller;
 
+import com.ra.course.com.stackoverflow.dto.LogInDto;
 import com.ra.course.com.stackoverflow.dto.MemberDto;
+import com.ra.course.com.stackoverflow.dto.RegisterDto;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyExistAccountException;
 import com.ra.course.com.stackoverflow.exception.service.LoginException;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
@@ -18,14 +20,16 @@ public class StackOverflowControllerAdvice {
     public String handleBindException(final BindException e, final Model model,
                                       final HttpServletRequest request) {
 
+        e.getBindingResult().getFieldErrors().forEach(
+                fieldError -> model.addAttribute(fieldError.getField() + "Error",
+                        fieldError.getDefaultMessage()));
+
         if (request.getRequestURI().contains("member/register")) {
-
-            e.getBindingResult().getFieldErrors().forEach(
-                    fieldError -> model.addAttribute(fieldError.getField() + "Error",
-                            fieldError.getDefaultMessage()));
-            model.addAttribute("memberDto", new MemberDto());
-
+            model.addAttribute("registerDto", new RegisterDto());
             return "member/registration";
+        } else if (request.getRequestURI().contains("member/login")) {
+            model.addAttribute("logInDto", new LogInDto());
+            return "member/login";
         } else {
             return "index";
         }

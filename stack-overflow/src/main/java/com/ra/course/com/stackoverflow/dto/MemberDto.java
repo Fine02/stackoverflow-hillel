@@ -7,10 +7,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.*;
 
 @AllArgsConstructor
@@ -22,19 +18,9 @@ public class MemberDto {
 
     Long id;
 
-    @NotNull
-    @Size(min = 5, max = 20, message = "{memberDto.name.size}")
     String name;
 
-
-    @NotNull
-    @Email(message = "{memberDto.email.invalid}")
     String email;
-
-    @NotNull
-    @Pattern(regexp = "^(?=\\P{Ll}*\\p{Ll})(?=\\P{Lu}*\\p{Lu})(?=\\P{N}*\\p{N})[\\s\\S]{8,}$",
-             message = "{memberDto.password.invalid}")
-    String password;
 
     AccountStatus status;
 

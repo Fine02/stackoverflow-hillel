@@ -1,10 +1,10 @@
 package com.ra.course.com.stackoverflow.service.storage;
 
+import com.ra.course.com.stackoverflow.dto.LogInDto;
 import com.ra.course.com.stackoverflow.dto.MemberDto;
-import com.ra.course.com.stackoverflow.dto.mapper.Mapper;
+import com.ra.course.com.stackoverflow.dto.RegisterDto;
 import com.ra.course.com.stackoverflow.dto.mapper.impl.MemberMapper;
 import com.ra.course.com.stackoverflow.entity.Member;
-import com.ra.course.com.stackoverflow.entity.enums.AccountStatus;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyExistAccountException;
 import com.ra.course.com.stackoverflow.exception.service.LoginException;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
@@ -20,27 +20,26 @@ import java.util.Optional;
 public class MemberStorageServiceImpl implements MemberStorageService {
 
     private transient final MemberRepository memberRepository;
-    private transient final MemberMapper mapper;
-
+    private transient final MemberMapper memberMapper;
 
     @Override
     public MemberDto findMemberById(final long id) {
         final var member = memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException("No such member"));
 
-        return mapper.dtoFromEntity(member);
+        return memberMapper.dtoFromEntity(member);
     }
 
     @Override
-    public MemberDto loginMember(final String email, final String password){
+    public MemberDto loginMember(final LogInDto dto){
 
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        Optional<Member> optionalMember = memberRepository.findByEmail(dto.getEmail());
         if (optionalMember.isEmpty()){
-            throw new LoginException("No account with email " + email);
-        } else if(!optionalMember.get().getAccount().getPassword().equals(password)){
+            throw new LoginException("No account with email " + dto.getEmail());
+        } else if(!optionalMember.get().getAccount().getPassword().equals(dto.getPassword())){
             throw new LoginException("Wrong password, try once more!");
         } else {
-            return mapper.dtoFromEntity(optionalMember.get());
+            return memberMapper.dtoFromEntity(optionalMember.get());
         }
     }
 
@@ -59,15 +58,15 @@ public class MemberStorageServiceImpl implements MemberStorageService {
 
         final var byMemberName = memberRepository.findByMemberName(name);
 
-        return mapper.dtoFromEntity(byMemberName);
+        return memberMapper.dtoFromEntity(byMemberName);
     }
 
     @Override
-    public MemberDto saveMemberToDB(final MemberDto memberDto){
-        final var newMember = mapper.entityFromDto(memberDto);
+    public MemberDto saveMemberToDB(final RegisterDto registerDto){
+        final var newMember = memberMapper.entityFromRegisterDto(registerDto);
         if(memberRepository.findByEmail(newMember.getAccount().getEmail()).isEmpty()) {
             Member savedMember = memberRepository.save(newMember);
-            return mapper.dtoFromEntity(savedMember);
+            return memberMapper.dtoFromEntity(savedMember);
         } else {
             throw new AlreadyExistAccountException("Account with such email is already exist");
         }

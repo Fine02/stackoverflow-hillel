@@ -1,6 +1,8 @@
 package com.ra.course.com.stackoverflow.service.storage;
 
+import com.ra.course.com.stackoverflow.dto.LogInDto;
 import com.ra.course.com.stackoverflow.dto.MemberDto;
+import com.ra.course.com.stackoverflow.dto.RegisterDto;
 import com.ra.course.com.stackoverflow.dto.mapper.impl.MemberMapper;
 import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
@@ -24,17 +26,21 @@ public class MemberStorageServiceTest {
 
     private Member member;
     private MemberDto dto;
+    private LogInDto logInDto;
+    private RegisterDto registerDto;
     private MemberRepository mockedMemberRepository;
-    private MemberMapper mapper;
+    private MemberMapper memberMapper;
 
     @BeforeEach
     void setUp() {
         mockedMemberRepository = mock(MemberRepository.class);
-        mapper = mock(MemberMapper.class);
-        memberStorageService = new MemberStorageServiceImpl(mockedMemberRepository, mapper);
+        memberMapper = mock(MemberMapper.class);
+        memberStorageService = new MemberStorageServiceImpl(mockedMemberRepository, memberMapper);
         member = mockMember(1L);
         dto = mockDto(1L);
-        when(mapper.dtoFromEntity(member)).thenReturn(dto);
+        registerDto = new RegisterDto("Member Name", "email@gmail.com", "Password!111");
+        when(memberMapper.dtoFromEntity(member)).thenReturn(dto);
+        when(memberMapper.entityFromRegisterDto(registerDto)).thenReturn(member);
     }
 
     @Test
@@ -52,9 +58,10 @@ public class MemberStorageServiceTest {
     @DisplayName("MemberStorageService return dto of member when login is true")
     public void whenLoginThenReturnDto(){
         //given
-        when(mockedMemberRepository.findByEmail("email")).thenReturn(Optional.of(member));
+        logInDto = new LogInDto("email@gmail.com", "Password!111");
+        when(mockedMemberRepository.findByEmail("email@gmail.com")).thenReturn(Optional.of(member));
         //when
-        var result = memberStorageService.loginMember("email", "password");
+        var result = memberStorageService.loginMember(logInDto);
         //then
         assertEquals(dto, result);
     }
@@ -62,21 +69,23 @@ public class MemberStorageServiceTest {
     @DisplayName("MemberStorageService throws LoginException when not data in repository")
     public void whenLoginWithWrongEmailThenThrowsLoginException(){
         //given
-        when(mockedMemberRepository.findByEmail("wrong email")).thenReturn(Optional.empty());
+        logInDto = new LogInDto("wrong@gmail.com", "Password!111");
+        when(mockedMemberRepository.findByEmail("wrong@gmail.com")).thenReturn(Optional.empty());
         //when
         //then
-        assertThatThrownBy(() -> memberStorageService.loginMember("wrong email", "password"))
+        assertThatThrownBy(() -> memberStorageService.loginMember(logInDto))
                 .isInstanceOf(LoginException.class)
-        .hasMessage("No account with email wrong email");
+        .hasMessage("No account with email wrong@gmail.com");
     }
     @Test
     @DisplayName("MemberStorageService throws LoginException when wrong password")
     public void whenLoginWithWrongPasswordThenThrowsLoginException(){
         //given
-        when(mockedMemberRepository.findByEmail("email")).thenReturn(Optional.of(member));
+        logInDto = new LogInDto("email@gmail.com", "wrongPassword!111");
+        when(mockedMemberRepository.findByEmail("email@gmail.com")).thenReturn(Optional.of(member));
         //when
         //then
-        assertThatThrownBy(() -> memberStorageService.loginMember("email", "wrong password"))
+        assertThatThrownBy(() -> memberStorageService.loginMember(logInDto))
                 .isInstanceOf(LoginException.class)
                 .hasMessage("Wrong password, try once more!");
     }
@@ -101,13 +110,10 @@ public class MemberStorageServiceTest {
     @DisplayName("MemberStorageService save member then return member  dto")
     public void whenSaveMemberThenReturnMemberDto(){
         //given
-        var newDto = mockDto(0);
-        var newMember = mockMember(0);
-        when(mapper.entityFromDto(newDto)).thenReturn(newMember);
         when(mockedMemberRepository.findByEmail(member.getAccount().getEmail())).thenReturn(Optional.empty());
-        when(mockedMemberRepository.save(newMember)).thenReturn(member);
+        when(mockedMemberRepository.save(member)).thenReturn(member);
         //when
-        var result = memberStorageService.saveMemberToDB(newDto);
+        var result = memberStorageService.saveMemberToDB(registerDto);
         //then
         assertEquals(dto,result);
     }
@@ -115,11 +121,10 @@ public class MemberStorageServiceTest {
     @DisplayName("MemberStorageService save member then throws AlreadyExistException")
     public void whenSaveMemberThenThrowsAlreadyExistException(){
         //given
-        when(mapper.entityFromDto(dto)).thenReturn(member);
         when(mockedMemberRepository.findByEmail(member.getAccount().getEmail())).thenReturn(Optional.of(member));
         //when
         //then
-        assertThatThrownBy(() -> memberStorageService.saveMemberToDB(dto))
+        assertThatThrownBy(() -> memberStorageService.saveMemberToDB(registerDto))
                 .isInstanceOf(AlreadyExistAccountException.class);
     }
     @Test
@@ -129,7 +134,7 @@ public class MemberStorageServiceTest {
         var listMember = new ArrayList<Member>(){{ add(member); }};
         var listDto = new ArrayList<MemberDto>(){{ add(dto); }};
         when(mockedMemberRepository.findByMemberName("name")).thenReturn(listMember);
-        when(mapper.dtoFromEntity(listMember)).thenReturn(listDto);
+        when(memberMapper.dtoFromEntity(listMember)).thenReturn(listDto);
 
         //when
         var listMemberFromDb = memberStorageService.findByMemberName("name");
@@ -142,17 +147,16 @@ public class MemberStorageServiceTest {
     private Member mockMember(long idMember) {
         var account = Account.builder()
                 .id(idMember)
-                .password("password")
-                .email("email")
-                .name("name").build();
+                .password("Password!111")
+                .email("email@gmail.com")
+                .name("Member name").build();
         return Member.builder()
                 .account(account).build();
     }
     private MemberDto mockDto(long idMember) {
         return MemberDto.builder()
                 .id(idMember)
-                .password("password")
-                .email("email")
-                .name("name").build();
+                .email("email@gmail.com")
+                .name("Member name").build();
     }
 }

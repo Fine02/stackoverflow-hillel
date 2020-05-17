@@ -9,6 +9,9 @@
         span.error{
             color: red;
         }
+        h4.exception{
+            color: brown;
+        }
     </style>
 </head>
 <body>
@@ -16,8 +19,8 @@
 <div class="main">
     <div class="container">
         <h3>Registration Form</h3>
-        <p th:text="${text}"></p>
-        <form action="/member/register" th:object="${memberDto}" method="post">
+        <h4 th:class="exception" th:text="${text}"></h4>
+        <form action="/member/register" th:object="${registerDto}" method="post">
             <p>Email: </p>
             <p><label>
                 <input type="text"  placeholder="Enter email" required th:field="*{email}" />

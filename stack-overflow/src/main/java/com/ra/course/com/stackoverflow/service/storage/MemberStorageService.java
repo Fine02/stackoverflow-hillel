@@ -1,6 +1,8 @@
 package com.ra.course.com.stackoverflow.service.storage;
 
+import com.ra.course.com.stackoverflow.dto.LogInDto;
 import com.ra.course.com.stackoverflow.dto.MemberDto;
+import com.ra.course.com.stackoverflow.dto.RegisterDto;
 import com.ra.course.com.stackoverflow.entity.Member;
 
 import java.util.List;
@@ -8,11 +10,11 @@ import java.util.Optional;
 
 public interface MemberStorageService {
 
-    MemberDto saveMemberToDB(MemberDto memberDto);
+    MemberDto saveMemberToDB(RegisterDto registerDto);
 
     MemberDto findMemberById(long id);
 
-    MemberDto loginMember(String email, String password);
+    MemberDto loginMember(LogInDto logInDto);
 
     void deleteMember(Member member);
 

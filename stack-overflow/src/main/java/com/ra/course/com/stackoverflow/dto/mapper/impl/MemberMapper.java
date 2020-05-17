@@ -1,6 +1,7 @@
 package com.ra.course.com.stackoverflow.dto.mapper.impl;
 
 import com.ra.course.com.stackoverflow.dto.MemberDto;
+import com.ra.course.com.stackoverflow.dto.RegisterDto;
 import com.ra.course.com.stackoverflow.dto.mapper.Mapper;
 import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
@@ -26,7 +27,6 @@ public class MemberMapper implements Mapper<Member, MemberDto> {
         var account = Account.builder().id(dto.getId())
                 .name(dto.getName())
                 .email(dto.getEmail())
-                .password(dto.getPassword())
                 .status(Objects.nonNull(dto.getStatus())
                         ? dto.getStatus()
                         : AccountStatus.ACTIVE)
@@ -49,7 +49,6 @@ public class MemberMapper implements Mapper<Member, MemberDto> {
         return MemberDto.builder().id(entity.getAccount().getId())
                 .name(entity.getAccount().getName())
                 .email(entity.getAccount().getEmail())
-                .password(entity.getAccount().getPassword())
                 .status(entity.getAccount().getStatus())
                 .reputation(entity.getAccount().getReputation())
                 .questions(questionMapper.dtoFromEntity(entity.getQuestions()))
@@ -75,6 +74,26 @@ public class MemberMapper implements Mapper<Member, MemberDto> {
         return checkIfNull(dtos).stream()
                 .map(this::entityFromDto)
                 .collect(Collectors.toList());
+    }
+
+    public Member entityFromRegisterDto(RegisterDto dto){
+        var account = Account.builder()
+                .name(dto.getName())
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .status(AccountStatus.ACTIVE)
+                .reputation(0).build();
+        return Member.builder().account(account)
+                .questions(new ArrayList<>())
+                .answers(new ArrayList<>())
+                .comments(new ArrayList<>())
+                .downVotedAnswersId(new ArrayList<>())
+                .upVotedAnswersId(new ArrayList<>())
+                .downVotedQuestionsId(new ArrayList<>())
+                .upVotedQuestionsId(new ArrayList<>())
+                .downVotedCommentsId(new ArrayList<>())
+                .upVotedCommentsId(new ArrayList<>())
+                .build();
     }
 
     private <T> List <T> checkIfNull(List<T> list){

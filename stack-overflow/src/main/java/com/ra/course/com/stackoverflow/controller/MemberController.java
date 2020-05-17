@@ -1,6 +1,8 @@
 package com.ra.course.com.stackoverflow.controller;
 
+import com.ra.course.com.stackoverflow.dto.LogInDto;
 import com.ra.course.com.stackoverflow.dto.MemberDto;
+import com.ra.course.com.stackoverflow.dto.RegisterDto;
 import com.ra.course.com.stackoverflow.service.storage.MemberStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -21,13 +23,13 @@ public class MemberController {
 
     @GetMapping("/login")
     public String getLoginMember( final Model model) {
-        model.addAttribute("memberDto", new MemberDto());
+        model.addAttribute("logInDto", new LogInDto());
         return "member/login";
     }
 
     @PostMapping("/login")
-    public String postLoginMember(final MemberDto memberDto, final Model model){
-        final var loginMember = memberStorageService.loginMember(memberDto.getEmail(), memberDto.getPassword());
+    public String postLoginMember(final LogInDto logInDto, final Model model){
+        final var loginMember = memberStorageService.loginMember(logInDto);
         model.addAttribute("memberDto", loginMember);
         return "member/greeting";
     }
@@ -41,7 +43,7 @@ public class MemberController {
 
     @GetMapping("/register")
     public String getRegisterNewMember(final Model model){
-        model.addAttribute("memberDto", new MemberDto());
+        model.addAttribute("registerDto", new RegisterDto());
         return "member/registration";
     }
     @GetMapping("/exit")
@@ -51,14 +53,10 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    public String postRegisterNewMember(@Valid final MemberDto memberDto, final Model model){
-        final var savedMember = saveMember(memberDto);
+    public String postRegisterNewMember(@Valid final RegisterDto registerDto, final Model model){
+        final var savedMember = memberStorageService.saveMemberToDB(registerDto);
         model.addAttribute("memberDto", savedMember);
         return "member/registration-done";
-    }
-
-    private MemberDto saveMember (final MemberDto memberDto){
-        return memberStorageService.saveMemberToDB(memberDto);
     }
 
     @ModelAttribute("memberDto")
