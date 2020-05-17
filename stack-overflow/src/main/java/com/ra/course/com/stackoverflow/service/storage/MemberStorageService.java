@@ -6,7 +6,6 @@ import com.ra.course.com.stackoverflow.dto.RegisterDto;
 import com.ra.course.com.stackoverflow.entity.Member;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface MemberStorageService {
 

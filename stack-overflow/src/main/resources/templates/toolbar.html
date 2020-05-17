@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Toolbar</title>
+
+</head>
+<body>
+    <div th:fragment="header" th:object="${memberDto}">
+        <header>
+            <div class="container">
+                <a href="/main" class="logo">StackOverFlow</a>
+                <nav>
+                    <ul>
+                        <li><a th:href="${memberDto == null}
+                                        ? '/member/login' : '/member/' + ${memberDto.getId()}"
+                               th:text="(${memberDto == null})
+                                        ? 'LogIn' : ${memberDto.getName()}"></a></li>
+                        <li><a th:href="(${memberDto == null})
+                                        ? '/member/register' : '/member/exit'"
+                               th:text="(${memberDto == null})
+                                        ? 'Register' : 'Exit'"></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+    </div>
+<div th:fragment="footer" >
+    <footer>
+    <div class="container">
+        © 2020 The StackOverflow Team Virtual Company
+    </div>
+    </footer>
+</div>
+</body>
+</html>

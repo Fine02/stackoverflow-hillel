@@ -33,7 +33,7 @@ public class MemberStorageServiceImpl implements MemberStorageService {
     @Override
     public MemberDto loginMember(final LogInDto dto){
 
-        Optional<Member> optionalMember = memberRepository.findByEmail(dto.getEmail());
+        final var optionalMember = memberRepository.findByEmail(dto.getEmail());
         if (optionalMember.isEmpty()){
             throw new LoginException("No account with email " + dto.getEmail());
         } else if(!optionalMember.get().getAccount().getPassword().equals(dto.getPassword())){
@@ -65,7 +65,7 @@ public class MemberStorageServiceImpl implements MemberStorageService {
     public MemberDto saveMemberToDB(final RegisterDto registerDto){
         final var newMember = memberMapper.entityFromRegisterDto(registerDto);
         if(memberRepository.findByEmail(newMember.getAccount().getEmail()).isEmpty()) {
-            Member savedMember = memberRepository.save(newMember);
+            final var savedMember = memberRepository.save(newMember);
             return memberMapper.dtoFromEntity(savedMember);
         } else {
             throw new AlreadyExistAccountException("Account with such email is already exist");

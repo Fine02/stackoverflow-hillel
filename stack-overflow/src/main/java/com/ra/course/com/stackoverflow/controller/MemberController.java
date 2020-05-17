@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +29,16 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String postLoginMember(final LogInDto logInDto, final Model model){
+    public String postLoginMember(@Valid @ModelAttribute final LogInDto logInDto, final Model model,
+                                  final HttpSession session){
         final var loginMember = memberStorageService.loginMember(logInDto);
         model.addAttribute("memberDto", loginMember);
+        session.setAttribute("memberDto", loginMember);
         return "member/greeting";
     }
 
     @GetMapping("/{id}")
-    public String viewMemberById(@PathVariable Long id, Model model){
+    public String viewMemberById(@PathVariable final Long id, final Model model){
         MemberDto member = memberStorageService.findMemberById(id);
         model.addAttribute("viewMembers", new ArrayList<>(List.of(member)));
         return "member/view-members";
@@ -46,21 +49,24 @@ public class MemberController {
         model.addAttribute("registerDto", new RegisterDto());
         return "member/registration";
     }
+
     @GetMapping("/exit")
-    public String getExitMember(@ModelAttribute("memberDto") MemberDto memberDto, final Model model){
-//        model.ad
-        return "index";
+    public String getExitMember(final HttpSession session){
+        session.removeAttribute("memberDto");
+        return "main";
     }
 
     @PostMapping("/register")
-    public String postRegisterNewMember(@Valid final RegisterDto registerDto, final Model model){
+    public String postRegisterNewMember(@Valid final RegisterDto registerDto, final Model model,
+                                        final HttpSession session){
         final var savedMember = memberStorageService.saveMemberToDB(registerDto);
         model.addAttribute("memberDto", savedMember);
+        session.setAttribute("memberDto", savedMember);
         return "member/registration-done";
     }
 
     @ModelAttribute("memberDto")
-    public MemberDto getMemberDto (final Model model) {
-        return (MemberDto) model.getAttribute("memberDto");
+    public MemberDto getMemberDto (final HttpSession session) {
+        return (MemberDto) session.getAttribute("memberDto");
     }
 }
