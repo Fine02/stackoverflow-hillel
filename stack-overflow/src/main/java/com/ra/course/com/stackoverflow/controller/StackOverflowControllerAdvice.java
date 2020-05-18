@@ -4,7 +4,7 @@ import com.ra.course.com.stackoverflow.dto.LogInDto;
 import com.ra.course.com.stackoverflow.dto.MemberDto;
 import com.ra.course.com.stackoverflow.dto.RegisterDto;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyExistAccountException;
-import com.ra.course.com.stackoverflow.exception.service.LoginException;
+import com.ra.course.com.stackoverflow.exception.service.LoginMemberException;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -18,8 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class StackOverflowControllerAdvice {
 
-    final static String REGISTER_TEMPLATE = "member/register";
-    final static String LOGIN_TEMPLATE = "member/login";
+    private final static String REGISTER_TEMPLATE = "member/register";
+    private final static String LOGIN_TEMPLATE = "member/login";
+    private final static String MAIN_TEMPLATE = "main";
 
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -31,28 +32,35 @@ public class StackOverflowControllerAdvice {
                         fieldError.getDefaultMessage()));
 
         if (request.getRequestURI().contains(REGISTER_TEMPLATE)) {
-            model.addAttribute("registerDto", new RegisterDto());
-            return REGISTER_TEMPLATE;
+            return returnRegisterTemplate(model);
         } else if (request.getRequestURI().contains(LOGIN_TEMPLATE)) {
-            model.addAttribute("logInDto", new LogInDto());
-            return LOGIN_TEMPLATE;
+            return returnLogInTemplate(model);
         } else {
-            return "main";
+            return MAIN_TEMPLATE;
         }
     }
 
-    @ExceptionHandler({AlreadyExistAccountException.class, MemberNotFoundException.class, LoginException.class})
+    @ExceptionHandler({AlreadyExistAccountException.class, MemberNotFoundException.class, LoginMemberException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleAlreadyExistAccountException(final Exception e, final Model model) {
+    public String handleMemberExceptions(final Exception e, final Model model) {
 
-        model.addAttribute("memberDto", new MemberDto());
-        model.addAttribute("logInDto", new LogInDto());
-        model.addAttribute("registerDto", new RegisterDto());
         model.addAttribute("text", e.getMessage());
+        model.addAttribute("memberDto", new MemberDto());
 
-        return e.getClass().isInstance(AlreadyExistAccountException.class) ? REGISTER_TEMPLATE
-             : e.getClass().isInstance(MemberNotFoundException.class) ? "member/view-members"
-             : LOGIN_TEMPLATE;
+        return e instanceof AlreadyExistAccountException
+                ? returnRegisterTemplate(model)
+                : e instanceof LoginMemberException
+                    ? returnLogInTemplate(model)
+                    : MAIN_TEMPLATE;
 
+    }
+
+    private String returnLogInTemplate(final Model model){
+        model.addAttribute("logInDto", new LogInDto());
+        return LOGIN_TEMPLATE;
+    }
+    private String returnRegisterTemplate(final Model model){
+        model.addAttribute("registerDto", new RegisterDto());
+        return REGISTER_TEMPLATE;
     }
 }

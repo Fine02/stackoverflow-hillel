@@ -7,7 +7,7 @@ import com.ra.course.com.stackoverflow.dto.mapper.impl.MemberMapper;
 import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyExistAccountException;
-import com.ra.course.com.stackoverflow.exception.service.LoginException;
+import com.ra.course.com.stackoverflow.exception.service.LoginMemberException;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -74,7 +74,7 @@ public class MemberStorageServiceTest {
         //when
         //then
         assertThatThrownBy(() -> memberStorageService.loginMember(logInDto))
-                .isInstanceOf(LoginException.class)
+                .isInstanceOf(LoginMemberException.class)
         .hasMessage("No account with email wrong@gmail.com");
     }
     @Test
@@ -86,7 +86,7 @@ public class MemberStorageServiceTest {
         //when
         //then
         assertThatThrownBy(() -> memberStorageService.loginMember(logInDto))
-                .isInstanceOf(LoginException.class)
+                .isInstanceOf(LoginMemberException.class)
                 .hasMessage("Wrong password, try once more!");
     }
 

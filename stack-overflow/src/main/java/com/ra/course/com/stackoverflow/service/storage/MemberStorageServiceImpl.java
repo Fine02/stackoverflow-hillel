@@ -6,14 +6,13 @@ import com.ra.course.com.stackoverflow.dto.RegisterDto;
 import com.ra.course.com.stackoverflow.dto.mapper.impl.MemberMapper;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyExistAccountException;
-import com.ra.course.com.stackoverflow.exception.service.LoginException;
+import com.ra.course.com.stackoverflow.exception.service.LoginMemberException;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -35,9 +34,9 @@ public class MemberStorageServiceImpl implements MemberStorageService {
 
         final var optionalMember = memberRepository.findByEmail(dto.getEmail());
         if (optionalMember.isEmpty()){
-            throw new LoginException("No account with email " + dto.getEmail());
+            throw new LoginMemberException("No account with email " + dto.getEmail());
         } else if(!optionalMember.get().getAccount().getPassword().equals(dto.getPassword())){
-            throw new LoginException("Wrong password, try once more!");
+            throw new LoginMemberException("Wrong password, try once more!");
         } else {
             return memberMapper.dtoFromEntity(optionalMember.get());
         }

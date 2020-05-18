@@ -38,7 +38,7 @@ public class MemberController {
         return "member/greeting";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id:d+}")
     public String viewMemberById(@PathVariable final Long id, final Model model) {
         final var member = memberService.findMemberById(id);
         model.addAttribute("viewMembers", new ArrayList<>(List.of(member)));

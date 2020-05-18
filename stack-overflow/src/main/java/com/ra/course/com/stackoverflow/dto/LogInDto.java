@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Data
@@ -13,9 +14,10 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class LogInDto {
 
-    @NotBlank(message = "{logInDto.password.blank}")
+    @NotBlank(message = "{logInDto.email.blank}")
+    @Email(message = "{logInDto.email.invalid}")
     private String email;
 
-    @NotBlank(message = "{logInDto.email.blank}")
+    @NotBlank(message = "{logInDto.password.blank}")
     private String password;
 }

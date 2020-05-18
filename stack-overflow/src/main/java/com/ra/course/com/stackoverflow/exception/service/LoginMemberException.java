@@ -1,9 +1,9 @@
 package com.ra.course.com.stackoverflow.exception.service;
 
-public class LoginException extends RuntimeException{
+public class LoginMemberException extends RuntimeException{
     private static final long serialVersionUID = 1L;
 
-    public LoginException(final String message) {
+    public LoginMemberException(final String message) {
         super(message);
     }
 }
