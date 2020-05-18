@@ -34,10 +34,10 @@ public class JdbcShippingDaoImpl implements ShippingDao {
             "        crc.nameOnCard, crc.cardNumber,crc.code, \n" +
             "        ebt.bankName, ebt.routingNumber, ebt.accountNumber\n" +
             "FROM member m JOIN account a ON m.account_id= a.id\n" +
-            "JOIN account_status acs ON a.account_status_id = acs.id\n" +
-            "JOIN address adr ON a.address_id = adr.id\n" +
-            "JOIN credit_card crc ON crc.account_id = a.id\n" +
-            "JOIN electronic_bank_transfer ebt ON ebt.account_id = a.id\n" +
+            "LEFT JOIN account_status acs ON a.account_status_id = acs.id\n" +
+            "LEFT JOIN address adr ON a.address_id = adr.id\n" +
+            "LEFT JOIN credit_card crc ON crc.account_id = a.id\n" +
+            "LEFT JOIN electronic_bank_transfer ebt ON ebt.account_id = a.id\n" +
             "WHERE m.id=? ";
 
     public static final String GET_SHIPMENT = "SELECT s.id, s.shipmentNumber, s.shipmentDate, s.estimatedArrival, s.shipmentMethod\n" +

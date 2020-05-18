@@ -2,14 +2,18 @@ package com.ra.course.aws.online.shopping.service.impl;
 
 import com.ra.course.aws.online.shopping.dao.ProductDao;
 import com.ra.course.aws.online.shopping.entity.product.Product;
-import com.ra.course.aws.online.shopping.exceptions.ProductNotFoundException;
+import com.ra.course.aws.online.shopping.entity.product.ProductCategory;
+import com.ra.course.aws.online.shopping.entity.product.ProductReview;
 import com.ra.course.aws.online.shopping.service.ProductService;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
     private transient final ProductDao productDao;
 
     public ProductServiceImpl(final ProductDao productDao) {
@@ -17,30 +21,64 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Long save(final Product newProduct) {
+    public Long save(final Product newProduct) throws SQLException {
+
         return productDao.save(newProduct);
     }
 
     @Override
-    public boolean update(final Product productToUpdate) {
-        Optional.ofNullable(productDao.findById(productToUpdate.getId()))
-                .ifPresentOrElse(product -> productDao.update(productToUpdate), () -> {
-                    throw new ProductNotFoundException("Product with id=" + productToUpdate.getId() + " not found");
-                });
-        return true;
+    public void update(final Product productToUpdate) {
+
+        productDao.update(productToUpdate);
     }
 
     @Override
-    public boolean remove(final Long productId) {
-        Optional.ofNullable(productDao.findById(productId))
-                .ifPresentOrElse(product -> productDao.remove(productId), () -> {
-                    throw new ProductNotFoundException("Product with id = " + productId + " not found.");
-                });
-        return true;
+    public void remove(final Long productId) {
+
+        productDao.remove(productId);
     }
 
     @Override
     public Product findByID(final Long productID) {
         return productDao.findById(productID);
+    }
+
+    @Override
+    public List<Product> searchByName(final String productName) {
+        return productDao.searchProductsByName(productName);
+    }
+
+    @Override
+    public List<Product> searchByCategory(final ProductCategory productCategory) {
+        return productDao.searchProductsByCategory(productCategory);
+    }
+
+    @Override
+    public List<Product> getAll() {
+
+        return productDao.getAll();
+    }
+
+    @Override
+    public void addProductReview(final Product product) {
+        if(product != null){
+            final Product productFromDao = productDao.findById(product.getId());
+            Objects.requireNonNull(productFromDao);
+            productFromDao.setProductReview(product.getProductReview());
+            productDao.update(productFromDao);
+        }
+
+    }
+
+    @Override
+    public void addProductRating(final Product product, final int rating) {
+        if(product != null){
+            final Product productFromDao = productDao.findById(product.getId());
+            Objects.requireNonNull(productFromDao);
+            final ProductReview productReview = productFromDao.getProductReview() == null ? new ProductReview(productFromDao.getId(), rating, "") : productFromDao.getProductReview();
+            productReview.setRating(rating);
+            productFromDao.setProductReview(productReview);
+            productDao.update(productFromDao);
+        }
     }
 }

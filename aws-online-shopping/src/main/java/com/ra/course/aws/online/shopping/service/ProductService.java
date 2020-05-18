@@ -1,16 +1,29 @@
 package com.ra.course.aws.online.shopping.service;
 
 import com.ra.course.aws.online.shopping.entity.product.Product;
+import com.ra.course.aws.online.shopping.entity.product.ProductCategory;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public interface ProductService {
+    Long save(Product product) throws SQLException;
 
-    Long save(Product product);
+    void update(Product product);
 
-    boolean update(Product product);
-
-    boolean remove(Long productId);
+    void remove(Long productId);
 
     Product findByID(Long productID);
+
+    List<Product> searchByName(String productName);
+
+    List<Product> searchByCategory(ProductCategory productCategory);
+
+    List<Product> getAll();
+
+    void addProductReview(Product product);
+
+    void addProductRating(Product product, int rating);
 
 }
 

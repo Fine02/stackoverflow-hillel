@@ -1,6 +1,5 @@
 package com.ra.course.aws.online.shopping.entity.product;
 
-import java.util.List;
 import java.util.Objects;
 
 public class Product {
@@ -10,7 +9,7 @@ public class Product {
     private double price;
     private int availableItemCount;
     private ProductCategory category;
-    private List<ProductReview> productReviews;
+    private ProductReview productReview;
 
     public Product() {
     }
@@ -89,12 +88,12 @@ public class Product {
         this.category = category;
     }
 
-    public List<ProductReview> getProductReviews() {
-        return productReviews;
+    public ProductReview getProductReview() {
+        return productReview;
     }
 
-    public void setProductReviews(List<ProductReview> productReviews) {
-        this.productReviews = productReviews;
+    public void setProductReview(ProductReview productReview) {
+        this.productReview = productReview;
     }
 
     @Override
@@ -108,12 +107,12 @@ public class Product {
                 Objects.equals(name, product.name) &&
                 Objects.equals(description, product.description) &&
                 Objects.equals(category, product.category) &&
-                Objects.equals(productReviews, product.productReviews);
+                Objects.equals(productReview, product.productReview);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, price, availableItemCount, category, productReviews);
+        return Objects.hash(id, name, description, price, availableItemCount, category, productReview);
     }
 
     @Override
@@ -125,7 +124,7 @@ public class Product {
                 ", price=" + price +
                 ", availableItemCount=" + availableItemCount +
                 ", category=" + category +
-                ", productReview=" + productReviews +
+                ", productReview=" + productReview +
                 '}';
     }
 }
