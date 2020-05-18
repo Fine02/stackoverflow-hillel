@@ -56,7 +56,7 @@ public class MemberControllerTest {
                 .andExpect(matchAll(
                         status().isOk(),
                         model().attributeExists("registerDto"),
-                        view().name("member/registration")));
+                        view().name("member/register")));
     }
     @Test
     public void whenPostLoginThenReturnNewMemberDto() throws Exception{

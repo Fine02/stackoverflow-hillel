@@ -18,6 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class StackOverflowControllerAdvice {
 
+    final static String REGISTER_TEMPLATE = "member/register";
+    final static String LOGIN_TEMPLATE = "member/login";
+
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleBindException(final BindException e, final Model model,
@@ -27,14 +30,14 @@ public class StackOverflowControllerAdvice {
                 fieldError -> model.addAttribute(fieldError.getField() + "Error",
                         fieldError.getDefaultMessage()));
 
-        if (request.getRequestURI().contains("member/register")) {
+        if (request.getRequestURI().contains(REGISTER_TEMPLATE)) {
             model.addAttribute("registerDto", new RegisterDto());
-            return "member/registration";
-        } else if (request.getRequestURI().contains("member/login")) {
+            return REGISTER_TEMPLATE;
+        } else if (request.getRequestURI().contains(LOGIN_TEMPLATE)) {
             model.addAttribute("logInDto", new LogInDto());
-            return "member/login";
+            return LOGIN_TEMPLATE;
         } else {
-            return "index";
+            return "main";
         }
     }
 
@@ -47,9 +50,9 @@ public class StackOverflowControllerAdvice {
         model.addAttribute("registerDto", new RegisterDto());
         model.addAttribute("text", e.getMessage());
 
-        return e.getClass().isInstance(AlreadyExistAccountException.class) ? "member/registration"
+        return e.getClass().isInstance(AlreadyExistAccountException.class) ? REGISTER_TEMPLATE
              : e.getClass().isInstance(MemberNotFoundException.class) ? "member/view-members"
-             : "member/login";
+             : LOGIN_TEMPLATE;
 
     }
 }

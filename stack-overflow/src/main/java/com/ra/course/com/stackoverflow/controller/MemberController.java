@@ -20,53 +20,58 @@ import java.util.List;
 @SessionAttributes("memberDto")
 public class MemberController {
 
-    private final MemberStorageService memberStorageService;
+    private final MemberStorageService memberService;
+
+    private final static String MEMBER_DTO_NAME = "memberDto";
 
     @GetMapping("/login")
-    public String getLoginMember( final Model model) {
+    public String getLoginMember(final Model model) {
         model.addAttribute("logInDto", new LogInDto());
         return "member/login";
     }
 
     @PostMapping("/login")
     public String postLoginMember(@Valid @ModelAttribute final LogInDto logInDto, final Model model,
-                                  final HttpSession session){
-        final var loginMember = memberStorageService.loginMember(logInDto);
-        model.addAttribute("memberDto", loginMember);
-        session.setAttribute("memberDto", loginMember);
+                                  final HttpSession session) {
+        final var loginMember = memberService.loginMember(logInDto);
+        setAttributes(model, session, loginMember);
         return "member/greeting";
     }
 
     @GetMapping("/{id}")
-    public String viewMemberById(@PathVariable final Long id, final Model model){
-        MemberDto member = memberStorageService.findMemberById(id);
+    public String viewMemberById(@PathVariable final Long id, final Model model) {
+        final var member = memberService.findMemberById(id);
         model.addAttribute("viewMembers", new ArrayList<>(List.of(member)));
         return "member/view-members";
     }
 
     @GetMapping("/register")
-    public String getRegisterNewMember(final Model model){
+    public String getRegisterNewMember(final Model model) {
         model.addAttribute("registerDto", new RegisterDto());
-        return "member/registration";
+        return "member/register";
     }
 
     @GetMapping("/exit")
-    public String getExitMember(final HttpSession session){
-        session.removeAttribute("memberDto");
+    public String getExitMember(final HttpSession session) {
+        session.removeAttribute(MEMBER_DTO_NAME);
         return "main";
     }
 
     @PostMapping("/register")
     public String postRegisterNewMember(@Valid final RegisterDto registerDto, final Model model,
-                                        final HttpSession session){
-        final var savedMember = memberStorageService.saveMemberToDB(registerDto);
-        model.addAttribute("memberDto", savedMember);
-        session.setAttribute("memberDto", savedMember);
+                                        final HttpSession session) {
+        final var savedMember = memberService.saveMemberToDB(registerDto);
+        setAttributes(model, session, savedMember);
         return "member/registration-done";
     }
 
     @ModelAttribute("memberDto")
-    public MemberDto getMemberDto (final HttpSession session) {
-        return (MemberDto) session.getAttribute("memberDto");
+    public MemberDto getMemberDto(final HttpSession session) {
+        return (MemberDto) session.getAttribute(MEMBER_DTO_NAME);
+    }
+
+    private void setAttributes(final Model model, final HttpSession session, final Object object){
+        model.addAttribute(MEMBER_DTO_NAME, object);
+        session.setAttribute(MEMBER_DTO_NAME, object);
     }
 }
