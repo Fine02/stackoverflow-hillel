@@ -17,28 +17,37 @@ import java.util.List;
 @Controller
 @RequestMapping("/member")
 @RequiredArgsConstructor
-@SessionAttributes("memberDto")
+//@SessionAttributes("memberDto")
 public class MemberController {
 
     private final MemberStorageService memberService;
 
     private final static String MEMBER_DTO_NAME = "memberDto";
+    private final static String REGISTER_TEMPLATE = "member/register";
+    private final static String LOGIN_TEMPLATE = "member/login";
+
+    static String logInTemplate(final Model model){
+        model.addAttribute("logInDto", new LogInDto());
+        return LOGIN_TEMPLATE;
+    }
+    static String registerTemplate(final Model model){
+        model.addAttribute("registerDto", new RegisterDto());
+        return REGISTER_TEMPLATE;
+    }
 
     @GetMapping("/login")
     public String getLoginMember(final Model model) {
-        model.addAttribute("logInDto", new LogInDto());
-        return "member/login";
+        return logInTemplate(model);
     }
 
     @PostMapping("/login")
-    public String postLoginMember(@Valid @ModelAttribute final LogInDto logInDto, final Model model,
-                                  final HttpSession session) {
+    public String postLoginMember(@Valid @ModelAttribute final LogInDto logInDto, final HttpSession session) {
         final var loginMember = memberService.loginMember(logInDto);
-        setAttributes(model, session, loginMember);
+        session.setAttribute(MEMBER_DTO_NAME, loginMember);
         return "member/greeting";
     }
 
-    @GetMapping("/{id:d+}")
+    @GetMapping("/{id}")
     public String viewMemberById(@PathVariable final Long id, final Model model) {
         final var member = memberService.findMemberById(id);
         model.addAttribute("viewMembers", new ArrayList<>(List.of(member)));
@@ -47,8 +56,7 @@ public class MemberController {
 
     @GetMapping("/register")
     public String getRegisterNewMember(final Model model) {
-        model.addAttribute("registerDto", new RegisterDto());
-        return "member/register";
+        return registerTemplate(model);
     }
 
     @GetMapping("/exit")
@@ -58,20 +66,10 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    public String postRegisterNewMember(@Valid final RegisterDto registerDto, final Model model,
-                                        final HttpSession session) {
+    public String postRegisterNewMember(@Valid final RegisterDto registerDto, final HttpSession session) {
         final var savedMember = memberService.saveMemberToDB(registerDto);
-        setAttributes(model, session, savedMember);
+        session.setAttribute(MEMBER_DTO_NAME, savedMember);
         return "member/registration-done";
     }
 
-    @ModelAttribute("memberDto")
-    public MemberDto getMemberDto(final HttpSession session) {
-        return (MemberDto) session.getAttribute(MEMBER_DTO_NAME);
-    }
-
-    private void setAttributes(final Model model, final HttpSession session, final Object object){
-        model.addAttribute(MEMBER_DTO_NAME, object);
-        session.setAttribute(MEMBER_DTO_NAME, object);
-    }
 }

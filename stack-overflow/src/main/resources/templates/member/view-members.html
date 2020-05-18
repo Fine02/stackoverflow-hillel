@@ -18,7 +18,7 @@
         <h1 class="exception" th:text="${text}"></h1>
         <div th:if="${not #lists.isEmpty(viewMembers)}">
             <div th:each="viewMember : ${viewMembers}">
-                <h3 th:text="'Hello, ' + ${viewMember.getName()} +'!!!'"></h3>
+                <h3 th:text="'Name: ' + ${viewMember.getName()} +'!!!'"></h3>
                 <p th:text="'Id: ' + ${viewMember.getId()} "></p>
                 <p th:text="'Reputation: ' + ${viewMember.getReputation()} "></p>
                 <p th:text="'Status: ' + ${viewMember.getStatus()} "></p>

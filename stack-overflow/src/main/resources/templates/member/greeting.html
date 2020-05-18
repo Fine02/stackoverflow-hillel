@@ -9,10 +9,10 @@
 <div th:insert="~{toolbar::header}"></div>
 
 <div class="main">
-    <div class="container" th:object="${memberDto}">
+    <div class="container" th:with="member=${session.memberDto}">
         <p th:text="${text}"></p>
-        <p th:text="'Hello, ' + ${memberDto.getName()} +'!!!'"></p>
-        <p th:text="'Your id is ' + ${memberDto.getId()} "></p>
+        <p th:text="'Hello, ' + ${member.getName()} +'!!!'"></p>
+        <p th:text="'Your id is ' + ${member.getId()} "></p>
 
     </div>
 </div>

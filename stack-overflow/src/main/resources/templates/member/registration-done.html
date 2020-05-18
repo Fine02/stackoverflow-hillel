@@ -8,9 +8,9 @@
 <body>
 <div th:insert="~{toolbar::header}"></div>
 
-<div class="container" th:object="${memberDto}">
-    <h3 th:text="'Wellcome, ' + ${memberDto.getName()}"></h3>
-    <p th:text="'Your id is ' + ${memberDto.getId()}"></p>
+<div class="container" th:with="member=${session.memberDto}">
+    <h3 th:text="'Wellcome, ' + ${member.getName()}"></h3>
+    <p th:text="'Your id is ' + ${member.getId()}"></p>
 </div>
 
 <div th:insert="~{toolbar::footer}"></div>
