@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class MemberController {
     private final static String MEMBER_DTO_NAME = "memberDto";
     private final static String REGISTER_TEMPLATE = "member/register";
     private final static String LOGIN_TEMPLATE = "member/login";
+    private final static String VIEW_TEMPLATE = "member/view-members";
 
     static String logInTemplate(final Model model){
         model.addAttribute("logInDto", new LogInDto());
@@ -51,7 +54,20 @@ public class MemberController {
     public String viewMemberById(@PathVariable final Long id, final Model model) {
         final var member = memberService.findMemberById(id);
         model.addAttribute("viewMembers", new ArrayList<>(List.of(member)));
-        return "member/view-members";
+        return VIEW_TEMPLATE;
+    }
+    @GetMapping("/search")
+    public String getSearchMember(){
+        return "member/member-search";
+    }
+
+    @PostMapping("/search")
+    public String postSearchMember(@ModelAttribute("name") @NotBlank(message = "{search.blank}") final String name,
+                                   final Model model){
+        final var memberList = memberService.findByMemberName(name);
+        model.addAttribute("size", "There are " + memberList.size() + " member with name: " + name);
+        model.addAttribute("viewMembers", memberList);
+        return VIEW_TEMPLATE;
     }
 
     @GetMapping("/register")

@@ -3,39 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Registration Form</title>
-    <style>
-        span.error{
-            color: red;
-        }
-        h4.exception{
-            color: brown;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div th:insert="~{toolbar::header}"></div>
 <div class="main">
     <div class="container">
-        <h3>Registration Form</h3>
-        <h4 th:class="exception" th:text="${text}"></h4>
+        <h3 class="h3">Registration Form</h3>
+        <h4 th:class="bg-danger" th:text="${text}"></h4>
         <form action="/member/register" th:object="${registerDto}" method="post">
             <p>Email: </p>
             <p><label>
-                <input type="text"  placeholder="Enter email" required th:field="*{email}" />
-                <br><span class="error" th:text="${emailError}"></span>
+                <input type="email"  placeholder="Enter email" required th:field="*{email}" />
+                <br><span class="bg-warning" th:text="${emailError}"></span>
             </label>
             <p>Name: </p>
             <p><label>
                 <input type="text" placeholder="Enter name" required th:field="*{name}" />
-                <br><span class="error" th:text="${nameError}"></span>
+                <br><span class="bg-warning" th:text="${nameError}"></span>
             </label>
             <p>Password: </p>
             <p><label>
                 <input type="text" placeholder="Enter Password" required th:field="*{password}" />
-                <br><span class="error" th:text="${passwordError}"></span>
+                <br><span class="bg-warning" th:text="${passwordError}"></span>
             </label>
-            <p><input type="submit" value="Submit" />
-                <input type="reset" value="Reset" /></p>
+            <p><input type="submit"  class="btn btn-success" value="Submit" />
+                <input type="reset" class="btn btn-warning" value="Reset" /></p>
         </form>
     </div>
 </div>

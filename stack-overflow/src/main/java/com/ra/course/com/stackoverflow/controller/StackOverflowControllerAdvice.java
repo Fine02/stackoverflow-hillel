@@ -20,6 +20,7 @@ public class StackOverflowControllerAdvice {
 
     private final static String REGISTER_URL = "member/register";
     private final static String LOGIN_URL = "member/login";
+    private final static String SEARCH_URL = "member/search";
     private final static String MAIN_TEMPLATE = "main";
 
     @ExceptionHandler(BindException.class)
@@ -35,6 +36,8 @@ public class StackOverflowControllerAdvice {
             return registerTemplate(model);
         } else if (request.getRequestURI().contains(LOGIN_URL)) {
             return logInTemplate(model);
+        } else if (request.getRequestURI().contains(SEARCH_URL)) {
+            return "member/member-search";
         } else {
             return MAIN_TEMPLATE;
         }

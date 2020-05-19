@@ -3,22 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>StackOverflow Member View</title>
-
-    <style>
-        h1.exception {
-            color: brown;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div th:insert="~{toolbar::header}"></div>
 
 <div class="main">
     <div class="container">
-        <h1 class="exception" th:text="${text}"></h1>
+        <h4 class="bg-warning" th:text="${size}"></h4>
         <div th:if="${not #lists.isEmpty(viewMembers)}">
             <div th:each="viewMember : ${viewMembers}">
-                <h3 th:text="'Name: ' + ${viewMember.getName()} +'!!!'"></h3>
+                <h3 th:text="'Name: ' + ${viewMember.getName()}"></h3>
                 <p th:text="'Id: ' + ${viewMember.getId()} "></p>
                 <p th:text="'Reputation: ' + ${viewMember.getReputation()} "></p>
                 <p th:text="'Status: ' + ${viewMember.getStatus()} "></p>

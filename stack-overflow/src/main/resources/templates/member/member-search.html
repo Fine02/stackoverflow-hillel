@@ -2,36 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Log In Form</title>
+    <title>Search Member Form</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        span.error{
+            color: red;
+        }
+    </style>
 </head>
 <body>
-    <div th:insert="~{toolbar::header}"></div>
+<div th:insert="~{toolbar::header}"></div>
 <div class="main">
     <div class="container">
-        <h3 class="h3">Login Form</h3>
-        <form action="#" th:object="${logInDto}" method="post">
-            <p class="bg-danger" th:text="${text}"></p>
-            <p>Email: </p>
+        <h3 class="h3">Search Member Form</h3>
+        <p th:text="${text}"></p>
+        <form action="/member/search" method="post">
+            <p>Name: </p>
             <p><label>
-                <input type="email" placeholder="Enter email" required th:field="*{email}" />
-                <br><span class="bg-warning" th:text="${emailError}"></span>
-            </label>
-            <p>Password: </p>
-            <p><label>
-                <input type="password" placeholder="Enter Password" required th:field="*{password}" />
-                <br><span class="bg-warning" th:text="${passwordError}"></span>
+                <input type="text" aria-label="Search" placeholder="Enter searching name" required th:name="name" />
+                <br><span class="bg-warning" th:text="${nameError}"></span>
             </label>
             <p><input type="submit"  class="btn btn-success" value="Submit" />
             <input type="reset" class="btn btn-warning" value="Reset" /></p>
         </form>
     </div>
 </div>
-
 <div th:insert="~{toolbar::footer}"></div>
-
 </body>
 </html>
