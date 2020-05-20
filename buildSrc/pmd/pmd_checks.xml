@@ -241,7 +241,7 @@
     </rule>
     <rule ref="category/java/design.xml/ExcessiveParameterList">
         <properties>
-            <property name="minimum" value="4.0" />
+            <property name="minimum" value="7.0" />
         </properties>
     </rule>
     <rule ref="category/java/design.xml/ExcessivePublicCount" />

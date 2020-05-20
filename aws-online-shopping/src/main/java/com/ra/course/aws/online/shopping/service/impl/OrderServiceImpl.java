@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
                 orderDao.updateOrder(foundOrder);
                 return order;
             }
-            throw new OrderNotFoundException("There is not found the Order by this number");
+            throw new OrderNotFoundException("You can not cancel the order");
         }
         throw new MemberDataNotFoundException("There is not found the Member by this ID");
     }
@@ -54,10 +54,8 @@ public class OrderServiceImpl implements OrderService {
         if (foundOrder.getOrderLog().contains(orderLog)) {
             throw new OrderLogIsAlreadyExistException("This OrderLog is already exist");
         }
-        final var foundOrderList = orderDao.findLogListByOrder(order.getOrderLog());
-        orderDao.addOrderLog(foundOrderList.add(orderLog));
         foundOrder.setStatus(orderLog.getStatus());
-        orderDao.updateOrder(foundOrder);
+        orderDao.addOrderLogAndUpdateOrder(foundOrder, orderLog);
         return true;
     }
 

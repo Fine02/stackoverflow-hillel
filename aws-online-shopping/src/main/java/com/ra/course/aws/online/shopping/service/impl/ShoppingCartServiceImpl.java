@@ -1,61 +1,74 @@
 package com.ra.course.aws.online.shopping.service.impl;
 
+import com.ra.course.aws.online.shopping.dao.ProductDao;
 import com.ra.course.aws.online.shopping.dao.ShoppingCartDao;
 import com.ra.course.aws.online.shopping.entity.Item;
-import com.ra.course.aws.online.shopping.entity.enums.PaymentStatus;
 import com.ra.course.aws.online.shopping.entity.product.Product;
-import com.ra.course.aws.online.shopping.exceptions.ElementNotFoundException;
+import com.ra.course.aws.online.shopping.entity.user.Member;
 import com.ra.course.aws.online.shopping.service.ShoppingCartService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final transient ShoppingCartDao shoppingCartDao;
+    private final transient ProductDao productDao;
     private static final int MIN_QUANTITY = 1;
 
-    public ShoppingCartServiceImpl(final ShoppingCartDao shoppingCartDao) {
+    @Autowired
+    public ShoppingCartServiceImpl(final ShoppingCartDao shoppingCartDao,final ProductDao productDao) {
         this.shoppingCartDao = shoppingCartDao;
+        this.productDao = productDao;
     }
 
 
     @Override
-    public Long addProductToCart(final Product product) {
-        Objects.requireNonNull(product);
-        final Item itemToSave = new Item(product.getId(), MIN_QUANTITY, product.getPrice());
-        return shoppingCartDao.addItemToCart(itemToSave);
+    public Long addProductToCart(final Product product, final Member member) {
+        if(product != null && member != null) {
+            final Item itemInCart = shoppingCartDao.findItem(product.getId());
+            if(itemInCart == null){
+                final Item itemToSave = new Item(MIN_QUANTITY, product.getPrice(), member.getCart().getId(), product.getId());
+                return shoppingCartDao.addItemToCart(itemToSave);
+            }else{
+                itemInCart.setQuantity(itemInCart.getQuantity()+MIN_QUANTITY);
+                itemInCart.setPrice(itemInCart.getPrice()+product.getPrice());
+                final boolean updated = shoppingCartDao.updateItemInCart(itemInCart);
+                return updated?itemInCart.getItemId():0L;
+            }
+        } else {
+            return 0L;
+        }
     }
 
     @Override
-    public void removeProductFromCart(final Product product) {
-        if(product != null){
-            try{
-                final Item itemFromDB = shoppingCartDao.getItemFromCart(product.getId());
-                if(itemFromDB.getQuantity() > MIN_QUANTITY){
-                    itemFromDB.setQuantity(itemFromDB.getQuantity() - MIN_QUANTITY);
-                    itemFromDB.setPrice(itemFromDB.getPrice() - product.getPrice());
-                    shoppingCartDao.updateItemInCart(itemFromDB);
-                }
+    public void removeItemFromCart(final Item item) {
+        if(item != null){
+            final Item itemFromDB = shoppingCartDao.findItem(item.getProductId());
+            final Product product = productDao.findById(item.getProductId());
+            Objects.requireNonNull(itemFromDB);
+            Objects.requireNonNull(product);
+            if(itemFromDB.getQuantity() > MIN_QUANTITY){
+                itemFromDB.setQuantity(itemFromDB.getQuantity() - MIN_QUANTITY);
+                itemFromDB.setPrice(itemFromDB.getPrice() - product.getPrice());
+                shoppingCartDao.updateItemInCart(itemFromDB);
+            } else {
                 shoppingCartDao.removeItemFromCart(itemFromDB);
-            }catch (IllegalArgumentException e){
-                throw new ElementNotFoundException(e.getMessage() + "\n element not found!" , e);
             }
         }
     }
 
     @Override
-    public boolean checkoutItemInCart(final Item item) {
-       Objects.requireNonNull(item);
-          final Item itemFromDB = shoppingCartDao.getItemFromCart(item.getProductID());
-            return item.equals(itemFromDB);
+    public boolean checkoutItemInCart(final Long itemId) {
+        final Item itemFromDB = shoppingCartDao.findItem(itemId);
+        return itemFromDB != null;
 
     }
 
     @Override
-    public PaymentStatus buyItems() {
-        final List<Item> allItemsFromDB =  shoppingCartDao.getAllItems();
-        return shoppingCartDao.makePayment(allItemsFromDB);
+    public Item findItemById(final Long productId) {
+        return shoppingCartDao.findItem(productId);
     }
+
 }

@@ -1,6 +1,7 @@
 package com.ra.course.aws.online.shopping.entity.notification;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Notification {
     private int notificationId;
@@ -43,5 +44,20 @@ public class Notification {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Notification that = (Notification) o;
+        return notificationId == that.notificationId &&
+                Objects.equals(createdOn, that.createdOn) &&
+                Objects.equals(content, that.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(notificationId, createdOn, content);
     }
 }

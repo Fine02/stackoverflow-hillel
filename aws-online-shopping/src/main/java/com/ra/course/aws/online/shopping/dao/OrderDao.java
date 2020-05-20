@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface OrderDao {
 
-    void updateOrder(Order orderNumber);
+    void updateOrder(Order order);
+
+    void addOrderLogAndUpdateOrder(Order order, OrderLog orderLog);
 
     boolean isFoundMemberID(Long id);
 
@@ -17,8 +19,5 @@ public interface OrderDao {
 
     boolean isThisOrderLogExist(OrderLog orderLog);
 
-    void addOrderLog(boolean add);
-
     OrderLog findOrderLogById(Long orderLogId);
-
 }
