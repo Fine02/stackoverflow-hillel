@@ -15,16 +15,20 @@
         <h3 class="h3">Login Form</h3>
         <form action="#" th:object="${logInDto}" method="post">
             <p class="bg-danger" th:text="${text}"></p>
-            <p>Email: </p>
-            <p><label>
-                <input type="email" placeholder="Enter email" required th:field="*{email}" />
-                <br><span class="bg-warning" th:text="${emailError}"></span>
-            </label>
-            <p>Password: </p>
-            <p><label>
-                <input type="password" placeholder="Enter Password" required th:field="*{password}" />
-                <br><span class="bg-warning" th:text="${passwordError}"></span>
-            </label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <label for="email">
+                    <input id="email" type="email" class="form-control" required th:field="*{email}" placeholder="Email" />
+                    <br><span class="bg-warning" th:text="${emailError}"></span>
+                </label>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                <label for="password">
+                    <input id="password" type="password" class="form-control" required th:field="*{password}" placeholder="Password">
+                    <br><span class="bg-warning" th:text="${passwordError}"></span>
+                </label>
+            </div>
             <p><input type="submit"  class="btn btn-success" value="Submit" />
             <input type="reset" class="btn btn-warning" value="Reset" /></p>
         </form>

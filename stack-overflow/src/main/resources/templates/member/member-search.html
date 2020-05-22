@@ -22,7 +22,7 @@
         <form action="/member/search" method="post">
             <p>Name: </p>
             <p><label>
-                <input type="text" aria-label="Search" placeholder="Enter searching name" required th:name="name" />
+                <input type="text" aria-label="Search" placeholder="Enter searching name" required name="name" />
                 <br><span class="bg-warning" th:text="${nameError}"></span>
             </label>
             <p><input type="submit"  class="btn btn-success" value="Submit" />

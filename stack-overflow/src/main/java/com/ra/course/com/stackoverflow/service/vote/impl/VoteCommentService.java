@@ -67,7 +67,7 @@ public class VoteCommentService implements VoteService<Comment> {
     }
 
     private void checkTheAuthorOfComment(final Comment comment, final Member member) {
-        if (comment.getAuthorId() == member.getAccount().getId()) {
+        if (comment.getAuthorId().equals(member.getAccount().getId())) {
             throw new CannotVoteOwnPostException("Can't vote your own comment");
         }
     }

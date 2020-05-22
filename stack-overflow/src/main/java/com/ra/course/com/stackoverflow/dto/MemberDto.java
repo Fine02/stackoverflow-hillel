@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.util.*;
 
 @AllArgsConstructor
@@ -14,7 +15,9 @@ import java.util.*;
 @NoArgsConstructor
 @SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class MemberDto {
+public class MemberDto implements Serializable {
+
+    private static final long serialVersionUID = 99L;
 
     Long id;
 
@@ -26,16 +29,11 @@ public class MemberDto {
 
     int reputation;
 
-    @Builder.Default
-    Map<Badge, Set<Question>> questionBadges = new HashMap<>();
-
     List<QuestionDto> questions;
 
     List<AnswerDto> answers;
 
     List<CommentDto> comments;
-
-    List<Notification> notifications;
 
     List<Long> upVotedQuestionsId;
 

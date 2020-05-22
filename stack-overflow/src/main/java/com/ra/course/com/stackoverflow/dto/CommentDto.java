@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -14,7 +15,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CommentDto {
+public class CommentDto implements Serializable {
+
+    private static final long serialVersionUID = 99L;
 
     Long id;
 

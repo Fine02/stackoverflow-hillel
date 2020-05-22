@@ -3,11 +3,13 @@ package com.ra.course.com.stackoverflow.service.storage;
 import com.ra.course.com.stackoverflow.dto.LogInDto;
 import com.ra.course.com.stackoverflow.dto.MemberDto;
 import com.ra.course.com.stackoverflow.dto.RegisterDto;
+import com.ra.course.com.stackoverflow.dto.UpdateDto;
 import com.ra.course.com.stackoverflow.dto.mapper.impl.MemberMapper;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyExistAccountException;
 import com.ra.course.com.stackoverflow.exception.service.LoginMemberException;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
+import com.ra.course.com.stackoverflow.exception.service.WrongPasswordException;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,35 +23,42 @@ public class MemberStorageServiceImpl implements MemberStorageService {
     private transient final MemberRepository memberRepository;
     private transient final MemberMapper memberMapper;
 
+    private final static String DEFAULT_PASSWORD = "Default_Password1";
+
+
     @Override
     public MemberDto findMemberById(final long id) {
-        final var member = memberRepository.findById(id)
-                .orElseThrow(() -> new MemberNotFoundException("No such member"));
-
+        final var member = getMemberFromDB(id);
         return memberMapper.dtoFromEntity(member);
     }
 
     @Override
     public MemberDto loginMember(final LogInDto dto){
 
-        final var optionalMember = memberRepository.findByEmail(dto.getEmail());
-        if (optionalMember.isEmpty()){
-            throw new LoginMemberException("No account with email " + dto.getEmail());
-        } else if(!optionalMember.get().getAccount().getPassword().equals(dto.getPassword())){
-            throw new LoginMemberException("Wrong password, try once more!");
-        } else {
-            return memberMapper.dtoFromEntity(optionalMember.get());
-        }
+        final var member = memberRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new LoginMemberException("No account with email " + dto.getEmail()));
+
+        checkPassword(dto.getPassword(), member);
+        return memberMapper.dtoFromEntity(member);
     }
 
     @Override
-    public void deleteMember(final Member member) {
+    public void deleteMember(final long id, final String password) {
+        final var member = getMemberFromDB(id);
+        checkPassword(password, member);
         memberRepository.delete(member);
     }
 
     @Override
-    public void updateMember(final Member member) {
+    public MemberDto updateMember(final UpdateDto updateDto, final String password) {
+        final var member = getMemberFromDB(updateDto.getId());
+        checkPassword(password, member);
+        member.getAccount().setName(updateDto.getName());
+        if(!updateDto.getPassword().equals(DEFAULT_PASSWORD)) {
+            member.getAccount().setPassword(updateDto.getPassword());
+        }
         memberRepository.update(member);
+        return memberMapper.dtoFromEntity(member);
     }
 
     @Override
@@ -61,13 +70,25 @@ public class MemberStorageServiceImpl implements MemberStorageService {
     }
 
     @Override
-    public MemberDto saveMemberToDB(final RegisterDto registerDto){
-        final var newMember = memberMapper.entityFromRegisterDto(registerDto);
-        if(memberRepository.findByEmail(newMember.getAccount().getEmail()).isEmpty()) {
+    public MemberDto registerMember(final RegisterDto registerDto){
+
+        if(memberRepository.findByEmail(registerDto.getEmail()).isEmpty()) {
+            final var newMember = memberMapper.entityFromRegisterDto(registerDto);
             final var savedMember = memberRepository.save(newMember);
             return memberMapper.dtoFromEntity(savedMember);
         } else {
-            throw new AlreadyExistAccountException("Account with such email is already exist");
+            throw new AlreadyExistAccountException("Account with email " + registerDto.getEmail() + " is already exist");
+        }
+    }
+
+    private Member getMemberFromDB(final Long id){
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new MemberNotFoundException("No such member"));
+    }
+
+    private void checkPassword(final String password, final Member member){
+        if(!member.getAccount().getPassword().equals(password)){
+            throw new WrongPasswordException("Wrong password!");
         }
     }
 }

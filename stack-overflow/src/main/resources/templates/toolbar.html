@@ -16,12 +16,12 @@
                 <div class="navbar-header">
                     <a class="navbar-brand" th:href="@{/}">Stack <b>overflow</b></a>
                 </div>
-                <ul class="nav navbar-nav" th:with="member=${session.memberDto}">
+                <ul class="nav navbar-nav">
                     <li class="dropdown" th:with="member=${session.memberDto}" th:if="${session.memberDto}">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" th:text=" ${member.getName()}">
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a th:href="@{/member/{id}(id=${member.getId()})}">My profile</a></li>
+                            <li><a th:href="@{/member/profile}">My profile</a></li>
                             <li><a th:href="@{/member/exit}">Exit</a></li>
                         </ul>
                     </li>

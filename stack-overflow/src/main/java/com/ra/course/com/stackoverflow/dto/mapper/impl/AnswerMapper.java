@@ -28,7 +28,6 @@ public class AnswerMapper implements Mapper<Answer, AnswerDto> {
                 .creationDate(checkIfNull(dto.getCreationDate()))
                 .authorId(dto.getAuthorId())
                 .questionId(dto.getQuestionId())
-                .photos(checkIfNull(dto.getPhotos()))
                 .comments(commentMapper.entityFromDto(dto.getComments())).build();
     }
 
@@ -42,7 +41,6 @@ public class AnswerMapper implements Mapper<Answer, AnswerDto> {
                 .creationDate(checkIfNull(entity.getCreationDate()))
                 .authorId(entity.getAuthorId())
                 .questionId(entity.getQuestionId())
-                .photos(checkIfNull(entity.getPhotos()))
                 .comments(commentMapper.dtoFromEntity(entity.getComments())).build();
     }
 

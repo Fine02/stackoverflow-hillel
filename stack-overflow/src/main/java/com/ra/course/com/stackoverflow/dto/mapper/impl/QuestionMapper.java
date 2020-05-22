@@ -20,6 +20,7 @@ public class QuestionMapper implements Mapper<Question, QuestionDto> {
 
     private final transient AnswerMapper answerMapper;
     private final transient CommentMapper commentMapper;
+    private final transient TagMapper tagMapper;
 
     @Override
     public Question entityFromDto(QuestionDto dto) {
@@ -35,8 +36,7 @@ public class QuestionMapper implements Mapper<Question, QuestionDto> {
                 .authorId(dto.getAuthorId())
                 .commentList(commentMapper.entityFromDto(dto.getCommentList()))
                 .answerList(answerMapper.entityFromDto(dto.getAnswerList()))
-                .photoList(checkIfNull(dto.getPhotoList()))
-                .tagList(checkIfNull(dto.getTagList()))
+                .tagList(tagMapper.entityFromDto(dto.getTagList()))
                 .build();
     }
 
@@ -55,8 +55,7 @@ public class QuestionMapper implements Mapper<Question, QuestionDto> {
                 .authorId(entity.getAuthorId())
                 .commentList(commentMapper.dtoFromEntity(entity.getCommentList()))
                 .answerList(answerMapper.dtoFromEntity(entity.getAnswerList()))
-                .photoList(checkIfNull(entity.getPhotoList()))
-                .tagList(checkIfNull(entity.getTagList()))
+                .tagList(tagMapper.dtoFromEntity(entity.getTagList()))
                 .build();
     }
 

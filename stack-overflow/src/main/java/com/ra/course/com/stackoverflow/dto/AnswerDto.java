@@ -1,15 +1,13 @@
 package com.ra.course.com.stackoverflow.dto;
 
-import com.ra.course.com.stackoverflow.entity.Comment;
-import com.ra.course.com.stackoverflow.entity.Photo;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.PastOrPresent;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,7 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AnswerDto {
+public class AnswerDto implements Serializable {
+
+    private static final long serialVersionUID = 99L;
 
     Long id;
 
@@ -38,8 +38,6 @@ public class AnswerDto {
     Long authorId;
 
     Long questionId;
-
-    List<Photo> photos;
 
     List<CommentDto> comments;
 }

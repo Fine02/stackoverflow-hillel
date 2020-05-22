@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>StackOverflow Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:insert="~{toolbar::header}"></div>
+
+<div class="main">
+    <div class="container">
+        <h4 class="bg-warning" th:text="${done}"></h4>
+        <div th:if="${session.memberDto}"  th:with="member=${session.memberDto}">
+                <h3 th:text="'Name: ' + ${member.getName()}"></h3>
+                <p th:text="'Id: ' + ${member.getId()} "></p>
+                <p th:text="'Reputation: ' + ${member.getReputation()} "></p>
+                <p th:text="'Status: ' + ${member.getStatus()} "></p>
+                <p th:text="'Questions: ' + ${member.getQuestions().size()} "></p>
+                <p th:text="'Answers: ' + ${member.getAnswers().size()} "></p>
+                <p th:text="'Comments: ' + ${member.getComments().size()} "></p>
+
+            <h4><b><a th:href="@{/member/update}">Update account</a></b> </h4>
+            <h4><b><a th:href="@{/member/delete}">Delete account</a></b> </h4>
+        </div>
+    </div>
+</div>
+
+<div th:insert="~{toolbar::footer}"></div>
+</body>
+</html>

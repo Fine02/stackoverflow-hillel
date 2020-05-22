@@ -3,89 +3,126 @@ package com.ra.course.com.stackoverflow.controller;
 import com.ra.course.com.stackoverflow.dto.LogInDto;
 import com.ra.course.com.stackoverflow.dto.MemberDto;
 import com.ra.course.com.stackoverflow.dto.RegisterDto;
+import com.ra.course.com.stackoverflow.dto.UpdateDto;
 import com.ra.course.com.stackoverflow.service.storage.MemberStorageService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
+
+import static com.ra.course.com.stackoverflow.controller.ControllerConstants.*;
+
 
 @Controller
 @RequestMapping("/member")
 @RequiredArgsConstructor
-//@SessionAttributes("memberDto")
+@SessionAttributes("memberDto")
+@SuppressWarnings("PMD.UnusedFormalParameter")
 public class MemberController {
 
     private final MemberStorageService memberService;
 
-    private final static String MEMBER_DTO_NAME = "memberDto";
-    private final static String REGISTER_TEMPLATE = "member/register";
-    private final static String LOGIN_TEMPLATE = "member/login";
-    private final static String VIEW_TEMPLATE = "member/view-members";
-
-    static String logInTemplate(final Model model){
-        model.addAttribute("logInDto", new LogInDto());
-        return LOGIN_TEMPLATE;
-    }
-    static String registerTemplate(final Model model){
-        model.addAttribute("registerDto", new RegisterDto());
-        return REGISTER_TEMPLATE;
-    }
-
-    @GetMapping("/login")
+    @GetMapping(LOGIN_URL)
     public String getLoginMember(final Model model) {
         return logInTemplate(model);
     }
 
-    @PostMapping("/login")
-    public String postLoginMember(@Valid @ModelAttribute final LogInDto logInDto, final HttpSession session) {
+    @PostMapping(LOGIN_URL)
+    public String postLoginMember(@Valid final LogInDto logInDto, final HttpSession session) {
         final var loginMember = memberService.loginMember(logInDto);
-        session.setAttribute(MEMBER_DTO_NAME, loginMember);
-        return "member/greeting";
+        session.setAttribute(MEMBER_ATTR, loginMember);
+        return PROFILE_TEMPLATE;
     }
 
-    @GetMapping("/{id}")
-    public String viewMemberById(@PathVariable final Long id, final Model model) {
-        final var member = memberService.findMemberById(id);
-        model.addAttribute("viewMembers", new ArrayList<>(List.of(member)));
-        return VIEW_TEMPLATE;
-    }
-    @GetMapping("/search")
-    public String getSearchMember(){
-        return "member/member-search";
+    @GetMapping(PROFILE_URL)
+    public String getProfile(@NonNull @ModelAttribute final MemberDto sessionMember) {
+        return PROFILE_TEMPLATE;
     }
 
-    @PostMapping("/search")
-    public String postSearchMember(@ModelAttribute("name") @NotBlank(message = "{search.blank}") final String name,
-                                   final Model model){
+    @GetMapping(REGISTER_URL)
+    public String getRegisterNewMember(final Model model) {
+        return registerTemplate(model);
+    }
+
+    @PostMapping(REGISTER_URL)
+    public String postRegisterNewMember(@Valid final RegisterDto registerDto, final Model model,
+                                        final HttpSession session) {
+        final var savedMember = memberService.registerMember(registerDto);
+        model.addAttribute("done", "Registration done! Welcome!");
+        session.setAttribute(MEMBER_ATTR, savedMember);
+        return PROFILE_TEMPLATE;
+    }
+
+    @GetMapping(UPDATE_URL)
+    public String getUpdateMember(@NonNull @ModelAttribute final MemberDto sessionMember,
+                                  final Model model) {
+        return updateTemplate(model);
+    }
+
+    @PostMapping(UPDATE_URL)
+    public String postUpdateMember(@Valid final UpdateDto updateDto,
+                                   final String currentPassword,
+                                   final HttpSession session) {
+        updateDto.setId(sessionMember(session).getId());
+        final var updatedMember = memberService.updateMember(updateDto, currentPassword);
+        session.setAttribute(MEMBER_ATTR, updatedMember);
+        return PROFILE_TEMPLATE;
+    }
+
+    @GetMapping(DELETE_URL)
+    public String getDeleteMember(@NonNull @ModelAttribute final MemberDto sessionMember) {
+        return UPDATE_TEMPLATE;
+    }
+
+    @PostMapping(DELETE_URL)
+    public String postDeleteMember(@ModelAttribute final MemberDto sessionMember, final String currentPassword) {
+        memberService.deleteMember(sessionMember.getId(), currentPassword);
+        return "redirect:/member" + EXIT_URL;
+    }
+
+    @GetMapping(SEARCH_URL)
+    public String getSearchMember() {
+        return SEARCH_TEMPLATE;
+    }
+
+    @PostMapping(SEARCH_URL)
+    public String postSearchMember(final String name, final Model model) {
         final var memberList = memberService.findByMemberName(name);
         model.addAttribute("size", "There are " + memberList.size() + " member with name: " + name);
         model.addAttribute("viewMembers", memberList);
         return VIEW_TEMPLATE;
     }
 
-    @GetMapping("/register")
-    public String getRegisterNewMember(final Model model) {
-        return registerTemplate(model);
+    @GetMapping(EXIT_URL)
+    public String getExitMember(final HttpSession session, final SessionStatus status) {
+        status.setComplete();
+        session.removeAttribute(MEMBER_ATTR);
+        return "redirect:/";
     }
 
-    @GetMapping("/exit")
-    public String getExitMember(final HttpSession session) {
-        session.removeAttribute(MEMBER_DTO_NAME);
-        return "main";
+    @ModelAttribute
+    private MemberDto sessionMember(final HttpSession session) {
+        return (MemberDto) session.getAttribute(MEMBER_ATTR);
     }
 
-    @PostMapping("/register")
-    public String postRegisterNewMember(@Valid final RegisterDto registerDto, final HttpSession session) {
-        final var savedMember = memberService.saveMemberToDB(registerDto);
-        session.setAttribute(MEMBER_DTO_NAME, savedMember);
-        return "member/registration-done";
+    private String logInTemplate(final Model model) {
+        model.addAttribute("logInDto", new LogInDto());
+        return LOGIN_TEMPLATE;
+    }
+
+    private String registerTemplate(final Model model) {
+        model.addAttribute("registerDto", new RegisterDto());
+        return REGISTER_TEMPLATE;
+    }
+
+    private String updateTemplate(final Model model) {
+        model.addAttribute("updateDto", new UpdateDto());
+        return UPDATE_TEMPLATE;
     }
 
 }

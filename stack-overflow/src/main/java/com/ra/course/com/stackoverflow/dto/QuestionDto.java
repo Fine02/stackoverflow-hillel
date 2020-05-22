@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,9 @@ import java.util.Optional;
 @NoArgsConstructor
 @SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class QuestionDto {
+public class QuestionDto implements Serializable {
+
+    private static final long serialVersionUID = 99L;
 
     Long id;
 
@@ -49,16 +52,14 @@ public class QuestionDto {
 
     Long authorId;
 
-    @Builder.Default
-    Optional<Bounty> bounty = Optional.empty();
+//    todo implement bounty to view
+//    Optional<Bounty> bounty = Optional.empty();
 
     List<CommentDto> commentList;
 
     List<AnswerDto> answerList;
 
-    List<Photo> photoList;
-
-    List<Tag> tagList;
+    List<TagDto> tagList;
 
     @Builder.Default
     Map<Long, QuestionClosingRemark> membersIdsWhoVotedQuestionToClose = new HashMap<>();
