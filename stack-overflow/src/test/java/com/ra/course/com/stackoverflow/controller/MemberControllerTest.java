@@ -25,6 +25,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ra.course.com.stackoverflow.controller.ControllerConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.ResultMatcher.matchAll;
@@ -52,23 +53,6 @@ public class MemberControllerTest {
     private final String NAME = "Member Name";
     private final Long ID = 1L;
     private final String EXCEPTION_MESSAGE = "Exception message";
-    private final String TEXT_ATTR = "text";
-    private final String MEMBER_DTO_NAME = "memberDto";
-
-    private final String REGISTER_TEMPLATE = "member/register";
-    private final String PROFILE_TEMPLATE = "member/profile";
-    private final String LOGIN_TEMPLATE = "member/login";
-    private final String SEARCH_TEMPLATE = "member/member-search";
-    private final String VIEW_TEMPLATE = "member/view-members";
-    private final String UPDATE_TEMPLATE = "member/update";
-    private final String MAIN_TEMPLATE = "main";
-
-    final String REGISTER_URL = "/member/register";
-    final String LOGIN_URL = "/member/login";
-    final String PROFILE_URL = "/member/profile";
-    final String SEARCH_URL = "/member/search";
-    final String UPDATE_URL = "/member/update";
-    final String DELETE_URL = "/member/delete";
 
     @BeforeEach
     void setUp() {
@@ -82,7 +66,7 @@ public class MemberControllerTest {
 
     @Test
     public void whenGetLoginThenReturnModelWithTemplate() throws Exception {
-        mockMvc.perform(get(LOGIN_URL))
+        mockMvc.perform(get(memberUrl(LOGIN_URL)))
                 .andExpect(matchAll(
                         status().isOk(),
                         model().attributeExists("logInDto"),
@@ -92,7 +76,7 @@ public class MemberControllerTest {
     @Test
     public void whenPostInvalidLogInDataThenThrowsBindException() throws Exception {
 
-        mockMvc.perform(post(LOGIN_URL)
+        mockMvc.perform(post(memberUrl(LOGIN_URL))
                 .params(mapForParams("invalid email", " ", null)))
                 .andDo(print())
                 .andExpect(matchAll(
@@ -106,7 +90,7 @@ public class MemberControllerTest {
         //given
         when(service.loginMember(logInDto)).thenThrow(new LoginMemberException(EXCEPTION_MESSAGE));
         //when
-        mockMvc.perform(post(LOGIN_URL)
+        mockMvc.perform(post(memberUrl(LOGIN_URL))
                 .params(mapForParams(EMAIL, PASSWORD, null)))
                 .andDo(print())
                 .andExpect(matchAll(
@@ -120,7 +104,7 @@ public class MemberControllerTest {
         //given
         when(service.loginMember(logInDto)).thenThrow(new WrongPasswordException(EXCEPTION_MESSAGE));
         //when
-        mockMvc.perform(post(LOGIN_URL)
+        mockMvc.perform(post(memberUrl(LOGIN_URL))
                 .params(mapForParams(EMAIL, PASSWORD, null)))
                 .andDo(print())
                 .andExpect(matchAll(
@@ -134,7 +118,7 @@ public class MemberControllerTest {
         //given
         when(service.loginMember(logInDto)).thenReturn(memberDto);
         //when
-        HttpSession session = mockMvc.perform(post(LOGIN_URL)
+        HttpSession session = mockMvc.perform(post(memberUrl(LOGIN_URL))
                 .params(mapForParams(EMAIL, PASSWORD, null)))
                 .andDo(print())
                 .andExpect(matchAll(
@@ -142,14 +126,14 @@ public class MemberControllerTest {
                         view().name(PROFILE_TEMPLATE)))
                 .andReturn().getRequest().getSession();
         //then
-        assertEquals(memberDto, session.getAttribute(MEMBER_DTO_NAME));
+        assertEquals(memberDto, session.getAttribute(MEMBER_ATTR));
     }
     
 //    Test url = member/profile
 
     @Test
     public void whenGetViewProfileAndSessionMemberAbsentThenReturnMainTemplate() throws Exception {
-        mockMvc.perform(get(PROFILE_URL))
+        mockMvc.perform(get(memberUrl(PROFILE_URL)))
                 .andDo(print())
                 .andExpect(matchAll(
                         status().isUnauthorized(),
@@ -159,8 +143,8 @@ public class MemberControllerTest {
 
     @Test
     public void whenGetViewProfileThenReturnProfileTemplate() throws Exception {
-        mockMvc.perform(get(PROFILE_URL)
-                .sessionAttr(MEMBER_DTO_NAME, memberDto))
+        mockMvc.perform(get(memberUrl(PROFILE_URL))
+                .sessionAttr(MEMBER_ATTR, memberDto))
                 .andDo(print())
                 .andExpect(matchAll(
                         status().isOk(),
@@ -172,7 +156,7 @@ public class MemberControllerTest {
 
     @Test
     public void whenGetRegisterThenReturnModelWithTemplate() throws Exception {
-        mockMvc.perform(get(REGISTER_URL))
+        mockMvc.perform(get(memberUrl(REGISTER_URL)))
                 .andExpect(matchAll(
                         status().isOk(),
                         model().attributeExists("registerDto"),
@@ -182,7 +166,7 @@ public class MemberControllerTest {
     @Test
     public void whenPostInvalidRegisterDataThenThrowsBindException() throws Exception {
 
-        mockMvc.perform(post(REGISTER_URL)
+        mockMvc.perform(post(memberUrl(REGISTER_URL))
                 .params(mapForParams("invalid email", "   ", "0")))
                 .andDo(print())
                 .andExpect(matchAll(
@@ -196,7 +180,7 @@ public class MemberControllerTest {
         //given
         when(service.registerMember(registerDto)).thenThrow(new AlreadyExistAccountException(EXCEPTION_MESSAGE));
         //when
-        mockMvc.perform(post(REGISTER_URL)
+        mockMvc.perform(post(memberUrl(REGISTER_URL))
                 .params(mapForParams(EMAIL, PASSWORD, NAME)))
                 .andDo(print())
                 .andExpect(matchAll(
@@ -210,7 +194,7 @@ public class MemberControllerTest {
         //given
         when(service.registerMember(registerDto)).thenReturn(memberDto);
         //when
-        HttpSession session = mockMvc.perform(post(REGISTER_URL)
+        HttpSession session = mockMvc.perform(post(memberUrl(REGISTER_URL))
                 .params(mapForParams(EMAIL, PASSWORD, NAME)))
                 .andDo(print())
                 .andExpect(matchAll(
@@ -224,7 +208,7 @@ public class MemberControllerTest {
 
     @Test
     public void whenGetUpdateAndSessionMemberAbsentThenReturnMainTemplate() throws Exception {
-        mockMvc.perform(get(UPDATE_URL))
+        mockMvc.perform(get(memberUrl(UPDATE_URL)))
                 .andDo(print())
                 .andExpect(matchAll(
                         status().isUnauthorized(),
@@ -233,8 +217,8 @@ public class MemberControllerTest {
     }
     @Test
     public void whenGetUpdateWithSessionMemberThenReturnTemplate() throws Exception {
-        mockMvc.perform(get(UPDATE_URL)
-        .sessionAttr(MEMBER_DTO_NAME, memberDto))
+        mockMvc.perform(get(memberUrl(UPDATE_URL))
+        .sessionAttr(MEMBER_ATTR, memberDto))
                 .andDo(print())
                 .andExpect(matchAll(
                         status().isOk(),
@@ -244,7 +228,7 @@ public class MemberControllerTest {
     }
     @Test
     public void whenGetDeleteAndSessionMemberAbsentThenReturnMainTemplate() throws Exception {
-        mockMvc.perform(get(DELETE_URL))
+        mockMvc.perform(get(memberUrl(DELETE_URL)))
                 .andDo(print())
                 .andExpect(matchAll(
                         status().isUnauthorized(),
@@ -253,8 +237,8 @@ public class MemberControllerTest {
     }
     @Test
     public void whenGetDeleteWithSessionMemberThenReturnTemplate() throws Exception {
-        mockMvc.perform(get(DELETE_URL)
-                .sessionAttr(MEMBER_DTO_NAME, memberDto))
+        mockMvc.perform(get(memberUrl(DELETE_URL))
+                .sessionAttr(MEMBER_ATTR, memberDto))
                 .andDo(print())
                 .andExpect(matchAll(
                         status().isOk(),
@@ -264,10 +248,10 @@ public class MemberControllerTest {
 
     @Test
     public void whenPostUpdateThenOk() throws Exception {
-        mockMvc.perform(post(UPDATE_URL)
+        mockMvc.perform(post(memberUrl(UPDATE_URL))
                 .param("currentPassword", PASSWORD)
                 .params(mapForParams(null, "New password111", "New Name"))
-                .sessionAttr(MEMBER_DTO_NAME, memberDto))
+                .sessionAttr(MEMBER_ATTR, memberDto))
                 .andDo(print())
                 .andExpect(matchAll(
                         status().isOk(),
@@ -280,10 +264,10 @@ public class MemberControllerTest {
         updateDto.setId(ID);
         when(service.updateMember(updateDto, PASSWORD)).thenThrow(new MemberNotFoundException(EXCEPTION_MESSAGE));
         //then
-        mockMvc.perform(post(UPDATE_URL)
+        mockMvc.perform(post(memberUrl(UPDATE_URL))
                 .param("currentPassword", PASSWORD)
                 .params(mapForParams(null, updateDto.getPassword(), updateDto.getName()))
-                .sessionAttr(MEMBER_DTO_NAME, memberDto))
+                .sessionAttr(MEMBER_ATTR, memberDto))
                 .andDo(print())
                 .andExpect(matchAll(
                         status().isInternalServerError(),
@@ -293,10 +277,10 @@ public class MemberControllerTest {
     @Test
     public void whenPostUpdateThrowsBindExceptionThenReturnTemplate() throws Exception {
 
-        mockMvc.perform(post(UPDATE_URL)
+        mockMvc.perform(post(memberUrl(UPDATE_URL))
                 .param("currentPassword", PASSWORD)
                 .params(mapForParams(null, "PASSWORD", updateDto.getName()))
-                .sessionAttr(MEMBER_DTO_NAME, memberDto))
+                .sessionAttr(MEMBER_ATTR, memberDto))
                 .andDo(print())
                 .andExpect(matchAll(
                         status().isBadRequest(),
@@ -310,10 +294,10 @@ public class MemberControllerTest {
         updateDto.setId(ID);
         when(service.updateMember(updateDto, "PASSWORD")).thenThrow(new WrongPasswordException(EXCEPTION_MESSAGE));
         //then
-        mockMvc.perform(post(UPDATE_URL)
+        mockMvc.perform(post(memberUrl(UPDATE_URL))
                 .param("currentPassword", "PASSWORD")
                 .params(mapForParams(null, updateDto.getPassword(), updateDto.getName()))
-                .sessionAttr(MEMBER_DTO_NAME, memberDto))
+                .sessionAttr(MEMBER_ATTR, memberDto))
                 .andDo(print())
                 .andExpect(matchAll(
                         status().isBadRequest(),
@@ -324,14 +308,14 @@ public class MemberControllerTest {
 
     @Test
     public void whenPostDeleteThenOk() throws Exception {
-        MockHttpServletResponse response = mockMvc.perform(post(DELETE_URL)
+        MockHttpServletResponse response = mockMvc.perform(post(memberUrl(DELETE_URL))
                 .param("currentPassword", PASSWORD)
-                .sessionAttr(MEMBER_DTO_NAME, memberDto))
+                .sessionAttr(MEMBER_ATTR, memberDto))
                 .andDo(print())
                 .andExpect(matchAll(
                         status().isFound()
                 )).andReturn().getResponse();
-        assertEquals("/member/exit", response.getRedirectedUrl());
+        assertEquals(memberUrl(EXIT_URL), response.getRedirectedUrl());
         verify(service).deleteMember(ID, PASSWORD);
     }
     @Test
@@ -340,9 +324,9 @@ public class MemberControllerTest {
         doThrow(new MemberNotFoundException(EXCEPTION_MESSAGE))
                 .when(service).deleteMember(ID, PASSWORD);
         //then
-        mockMvc.perform(post(DELETE_URL)
+        mockMvc.perform(post(memberUrl(DELETE_URL))
                 .param("currentPassword", PASSWORD)
-                .sessionAttr(MEMBER_DTO_NAME, memberDto))
+                .sessionAttr(MEMBER_ATTR, memberDto))
                 .andDo(print())
                 .andExpect(matchAll(
                         status().isInternalServerError(),
@@ -352,14 +336,14 @@ public class MemberControllerTest {
     }
 
     @Test
-    public void whenDeleteThrowsWrongPasswordExceptionThenReturnMainTemplate() throws Exception {
+    public void whenPostDeleteThrowsWrongPasswordExceptionThenReturnMainTemplate() throws Exception {
         //given
         doThrow(new WrongPasswordException(EXCEPTION_MESSAGE))
                 .when(service).deleteMember(ID, "PASSWORD");
         //then
-        mockMvc.perform(post(DELETE_URL)
+        mockMvc.perform(post(memberUrl(DELETE_URL))
                 .param("currentPassword", "PASSWORD")
-                .sessionAttr(MEMBER_DTO_NAME, memberDto))
+                .sessionAttr(MEMBER_ATTR, memberDto))
                 .andDo(print())
                 .andExpect(matchAll(
                         status().isBadRequest(),
@@ -373,7 +357,7 @@ public class MemberControllerTest {
 
     @Test
     public void whenGetSearchThenReturnModelWithTemplate() throws Exception {
-        mockMvc.perform(get(SEARCH_URL))
+        mockMvc.perform(get(memberUrl(SEARCH_URL)))
                 .andExpect(matchAll(
                         status().isOk(),
                         view().name(SEARCH_TEMPLATE)));
@@ -385,7 +369,7 @@ public class MemberControllerTest {
         var memberList = new ArrayList<>(List.of(memberDto, memberDto, memberDto));
         when(service.findByMemberName(NAME)).thenReturn(memberList);
         //then
-        mockMvc.perform(post(SEARCH_URL)
+        mockMvc.perform(post(memberUrl(SEARCH_URL))
                 .param("name", NAME))
                 .andDo(print())
                 .andExpect(matchAll(
@@ -400,7 +384,7 @@ public class MemberControllerTest {
     @Test
     public void whenExitThemReturnSessionWithoutMemberDto() throws Exception {
         //when
-        var response = mockMvc.perform(get("/member/exit"))
+        var response = mockMvc.perform(get(memberUrl(EXIT_URL)))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andReturn().getResponse();
@@ -408,6 +392,9 @@ public class MemberControllerTest {
         assertEquals("/", response.getRedirectedUrl());
     }
 
+    private String memberUrl(final String url){
+        return "/member" + url;
+    }
     private MemberDto mockMemberDto() {
         return MemberDto.builder()
                 .id(1L)
