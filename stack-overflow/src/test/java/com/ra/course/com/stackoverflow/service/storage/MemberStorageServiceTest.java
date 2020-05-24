@@ -7,6 +7,7 @@ import com.ra.course.com.stackoverflow.dto.UpdateDto;
 import com.ra.course.com.stackoverflow.dto.mapper.impl.MemberMapper;
 import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
+import com.ra.course.com.stackoverflow.entity.enums.AccountStatus;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyExistAccountException;
 import com.ra.course.com.stackoverflow.exception.service.LoginMemberException;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
@@ -80,6 +81,17 @@ public class MemberStorageServiceTest {
         assertThatThrownBy(() -> memberStorageService.loginMember(logInDto))
                 .isInstanceOf(LoginMemberException.class)
         .hasMessage("No account with email wrong@gmail.com");
+    }
+    @Test
+    @DisplayName("MemberStorageService throws LoginException when status of account in not active")
+    public void whenLoginWithNonActiveStatusThenThrowsLoginException(){
+        //given
+        member.getAccount().setStatus(AccountStatus.BANNED);
+        when(mockedMemberRepository.findByEmail(EMAIL)).thenReturn(Optional.of(member));
+        //then
+        assertThatThrownBy(() -> memberStorageService.loginMember(logInDto))
+                .isInstanceOf(LoginMemberException.class)
+        .hasMessage("OoUPS! Account status is BANNED");
     }
     @Test
     @DisplayName("MemberStorageService login throws WrongPasswordException")

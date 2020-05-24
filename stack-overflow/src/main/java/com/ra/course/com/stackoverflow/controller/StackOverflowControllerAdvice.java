@@ -21,6 +21,7 @@ import static com.ra.course.com.stackoverflow.controller.ControllerConstants.*;
 @ControllerAdvice
 public class StackOverflowControllerAdvice {
 
+    
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleBindException(final BindException e, final Model model,
@@ -30,14 +31,15 @@ public class StackOverflowControllerAdvice {
                 fieldError -> model.addAttribute(fieldError.getField() + "Error",
                         fieldError.getDefaultMessage()));
 
-        if (request.getRequestURI().contains(REGISTER_URL)) {
+        final var requestURI= request.getRequestURI();
+
+        if (requestURI.contains(REGISTER_URL)) {
             return registerTemplate(model);
-        } else if (request.getRequestURI().contains(LOGIN_URL)) {
+        } else if (requestURI.contains(LOGIN_URL)) {
             return logInTemplate(model);
-        } else if (request.getRequestURI().contains(UPDATE_URL)) {
-            return updateTemplate(model);
         } else {
-            return MAIN_TEMPLATE;
+//            (requestURI.contains(UPDATE_URL))
+            return updateTemplate(model);
         }
     }
 
@@ -45,14 +47,7 @@ public class StackOverflowControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleMemberExceptions(final Exception e, final Model model) {
         model.addAttribute(TEXT_ATTR, e.getMessage());
-        return MAIN_TEMPLATE;
-    }
-
-    @ExceptionHandler(NullPointerException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public String handleNPEExceptions(final Exception e, final Model model) {
-        model.addAttribute(TEXT_ATTR, e.getMessage());
-        return MAIN_TEMPLATE;
+        return MAIN_VIEW;
     }
 
     @ExceptionHandler(LoginMemberException.class)
@@ -76,29 +71,28 @@ public class StackOverflowControllerAdvice {
 
         model.addAttribute(TEXT_ATTR, e.getMessage());
 
-        if (request.getRequestURI().contains(LOGIN_URL)) {
+        final var requestURI = request.getRequestURI();
+
+        if (requestURI.contains(LOGIN_URL)) {
             return logInTemplate(model);
-        } else if (request.getRequestURI().contains(UPDATE_URL)) {
+        } else  {
+//            (requestURI.contains(UPDATE_URL) || requestURI.contains(DELETE_URL))
             return updateTemplate(model);
-        } else if (request.getRequestURI().contains(DELETE_URL)) {
-            return UPDATE_TEMPLATE;
-        } else {
-            return MAIN_TEMPLATE;
         }
     }
     private String logInTemplate(final Model model) {
         model.addAttribute("logInDto", new LogInDto());
-        return LOGIN_TEMPLATE;
+        return LOGIN_VIEW;
     }
 
     private String registerTemplate(final Model model) {
         model.addAttribute("registerDto", new RegisterDto());
-        return REGISTER_TEMPLATE;
+        return REGISTER_VIEW;
     }
 
     private String updateTemplate(final Model model) {
         model.addAttribute("updateDto", new UpdateDto());
-        return UPDATE_TEMPLATE;
+        return UPDATE_VIEW;
     }
 
 }

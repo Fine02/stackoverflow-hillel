@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
+<head th:replace="~{head :: general_header(~{::title},_,_)}">
     <title>Registration Form</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div th:insert="~{toolbar::header}"></div>
+
+<div th:insert="~{fragments/navbar-nonmember}"></div>
+
 <div class="main">
     <div class="container">
         <h3 class="h3">Registration Form</h3>
         <h4 th:class="bg-danger" th:text="${text}"></h4>
-        <form action="/member/register" th:object="${registerDto}" method="post">
+        <form th:object="${registerDto}" method="post">
             <p>Email: </p>
             <p><label>
                 <input type="email"  placeholder="Enter email" required th:field="*{email}" />
@@ -35,6 +32,8 @@
         </form>
     </div>
 </div>
-<div th:insert="~{toolbar::footer}"></div>
+
+<div th:insert="~{fragments/footer}"></div>
+
 </body>
 </html>

@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+<head th:replace="~{head :: general_header(~{::title},_,~{::style})}">
     <title>StackOverflow.course.ra.com</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
         h1.welcome{
             color: darkblue;
@@ -14,7 +9,9 @@
     </style>
 </head>
 <body>
-<div th:insert="~{toolbar::header}"></div>
+
+<div th:insert="${session.memberDto} ? ~{fragments/navbar-member} : ~{fragments/navbar-nonmember}"></div>
+
 <div class="main">
     <div class="container">
         <h1 class="welcome">Welcome to Stack Overflow!</h1>
@@ -38,6 +35,8 @@
                 on the date the content was contributed.</p>
     </div>
 </div>
-<div th:insert="~{toolbar::footer}"></div>
+
+<div th:insert="~{fragments/footer}"></div>
+
 </body>
 </html>

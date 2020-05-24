@@ -1,46 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
+<head th:replace="~{head :: general_header(~{::title},_,_)}">
     <title>Update Form</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div th:insert="~{toolbar::header}"></div>
+
+<div th:insert="~{fragments/navbar-member}"></div>
+
 <div class="main">
     <div class="container">
         <h3 class="h3">Enter Form</h3>
         <h4 th:class="bg-danger" th:text="${text}"></h4>
-        <form th:if="${updateDto}" th:with="member=${session.memberDto}" action="/member/update" th:object="${updateDto}" method="post">
+        <form th:object="${updateDto}" method="post">
             <p>New name: </p>
             <p><label>
-                <input type="text" placeholder="Enter new name" th:value="${member.getName()}" th:field="*{name}"/>
+                <input type="text" placeholder="Enter new name" th:field="*{name}"/>
+                <br><span class="bg-warning" th:text="${nameError}"></span>
             </label>
             <p>New password: </p>
             <p><label>
-                <input type="text" placeholder="Enter new password" th:value="Default_Password1" th:field="*{password}"/>
+                <input type="text" placeholder="Enter new password" th:field="*{password}"/>
+                <br><span class="bg-warning" th:text="${passwordError}"></span>
             </label>
             <p>Enter your password: </p>
             <p><label>
-                <input type="password" placeholder="Enter Password" required name="currentPassword"/>
-                <br><span class="bg-warning" th:text="${passwordError}"></span>
+                <input type="password" placeholder="Enter current password" required name="currentPassword"/>
             </label>
-            <p><input type="submit" class="btn btn-info" value="Ok"/></p>
-        </form>
-        <form th:unless="${updateDto}" action="/member/delete" method="post">
-            <h4>Delete account?</h4>
-            <p>Enter your password: </p>
-            <p><label>
-                <input type="password" placeholder="Enter Password" required name="currentPassword"/>
-                <br><span class="bg-warning" th:text="${passwordError}"></span>
-            </label>
-            <p><input type="submit" class="btn btn-info" value="Ok"/></p>
+            <p><button type="submit" class="btn btn-info" formaction="/member/update">Ok</button> </p>
+            <p><button type="submit" class="btn btn-danger" formaction="/member/delete">Delete account</button></p>
         </form>
     </div>
 </div>
-<div th:insert="~{toolbar::footer}"></div>
+
+<div th:insert="~{fragments/footer}"></div>
+
 </body>
 </html>

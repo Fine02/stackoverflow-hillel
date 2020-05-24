@@ -6,6 +6,7 @@ import com.ra.course.com.stackoverflow.dto.RegisterDto;
 import com.ra.course.com.stackoverflow.dto.UpdateDto;
 import com.ra.course.com.stackoverflow.dto.mapper.impl.MemberMapper;
 import com.ra.course.com.stackoverflow.entity.Member;
+import com.ra.course.com.stackoverflow.entity.enums.AccountStatus;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyExistAccountException;
 import com.ra.course.com.stackoverflow.exception.service.LoginMemberException;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
@@ -37,6 +38,10 @@ public class MemberStorageServiceImpl implements MemberStorageService {
 
         final var member = memberRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new LoginMemberException("No account with email " + dto.getEmail()));
+
+        if (member.getAccount().getStatus()!= AccountStatus.ACTIVE){
+            throw new LoginMemberException("OoUPS! Account status is " + member.getAccount().getStatus().toString());
+        }
 
         checkPassword(dto.getPassword(), member);
         return memberMapper.dtoFromEntity(member);

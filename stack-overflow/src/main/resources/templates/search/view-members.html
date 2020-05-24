@@ -1,15 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
+<head th:replace="~{head :: general_header(~{::title},_,_)}">
     <title>StackOverflow Member View</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div th:insert="~{toolbar::header}"></div>
+
+<div th:insert="${session.memberDto} ? ~{fragments/navbar-member} : ~{fragments/navbar-nonmember}"></div>
 
 <div class="main">
     <div class="container">
@@ -17,14 +13,16 @@
         <div th:if="${not #lists.isEmpty(viewMembers)}">
             <div th:each="viewMember : ${viewMembers}">
                 <h3 th:text="'Name: ' + ${viewMember.getName()}"></h3>
-                <p th:text="'Id: ' + ${viewMember.getId()} "></p>
                 <p th:text="'Reputation: ' + ${viewMember.getReputation()} "></p>
                 <p th:text="'Status: ' + ${viewMember.getStatus()} "></p>
+                <p th:text="'Questions: ' + ${viewMember.getQuestions().size()} "></p>
+                <p th:text="'Answers: ' + ${viewMember.getAnswers().size()} "></p>
+                <p th:text="'Comments: ' + ${viewMember.getComments().size()} "></p>
             </div>
         </div>
     </div>
 </div>
 
-    <div th:insert="~{toolbar::footer}"></div>
+<div th:insert="~{fragments/footer}"></div>
 </body>
 </html>
