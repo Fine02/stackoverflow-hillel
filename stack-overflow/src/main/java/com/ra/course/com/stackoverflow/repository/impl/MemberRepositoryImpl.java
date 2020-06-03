@@ -105,40 +105,37 @@ public class MemberRepositoryImpl implements MemberRepository {
     private void updateVotedQuestionId(final Member member, final Boolean bool) {
         final var questionsId = bool ? member.getUpVotedQuestionsId()
                 : member.getDownVotedQuestionsId();
-        for (int i = 0; i < questionsId.size(); i++) {
-            final var id = questionsId.get(i);
-            dslContext.insertInto(MEMBER_VOTED_QUESTION_TABLE, MEMBER_VOTED_QUESTION_TABLE.ACCOUNT_ID, MEMBER_VOTED_QUESTION_TABLE.QUESTION_ID, MEMBER_VOTED_QUESTION_TABLE.UPVOTED)
-                    .values(member.getAccount().getId(), id, bool)
-                    .onDuplicateKeyUpdate()
-                    .set(MEMBER_VOTED_QUESTION_TABLE.UPVOTED, bool)
-                    .execute();
-        }
+        questionsId.forEach(
+                id -> dslContext.insertInto(MEMBER_VOTED_QUESTION_TABLE, MEMBER_VOTED_QUESTION_TABLE.ACCOUNT_ID, MEMBER_VOTED_QUESTION_TABLE.QUESTION_ID, MEMBER_VOTED_QUESTION_TABLE.UPVOTED)
+                        .values(member.getAccount().getId(), id, bool)
+                        .onDuplicateKeyUpdate()
+                        .set(MEMBER_VOTED_QUESTION_TABLE.UPVOTED, bool)
+                        .execute()
+        );
     }
 
     private void updateVotedAnswerId(final Member member, final Boolean bool) {
         final var answersId = bool ? member.getUpVotedAnswersId()
                 : member.getDownVotedAnswersId();
-        for (int i = 0; i < answersId.size(); i++) {
-            final var id = answersId.get(i);
-            dslContext.insertInto(MEMBER_VOTED_ANSWER_TABLE, MEMBER_VOTED_ANSWER_TABLE.ACCOUNT_ID, MEMBER_VOTED_ANSWER_TABLE.ANSWER_ID, MEMBER_VOTED_ANSWER_TABLE.UPVOTED)
-                    .values(member.getAccount().getId(), id, bool)
-                    .onDuplicateKeyUpdate()
-                    .set(MEMBER_VOTED_ANSWER_TABLE.UPVOTED, bool)
-                    .execute();
-        }
+        answersId.forEach(
+                id -> dslContext.insertInto(MEMBER_VOTED_ANSWER_TABLE, MEMBER_VOTED_ANSWER_TABLE.ACCOUNT_ID, MEMBER_VOTED_ANSWER_TABLE.ANSWER_ID, MEMBER_VOTED_ANSWER_TABLE.UPVOTED)
+                        .values(member.getAccount().getId(), id, bool)
+                        .onDuplicateKeyUpdate()
+                        .set(MEMBER_VOTED_ANSWER_TABLE.UPVOTED, bool)
+                        .execute()
+        );
     }
 
     private void updateVotedCommentId(final Member member, final Boolean bool) {
         final var commentsId = bool ? member.getUpVotedCommentsId()
                 : member.getDownVotedCommentsId();
-        for (int i = 0; i < commentsId.size(); i++) {
-            final var id = commentsId.get(i);
-            dslContext.insertInto(MEMBER_VOTED_COMMENT_TABLE, MEMBER_VOTED_COMMENT_TABLE.ACCOUNT_ID, MEMBER_VOTED_COMMENT_TABLE.COMMENT_ID, MEMBER_VOTED_COMMENT_TABLE.UPVOTED)
-                    .values(member.getAccount().getId(), id, bool)
-                    .onDuplicateKeyUpdate()
-                    .set(MEMBER_VOTED_COMMENT_TABLE.UPVOTED, bool)
-                    .execute();
-        }
+        commentsId.forEach(
+                id -> dslContext.insertInto(MEMBER_VOTED_COMMENT_TABLE, MEMBER_VOTED_COMMENT_TABLE.ACCOUNT_ID, MEMBER_VOTED_COMMENT_TABLE.COMMENT_ID, MEMBER_VOTED_COMMENT_TABLE.UPVOTED)
+                        .values(member.getAccount().getId(), id, bool)
+                        .onDuplicateKeyUpdate()
+                        .set(MEMBER_VOTED_COMMENT_TABLE.UPVOTED, bool)
+                        .execute()
+        );
     }
 
     @Override

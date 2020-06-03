@@ -14,7 +14,7 @@ import java.util.*;
 public class Question {
 
     @EqualsAndHashCode.Include
-    final private long id;
+    final private Long id;
 
     @NonNull
     private String title;

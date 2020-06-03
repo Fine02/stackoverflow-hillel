@@ -89,12 +89,13 @@ public class MemberRepositoryImplIntegrationTest {
         member.getDownVotedCommentsId().add(2L);
         member.getUpVotedCommentsId().add(3L);
         memberRepository.update(member);
-        assertThat(memberRepository.findById(member.getAccount().getId()).get().getDownVotedQuestionsId().contains(2L));
-        assertThat(memberRepository.findById(member.getAccount().getId()).get().getUpVotedQuestionsId().contains(3L));
-        assertThat(memberRepository.findById(member.getAccount().getId()).get().getDownVotedAnswersId().contains(2L));
-        assertThat(memberRepository.findById(member.getAccount().getId()).get().getUpVotedAnswersId().contains(3L));
-        assertThat(memberRepository.findById(member.getAccount().getId()).get().getDownVotedCommentsId().contains(2L));
-        assertThat(memberRepository.findById(member.getAccount().getId()).get().getUpVotedCommentsId().contains(3L));
+        var updatedMember = memberRepository.findById(member.getAccount().getId()).get();
+        assertThat(updatedMember.getDownVotedQuestionsId().contains(2L));
+        assertThat(updatedMember.getUpVotedQuestionsId().contains(3L));
+        assertThat(updatedMember.getDownVotedAnswersId().contains(2L));
+        assertThat(updatedMember.getUpVotedAnswersId().contains(3L));
+        assertThat(updatedMember.getDownVotedCommentsId().contains(2L));
+        assertThat(updatedMember.getUpVotedCommentsId().contains(3L));
     }
 
     private Account createNewAccount(long id) {

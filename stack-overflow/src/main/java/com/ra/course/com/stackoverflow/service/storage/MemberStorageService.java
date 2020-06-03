@@ -1,21 +1,23 @@
 package com.ra.course.com.stackoverflow.service.storage;
 
-import com.ra.course.com.stackoverflow.entity.Member;
+import com.ra.course.com.stackoverflow.dto.LogInDto;
+import com.ra.course.com.stackoverflow.dto.MemberDto;
+import com.ra.course.com.stackoverflow.dto.RegisterDto;
+import com.ra.course.com.stackoverflow.dto.UpdateDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface MemberStorageService {
 
-    Member saveMemberToDB(Member member);
+    MemberDto registerMember(RegisterDto registerDto);
 
-    Optional<Member> findMemberById(long id);
+    MemberDto findMemberById(long id);
 
-    Optional<Member> findMemberByEmail(String email);
+    MemberDto loginMember(LogInDto logInDto);
 
-    void deleteMember(Member member);
+    void deleteMember(long id, String password);
 
-    void updateMember (Member member);
+    MemberDto updateMember (UpdateDto updateDto, String password);
 
-    List<Member> findByMemberName(String name);
+    List<MemberDto> findByMemberName(String name);
 }

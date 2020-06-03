@@ -35,8 +35,10 @@ configure(subprojects) { project ->
     }
 
     dependencies {
-        compile 'org.springframework.boot:spring-boot-starter'
+        compile 'org.springframework.boot:spring-boot-starter-web'
         testCompile 'org.springframework.boot:spring-boot-starter-test'
+        compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
+        compile hibernate.validator
     }
 }
 
@@ -46,7 +48,7 @@ project(':ams-airline-manag-system') {
 
 project(':ams-airline-management-integration-test') {
     dependencies {
-        testCompile project(':ams-airline-manag-system'){
+        testCompile project(':ams-airline-manag-system') {
             bootJar.enabled = false
             jar.enabled = true
         }
@@ -62,12 +64,14 @@ project(':aws-online-shopping') {
 
 project(':aws-online-shopping-integration-test') {
     dependencies {
-        testCompile project(':aws-online-shopping'){
+        testCompile project(':aws-online-shopping') {
             bootJar.enabled = false
             jar.enabled = true
         }
+        dependencies {
+            testCompile 'com.h2database:h2'
+        }
     }
-
     bootJar {
         enabled = false
     }
@@ -81,7 +85,7 @@ project(':stack-overflow') {
 }
 project(':stack-overflow-integration-test') {
     dependencies {
-        testCompile project(':stack-overflow'){
+        testCompile project(':stack-overflow') {
             bootJar.enabled = false
             jar.enabled = true
         }

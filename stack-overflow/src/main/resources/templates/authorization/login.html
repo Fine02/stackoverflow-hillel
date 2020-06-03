@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{head :: general_header(~{::title},_,_)}">
+    <title>Log In Form</title>
+</head>
+
+<body>
+
+<div th:insert="~{fragments/navbar-nonmember}"></div>
+
+<div class="main">
+    <div class="container">
+        <h3 class="h3">Login Form</h3>
+        <form th:object="${logInDto}" method="post">
+            <p class="bg-danger" th:text="${text}"></p>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <label for="email">
+                    <input id="email" type="email" class="form-control" required th:field="*{email}" placeholder="Email" />
+                    <br><span class="bg-warning" th:text="${emailError}"></span>
+                </label>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                <label for="password">
+                    <input id="password" type="password" class="form-control" required th:field="*{password}" placeholder="Password">
+                    <br><span class="bg-warning" th:text="${passwordError}"></span>
+                </label>
+            </div>
+            <p><input type="submit"  class="btn btn-success" value="Submit" />
+            <input type="reset" class="btn btn-warning" value="Reset" /></p>
+        </form>
+    </div>
+</div>
+
+<div th:insert="~{fragments/footer}"></div>
+
+</body>
+</html>

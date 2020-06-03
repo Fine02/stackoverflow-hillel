@@ -1,0 +1,28 @@
+package com.ra.course.com.stackoverflow.configuration;
+
+import com.ra.course.com.stackoverflow.controller.filter.AuthorizationFilter;
+import com.ra.course.com.stackoverflow.controller.filter.MemberFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import static com.ra.course.com.stackoverflow.controller.ControllerConstants.*;
+
+@Configuration
+public class FilterConfiguration {
+
+    @Bean
+    public FilterRegistrationBean <AuthorizationFilter> authorizationFilterRegistrationBean() {
+        final var registrationBean = new FilterRegistrationBean<AuthorizationFilter>();
+        registrationBean.setFilter(new AuthorizationFilter());
+        registrationBean.addUrlPatterns(MEMBER_URL + "/*");
+        return registrationBean;
+    }
+    @Bean
+    public FilterRegistrationBean <MemberFilter> memberFilterRegistrationBean() {
+        final var registrationBean = new FilterRegistrationBean<MemberFilter>();
+        registrationBean.setFilter(new MemberFilter());
+        registrationBean.addUrlPatterns(LOGIN_URL, REGISTER_URL);
+        return registrationBean;
+    }
+}
