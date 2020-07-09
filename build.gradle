@@ -81,6 +81,7 @@ project(':stack-overflow') {
         compileOnly utils.lombok
         annotationProcessor utils.lombok
         compile 'org.springframework.boot:spring-boot-starter-jooq'
+        compile db.postgres
     }
 }
 project(':stack-overflow-integration-test') {

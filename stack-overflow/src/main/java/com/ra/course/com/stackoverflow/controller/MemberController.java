@@ -18,7 +18,7 @@ import static com.ra.course.com.stackoverflow.controller.ControllerConstants.*;
 @Controller
 @RequestMapping(MEMBER_URL)
 @RequiredArgsConstructor
-@SessionAttributes(MEMBER_ATTR)
+//@SessionAttributes(MEMBER_ATTR)
 @SuppressWarnings("PMD.UnusedPrivateMethod")
 public class MemberController {
 
@@ -39,7 +39,7 @@ public class MemberController {
 
     @PostMapping(UPDATE_URL)
     public String postUpdateMember(@Valid final UpdateDto updateDto,
-                                   @ModelAttribute final MemberDto memberDto,
+                                   @SessionAttribute(MEMBER_ATTR) final MemberDto memberDto,
                                    final String currentPassword) {
         updateDto.setId(memberDto.getId());
         memberService.updateMember(updateDto, currentPassword);
@@ -47,7 +47,7 @@ public class MemberController {
     }
 
     @PostMapping(DELETE_URL)
-    public String postDeleteMember(@ModelAttribute final MemberDto sessionMember,
+    public String postDeleteMember(@SessionAttribute(MEMBER_ATTR) final MemberDto sessionMember,
                                    final String currentPassword) {
         memberService.deleteMember(sessionMember.getId(), currentPassword);
         return REDIRECT_LOGOUT;
@@ -59,10 +59,10 @@ public class MemberController {
         session.removeAttribute(MEMBER_ATTR);
         return "redirect:/";
     }
-
-    @ModelAttribute
-    private MemberDto sessionMember(final HttpSession session) {
-        return (MemberDto) session.getAttribute(MEMBER_ATTR);
-    }
+//
+//    @ModelAttribute
+//    private MemberDto sessionMember(final HttpSession session) {
+//        return (MemberDto) session.getAttribute(MEMBER_ATTR);
+//    }
 
 }
