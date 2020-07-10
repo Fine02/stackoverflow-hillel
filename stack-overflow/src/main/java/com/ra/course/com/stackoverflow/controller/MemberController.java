@@ -12,14 +12,15 @@ import org.springframework.web.bind.support.SessionStatus;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.ra.course.com.stackoverflow.controller.ControllerConstants.*;
 
 
 @Controller
 @RequestMapping(MEMBER_URL)
 @RequiredArgsConstructor
-//@SessionAttributes(MEMBER_ATTR)
-@SuppressWarnings("PMD.UnusedPrivateMethod")
 public class MemberController {
 
     private final MemberStorageService memberService;
@@ -27,7 +28,9 @@ public class MemberController {
     private final static String REDIRECT_LOGOUT = "redirect:/member/logout";
 
     @GetMapping
-    public String getProfile() {
+    public String getProfile(final Model model,
+                @SessionAttribute(MEMBER_ATTR) final MemberDto sessionMember) {
+        model.addAttribute("account", memberService.findMemberById(sessionMember.getId()));
         return PROFILE_VIEW;
     }
 
@@ -39,9 +42,9 @@ public class MemberController {
 
     @PostMapping(UPDATE_URL)
     public String postUpdateMember(@Valid final UpdateDto updateDto,
-                                   @SessionAttribute(MEMBER_ATTR) final MemberDto memberDto,
+                                   @SessionAttribute(MEMBER_ATTR) final MemberDto sessionMember,
                                    final String currentPassword) {
-        updateDto.setId(memberDto.getId());
+        updateDto.setId(sessionMember.getId());
         memberService.updateMember(updateDto, currentPassword);
         return REDIRECT_LOGOUT;
     }
@@ -59,10 +62,5 @@ public class MemberController {
         session.removeAttribute(MEMBER_ATTR);
         return "redirect:/";
     }
-//
-//    @ModelAttribute
-//    private MemberDto sessionMember(final HttpSession session) {
-//        return (MemberDto) session.getAttribute(MEMBER_ATTR);
-//    }
 
 }

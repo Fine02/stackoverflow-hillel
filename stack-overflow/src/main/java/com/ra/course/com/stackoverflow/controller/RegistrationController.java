@@ -24,6 +24,8 @@ public class RegistrationController {
 
     private final transient MemberStorageService service;
 
+    private final static String REDIRECT_MEMBER = "redirect:/member";
+
     @GetMapping
     public String getRegisterNewMember(final Model model) {
         model.addAttribute("registerDto", new RegisterDto());
@@ -31,12 +33,10 @@ public class RegistrationController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public String postRegisterNewMember(@Valid final RegisterDto registerDto, final Model model,
                                         final HttpSession session) {
         final var savedMember = service.registerMember(registerDto);
-        model.addAttribute("done", "Registration done! Welcome!");
         session.setAttribute(MEMBER_ATTR, savedMember);
-        return PROFILE_VIEW;
+        return REDIRECT_MEMBER;
     }
 }

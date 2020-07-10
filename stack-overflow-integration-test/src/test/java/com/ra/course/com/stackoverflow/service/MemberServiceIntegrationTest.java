@@ -27,7 +27,7 @@ public class MemberServiceIntegrationTest {
 
     @Test
     public void whenFindMemberByIdAndMemberPresentInDataBaseThenReturnMember() {
-        var question = memberService.postQuestion(questionWithBounty);
+        var question = memberService.createQuestion(questionWithBounty);
 
         assertThat(question.getId()).isGreaterThan(0);
 

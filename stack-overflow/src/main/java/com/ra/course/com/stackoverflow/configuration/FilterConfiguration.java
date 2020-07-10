@@ -2,6 +2,7 @@ package com.ra.course.com.stackoverflow.configuration;
 
 import com.ra.course.com.stackoverflow.controller.filter.AuthorizationFilter;
 import com.ra.course.com.stackoverflow.controller.filter.MemberFilter;
+import com.ra.course.com.stackoverflow.controller.filter.QuestionFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,13 @@ public class FilterConfiguration {
         final var registrationBean = new FilterRegistrationBean<MemberFilter>();
         registrationBean.setFilter(new MemberFilter());
         registrationBean.addUrlPatterns(LOGIN_URL, REGISTER_URL);
+        return registrationBean;
+    }
+    @Bean
+    public FilterRegistrationBean <QuestionFilter> questionFilterRegistrationBean() {
+        final var registrationBean = new FilterRegistrationBean<QuestionFilter>();
+        registrationBean.setFilter(new QuestionFilter());
+        registrationBean.addUrlPatterns(QUESTION_URL + "/*");
         return registrationBean;
     }
 }

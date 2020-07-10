@@ -1,5 +1,9 @@
 package com.ra.course.com.stackoverflow.service.member;
 
+import com.ra.course.com.stackoverflow.dto.CreateQuestionDto;
+import com.ra.course.com.stackoverflow.dto.MemberDto;
+import com.ra.course.com.stackoverflow.dto.QuestionDto;
+import com.ra.course.com.stackoverflow.dto.mapper.impl.QuestionMapper;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
@@ -11,20 +15,30 @@ import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service
-public class MemberServiceImpl implements MemberService<Question> {
+public class MemberServiceImpl implements MemberService {
 
     private transient final QuestionRepository questionRep;
     private transient final MemberRepository memberRep;
+    private transient final QuestionMapper questionMapper;
 
     @Override
-    public Question postQuestion(@NonNull final Question question) {
-        final Question postedQuestion = questionRep.save(question);
+    public QuestionDto createQuestion(final CreateQuestionDto createQuestionDto,
+                                      final MemberDto memberDto) {
 
-        final Member member = memberRep.findById(question.getAuthorId())
-                .orElseThrow(() -> new MemberNotFoundException("Member with id " + question.getAuthorId() + " not found in DB"));
+        checkMember(memberDto);
 
-        member.getQuestions().add(postedQuestion);
+        final Question newQuestion = questionMapper.questionFromCreateDto(createQuestionDto);
+        newQuestion.setAuthorId(memberDto.getId());
 
-        return postedQuestion;
+        final Question postedQuestion = questionRep.save(newQuestion);
+
+        return questionMapper.dtoFromEntity(postedQuestion);
+    }
+
+    private void checkMember(final MemberDto memberDto) {
+        final var optionalMember = memberRep.findById(memberDto.getId());
+        optionalMember.orElseThrow(
+                () -> new MemberNotFoundException("No such member in DB"));
+
     }
 }

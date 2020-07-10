@@ -9,16 +9,15 @@
 
 <div class="main">
     <div class="container">
-        <h4 class="bg-warning" th:text="${done}"></h4>
-        <div th:with="member=${session.memberDto}">
-                <h3 th:text="'Name: ' + ${member.getName()}"></h3>
-                <p th:text="'Id: ' + ${member.getId()} "></p>
-                <p th:text="'Email: ' + ${member.getEmail()} "></p>
-                <p th:text="'Reputation: ' + ${member.getReputation()} "></p>
-                <p th:text="'Status: ' + ${member.getStatus()} "></p>
-                <p th:text="'Questions: ' + ${member.getQuestions().size()} "></p>
-                <p th:text="'Answers: ' + ${member.getAnswers().size()} "></p>
-                <p th:text="'Comments: ' + ${member.getComments().size()} "></p>
+        <div >
+                <h3 th:text="'Name: ' + ${account.getName()}"></h3>
+                <p th:text="'Id: ' + ${account.getId()} "></p>
+                <p th:text="'Email: ' + ${account.getEmail()} "></p>
+                <p th:text="'Reputation: ' + ${account.getReputation()} "></p>
+                <p th:text="'Status: ' + ${account.getStatus()} "></p>
+                <p th:text="'Questions: ' + ${account.getQuestions().size()} "></p>
+                <p th:text="'Answers: ' + ${account.getAnswers().size()} "></p>
+                <p th:text="'Comments: ' + ${account.getComments().size()} "></p>
 
             <form th:action="@{/member/update}" method="get">
                 <p><input type="submit"  class="btn btn-success" value="Update" />

@@ -47,7 +47,7 @@ public class MemberServiceImplTest {
     @Test
     public void whenPostQuestionCalledReturnMemberWithExpectedQuestionList() {
         //when
-        Question actualQuestion = memberService.postQuestion(givenQuestion);
+        Question actualQuestion = memberService.createQuestion(givenQuestion);
 
         //then
         assertTrue(expectedMember.getQuestions().contains(actualQuestion));
@@ -57,14 +57,14 @@ public class MemberServiceImplTest {
     public void whenPostQuestionCalledButMemberNotFoundInDBThenThrowException() {
         when(mockedMemberRepository.findById(expectedMember.getAccount().getId())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> memberService.postQuestion(expectedQuestion))
+        assertThatThrownBy(() -> memberService.createQuestion(expectedQuestion))
             .isInstanceOf(MemberNotFoundException.class);
     }
 
     @Test
     public void whenPostQuestionCalledReturnExpectedQuestion() {
         //when
-        Question actualQuestion = memberService.postQuestion(givenQuestion);
+        Question actualQuestion = memberService.createQuestion(givenQuestion);
 
         //then
         assertEquals(expectedQuestion, actualQuestion);
@@ -72,7 +72,7 @@ public class MemberServiceImplTest {
 
     @Test
     public void whenNullArgumentPassedThenThrowNpe() {
-        assertThrows(NullPointerException.class, () -> memberService.postQuestion(null));
+        assertThrows(NullPointerException.class, () -> memberService.createQuestion(null));
     }
 
     private Member buildMember() {

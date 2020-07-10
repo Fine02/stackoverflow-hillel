@@ -1,5 +1,6 @@
 package com.ra.course.com.stackoverflow.dto.mapper.impl;
 
+import com.ra.course.com.stackoverflow.dto.CreateQuestionDto;
 import com.ra.course.com.stackoverflow.dto.QuestionDto;
 import com.ra.course.com.stackoverflow.dto.mapper.Mapper;
 import com.ra.course.com.stackoverflow.entity.Question;
@@ -76,5 +77,19 @@ public class QuestionMapper implements Mapper<Question, QuestionDto> {
     }
     private <T> List<T> checkIfNull(List<T> list){
         return Objects.nonNull(list) ? list : new ArrayList<>();
+    }
+
+    public Question questionFromCreateDto(final CreateQuestionDto createDto){
+        return Question.builder()
+                .title(createDto.getTitle())
+                .description(createDto.getDescription())
+                .creationTime(LocalDateTime.now())
+                .updateTime(LocalDateTime.now())
+                .status(QuestionStatus.OPEN)
+                .closingRemark(QuestionClosingRemark.NOT_MARKED_FOR_CLOSING)
+                .commentList(new ArrayList<>())
+                .answerList(new ArrayList<>())
+                .tagList(new ArrayList<>())
+                .build();
     }
 }

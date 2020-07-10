@@ -1,5 +1,6 @@
 package com.ra.course.com.stackoverflow.controller;
 
+import com.ra.course.com.stackoverflow.dto.CreateQuestionDto;
 import com.ra.course.com.stackoverflow.dto.LogInDto;
 import com.ra.course.com.stackoverflow.dto.RegisterDto;
 import com.ra.course.com.stackoverflow.dto.UpdateDto;
@@ -37,9 +38,11 @@ public class StackOverflowControllerAdvice {
             return registerTemplate(model);
         } else if (requestURI.contains(LOGIN_URL)) {
             return logInTemplate(model);
-        } else {
-//            (requestURI.contains(UPDATE_URL))
+        } else if (requestURI.contains(UPDATE_URL)) {
             return updateTemplate(model);
+        } else {
+//            (requestURI.contains(QUESTION_CREATE_URL))
+            return createQuestionTemplate(model);
         }
     }
 
@@ -93,6 +96,11 @@ public class StackOverflowControllerAdvice {
     private String updateTemplate(final Model model) {
         model.addAttribute("updateDto", new UpdateDto());
         return UPDATE_VIEW;
+    }
+
+    private String createQuestionTemplate(final Model model) {
+        model.addAttribute("createQuestionDto", new CreateQuestionDto());
+        return QUESTION_CREATE_VIEW;
     }
 
 }

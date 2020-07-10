@@ -23,6 +23,8 @@ public class LogInController {
 
     private final transient MemberStorageService service;
 
+    private final static String REDIRECT_MEMBER = "redirect:/member";
+
     @GetMapping
     public String getLoginMember(final Model model) {
         model.addAttribute("logInDto", new LogInDto());
@@ -30,10 +32,10 @@ public class LogInController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public String postLoginMember(@Valid final LogInDto logInDto, final HttpSession session) {
+    public String postLoginMember(@Valid final LogInDto logInDto,
+                                  final HttpSession session) {
         final var loginMember = service.loginMember(logInDto);
         session.setAttribute(MEMBER_ATTR, loginMember);
-        return PROFILE_VIEW;
+        return REDIRECT_MEMBER;
     }
 }
