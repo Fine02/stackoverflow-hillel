@@ -3,6 +3,7 @@ package com.ra.course.com.stackoverflow.service.member;
 import com.ra.course.com.stackoverflow.dto.CreateQuestionDto;
 import com.ra.course.com.stackoverflow.dto.MemberDto;
 import com.ra.course.com.stackoverflow.dto.QuestionDto;
+import com.ra.course.com.stackoverflow.dto.SessionMemberDto;
 import com.ra.course.com.stackoverflow.dto.mapper.impl.QuestionMapper;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
@@ -23,20 +24,20 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public QuestionDto createQuestion(final CreateQuestionDto createQuestionDto,
-                                      final MemberDto memberDto) {
+                                      final SessionMemberDto member) {
 
-        checkMember(memberDto);
+        checkMember(member);
 
         final Question newQuestion = questionMapper.questionFromCreateDto(createQuestionDto);
-        newQuestion.setAuthorId(memberDto.getId());
+        newQuestion.setAuthorId(member.getId());
 
         final Question postedQuestion = questionRep.save(newQuestion);
 
         return questionMapper.dtoFromEntity(postedQuestion);
     }
 
-    private void checkMember(final MemberDto memberDto) {
-        final var optionalMember = memberRep.findById(memberDto.getId());
+    private void checkMember(final SessionMemberDto member) {
+        final var optionalMember = memberRep.findById(member.getId());
         optionalMember.orElseThrow(
                 () -> new MemberNotFoundException("No such member in DB"));
 

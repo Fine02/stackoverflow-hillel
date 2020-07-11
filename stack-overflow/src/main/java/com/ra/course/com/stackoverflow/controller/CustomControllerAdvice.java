@@ -4,10 +4,7 @@ import com.ra.course.com.stackoverflow.dto.CreateQuestionDto;
 import com.ra.course.com.stackoverflow.dto.LogInDto;
 import com.ra.course.com.stackoverflow.dto.RegisterDto;
 import com.ra.course.com.stackoverflow.dto.UpdateDto;
-import com.ra.course.com.stackoverflow.exception.service.AlreadyExistAccountException;
-import com.ra.course.com.stackoverflow.exception.service.LoginMemberException;
-import com.ra.course.com.stackoverflow.exception.service.MemberNotFoundException;
-import com.ra.course.com.stackoverflow.exception.service.WrongPasswordException;
+import com.ra.course.com.stackoverflow.exception.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
@@ -20,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import static com.ra.course.com.stackoverflow.controller.ControllerConstants.*;
 
 @ControllerAdvice
-public class StackOverflowControllerAdvice {
+public class CustomControllerAdvice {
 
     
     @ExceptionHandler(BindException.class)
@@ -46,7 +43,8 @@ public class StackOverflowControllerAdvice {
         }
     }
 
-    @ExceptionHandler(MemberNotFoundException.class)
+    @ExceptionHandler({MemberNotFoundException.class, QuestionNotFoundException.class,
+            AnswerNotFoundException.class, CommentNotFoundException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleMemberExceptions(final Exception e, final Model model) {
         model.addAttribute(TEXT_ATTR, e.getMessage());

@@ -141,7 +141,7 @@ public class MemberRepositoryImpl implements MemberRepository {
     @Override
     public List<Member> findByMemberName(@NonNull final String name) {
         return dslContext.selectFrom(ACCOUNT_TABLE)
-                .where(ACCOUNT_TABLE.NAME.contains(name))
+                .where(ACCOUNT_TABLE.NAME.containsIgnoreCase(name))
                 .fetchStream()
                 .map(this::mapperMember)
                 .collect(Collectors.toList());

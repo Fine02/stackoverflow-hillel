@@ -5,7 +5,7 @@
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-static-top navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="/">Stack <b>overflow</b></a>
@@ -15,11 +15,13 @@
                 <li><a href="/login">Log In</a></li>
                 <li><a href="/registration">Registration</a></li>
 
-                <form class="navbar-form navbar-left" action="/search/member">
+                <form class="navbar-form navbar-left" th:action="@{/search/members}">
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Search member" required name="name">
                     </div>
-                    <button type="submit" class="btn btn-default">Submit</button>
+                    <button type="submit" class="btn btn-default">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
                 </form>
 
                 <li><a href="#">Search question</a></li>

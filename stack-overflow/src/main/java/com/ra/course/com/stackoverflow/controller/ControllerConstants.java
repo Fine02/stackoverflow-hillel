@@ -20,11 +20,13 @@ public class ControllerConstants {
 
     //used for Search Controller
     public final static String SEARCH_URL = "/search";
-    public final static String MEMBERS_VIEW = "search/view-members";
+    public final static String MEMBERS_VIEW = "search/list-members";
+    public final static String MEMBER_VIEW = "search/member";
+    public final static String QUESTIONS_VIEW = "search/list-questions";
 
     //used for Member Controller
-    public final static String MEMBER_ATTR = "memberDto"; //name of session attribute
-    public final static String MEMBER_URL = "/member";
+    public final static String MEMBER_ATTR = "member"; //name of session attribute
+    public final static String MEMBER_URL = "/members";
     public final static String UPDATE_URL = "/update";
     public final static String DELETE_URL = "/delete";
     public final static String LOGOUT_URL = "/logout";
@@ -32,7 +34,7 @@ public class ControllerConstants {
     public final static String PROFILE_VIEW = "member/profile";
 
     //used for question Controller
-    public final static String QUESTION_URL = "/question";
+    public final static String QUESTION_URL = "/questions";
     public final static String QUESTION_CREATE_URL = "/create";
     public final static String QUESTION_CREATE_VIEW = "question/create";
     public final static String QUESTION_VIEW = "question/view";

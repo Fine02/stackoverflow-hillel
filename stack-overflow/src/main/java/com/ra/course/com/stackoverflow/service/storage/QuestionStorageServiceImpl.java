@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,6 +18,11 @@ public class QuestionStorageServiceImpl implements QuestionStorageService {
 
     private final transient QuestionRepository questionRepository;
     private final transient QuestionMapper mapper;
+
+    @Override
+    public List<QuestionDto> getByAuthorId(final Long id) {
+        return mapper.dtoFromEntity(questionRepository.findByMemberId(id));
+    }
 
     @Override
     public QuestionDto getById(final Long id) {

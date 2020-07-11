@@ -15,9 +15,9 @@ public class AuthorizationFilter implements Filter {
                          final FilterChain chain) throws IOException, ServletException {
 
         final var httpRequest = (HttpServletRequest) request;
-        final var memberDto = httpRequest.getSession().getAttribute(MEMBER_ATTR);
+        final var sessionMember = httpRequest.getSession().getAttribute(MEMBER_ATTR);
 
-        if(Objects.isNull(memberDto)){
+        if(Objects.isNull(sessionMember)){
             httpRequest.getRequestDispatcher(MAIN_URL).forward(request, response);
         } else {
             chain.doFilter(request, response);

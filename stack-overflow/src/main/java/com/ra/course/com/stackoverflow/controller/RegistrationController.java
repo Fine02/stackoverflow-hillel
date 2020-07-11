@@ -1,6 +1,7 @@
 package com.ra.course.com.stackoverflow.controller;
 
 import com.ra.course.com.stackoverflow.dto.RegisterDto;
+import com.ra.course.com.stackoverflow.dto.mapper.SessionMemberMapper;
 import com.ra.course.com.stackoverflow.service.storage.MemberStorageService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,9 @@ import static com.ra.course.com.stackoverflow.controller.ControllerConstants.*;
 public class RegistrationController {
 
     private final transient MemberStorageService service;
+    private final transient SessionMemberMapper mapper;
 
-    private final static String REDIRECT_MEMBER = "redirect:/member";
+    private final static String REDIRECT_MEMBER = "redirect:/members";
 
     @GetMapping
     public String getRegisterNewMember(final Model model) {
@@ -33,10 +35,10 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public String postRegisterNewMember(@Valid final RegisterDto registerDto, final Model model,
+    public String postRegisterNewMember(@Valid final RegisterDto registerDto,
                                         final HttpSession session) {
         final var savedMember = service.registerMember(registerDto);
-        session.setAttribute(MEMBER_ATTR, savedMember);
+        session.setAttribute(MEMBER_ATTR, mapper.getSessionMember(savedMember));
         return REDIRECT_MEMBER;
     }
 }

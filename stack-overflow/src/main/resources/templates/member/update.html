@@ -9,26 +9,48 @@
 
 <div class="main">
     <div class="container">
-        <h3 class="h3">Enter Form</h3>
+
         <h4 th:class="bg-danger" th:text="${text}"></h4>
-        <form th:object="${updateDto}" method="post">
-            <p>New name: </p>
-            <p><label>
-                <input type="text" placeholder="Enter new name" th:field="*{name}"/>
-                <br><span class="bg-warning" th:text="${nameError}"></span>
-            </label>
-            <p>New password: </p>
-            <p><label>
-                <input type="text" placeholder="Enter new password" th:field="*{password}"/>
-                <br><span class="bg-warning" th:text="${passwordError}"></span>
-            </label>
-            <p>Enter your password: </p>
-            <p><label>
-                <input type="password" placeholder="Enter current password" required name="currentPassword"/>
-            </label>
-            <p><button type="submit" class="btn btn-info" formaction="/member/update">Ok</button> </p>
-            <p><button type="submit" class="btn btn-danger" formaction="/member/delete">Delete account</button></p>
-        </form>
+
+        <div class="row">
+            <div class="col-lg-8">
+
+
+                <h3 class="h3">Enter Form</h3>
+
+                <form th:object="${updateDto}" method="post" th:action="@{/members/update}">
+                    <p>New name: </p>
+                    <p><label>
+                        <input type="text" placeholder="Enter new name" th:field="*{name}"/>
+                        <br><span class="bg-warning" th:text="${nameError}"></span>
+                    </label>
+
+                    <p>New password: </p>
+                    <p><label>
+                        <input type="text" placeholder="Enter new password" th:field="*{password}"/>
+                        <br><span class="bg-warning" th:text="${passwordError}"></span>
+                    </label>
+
+                    <p>Enter your password: </p>
+                    <p><label>
+                        <input type="password" placeholder="Enter current password" required name="currentPassword"/>
+                    </label>
+                    <p>
+                        <button type="submit" class="btn btn-default">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                        <button type="reset" class="btn btn-default">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
+                    </p>
+                    <p><button type="submit" class="btn btn-danger" formaction="/members/delete">Delete account</button></p>
+
+                </form>
+            </div>
+
+            <div th:insert="~{fragments/sidebar}"></div>
+
+        </div>
     </div>
 </div>
 

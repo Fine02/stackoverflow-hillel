@@ -9,27 +9,47 @@
 
 <div class="main">
     <div class="container">
-        <h3 class="h3">Registration Form</h3>
+
         <h4 th:class="bg-danger" th:text="${text}"></h4>
-        <form th:object="${registerDto}" method="post">
-            <p>Email: </p>
-            <p><label>
-                <input type="email"  placeholder="Enter email" required th:field="*{email}" />
-                <br><span class="bg-warning" th:text="${emailError}"></span>
-            </label>
-            <p>Name: </p>
-            <p><label>
-                <input type="text" placeholder="Enter name" required th:field="*{name}" />
-                <br><span class="bg-warning" th:text="${nameError}"></span>
-            </label>
-            <p>Password: </p>
-            <p><label>
-                <input type="text" placeholder="Enter Password" required th:field="*{password}" />
-                <br><span class="bg-warning" th:text="${passwordError}"></span>
-            </label>
-            <p><input type="submit"  class="btn btn-success" value="Submit" />
-                <input type="reset" class="btn btn-warning" value="Reset" /></p>
-        </form>
+
+        <div class="row">
+            <div class="col-lg-8">
+
+
+                <h3 class="h3">Registration Form</h3>
+
+                <form th:object="${registerDto}" method="post">
+                    <p>Email: </p>
+                    <p><label>
+                        <input type="email" placeholder="Enter email" required th:field="*{email}"/>
+                        <br><span class="bg-warning" th:text="${emailError}"></span>
+                    </label>
+
+                    <p>Name: </p>
+                    <p><label>
+                        <input type="text" placeholder="Enter name" required th:field="*{name}"/>
+                        <br><span class="bg-warning" th:text="${nameError}"></span>
+                    </label>
+
+                    <p>Password: </p>
+                    <p><label>
+                        <input type="text" placeholder="Enter Password" required th:field="*{password}"/>
+                        <br><span class="bg-warning" th:text="${passwordError}"></span>
+                    </label>
+
+                    <p>
+                        <button type="submit" class="btn btn-default">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                        <button type="reset" class="btn btn-default">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
+                    </p>
+
+                </form>
+
+            </div>
+        </div>
     </div>
 </div>
 

@@ -1,6 +1,7 @@
 package com.ra.course.com.stackoverflow.controller;
 
 import com.ra.course.com.stackoverflow.dto.MemberDto;
+import com.ra.course.com.stackoverflow.dto.SessionMemberDto;
 import com.ra.course.com.stackoverflow.dto.UpdateDto;
 import com.ra.course.com.stackoverflow.service.storage.MemberStorageService;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,11 @@ public class MemberController {
 
     private final MemberStorageService memberService;
 
-    private final static String REDIRECT_LOGOUT = "redirect:/member/logout";
+    private final static String REDIRECT_LOGOUT = "redirect:/members/logout";
 
     @GetMapping
     public String getProfile(final Model model,
-                @SessionAttribute(MEMBER_ATTR) final MemberDto sessionMember) {
+                @SessionAttribute(MEMBER_ATTR) final SessionMemberDto sessionMember) {
         model.addAttribute("account", memberService.findMemberById(sessionMember.getId()));
         return PROFILE_VIEW;
     }
@@ -42,7 +43,7 @@ public class MemberController {
 
     @PostMapping(UPDATE_URL)
     public String postUpdateMember(@Valid final UpdateDto updateDto,
-                                   @SessionAttribute(MEMBER_ATTR) final MemberDto sessionMember,
+                                   @SessionAttribute(MEMBER_ATTR) final SessionMemberDto sessionMember,
                                    final String currentPassword) {
         updateDto.setId(sessionMember.getId());
         memberService.updateMember(updateDto, currentPassword);
@@ -50,7 +51,7 @@ public class MemberController {
     }
 
     @PostMapping(DELETE_URL)
-    public String postDeleteMember(@SessionAttribute(MEMBER_ATTR) final MemberDto sessionMember,
+    public String postDeleteMember(@SessionAttribute(MEMBER_ATTR) final SessionMemberDto sessionMember,
                                    final String currentPassword) {
         memberService.deleteMember(sessionMember.getId(), currentPassword);
         return REDIRECT_LOGOUT;

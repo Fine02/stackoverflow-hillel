@@ -69,7 +69,7 @@ public class MemberStorageServiceImpl implements MemberStorageService {
     @Override
     public List<MemberDto> findByMemberName(final String name) {
 
-        final var byMemberName = memberRepository.findByMemberName(name);
+        final var byMemberName = memberRepository.findByMemberName(name.toLowerCase());
 
         return memberMapper.dtoFromEntity(byMemberName);
     }

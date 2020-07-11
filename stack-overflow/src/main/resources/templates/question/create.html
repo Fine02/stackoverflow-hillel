@@ -9,29 +9,48 @@
 
 <div class="main">
     <div class="container">
-        <h3 class="h3">Create new question</h3>
-        <h4 th:class="bg-danger" th:text="${text}"></h4>
-        <form th:object="${createQuestionDto}" method="post">
-            <p>Title: </p>
-            <p><label>
-                <input type="text" placeholder="Enter title" required th:field="*{title}"/>
-                <br><span class="bg-warning" th:text="${titleError}"></span>
-            </label>
-            <p>Description: </p>
-            <p><label>
-                <textarea class="form-control" rows="5" required th:field="*{description}"> </textarea>
-                <br><span class=" bg-warning" th:text="${descriptionError}"></span>
-            </label>
+        <div class="row">
+            <div class="col-lg-8">
 
-                <label>
-                    <select multiple th:field="*{tags}">
-                        <option th:each="tag : ${tagList}" th:value="${tag}" th:text="${tag.getName(}">
-                        </option>
-                    </select>
-                </label>
-                <input type="submit" class="btn btn-success" value="Submit"/>
-                <input type="reset" class="btn btn-warning" value="Reset"/>
-        </form>
+                <h4 th:class="bg-danger" th:text="${text}"></h4>
+
+                <h3 class="h3">Create new question</h3>
+
+                <form th:object="${createQuestionDto}" method="post">
+
+                    <p>Title: </p>
+                    <p><label>
+                        <input type="text" placeholder="Enter title" required th:field="*{title}"/>
+                        <br><span class="bg-warning" th:text="${titleError}"></span>
+                    </label>
+
+                    <p>Description: </p>
+                    <p><label>
+                        <textarea class="form-control" rows="5" required th:field="*{description}"> </textarea>
+                        <br><span class=" bg-warning" th:text="${descriptionError}"></span>
+                    </label>
+
+                        <label>
+                            <select multiple th:field="*{tags}">
+                                <option th:each="tag : ${tagList}" th:value="${tag}" th:text="${tag.getName(}">
+                                </option>
+                            </select>
+                        </label>
+
+                        <button type="submit" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                        <button type="reset" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
+
+                </form>
+
+            </div>
+
+            <div th:insert="~{fragments/sidebar}"></div>
+
+        </div>
     </div>
 </div>
 
