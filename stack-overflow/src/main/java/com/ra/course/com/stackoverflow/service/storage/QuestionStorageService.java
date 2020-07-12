@@ -9,4 +9,6 @@ public interface QuestionStorageService {
     QuestionDto getById(Long id);
 
     List<QuestionDto> getByAuthorId(Long id);
+
+    List<String> getAllTagsName();
 }

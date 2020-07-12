@@ -8,7 +8,7 @@
         }
 
         .comment {
-            padding-left: 80px;
+            padding-left: 60px;
             background-color: beige;
         }
     </style>
@@ -27,7 +27,8 @@
             <!--            Count content column-->
             <div class="col-lg-1">
                 <p>
-                <form name="upvote" th:action="@{/questions/{id}/upvote(${question.getId()})}">
+                <form name="upvote"
+                      th:action="@{/questions/{questionId}/upvote(questionId=${question.getId()})}">
                     <button type="submit" class="btn btn-default">
                         <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
                     </button>
@@ -35,7 +36,8 @@
                 <p>
                 <h1 th:text="${question.getVoteCount()}"></h1>
                 <p>
-                <form name="downvote" th:action="@{/questions/{id}/downvote(${question.getId()})}">
+                <form name="downvote"
+                      th:action="@{/questions/{questionId}/downvote(questionId=${question.getId()})}">
                     <button type="submit" class="btn btn-default">
                         <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
                     </button>
@@ -63,8 +65,34 @@
 
                 <hr>
 
+                <p th:text="'Status: ' + ${question.getStatus().name()}"></p>
+                <a th:each="tag : ${question.getTagList()}">
+                    <a th:href="@{/search/questions(tag=${tag.getName()})}" role="button" class="btn btn-default btn-sm" th:text="${tag.getName()}"></a>
+                </a>
+                <hr>
+
                 <!-- Post Content -->
                 <p class="lead" th:text="${question.getDescription()}"></p>
+
+                <!-- Update button for author-->
+                <div th:if="${session.member} !=null">
+                    <form th:if="${session.member.getId()} == ${question.getAuthorId()}"
+                          th:action="@{/questions/{questionId}/update(questionId=${question.getId()})}">
+                        <button type="submit" class="btn btn-default">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Delete button for author-->
+                <div th:if="${session.member} !=null">
+                    <p th:if="${session.member.getId()} == ${question.getAuthorId()}">
+                        <button class="btn btn-danger"
+                                th:action="@{/questions/{questionId}/delete(questionId=${question.getId()})}">
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        </button>
+                    </p>
+                </div>
 
                 <hr>
 
@@ -77,35 +105,62 @@
                             <p th:text="'Posted: '  + ${#temporals.format(answer.getCreationDate(), 'dd-MM-yyyy HH:mm')}"></p>
                             <p th:text="${answer.getAnswerText()} "></p>
 
-                            <hr>
+                            <!-- Voting an answer-->
+                            <p>
+                                <a th:href="@{/answers/{answerId}/upvote(answerId=${answer.getId()})}"
+                                   class="btn btn-default btn-xs" role="button" aria-pressed="true">
+                                    <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                                </a>
 
-                            <!-- Comments Form -->
-                            <div class="card my-4">
-                                <form th:action="@{/questions/{questionId}/answer/{answerId}/comment/create(questionId=${question.getId()}, answerId=${answer.getId()})}">
-                                    <div class="form-group">
-                                        <textarea class="form-control" rows="1"></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">
-                                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                                    </button>
-                                    <button type="reset" class="btn btn-primary">
-                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                    </button>
-                                </form>
-                            </div>
+                                <a th:text="${answer.getVoteCount()}"></a>
+
+                                <a th:href="@{/answers/{answerId}/downvote(answerId=${answer.getId()})}"
+                                   class="btn btn-default btn-xs" role="button" aria-pressed="true">
+                                    <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                                </a>
+                            </p>
+                            <hr>
 
                             <!-- Nested comments-->
 
                             <div class="comment" th:each="comment : ${answer.getComments()}">
-                                <div class="media mt-4">
-                                    <div class="media-body">
-                                        <p th:text="${comment.getText()} "></p>
-                                        <h5 class="mt-0" th:href="@{/members(id=${comment.getAuthorId()})}"
-                                            th:text="'Author: ' + ${comment.getAuthorId()}"></h5>
-                                        <a th:text="${#temporals.format(comment.getCreationDate(), 'dd-MM-yyyy HH:mm')}"></a>
-                                    </div>
+                                <div class="media-body">
+                                    <p th:text="${comment.getText()} "></p>
+                                    <a class="mt-0" th:href="@{/members(id=${comment.getAuthorId()})}"
+                                       th:text="'Author: ' + ${comment.getAuthorId()}"></a>
+                                    <a th:text="${#temporals.format(comment.getCreationDate(), 'dd-MM-yyyy HH:mm')}"></a>
+
+                                    <!-- Voting a comment-->
+                                    <p>
+                                        <a th:href="@{/comments/{commentId}/upvote(commentId=${comment.getId()})}"
+                                           class="btn btn-default btn-xs" role="button" aria-pressed="true">
+                                            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                                        </a>
+
+                                        <a th:text="${comment.getVoteCount()}"></a>
+
+                                        <a th:href="@{/comments/{commentId}/downvote(commentId=${comment.getId()})}"
+                                           class="btn btn-default btn-xs" role="button" aria-pressed="true">
+                                            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                                        </a>
+                                    </p>
                                 </div>
                                 <hr>
+                            </div>
+
+                            <!-- Comments Form -->
+                            <div class="card my-4" th:if="${question.getStatus().name() == 'OPEN'}">
+                                <form th:action="@{/questions/{questionId}/answer/{answerId}/comment/create(questionId=${question.getId()}, answerId=${answer.getId()})}">
+                                    <div class="form-group">
+                                        <textarea class="form-control" rows="1"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-default btn-xs">
+                                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                    </button>
+                                    <button type="reset" class="btn btn-default btn-xs">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -113,17 +168,17 @@
                 </div>
 
                 <!-- Answer Form -->
-                <div class="card my-4">
+                <div class="card my-4" th:if="${question.getStatus().name() == 'OPEN'}">
                     <h5 class="card-header">Leave an Answer:</h5>
                     <div class="card-body">
                         <form th:action="@{/questions/{questionId}/answer/create(questionId=${question.getId()})}">
                             <div class="form-group">
                                 <textarea class="form-control" rows="3"></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-default btn-sm">
                                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                             </button>
-                            <button type="reset" class="btn btn-primary">
+                            <button type="reset" class="btn btn-default btn-sm">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </button>
                         </form>

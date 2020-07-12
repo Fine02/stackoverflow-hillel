@@ -1,12 +1,14 @@
 package com.ra.course.com.stackoverflow.controller.filter;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Objects;
 
 import static com.ra.course.com.stackoverflow.controller.ControllerConstants.*;
 
+@WebFilter(urlPatterns = {QUESTION_URL + CREATE_URL, QUESTION_URL + UPDATE_URL})
 public class QuestionFilter implements Filter {
 
     @Override

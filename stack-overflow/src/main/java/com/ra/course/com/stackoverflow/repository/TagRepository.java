@@ -19,4 +19,6 @@ public interface TagRepository  {
 
     List<Tag> findByQuestionId(Long id);
 
+    List<Tag> findAll();
+
 }

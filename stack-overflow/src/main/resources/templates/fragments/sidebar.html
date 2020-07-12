@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{head :: general_header(~{::title},_,_)}">
+<head th:replace="~{head :: general_header(~{::title},~{::style},_)}">
     <title>Nav bar for member</title>
+
+    <style>
+        .tags-widget {
+            -moz-column-count: 4; /* Для Firefox */
+            -webkit-column-count: 4; /* Для Safari и Chrome */
+            column-count: 4;
+        }
+    </style>
 </head>
 <body>
 
@@ -23,43 +31,20 @@
         </div>
     </div>
 
-    <!-- Categories Widget -->
-    <div class="card my-4">
-        <h5 class="card-header">Popular Tags: </h5>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg-6">
-                    <ul class="list-unstyled mb-0">
-                        <li>
-                            <a href="#">Web Design</a>
-                        </li>
-                        <li>
-                            <a href="#">HTML</a>
-                        </li>
-                        <li>
-                            <a href="#">Freebies</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-lg-6">
-                    <ul class="list-unstyled mb-0">
-                        <li>
-                            <a href="#">JavaScript</a>
-                        </li>
-                        <li>
-                            <a href="#">CSS</a>
-                        </li>
-                        <li>
-                            <a href="#">Tutorials</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+    <hr>
+
+    <!-- Tags Widget -->
+    <h5 class="card-header">Popular Tags: </h5>
+    <div class="tags-widget">
+        <div class="card-body" th:each="tag : ${session.tags}">
+            <a th:href="@{/search/questions(tag=${tag.getName()})}" role="button" class="btn btn-default btn-xs" th:text="${tag.getName()}"></a>
         </div>
     </div>
 
+    <hr>
+
     <!-- Side Widget -->
-    <div class="card my-4" th:if="${session.member != null}">
+    <div class="card my-4" th:if="${session.member!=null and !session.member.getViewedQuestions().isEmpty()}">
         <h5 class="card-header">Questions you was interested:</h5>
         <div class="card-body">
             <div th:each="question : ${session.member.getViewedQuestions().entrySet()}">

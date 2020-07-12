@@ -1,13 +1,14 @@
 package com.ra.course.com.stackoverflow.controller.filter;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.ra.course.com.stackoverflow.controller.ControllerConstants.MAIN_URL;
-import static com.ra.course.com.stackoverflow.controller.ControllerConstants.MEMBER_ATTR;
+import static com.ra.course.com.stackoverflow.controller.ControllerConstants.*;
 
+@WebFilter(urlPatterns = MEMBER_URL)
 public class AuthorizationFilter implements Filter {
 
     @Override

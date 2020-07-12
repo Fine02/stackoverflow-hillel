@@ -19,7 +19,9 @@
                 <h4 class="bg-warning" th:text="${size}"></h4>
 
                 <div th:each="viewMember : ${viewMembers}">
-                    <h3 th:text="'Name: ' + ${viewMember.getName()}"
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    Name:
+                    <h3 th:text="${viewMember.getName()}"
                         th:action="@{/search/members(id=${viewMember.getId()})}"></h3>
                     <p th:text="'Status: ' + ${viewMember.getStatus()} "></p>
                 </div>

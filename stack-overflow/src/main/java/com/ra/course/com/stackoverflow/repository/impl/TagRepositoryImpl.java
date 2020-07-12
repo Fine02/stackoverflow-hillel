@@ -70,4 +70,11 @@ public class TagRepositoryImpl implements TagRepository {
                 .map(Optional::get)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Tag> findAll() {
+        return dslContext.selectFrom(TAG_TABLE)
+                .fetchStreamInto(Tag.class)
+                .collect(Collectors.toList());
+    }
 }
