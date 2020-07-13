@@ -16,7 +16,11 @@
 
             <div class="col-lg-8">
 
-                <h4 class="bg-warning" th:text="${size}"></h4>
+                <h2 class="my-4">Search result
+                    <small th:text="${viewMembers.size()}">
+                    </small>
+                </h2>
+
 
                 <div th:each="viewMember : ${viewMembers}">
                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
@@ -25,7 +29,7 @@
                         th:action="@{/search/members(id=${viewMember.getId()})}"></h3>
                     <p th:text="'Status: ' + ${viewMember.getStatus()} "></p>
                 </div>
-                <hr>
+                <hr noshade size="4">
 
             </div>
 

@@ -16,30 +16,45 @@
 
             <div class="col-lg-8">
 
-                <h1 class="my-4">Search result
-                    <small>by <a th:text="${phrase}"></a></small>
-                </h1>
-                <!-- Blog Post -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h2 class="card-title">Post Title</h2>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis
-                            aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi
-                            vero voluptate voluptatibus possimus, veniam magni quis!</p>
-                        <a href="#" class="btn btn-primary">Read More &rarr;</a>
-                    </div>
-                    <div class="card-footer text-muted">
-                        Posted on January 1, 2020 by
-                        <a href="#">Start Bootstrap</a>
-                    </div>
-                </div>
-                <div th:if="${not #lists.isEmpty(viewMembers)}">
-                    <div th:each="viewMember : ${viewMembers}">
-                        <h3 th:text="'Name: ' + ${viewMember.getName()}"
-                            th:action="@{/search/members/{id}(id=viewMember.getId())}"></h3>
-                        <p th:text="'Status: ' + ${viewMember.getStatus()} "></p>
-                    </div>
+                <h2 class="my-4">Search result
+                    <small>by
+                        <div th:each="search : ${searchlist}">
+                            <b><a th:text="${search}"> </a></b>
+                        </div>
+                    </small>
+                </h2>
+
+                <hr>
+
+                <div th:each="question : ${questions}">
+
+                    <!-- Question Post -->
+
+                    <!-- Title -->
+                    <h3 class="mt-4" >
+                        <a th:text="${question.getTitle()}" th:href="@{/search/questions(id=${question.getId()})}">
+                        </a></h3>
+
+                    <!-- Author/Date/Time -->
+                    <p class="lead">
+                        by <a th:href="@{/search/members(id=${question.getAuthorId()})}"
+                              th:text="${question.getAuthorId()}"></a>
+                        <a th:text="'Last update: ' + ${#temporals.format(question.getUpdateTime(), 'dd-MM-yyyy HH:mm')}"></a>
+                    </p>
+
+                    <p th:text="'Status: ' + ${question.getStatus().name()}">
+                        <a th:each="tag : ${question.getTagList()}">
+                            <a th:href="@{/search/questions(tag=${tag.getName()})}" role="button"
+                               class="btn btn-default btn-sm" th:text="${tag.getName()}"></a>
+                        </a>
+                    </p>
                     <hr>
+
+                    <!-- Post Content -->
+                    <p class="lead" th:text="${question.getDescription()}"></p>
+
+                    <hr>
+
                 </div>
             </div>
 

@@ -20,6 +20,6 @@ public class CreateQuestionDto {
     @NotBlank(message = "{questionDto.description.blank}")
     private String description;
 
-    private List<Integer> tags = new ArrayList<>();
+    private List<String> tags = new ArrayList<>();
 
 }

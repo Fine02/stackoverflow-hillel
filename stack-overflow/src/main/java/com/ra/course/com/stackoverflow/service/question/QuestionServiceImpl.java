@@ -1,5 +1,6 @@
 package com.ra.course.com.stackoverflow.service.question;
 
+import com.ra.course.com.stackoverflow.dto.QuestionDto;
 import com.ra.course.com.stackoverflow.entity.Answer;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.Tag;
@@ -50,28 +51,21 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**Members can add tags to their questions. A tag is a word or phrase that describes the topic of the question.**/
     @Override
-    public boolean addTagToQuestion(@NonNull final Tag tag, @NonNull final Question question) {
+    public void addTagToQuestion(final String tagName, final QuestionDto question) {
 
         final var questionFromDB = questionRepo.findById(question.getId())
                 .orElseThrow(() -> new QuestionNotFoundException("Question not found in DB. Can't add tag to nonexistent question"));
 
-        if (questionFromDB.getTagList().contains(tag)){
-            throw new TagAlreadyAddedException("Tag " + tag.getName() + " already added to this question.");
+        final var tagMatch = questionFromDB.getTagList().stream()
+                .anyMatch(tag -> tag.getName().equalsIgnoreCase(tagName));
+
+        if (tagMatch){
+            throw new TagAlreadyAddedException("Tag " + tagName + " already added to this question.");
         }
 
-        final var tagFromDB = tagRepo.findById(tag.getId())
-                .orElseGet(() -> tagRepo.save(tag));
+        final var tagFromDB = tagRepo.findByTagName(tagName)
+                .orElseGet(() -> tagRepo.save(new Tag(null, tagName, null)));
 
-        questionFromDB.getTagList().add(tagFromDB);
-
-        try {
-            questionRepo.update(questionFromDB);
-            tagQuestionRepo.save(tagFromDB, questionFromDB);
-        }catch (QuestionRepositoryException e) {
-            tagRepo.delete(tag);
-            return false;
-        }
-
-        return true;
+        tagQuestionRepo.save(tagFromDB, questionFromDB);
     }
 }

@@ -30,13 +30,15 @@
                         <br><span class=" bg-warning" th:text="${descriptionError}"></span>
                     </label>
 
-                        <label>
-                            <select multiple th:field="*{tags}">
-                                <option th:each="tag : ${session.tags}" th:value="${tag}" th:text="${tag}">
-                                </option>
-                            </select>
-                        </label>
+                    <p>Tags: </p>
+                    <p><label>
+                        <select multiple th:field="*{tags}" size="5">
+                            <option th:each="tag : ${session.tags}" th:value="${tag}" th:text="${tag}">
+                            </option>
+                        </select>
+                    </label>
 
+                    <p>
                         <button type="submit" class="btn btn-default">
                             <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                         </button>

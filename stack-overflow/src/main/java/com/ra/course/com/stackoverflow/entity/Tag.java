@@ -5,17 +5,16 @@ import lombok.*;
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Tag {
 
     @EqualsAndHashCode.Include
-    private final long id;
+    private Long id;
 
-    @NonNull
-    private final String name;
+    private String name;
 
-    @NonNull
     private String description;
 
 }

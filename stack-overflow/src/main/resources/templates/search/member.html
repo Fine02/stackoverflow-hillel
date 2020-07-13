@@ -23,7 +23,7 @@
                 <p th:text="'Answers: ' + ${account.getAnswers().size()} "></p>
                 <p th:text="'Comments: ' + ${account.getComments().size()} "></p>
 
-                <a th:href="@{search/questions(authorId=${account.getId()})}">Show all member questions</a>
+                <a th:href="@{/search/questions(authorId=${account.getId()})}">Show all member questions</a>
 
             </div>
 

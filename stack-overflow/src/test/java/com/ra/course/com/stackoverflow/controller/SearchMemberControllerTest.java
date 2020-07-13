@@ -20,8 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@WebMvcTest(SearchController.class)
-public class SearchControllerTest {
+@WebMvcTest(SearchMemberController.class)
+public class SearchMemberControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

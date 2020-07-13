@@ -111,7 +111,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     @Override
     public List<Question> findByTitle(@NonNull final String searchPhrase) {
         return dslContext.selectFrom(QUESTION_TABLE)
-                .where(QUESTION_TABLE.TITLE.contains(searchPhrase))
+                .where(QUESTION_TABLE.TITLE.containsIgnoreCase(searchPhrase))
                 .fetch()
                 .stream()
                 .map(this::mapperQuestion)
@@ -128,7 +128,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 .map(s -> s.getValue(TAG_QUESTION_TABLE.QUESTION_ID))
                 .map(this::findById)
                 .map(Optional::get)
-                .filter(q -> q.getTitle().contains(searchPhrase))
+                .filter(q -> q.getTitle().toLowerCase().contains(searchPhrase))
                 .collect(Collectors.toList());
     }
 

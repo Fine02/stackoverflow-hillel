@@ -1,5 +1,7 @@
 package com.ra.course.com.stackoverflow.service.search;
 
+import com.ra.course.com.stackoverflow.dto.QuestionDto;
+import com.ra.course.com.stackoverflow.dto.mapper.Mapper;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.Tag;
 import com.ra.course.com.stackoverflow.exception.service.TagNotFoundException;
@@ -17,32 +19,24 @@ public class SearchServiceImpl implements SearchService {
 
     private final QuestionRepository questionRepo;
     private final TagRepository tagRepo;
+    private final Mapper<Question, QuestionDto> mapper;
 
-    public List<Question> searchByTag(final String tagName) {
-        if (tagName != null) {
-            final Tag tag = getTagByTagName(tagName);
-            return questionRepo.findByTag(tag);
-        }
-        return Collections.emptyList();
+    public List<QuestionDto> searchByTag(final String tagName) {
+        final Tag tag = getTagByTagName(tagName);
+        return mapper.dtoFromEntity(questionRepo.findByTag(tag));
     }
 
-    public List<Question> searchInTitle(final String searchPhrase) {
-        if (searchPhrase != null) {
-            return questionRepo.findByTitle(searchPhrase);
-        }
-        return Collections.emptyList();
+    public List<QuestionDto> searchInTitle(final String searchPhrase) {
+        return mapper.dtoFromEntity(questionRepo.findByTitle(searchPhrase.toLowerCase()));
     }
 
-    public List<Question> searchInTitleByTag(final String searchPhrase, final String tagName) {
-        if (searchPhrase != null && tagName != null) {
-            final Tag tag = getTagByTagName(tagName);
-            return questionRepo.findByTitleAndTag(searchPhrase, tag);
-        }
-        return Collections.emptyList();
+    public List<QuestionDto> searchInTitleByTag(final String searchPhrase, final String tagName) {
+        final Tag tag = getTagByTagName(tagName);
+        return mapper.dtoFromEntity(questionRepo.findByTitleAndTag(searchPhrase.toLowerCase(), tag));
     }
 
     private Tag getTagByTagName(final String tagName) {
         return tagRepo.findByTagName(tagName)
-                      .orElseThrow(() -> new TagNotFoundException("There is no Tag in DB like: " + tagName));
+                .orElseThrow(() -> new TagNotFoundException("There is no Tag in DB like: " + tagName));
     }
 }
