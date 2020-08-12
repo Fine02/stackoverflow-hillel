@@ -17,11 +17,12 @@
 <div class="col-lg-4">
 
     <!-- Profile Widget -->
-    <div class="card my-4" th:with="account=${session.member}" th:if="${session.member!=null}">
+    <div class="card my-4" th:with="account=${session.account}" th:if="${session.account!=null}">
         <h5 class="card-header" th:text="${account.getName()}"></h5>
         <div class="card-body">
             <ul>
-                <li><a th:href="@{/members}">My profile</a></li>
+                <li><a th:href="@{/members/profile}">My profile</a></li>
+                <li><a th:href="@{/members/notifications}">My notifications</a></li>
                 <li><a th:href="@{/search/questions(authorId=${account.getId()})}">My questions</a></li>
             </ul>
         </div>
@@ -50,7 +51,7 @@
     <h5 class="card-header">Popular Tags: </h5>
     <div class="tags-widget">
         <div class="card-body" th:each="tag : ${session.tags}">
-            <a th:href="@{/search/questions(tag=${tag})}" role="button" class="btn btn-default btn-sm" th:text="${tag}"></a>
+            <a th:href="@{/search/questions(tag=${tag.getName()})}" role="button" class="btn btn-default btn-sm" th:text="${tag.toString()}"></a>
         </div>
     </div>
 

@@ -2,17 +2,18 @@ package com.ra.course.com.stackoverflow.entity;
 
 import lombok.*;
 
-import java.util.List;
-
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-@Data
+@AllArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Tag {
 
-    @EqualsAndHashCode.Include
     private Long id;
 
+    @ToString.Include
+    @EqualsAndHashCode.Include
     private String name;
 
     private String description;

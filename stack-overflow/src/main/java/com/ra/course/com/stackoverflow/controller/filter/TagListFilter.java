@@ -1,6 +1,6 @@
 package com.ra.course.com.stackoverflow.controller.filter;
 
-import com.ra.course.com.stackoverflow.service.storage.QuestionStorageService;
+import com.ra.course.com.stackoverflow.service.post.TagService;
 import lombok.AllArgsConstructor;
 
 import javax.servlet.*;
@@ -9,13 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.ra.course.com.stackoverflow.controller.ControllerConstants.TAGS_ATTR;
-
 @WebFilter(urlPatterns = "/*")
 @AllArgsConstructor
 public class TagListFilter implements Filter {
 
-    private final transient QuestionStorageService service;
+    private final TagService service;
+
+    private final static String TAGS = "tags";
 
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, FilterChain chain)
@@ -24,8 +24,8 @@ public class TagListFilter implements Filter {
         final var httpRequest = (HttpServletRequest) request;
         final var session = httpRequest.getSession();
 
-        if(Objects.isNull(session.getAttribute(TAGS_ATTR))){
-            session.setAttribute(TAGS_ATTR, service.getAllTagsName());
+        if(Objects.isNull(session.getAttribute(TAGS))){
+            session.setAttribute(TAGS, service.getAllTags());
         }
 
         chain.doFilter(request, response);

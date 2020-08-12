@@ -25,29 +25,9 @@
 
                 <li><a th:href="@{/questions/create}">Add new question</a></li>
 
-<!--                <li class="dropdown">-->
-<!--                    <a class="dropdown-toggle" data-toggle="dropdown" th:text=" ${session.member.getName()}">-->
-<!--                        <span class="caret"></span></a>-->
-<!--                    <ul class="dropdown-menu">-->
-<!--                        <li><a th:href="@{/members}">My profile</a></li>-->
-<!--                        <li><a th:href="@{/search/questions(authorId=${session.member.getId()})}">My questions</a></li>-->
-<!--                        <li><a th:href="@{/questions/create}">Add new question</a></li>-->
-<!--                        <li class="divider"></li>-->
-<!--                        <li><a th:href="@{/members/logout}">Log Out</a></li>-->
-<!--                    </ul>-->
-<!--                </li>-->
-
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-<!--                <li class="dropdown">-->
-<!--                    <a class="dropdown-toggle" data-toggle="dropdown" th:text="${session.member.getName()}">-->
-<!--                        <span class="caret"></span></a>-->
-<!--                    <ul class="dropdown-menu">-->
-<!--                        <li><a th:href="@{/members}">My profile</a></li>-->
-<!--                        <li><a th:href="@{/search/questions(authorId=${session.member.getId()})}">My questions</a></li>-->
-<!--                    </ul>-->
-<!--                </li>-->
 
                 <li><a th:href="@{/members/logout}"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
             </ul>

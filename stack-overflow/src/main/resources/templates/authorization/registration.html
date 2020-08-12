@@ -18,7 +18,7 @@
 
                 <h3 class="h3">Registration Form</h3>
 
-                <form th:object="${registerDto}" method="post">
+                <form th:object="${dto}" method="post">
                     <p>Email: </p>
                     <p><label>
                         <input type="email" placeholder="Enter email" required th:field="*{email}"/>

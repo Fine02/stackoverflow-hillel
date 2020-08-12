@@ -1,26 +1,23 @@
 package com.ra.course.com.stackoverflow.entity;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuperBuilder
-@Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(of="text")
+@EqualsAndHashCode(of = {"text", "author", "question"})
 public class Answer {
 
-    @EqualsAndHashCode.Include
-    final private Long id;
+    private Long id;
 
-    @Builder.Default
-    @NonNull
-    private String answerText = "";
+    private String text;
 
     private boolean accepted;
 
@@ -28,25 +25,14 @@ public class Answer {
 
     private int flagCount;
 
-    @Builder.Default
-    @NonNull
-    private final LocalDateTime creationDate = LocalDateTime.now();
+    private LocalDateTime creationTime = LocalDateTime.now();
 
-    @NonNull
-    private final Long authorId;
+    private Long author;
 
-    @NonNull
-    private final Long questionId;
+    private Long question;
 
-    @Builder.Default
-    @NonNull
     private List<Photo> photos = new ArrayList<>();
 
-    @Builder.Default
-    @NonNull
     private List<Comment> comments = new ArrayList<>();
 
-    public void incrementFlagCount() {
-        this.flagCount++;
-    }
 }

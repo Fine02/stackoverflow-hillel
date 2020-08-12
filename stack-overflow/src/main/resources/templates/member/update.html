@@ -18,7 +18,7 @@
 
                 <h3 class="h3">Enter Form</h3>
 
-                <form th:object="${updateDto}" method="post" th:action="@{/members/update}">
+                <form th:object="${dto}" method="post" th:action="@{/members/update}">
                     <p>New name: </p>
                     <p><label>
                         <input type="text" placeholder="Enter new name" th:field="*{name}"/>

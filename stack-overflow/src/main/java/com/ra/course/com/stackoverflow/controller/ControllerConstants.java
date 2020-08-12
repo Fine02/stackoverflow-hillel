@@ -41,6 +41,7 @@ public class ControllerConstants {
     //used for Question Controller
     public final static String QUESTION_URL = "/questions";
     public final static String QUESTION_CREATE_VIEW = "question/create";
+    public final static String QUESTION_UPDATE_VIEW = "question/update";
     public final static String QUESTION_VIEW = "question/view";
 
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="~{head :: general_header(~{::title},_,_)}">
-    <title>StackOverflow Members View</title>
+    <title>StackOverflow Questions View</title>
 </head>
 <body>
 
@@ -18,7 +18,7 @@
 
                 <h2 class="my-4">Search result
                     <small>by
-                        <div th:each="search : ${searchlist}">
+                        <div th:each="search : ${searchBy}">
                             <b><a th:text="${search}"> </a></b>
                         </div>
                     </small>
@@ -32,18 +32,18 @@
 
                     <!-- Title -->
                     <h3 class="mt-4" >
-                        <a th:text="${question.getTitle()}" th:href="@{/search/questions(id=${question.getId()})}">
+                        <a th:text="${question.getTitle()}" th:href="@{/view/question/{id}(id=${question.getId()})}">
                         </a></h3>
 
                     <!-- Author/Date/Time -->
                     <p class="lead">
-                        by <a th:href="@{/search/members(id=${question.getAuthorId()})}"
-                              th:text="${question.getAuthorId()}"></a>
+                        by <a th:href="@{/view/member/{id}(id=${question.getAuthor()})}"
+                              th:text="${question.getAuthor()}"></a>
                         <a th:text="'Last update: ' + ${#temporals.format(question.getUpdateTime(), 'dd-MM-yyyy HH:mm')}"></a>
                     </p>
 
                     <p th:text="'Status: ' + ${question.getStatus().name()}">
-                        <a th:each="tag : ${question.getTagList()}">
+                        <a th:each="tag : ${question.getTags()}">
                             <a th:href="@{/search/questions(tag=${tag.getName()})}" role="button"
                                class="btn btn-default btn-sm" th:text="${tag.getName()}"></a>
                         </a>
@@ -51,7 +51,7 @@
                     <hr>
 
                     <!-- Post Content -->
-                    <p class="lead" th:text="${question.getDescription()}"></p>
+                    <p class="lead" th:text="${question.getText()}"></p>
 
                     <hr>
 

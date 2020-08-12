@@ -17,19 +17,19 @@
             <div class="col-lg-8">
 
                 <h2 class="my-4">Search result
-                    <small th:text="${viewMembers.size()}">
+                    <small th:text="${members.size()}">
                     </small>
                 </h2>
 
 
-                <div th:each="viewMember : ${viewMembers}">
+                <div th:each="member : ${members}">
                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                     Name:
-                    <h3 th:text="${viewMember.getName()}"
-                        th:action="@{/search/members(id=${viewMember.getId()})}"></h3>
-                    <p th:text="'Status: ' + ${viewMember.getStatus()} "></p>
+                    <h3 th:text="${member.getName()}"
+                        th:action="@{/search/members(id=${member.getId()})}"></h3>
+                    <p th:text="'Status: ' + ${member.getStatus()} "></p>
                 </div>
-                <hr noshade size="4">
+                <hr>
 
             </div>
 

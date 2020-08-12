@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface BountyRepository {
     Bounty save(Bounty bounty);
 
-    Optional<Bounty> findById(long id);
+    Optional<Bounty> findById(Long id);
 
     void deleteById(long id);
 }

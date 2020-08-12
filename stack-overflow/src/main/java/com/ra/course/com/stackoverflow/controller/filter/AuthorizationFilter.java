@@ -6,9 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.ra.course.com.stackoverflow.controller.ControllerConstants.*;
-
-@WebFilter(urlPatterns = MEMBER_URL)
+@WebFilter(urlPatterns = {"/members/*", "/questions/*"})
 public class AuthorizationFilter implements Filter {
 
     @Override
@@ -16,10 +14,10 @@ public class AuthorizationFilter implements Filter {
                          final FilterChain chain) throws IOException, ServletException {
 
         final var httpRequest = (HttpServletRequest) request;
-        final var sessionMember = httpRequest.getSession().getAttribute(MEMBER_ATTR);
+        final var sessionMember = httpRequest.getSession().getAttribute("account");
 
         if(Objects.isNull(sessionMember)){
-            httpRequest.getRequestDispatcher(MAIN_URL).forward(request, response);
+            httpRequest.getRequestDispatcher("/login").forward(request, response);
         } else {
             chain.doFilter(request, response);
         }

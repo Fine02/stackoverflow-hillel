@@ -5,22 +5,31 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
-@SuperBuilder
-@Data
-@EqualsAndHashCode
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
 public class Comment {
 
-    private final Long id;
+    private Long id;
 
-    @NonNull
+    @ToString.Include
+    @EqualsAndHashCode.Include
     private String text;
-    @EqualsAndHashCode.Exclude
-    private final LocalDateTime creationDate;
+
+    private LocalDateTime creationTime = LocalDateTime.now();
+
     private int voteCount;
-    @NonNull
-    private final Long authorId;
-    private final Long answerId;
-    private final Long questionId;
+
+    @EqualsAndHashCode.Include
+    private Long author;
+
+    @EqualsAndHashCode.Include
+    private Long answer;
+
+    @EqualsAndHashCode.Include
+    private Long question;
 
 }
