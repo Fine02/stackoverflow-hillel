@@ -22,48 +22,51 @@ public class VoteController {
     private final VoteService<Answer> answerVote;
     private final VoteService<Comment> commentVote;
 
-    private final static String ACCOUNT = "account";
     private final static String REDIRECT_QUESTION = "/view/question/";
 
     @GetMapping("/up/question/{questionId}")
-    public RedirectView upVoteQuestion(@SessionAttribute(ACCOUNT)SessionMemberDto sessionMemberDto,
-                                       @PathVariable Long questionId){
-        questionVote.upVote(questionId, sessionMemberDto);
+    public RedirectView upVoteQuestion(@SessionAttribute final SessionMemberDto account,
+                                       @PathVariable final Long questionId) {
+        questionVote.upVote(questionId, account);
         return new RedirectView(REDIRECT_QUESTION + questionId, true);
     }
 
     @GetMapping("/down/question/{questionId}")
-    public RedirectView downVoteQuestion(@SessionAttribute(ACCOUNT)SessionMemberDto sessionMemberDto,
-                                       @PathVariable Long questionId){
-        questionVote.downVote(questionId, sessionMemberDto);
+    public RedirectView downVoteQuestion(@SessionAttribute final SessionMemberDto account,
+                                         @PathVariable final Long questionId) {
+        questionVote.downVote(questionId, account);
         return new RedirectView(REDIRECT_QUESTION + questionId, true);
     }
 
     @GetMapping("/up/question/{questionId}/answer/{answerId}")
-    public RedirectView upVoteAnswer(@SessionAttribute(ACCOUNT)SessionMemberDto sessionMemberDto,
-                                       @PathVariable Long questionId, @PathVariable Long answerId ){
-        answerVote.upVote(answerId, sessionMemberDto);
+    public RedirectView upVoteAnswer(@SessionAttribute final SessionMemberDto account,
+                                     @PathVariable final Long questionId,
+                                     @PathVariable final Long answerId) {
+        answerVote.upVote(answerId, account);
         return new RedirectView(REDIRECT_QUESTION + questionId, true);
     }
 
     @GetMapping("/down/question/{questionId}/answer/{answerId}")
-    public RedirectView downVoteAnswer(@SessionAttribute(ACCOUNT)SessionMemberDto sessionMemberDto,
-                                       @PathVariable Long questionId, @PathVariable Long answerId ){
-        answerVote.downVote(answerId, sessionMemberDto);
+    public RedirectView downVoteAnswer(@SessionAttribute final SessionMemberDto account,
+                                       @PathVariable final Long questionId,
+                                       @PathVariable final Long answerId) {
+        answerVote.downVote(answerId, account);
         return new RedirectView(REDIRECT_QUESTION + questionId, true);
     }
 
     @GetMapping("/up/question/{questionId}/comment/{commentId}")
-    public RedirectView upVoteComment(@SessionAttribute(ACCOUNT)SessionMemberDto sessionMemberDto,
-                                       @PathVariable Long questionId, @PathVariable Long commentId ){
-        commentVote.upVote(commentId, sessionMemberDto);
+    public RedirectView upVoteComment(@SessionAttribute final SessionMemberDto account,
+                                      @PathVariable final Long questionId,
+                                      @PathVariable final Long commentId) {
+        commentVote.upVote(commentId, account);
         return new RedirectView(REDIRECT_QUESTION + questionId, true);
     }
 
     @GetMapping("/down/question/{questionId}/comment/{commentId}")
-    public RedirectView downVoteComment(@SessionAttribute(ACCOUNT)SessionMemberDto sessionMemberDto,
-                                       @PathVariable Long questionId, @PathVariable Long commentId ){
-        commentVote.downVote(commentId, sessionMemberDto);
+    public RedirectView downVoteComment(@SessionAttribute final SessionMemberDto account,
+                                        @PathVariable final Long questionId,
+                                        @PathVariable final Long commentId) {
+        commentVote.downVote(commentId, account);
         return new RedirectView(REDIRECT_QUESTION + questionId, true);
     }
 

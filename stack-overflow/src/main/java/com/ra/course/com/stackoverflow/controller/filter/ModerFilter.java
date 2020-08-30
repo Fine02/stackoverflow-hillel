@@ -20,7 +20,9 @@ public class ModerFilter implements Filter {
         final var account = (SessionMemberDto) httpRequest.getSession().getAttribute("account");
 
         if(Objects.isNull(account) ||
-        (!account.getRole().equals(AccountRole.MODERATOR) && !account.getRole().equals(AccountRole.ADMIN))){
+            !account.getRole().equals(AccountRole.MODERATOR) &&
+            !account.getRole().equals(AccountRole.ADMIN)){
+
             httpRequest.getRequestDispatcher("/login").forward(request, response);
         } else {
             chain.doFilter(request, response);

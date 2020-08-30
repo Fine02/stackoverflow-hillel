@@ -18,22 +18,26 @@ public class SearchQuestionController {
 
     private final SearchQuestionService searchService;
 
+    public final static String TAG_PARAM = "tag";
+    public final static String PHRASE_PARAM = "phrase";
+
+
     @GetMapping(params = "authorId")
     public ModelAndView getQuestionsByAuthorId(@RequestParam final Long authorId){
         return modelAndView(List.of("member " + authorId), searchService.searchByAuthorId(authorId));
     }
 
-    @GetMapping(params = "tag")
+    @GetMapping(params = TAG_PARAM)
     public ModelAndView getQuestionsByTag(@RequestParam final String tag){
         return modelAndView(List.of(tag), searchService.searchByTag(tag));
     }
 
-    @GetMapping(params = "phrase")
+    @GetMapping(params = PHRASE_PARAM)
     public ModelAndView getQuestionsByPhrase(@RequestParam final String phrase){
         return modelAndView(List.of(phrase), searchService.searchInTitle(phrase));
     }
 
-    @GetMapping(params = {"tag", "phrase"})
+    @GetMapping(params = {TAG_PARAM, PHRASE_PARAM})
     public ModelAndView getQuestionsByTagAndPhrase(@RequestParam final String tag,
                                              @RequestParam final String phrase){
         return modelAndView(List.of(phrase, tag), searchService.searchByTitleAndTagName(phrase, tag));

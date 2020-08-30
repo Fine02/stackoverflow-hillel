@@ -89,7 +89,7 @@ public class MemberControllerTest {
                 .andDo(print())
                 .andExpect(matchAll(
                         status().isFound(),
-                        redirectedUrl("members/logout")
+                        redirectedUrl("/members/logout")
                 ));
         verify(service).updateMember(updateDto, member, "current password");
     }

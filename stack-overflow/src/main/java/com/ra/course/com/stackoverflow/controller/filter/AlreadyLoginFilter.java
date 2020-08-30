@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.ra.course.com.stackoverflow.controller.ControllerConstants.*;
-
 @WebFilter(urlPatterns = {"/login", "/registration"})
 public class AlreadyLoginFilter implements Filter {
 

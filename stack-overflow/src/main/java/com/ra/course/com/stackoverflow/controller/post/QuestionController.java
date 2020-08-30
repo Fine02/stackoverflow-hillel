@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 
@@ -22,14 +21,14 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
-    private final static String CREATE_URL = "/questions/create";
-    private final static String VIEW_QUESTION = "view/question/";
+    private final static String CREATE_URL = "/create";
+    private final static String DTO = "dto";
 
 
     @GetMapping(CREATE_URL)
     public ModelAndView getCreateQuestion() {
         final var model = new ModelAndView("question/create");
-        model.addObject("dto", new CreateQuestionDto());
+        model.addObject(DTO, new CreateQuestionDto());
         return model;
     }
 
@@ -42,37 +41,37 @@ public class QuestionController {
 
     @PostMapping("/{id}/delete")
     public ModelAndView deleteQuestion(@SessionAttribute final SessionMemberDto account,
-                                 @PathVariable Long id) {
+                                 @PathVariable final Long id) {
         final var question = questionService.deleteQuestion(id, account);
         return getModelAndView(question);
     }
 
     @GetMapping("/update")
     public ModelAndView getUpdateQuestion() {
-        var modelAndView = new ModelAndView("question/update");
-        modelAndView.addObject("dto", new UpdateQuestionDto());
+        final var modelAndView = new ModelAndView("question/update");
+            modelAndView.addObject(DTO, new UpdateQuestionDto());
         return modelAndView;
     }
 
     @PostMapping("/{id}/update")
-    public String updateQuestion(@SessionAttribute final SessionMemberDto account,
-                                 @Valid UpdateQuestionDto updateQuestionDto,
-                                 @PathVariable Long id) {
+    public ModelAndView updateQuestion(@SessionAttribute final SessionMemberDto account,
+                                 @Valid final UpdateQuestionDto updateQuestionDto,
+                                 @PathVariable final Long id) {
         final var question = questionService.updateQuestion(updateQuestionDto, id, account);
-        return VIEW_QUESTION + id;
+        return getModelAndView(question);
     }
 
     @PostMapping("/{id}/close")
-    public RedirectView closeQuestion(@SessionAttribute final SessionMemberDto account,
-                                      @PathVariable Long id){
-        questionService.closeQuestion(id, account);
-        return new RedirectView("/view/question" + id, true);
+    public ModelAndView closeQuestion(@SessionAttribute final SessionMemberDto account,
+                                      @PathVariable final Long id){
+        final var question = questionService.closeQuestion(id, account);
+        return getModelAndView(question);
     }
 
     private ModelAndView getModelAndView(final QuestionFullDto question){
         final var model = new ModelAndView("view/question");
-        model.addObject("question", question);
-        model.addObject("dto", new CreateDto());
+            model.addObject("question", question);
+            model.addObject(DTO, new CreateDto());
         return model;
     }
 }

@@ -4,7 +4,6 @@ import com.ra.course.com.stackoverflow.dto.NotificationDto;
 import com.ra.course.com.stackoverflow.dto.member.SessionMemberDto;
 import com.ra.course.com.stackoverflow.entity.Answer;
 import com.ra.course.com.stackoverflow.entity.Comment;
-import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 
 import java.util.List;

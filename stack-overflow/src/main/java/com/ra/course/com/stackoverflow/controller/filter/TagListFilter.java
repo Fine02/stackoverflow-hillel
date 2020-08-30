@@ -18,7 +18,8 @@ public class TagListFilter implements Filter {
     private final static String TAGS = "tags";
 
     @Override
-    public void doFilter(final ServletRequest request, final ServletResponse response, FilterChain chain)
+    public void doFilter(final ServletRequest request, final ServletResponse response,
+                         final FilterChain chain)
             throws IOException, ServletException {
 
         final var httpRequest = (HttpServletRequest) request;

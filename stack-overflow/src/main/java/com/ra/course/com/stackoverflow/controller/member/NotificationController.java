@@ -16,14 +16,14 @@ public class NotificationController {
     private final NotificationService noteService;
 
     @GetMapping
-    public ModelAndView viewAllNotifications(@SessionAttribute("account") final SessionMemberDto sessionMember){
+    public ModelAndView viewAllNotifications(@SessionAttribute final SessionMemberDto account){
         final var model = new ModelAndView("member/notifications");
-        model.addObject("notifications", noteService.getAllNotificationsByMember(sessionMember));
+        model.addObject("notifications", noteService.getAllNotificationsByMember(account));
         return model;
     }
 
     @GetMapping("/{id}")
-    public RedirectView getQuestionByNotification(@PathVariable("id") Long id){
+    public RedirectView getQuestionByNotification(@PathVariable final Long id){
         final var questionId = noteService.readNotificationAndGetViewedQuestionId(id);
         return new RedirectView("/view/question/" + questionId);
     }

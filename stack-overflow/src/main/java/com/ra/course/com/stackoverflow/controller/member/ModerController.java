@@ -18,21 +18,21 @@ public class ModerController {
 
     @PostMapping("/question/{questionId}/close")
     public ModelAndView closeQuestion(@SessionAttribute final SessionMemberDto account,
-                                      @PathVariable Long questionId){
+                                      @PathVariable final Long questionId){
         final var question = service.closeQuestion(questionId, account);
         return getModelAndView(question);
     }
 
     @PostMapping("/question/{questionId}/reopen")
     public ModelAndView reopenQuestion(@SessionAttribute final SessionMemberDto account,
-                                      @PathVariable Long questionId){
+                                      @PathVariable final Long questionId){
         final var question = service.reopenQuestion(questionId, account);
         return getModelAndView(question);
     }
 
     @PostMapping("/question/{questionId}/undelete")
     public ModelAndView undeleteQuestion(@SessionAttribute final SessionMemberDto account,
-                                      @PathVariable Long questionId){
+                                      @PathVariable final Long questionId){
         final var question = service.undeleteQuestion(questionId, account);
         return getModelAndView(question);
     }

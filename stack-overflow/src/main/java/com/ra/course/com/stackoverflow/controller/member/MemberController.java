@@ -2,7 +2,6 @@ package com.ra.course.com.stackoverflow.controller.member;
 
 import com.ra.course.com.stackoverflow.dto.member.SessionMemberDto;
 import com.ra.course.com.stackoverflow.dto.member.UpdateDto;
-import com.ra.course.com.stackoverflow.service.search.SearchMemberService;
 import com.ra.course.com.stackoverflow.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

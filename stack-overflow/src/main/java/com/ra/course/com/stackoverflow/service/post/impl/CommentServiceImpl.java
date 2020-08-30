@@ -27,6 +27,8 @@ public class CommentServiceImpl implements CommentService {
     private final SecurityService securityService;
     private final NotificationService noteService;
 
+    private static final String COMMENTED_NOTE = "commented";
+
 
     /**Member can add comments to any open question.**/
     @Override
@@ -44,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
 
         commentRepo.save(comment);
 
-        noteService.sendNotification(question, "commented");
+        noteService.sendNotification(question, COMMENTED_NOTE);
     }
 
 
@@ -66,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
 
         commentRepo.save(comment);
 
-        noteService.sendNotification(question, "commented");
+        noteService.sendNotification(question, COMMENTED_NOTE);
     }
 
     /**User can delete own comment, moder/admin - any**/

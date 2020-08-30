@@ -28,6 +28,7 @@ public class CommentController {
 
     }
 
+    @SuppressWarnings("PMD.ExcessiveParameterList")
     @PostMapping("/answers/{answerId}/create")
     public RedirectView createCommentToAnswer(@SessionAttribute final SessionMemberDto account,
                                               @Valid final CreateDto dto, @PathVariable final Long questionId,
