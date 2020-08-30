@@ -4,20 +4,27 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Bounty {
 
-    @EqualsAndHashCode.Include
-    private long id;
+    private Long id;
 
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private int reputation;
 
-    @NonNull
+    @ToString.Include
     private LocalDateTime expiry;
 
-    @NonNull
-    private final Long creator_id;
+    @EqualsAndHashCode.Include
+    private Long creatorId;
+
+    @EqualsAndHashCode.Include
+    private Long questionId;
 
 }

@@ -3,23 +3,25 @@ package com.ra.course.com.stackoverflow.entity;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
 
-@Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(of={"text", "member", "question"})
+@ToString(of="text")
 public class Notification {
 
-    @EqualsAndHashCode.Include
-    final private LocalDateTime createdOn;
+    private Long id;
 
-    @NonNull
-    private String content;
+    private LocalDateTime creationTime = LocalDateTime.now();
 
-    public Notification(String content) {
-        Objects.requireNonNull(content, "'content' argument must no be null");
+    private String text;
 
-        this.content = content;
-        this.createdOn = LocalDateTime.now();
-    }
+    private boolean read;
+
+    private Long question;
+    private Long answer;
+    private Long comment;
+
+    private Long member;
 }

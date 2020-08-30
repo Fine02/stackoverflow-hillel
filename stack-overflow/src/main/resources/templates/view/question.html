@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{head :: general_header(~{::title},_,~{::style})}">
+    <title>StackOverflow Question View</title>
+    <style>
+        .answer {
+            padding-left: 40px;
+        }
+
+        .comment {
+            padding-left: 60px;
+            background-color: beige;
+        }
+    </style>
+</head>
+<body>
+
+<div th:insert="${session.account} ? ~{fragments/navbar-member} : ~{fragments/navbar-nonmember}"></div>
+
+<div class="main">
+    <div class="container">
+
+        <p class="bg-danger" th:text="${text}"></p>
+
+        <div class="row">
+
+            <!--            Count content column/voting-->
+            <div class="col-lg-1">
+                <p>
+                <!--                Voting panel-->
+                <div th:insert="~{panels/vote-panel::question_vote(${question})}"></div>
+
+                <!--                Author panel-->
+                <div th:insert="~{panels/author-panel::question_buttons(${question})}"></div>
+
+                <!--                Moder panel-->
+                <div th:insert="~{panels/moder-panel::question_buttons(${question})}"></div>
+
+            </div>
+
+            <!-- Question Content Column -->
+            <div class="col-lg-7">
+
+                <!-- Title -->
+                <h1 class="mt-4" th:text="${question.getTitle()}"></h1>
+
+                <!-- Author -->
+                <p class="lead">
+                    by
+                    <a th:href="@{/view/member/{id}(id=${question.getAuthor()})}"
+                       th:text="${question.getAuthor()}"></a>
+                </p>
+
+                <hr>
+
+                <!-- Date/Time -->
+                <p th:text="'Last update: ' + ${#temporals.format(question.getUpdateTime(), 'dd-MM-yyyy HH:mm')}"></p>
+                <p th:text="'Posted: ' + ${#temporals.format(question.getCreationTime(), 'dd-MM-yyyy HH:mm')}"></p>
+
+                <hr>
+
+                <p th:text="'Status: ' + ${question.getStatus().name()}"></p>
+                <a th:each="tag : ${question.getTags()}">
+                    <a th:href="@{/search/questions(tag=${tag.getName()})}" role="button" class="btn btn-default btn-sm"
+                       th:text="${tag.getName()}"></a>
+                </a>
+                <hr>
+
+                <!-- Post Content -->
+                <p class="lead" th:text="${question.getText()}"></p>
+
+                <!-- Comments to question -->
+                <hr>
+                <div class="comment" th:each="comment : ${question.getComments()}">
+                    <div class="media-body">
+                        <p th:text="${comment.getText()} "></p>
+                        <a class="mt-0" th:href="@{/view/member/{id}(id=${comment.getAuthor()})}"
+                           th:text="'Author: ' + ${comment.getAuthor()}"></a>
+                        <a th:text="${#temporals.format(comment.getCreationTime(), 'dd-MM-yyyy HH:mm')}"></a>
+
+                        <!--                Author panel-->
+                        <div th:insert="~{panels/author-panel::comment_buttons(${question}, ${comment})}"></div>
+
+
+                        <!-- Voting a comment-->
+                        <div th:insert="~{panels/vote-panel::comment_vote(${question}, ${comment})}"></div>
+
+                    </div>
+                    <hr>
+                </div>
+
+                <!-- Comments Form to Question -->
+                <div class="card my-4" th:if="${question.getStatus().name() == 'OPEN'}">
+                    <form th:object="${dto}" th:method="post"
+                            th:action="@{/questions/{questionId}/comments/create(questionId=${question.getId()})}">
+                        <div class="form-group">
+                            <textarea class="form-control" required th:fiels="*{text}" rows="1"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-default btn-xs">ok
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                        <button type="reset" class="btn btn-default btn-xs">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
+                    </form>
+                </div>
+
+
+
+                <!-- Answers with nested comments -->
+                <div class="answer" th:each="answer : ${question.getAnswers()}">
+                    <div class="media mb-4">
+                        <div class="media-body">
+                            <h5 class="mt-0" th:href="@{/view/member/{id}(id=${answer.getAuthor()})}"
+                                th:text="'Author: ' + ${answer.getAuthor()}"></h5>
+                            <p th:text="'Posted: '  + ${#temporals.format(answer.getCreationTime(), 'dd-MM-yyyy HH:mm')}"></p>
+                            <p th:text="${answer.getText()} "></p>
+
+                            <!-- Author panel-->
+                            <div th:insert="~{panels/author-panel::answer_buttons(${question}, ${answer})}"></div>
+
+                            <!--                Moder panel-->
+                            <div th:insert="~{panels/moder-panel::answer_buttons(${question}, ${answer})}"></div>
+
+                            <!-- Voting an answer-->
+                            <div th:insert="~{panels/vote-panel::answer_vote(${question}, ${answer})}"></div>
+
+                            <hr>
+
+                            <!-- Nested comments-->
+
+                            <div class="comment" th:each="comment : ${answer.getComments()}">
+                                <div class="media-body">
+                                    <p th:text="${comment.getText()} "></p>
+                                    <a class="mt-0" th:href="@{/view/member/{id}(id=${comment.getAuthor()})}"
+                                       th:text="'Author: ' + ${comment.getAuthor()}"></a>
+                                    <a th:text="${#temporals.format(comment.getCreationTime(), 'dd-MM-yyyy HH:mm')}"></a>
+
+                                    <!-- Author panel-->
+                                    <div th:insert="~{panels/author-panel::comment_buttons(${question}, ${comment})}"></div>
+
+                                    <!--                Moder panel-->
+                                    <div th:insert="~{panels/moder-panel::comment_buttons(${question}, ${comment})}"></div>
+
+                                    <!-- Voting a comment-->
+                                    <div th:insert="~{panels/vote-panel::comment_vote(${question}, ${comment})}"></div>
+
+                                </div>
+                                <hr>
+                            </div>
+
+                            <!-- Comments Form to Answer -->
+
+                            <div class="card my-4" th:if="${question.getStatus().name() == 'OPEN'}">
+                                <form th:object="${dto}" th:method="post"
+                                        th:action="@{/questions/{questionId}/comments/answers/{answerId}/create(questionId=${question.getId()}, answerId=${answer.getId()})}">
+                                    <div class="form-group">
+                                        <textarea class="form-control" required th:field="*{text}" rows="1"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-default btn-xs">ok
+                                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                    </button>
+                                    <button type="reset" class="btn btn-default btn-xs">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+
+                <!-- Answer Form -->
+                <div class="card my-4" th:if="${question.getStatus().name() == 'OPEN'}">
+                    <h5 class="card-header">Leave an Answer:</h5>
+                    <div class="card-body">
+                        <form th:object="${dto}" th:method="post"
+                              th:action="@{/questions/{questionId}/answers/create(questionId=${question.getId()})}">
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3" required th:field="*{text}"> </textarea>
+                            </div>
+
+
+                            <button type="submit" class="btn btn-default btn-sm">ok
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            </button>
+                            <button type="reset" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <div th:insert="~{fragments/sidebar}"></div>
+
+        </div>
+    </div>
+</div>
+
+<div th:insert="~{fragments/footer}"></div>
+</body>
+</html>

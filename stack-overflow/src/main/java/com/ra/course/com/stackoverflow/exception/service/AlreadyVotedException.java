@@ -4,10 +4,7 @@ public class AlreadyVotedException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public AlreadyVotedException(final String message) {
-        super(message);
+        super(message + " is already voted");
     }
 
-    public AlreadyVotedException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
 }

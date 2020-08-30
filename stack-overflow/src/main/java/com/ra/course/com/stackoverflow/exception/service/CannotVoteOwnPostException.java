@@ -4,11 +4,8 @@ public class CannotVoteOwnPostException extends RuntimeException{
 
     private static final long serialVersionUID = 1L;
 
-    public CannotVoteOwnPostException(final String message) {
-        super(message);
+    public CannotVoteOwnPostException() {
+        super("Cannot vote own post");
     }
 
-    public CannotVoteOwnPostException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
 }

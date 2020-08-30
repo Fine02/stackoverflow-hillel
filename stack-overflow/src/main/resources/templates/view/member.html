@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{head :: general_header(~{::title},_,_)}">
+    <title>StackOverflow Member View</title>
+</head>
+<body>
+
+<div th:insert="${session.member} ? ~{fragments/navbar-member} : ~{fragments/navbar-nonmember}"></div>
+
+<div class="main">
+    <div class="container">
+
+        <p class="bg-danger" th:text="${text}"></p>
+
+        <div class="row">
+
+            <div class="col-lg-8">
+
+                <h3 th:text="'Name: ' + ${member.getName()}"></h3>
+                <p th:text="'Reputation: ' + ${member.getReputation()} "></p>
+                <p th:text="'Status: ' + ${member.getStatus()} "></p>
+                <p th:text="'Questions: ' + ${member.getQuestions()} "></p>
+                <p th:text="'Answers: ' + ${member.getAnswers()} "></p>
+                <p th:text="'Comments: ' + ${member.getComments()} "></p>
+
+<!--                Admin panel-->
+                <div th:insert="~{panels/admin-panel::user_buttons(${member})}"></div>
+
+                <a th:href="@{/search/questions(authorId=${member.getId()})}">Show all member questions</a>
+
+            </div>
+
+            <div th:insert="~{fragments/sidebar}"></div>
+
+        </div>
+    </div>
+</div>
+
+<div th:insert="~{fragments/footer}"></div>
+
+</body>
+</html>

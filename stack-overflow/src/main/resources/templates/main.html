@@ -3,36 +3,48 @@
 <head th:replace="~{head :: general_header(~{::title},_,~{::style})}">
     <title>StackOverflow.course.ra.com</title>
     <style>
-        h1.welcome{
+        h1.welcome {
             color: darkblue;
         }
     </style>
 </head>
 <body>
 
-<div th:insert="${session.memberDto} ? ~{fragments/navbar-member} : ~{fragments/navbar-nonmember}"></div>
+<div th:insert="${session.member} ? ~{fragments/navbar-member} : ~{fragments/navbar-nonmember}"></div>
 
 <div class="main">
     <div class="container">
-        <h1 class="welcome">Welcome to Stack Overflow!</h1>
-        <p>Stack Overflow is a question and answer site for professional and enthusiast programmers.
-            It is a privately held website, the flagship site of the Stack Exchange Network,
-            created in 2008 by Jeff Atwood and Joel Spolsky.
-            It features questions and answers on a wide range of topics in computer programming.
-            It was created to be a more open alternative to earlier question and answer sites such
-            as Experts-Exchange. The name for the website was chosen
-            by voting in April 2008 by readers of Coding Horror, Atwood's popular programming blog.</p>
-            <p>The website serves as a platform for users to ask and answer questions, and,
-        through membership and active participation, to vote questions and answers up or down and
-        edit questions and answers in a fashion similar to a wiki or Reddit.
-        Users of Stack Overflow can earn reputation points and "badges"; for example, a person
-                is awarded 10 reputation points for receiving an "up" vote on an answer given to a
-                question and 10 points for the "up" vote of a question, and can receive badges for
-                their valued contributions, which represents a gamification of the traditional
-                Q&A site. Users unlock new privileges with an increase in reputation like the ability
-                to vote, comment, and even edit other people's posts. All user-generated content
-            is licensed under Creative Commons Attribute-ShareAlike license, version 3.0 or 4.0 depending
-                on the date the content was contributed.</p>
+
+        <h4 th:class="bg-danger" th:text="${text}"></h4>
+
+        <div class="row">
+            <div class="col-lg-8">
+
+
+                <h1 class="welcome">Welcome to Stack Overflow!</h1>
+                <p>Stack Overflow is a question and answer site for professional and enthusiast programmers.
+                    It is a privately held website, the flagship site of the Stack Exchange Network,
+                    created in 2008 by Jeff Atwood and Joel Spolsky.
+                    It features questions and answers on a wide range of topics in computer programming.
+                    It was created to be a more open alternative to earlier question and answer sites such
+                    as Experts-Exchange. The name for the website was chosen
+                    by voting in April 2008 by readers of Coding Horror, Atwood's popular programming blog.</p>
+                <p>The website serves as a platform for users to ask and answer questions, and,
+                    through membership and active participation, to vote questions and answers up or down and
+                    edit questions and answers in a fashion similar to a wiki or Reddit.
+                    Users of Stack Overflow can earn reputation points and "badges"; for example, a person
+                    is awarded 10 reputation points for receiving an "up" vote on an answer given to a
+                    question and 10 points for the "up" vote of a question, and can receive badges for
+                    their valued contributions, which represents a gamification of the traditional
+                    Q&A site. Users unlock new privileges with an increase in reputation like the ability
+                    to vote, comment, and even edit other people's posts. All user-generated content
+                    is licensed under Creative Commons Attribute-ShareAlike license, version 3.0 or 4.0 depending
+                    on the date the content was contributed.</p>
+            </div>
+
+            <div th:insert="~{fragments/sidebar}"></div>
+
+        </div>
     </div>
 </div>
 

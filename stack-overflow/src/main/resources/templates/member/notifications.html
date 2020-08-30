@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{head :: general_header(~{::title},_,_)}">
+    <title>StackOverflow Notifications</title>
+</head>
+<body>
+
+<div th:insert=" ~{fragments/navbar-member}"></div>
+
+<div class="main">
+    <div class="container">
+
+        <h4 class="bg-warning" th:text="${text}"></h4>
+
+        <div class="row">
+
+            <div class="col-lg-8">
+
+                <h2 class="my-4">My notifications: </h2>
+
+                <hr>
+
+                <div th:each="notification : ${notifications}">
+
+                    <!-- Notification Post -->
+                    <a th:text="'Last update: ' + ${#temporals.format(notification.getCreationTime(), 'dd-MM-yyyy HH:mm')}"></a>
+                    <p></p>
+                    <a th:text="${notification.getText()}"
+                       th:href="@{/members/notifications/{id}(id=${notification.getId()})}">
+                    </a>
+                    <span th:if="${!notification.isRead()}" class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+
+                    <hr>
+                </div>
+            </div>
+
+            <div th:insert="~{fragments/sidebar}"></div>
+
+        </div>
+    </div>
+</div>
+
+<div th:insert="~{fragments/footer}"></div>
+</body>
+</html>

@@ -9,7 +9,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.ra.course.com.stackoverflow.controller.ControllerConstants.MEMBER_ATTR;
 import static org.mockito.Mockito.*;
 
 public class AuthorizationFilterTest {
@@ -28,19 +27,19 @@ public class AuthorizationFilterTest {
     }
 
     @Test
-    public void testWithOutMemberDtoAttribute() throws Exception {
-        //when
-        filter.doFilter(request, response, filterChain);
-        //then
-        verify(filterChain, never()).doFilter(request,response);
-    }
-    @Test
-    public void testWithMemberDtoAttribute() throws Exception {
+    public void testWithOutSessionAttribute() throws Exception {
         //given
-        request.getSession().setAttribute(MEMBER_ATTR, new Object());
+        request.getSession().setAttribute("account", new Object());
         //when
         filter.doFilter(request, response, filterChain);
         //then
         verify(filterChain).doFilter(request, response);
+    }
+    @Test
+    public void testWithSessionAttribute() throws Exception {
+        //when
+        filter.doFilter(request, response, filterChain);
+        //then
+        verify(filterChain, never()).doFilter(request,response);
     }
 }

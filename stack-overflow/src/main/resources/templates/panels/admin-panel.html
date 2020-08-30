@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{head :: general_header(~{::title},_,_)}">
+    <title>Admin panel</title></head>
+<body>
+<div th:fragment="user_buttons(user)">
+
+    <!--  buttons for admin-->
+    <div th:if="${session.account} !=null">
+        <div th:if="${session.account.getRole().toString()} == 'ADMIN'">
+            <form th:if="${user.getStatus().toString()} == 'ACTIVE'" method="post"
+                  th:action="@{/admin/{id}/block(id=${user.getId()})}">
+                <button class="btn btn-danger">block
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </button>
+            </form>
+            <form th:if="${user.getStatus().toString()} == 'BLOCKED'" method="post"
+                  th:action="@{/admin/{id}/unblock(id=${user.getId()})}">
+                <button class="btn btn-default">unblock
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </button>
+            </form>
+            <form th:if="${user.getRole().toString()} != 'USER'" method="post"
+                  th:action="@{/admin/{id}/user(id=${user.getId()})}">
+                <button class="btn btn-default">set user
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </button>
+            </form>
+            <form th:if="${user.getRole().toString()} != 'MODER'" method="post"
+                  th:action="@{/admin/{id}/moder(id=${user.getId()})}">
+                <button class="btn btn-default">set moder
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </button>
+            </form>
+            <form th:if="${user.getRole().toString()} != 'ADMIN'" method="post"
+                  th:action="@{/admin/{id}/admin(id=${user.getId()})}">
+                <button class="btn btn-default">set admin
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

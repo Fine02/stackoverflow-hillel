@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{head :: general_header(~{::title},_,_)}">
+    <title>Vote panels for posts</title>
+</head>
+<body>
+<div th:fragment="question_vote(question)">
+
+    <!-- Vote buttons for login members-->
+    <form th:if="${session.account} !=null" name="upvote"
+          th:action="@{/vote/up/question/{questionId}(questionId=${question.getId()})}">
+        <button type="submit" class="btn btn-default">+
+            <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+        </button>
+    </form>
+    <p>
+    <h1 th:text="${question.getVoteCount()}"></h1>
+    <p>
+    <form th:if="${session.account} !=null" name="downvote"
+          th:action="@{/vote/down/question/{questionId}(questionId=${question.getId()})}">
+        <button type="submit" class="btn btn-default">-
+            <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+        </button>
+    </form>
+
+</div>
+
+<div th:fragment="answer_vote(question, answer)">
+
+    <!-- Vote button for login users-->
+
+    <p>
+        <a th:if="${session.account} !=null"
+                th:href="@{/vote/up/question/{questionId}/answer/{answerId}(questionId=${question.getId()}, answerId=${answer.getId()})}"
+           class="btn btn-default btn-xs" role="button" aria-pressed="true">
+            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true">+</span>
+        </a>
+
+        <a th:text="${answer.getVoteCount()}"></a>
+
+        <a th:if="${session.account} !=null"
+                th:href="@{/vote/down/question/{questionId}/answer/{answerId}(questionId=${question.getId()}, answerId=${answer.getId()})}"
+           class="btn btn-default btn-xs" role="button" aria-pressed="true">
+            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true">-</span>
+        </a>
+    </p>
+
+</div>
+
+<div th:fragment="comment_vote(question, comment)">
+
+    <!-- Vote button for login users-->
+    <p>
+        <a th:if="${session.account} !=null"
+                th:href="@{/vote/up/question/{questionId}/comment/{commentId}(questionId=${question.getId()}, commentId=${comment.getId()})}"
+           class="btn btn-default btn-xs" role="button" aria-pressed="true">
+            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true">+</span>
+        </a>
+
+        <a th:text="${comment.getVoteCount()}"></a>
+
+        <a th:if="${session.account} !=null"
+                th:href="@{/vote/down/question/{questionId}/comment/{commentId}(questionId=${question.getId()}, commentId=${comment.getId()})}"
+           class="btn btn-default btn-xs" role="button" aria-pressed="true">
+            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true">-</span>
+        </a>
+    </p>
+
+</div>
+
+</body>
+</html>

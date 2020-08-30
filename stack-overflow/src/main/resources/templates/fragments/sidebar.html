@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{head :: general_header(~{::title},~{::style},_)}">
+    <title>Nav bar for member</title>
+
+    <style>
+        .tags-widget {
+            -moz-column-count: 4; /* Для Firefox */
+            -webkit-column-count: 4; /* Для Safari и Chrome */
+            column-count: 4;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar Widgets Column -->
+<div class="col-lg-4">
+
+    <!-- Profile Widget -->
+    <div class="card my-4" th:with="account=${session.account}" th:if="${session.account!=null}">
+        <h5 class="card-header" th:text="${account.getName()}"></h5>
+        <div class="card-body">
+            <ul>
+                <li><a th:href="@{/members/profile}">My profile</a></li>
+                <li><a th:href="@{/members/notifications}">My notifications</a></li>
+                <li><a th:href="@{/search/questions(authorId=${account.getId()})}">My questions</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Search Widget -->
+    <div class="card my-4">
+        <h5 class="card-header">Search question:</h5>
+        <div class="card-body">
+            <form th:action="@{/search/questions}">
+                <div class="form-group">
+                    <input type="text" class="form-control" required name="phrase" placeholder="Search for...">
+                </div>
+                <button type="submit" class="btn btn-default">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Tags Widget -->
+    <h5 class="card-header">Popular Tags: </h5>
+    <div class="tags-widget">
+        <div class="card-body" th:each="tag : ${session.tags}">
+            <a th:href="@{/search/questions(tag=${tag.getName()})}" role="button" class="btn btn-default btn-sm" th:text="${tag.toString()}"></a>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Questions Widget -->
+    <div class="card my-4" th:if="${session.member!=null and !session.member.getViewedQuestions().isEmpty()}">
+        <h5 class="card-header">Questions you was interested:</h5>
+        <div class="card-body">
+            <div th:each="question : ${session.member.getViewedQuestions().entrySet()}">
+                <a th:text="${question.value}"
+                   th:href="@{search/questions(id=${question.key})}"></a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

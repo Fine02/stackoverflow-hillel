@@ -1,25 +1,22 @@
 package com.ra.course.com.stackoverflow.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
-@Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(of = "photoPath")
+@EqualsAndHashCode(of = "photoPath")
 public class Photo {
 
-    @EqualsAndHashCode.Include
-    private final long id;
+    private Long id;
 
-    @NonNull
     private String photoPath;
 
-    @NonNull
     private LocalDateTime creationDate;
-    private final Long answerId;
-    private final Long questionId;
+    private Long answerId;
+    private Long questionId;
 }

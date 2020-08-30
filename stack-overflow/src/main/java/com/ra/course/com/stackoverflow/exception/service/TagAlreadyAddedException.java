@@ -8,7 +8,4 @@ public class TagAlreadyAddedException extends RuntimeException {
         super(message);
     }
 
-    public TagAlreadyAddedException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
 }
