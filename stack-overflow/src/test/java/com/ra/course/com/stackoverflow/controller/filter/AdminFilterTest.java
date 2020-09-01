@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-import static com.ra.course.com.stackoverflow.utils.DtoCreationUtils.getSessionMemberDto;
 import static org.mockito.Mockito.*;
 
 public class AdminFilterTest {
@@ -33,7 +32,10 @@ public class AdminFilterTest {
         response = new MockHttpServletResponse();
         chain = mock(FilterChain.class);
 
-        member = getSessionMemberDto();
+        member = new SessionMemberDto();
+            member.setId(1L);
+            member.setName("Member name");
+            member.setRole(AccountRole.USER);
     }
 
     @Test

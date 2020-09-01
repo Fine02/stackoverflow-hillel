@@ -2,6 +2,7 @@ package com.ra.course.com.stackoverflow.controller.post;
 
 import com.ra.course.com.stackoverflow.dto.member.SessionMemberDto;
 import com.ra.course.com.stackoverflow.dto.post.CreateDto;
+import com.ra.course.com.stackoverflow.entity.enums.AccountRole;
 import com.ra.course.com.stackoverflow.service.post.AnswerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 
-import static com.ra.course.com.stackoverflow.utils.DtoCreationUtils.getSessionMemberDto;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,7 +31,10 @@ public class AnswerControllerTest {
 
     @BeforeEach
     void setUp() {
-        member = getSessionMemberDto();
+        member = new SessionMemberDto();
+            member.setId(1L);
+            member.setName("Member name");
+            member.setRole(AccountRole.USER);
     }
 
     @Test

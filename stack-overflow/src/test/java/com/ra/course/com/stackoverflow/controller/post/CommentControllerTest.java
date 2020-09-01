@@ -2,6 +2,7 @@ package com.ra.course.com.stackoverflow.controller.post;
 
 import com.ra.course.com.stackoverflow.dto.member.SessionMemberDto;
 import com.ra.course.com.stackoverflow.dto.post.CreateDto;
+import com.ra.course.com.stackoverflow.entity.enums.AccountRole;
 import com.ra.course.com.stackoverflow.service.post.CommentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.ra.course.com.stackoverflow.utils.DtoCreationUtils.getSessionMemberDto;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -28,17 +28,17 @@ public class CommentControllerTest {
     private CommentService service;
 
     private SessionMemberDto member;
+    private CreateDto dto;
 
     @BeforeEach
     void setUp() {
-        member = getSessionMemberDto();
+        member = createMember();
+        dto = new CreateDto();
+            dto.setText("Text");
     }
 
     @Test
     void whenCreateCommentToQuestion() throws Exception {
-        //given
-        var createDto = new CreateDto();
-        createDto.setText("Text");
         //then
         mockMvc.perform(MockMvcRequestBuilders.post("/questions/1/comments/create")
                 .sessionAttr("account", member)
@@ -48,13 +48,10 @@ public class CommentControllerTest {
                         status().isFound(),
                         redirectedUrl("/view/question/1")
                 ));
-        verify(service).addCommentToQuestion(createDto, 1L, member);
+        verify(service).addCommentToQuestion(dto, 1L, member);
     }
     @Test
     void whenCreateCommentToAnswer() throws Exception {
-        //given
-        var createDto = new CreateDto();
-        createDto.setText("Text");
         //then
         mockMvc.perform(MockMvcRequestBuilders.post("/questions/1/comments/answers/1/create")
                 .sessionAttr("account", member)
@@ -64,7 +61,7 @@ public class CommentControllerTest {
                         status().isFound(),
                         redirectedUrl("/view/question/1")
                 ));
-        verify(service).addCommentToAnswer(createDto, 1L, member);
+        verify(service).addCommentToAnswer(dto, 1L, member);
     }
 
     @Test
@@ -78,6 +75,14 @@ public class CommentControllerTest {
                         redirectedUrl("/view/question/1")
                 ));
         verify(service).deleteComment( 1L, member);
+    }
+
+    private SessionMemberDto createMember(){
+        var member = new SessionMemberDto();
+        member.setId(1L);
+        member.setName("Member name");
+        member.setRole(AccountRole.USER);
+        return member;
     }
 }
 

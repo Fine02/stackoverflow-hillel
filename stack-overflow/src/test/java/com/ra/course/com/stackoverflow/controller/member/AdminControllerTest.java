@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.ra.course.com.stackoverflow.utils.DtoCreationUtils.getSessionMemberDto;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -31,7 +30,9 @@ public class AdminControllerTest {
 
     @BeforeEach
     void setUp() {
-        member = getSessionMemberDto();
+        member = new SessionMemberDto();
+            member.setId(1L);
+            member.setName("Member name");
             member.setRole(AccountRole.ADMIN);
     }
 

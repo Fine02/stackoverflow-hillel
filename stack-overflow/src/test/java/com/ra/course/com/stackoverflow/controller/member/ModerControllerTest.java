@@ -13,9 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.ra.course.com.stackoverflow.utils.Constants.ID;
-import static com.ra.course.com.stackoverflow.utils.DtoCreationUtils.getQuestionFullDto;
-import static com.ra.course.com.stackoverflow.utils.DtoCreationUtils.getSessionMemberDto;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -32,11 +29,20 @@ public class ModerControllerTest {
     private SessionMemberDto member;
     private QuestionFullDto question;
 
+    private final Long ID = 1L;
+
     @BeforeEach
     void setUp() {
-        member = getSessionMemberDto();
+        member = new SessionMemberDto();
+            member.setId(ID);
+            member.setName("Member name");
             member.setRole(AccountRole.MODERATOR);
-        question = getQuestionFullDto();
+
+        question = new QuestionFullDto();
+            question.setId(ID);
+            question.setTitle("Title");
+            question.setText("Text");
+            question.setAuthor(ID);
     }
 
     @Test
@@ -55,7 +61,7 @@ public class ModerControllerTest {
     }
 
     @Test
-    void whenRepoenQuestion() throws Exception {
+    void whenReopenQuestion() throws Exception {
         //given
         when(service.reopenQuestion(ID, member)).thenReturn(question);
         //then

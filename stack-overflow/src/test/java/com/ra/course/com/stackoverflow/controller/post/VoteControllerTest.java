@@ -4,6 +4,7 @@ import com.ra.course.com.stackoverflow.dto.member.SessionMemberDto;
 import com.ra.course.com.stackoverflow.entity.Answer;
 import com.ra.course.com.stackoverflow.entity.Comment;
 import com.ra.course.com.stackoverflow.entity.Question;
+import com.ra.course.com.stackoverflow.entity.enums.AccountRole;
 import com.ra.course.com.stackoverflow.exception.service.CannotVoteOwnPostException;
 import com.ra.course.com.stackoverflow.service.vote.VoteService;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.ra.course.com.stackoverflow.utils.Constants.ID;
-import static com.ra.course.com.stackoverflow.utils.DtoCreationUtils.getSessionMemberDto;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -36,9 +35,11 @@ public class VoteControllerTest {
 
     private SessionMemberDto member;
 
+    private final Long ID = 1L;
+
     @BeforeEach
     void setUp() {
-        member = getSessionMemberDto();
+        member = createMember();
     }
 
     @Test
@@ -127,5 +128,13 @@ public class VoteControllerTest {
                         redirectedUrl("/view/question/1")
                 ));
         verify(questionVoteService).upVote(ID, member);
+    }
+
+    private SessionMemberDto createMember(){
+        final var member = new SessionMemberDto();
+        member.setId(1L);
+        member.setName("Member name");
+        member.setRole(AccountRole.USER);
+        return member;
     }
 }

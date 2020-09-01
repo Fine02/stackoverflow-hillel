@@ -3,6 +3,8 @@ package com.ra.course.com.stackoverflow.controller.member;
 import com.ra.course.com.stackoverflow.dto.member.MemberDto;
 import com.ra.course.com.stackoverflow.dto.member.SessionMemberDto;
 import com.ra.course.com.stackoverflow.dto.member.UpdateDto;
+import com.ra.course.com.stackoverflow.entity.enums.AccountRole;
+import com.ra.course.com.stackoverflow.entity.enums.AccountStatus;
 import com.ra.course.com.stackoverflow.service.member.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 
+import static com.ra.course.com.stackoverflow.utils.Constants.*;
 import static com.ra.course.com.stackoverflow.utils.DtoCreationUtils.*;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
@@ -34,16 +37,22 @@ public class MemberControllerTest {
     private UpdateDto updateDto;
     private SessionMemberDto member;
 
-    private final String EMAIL = "email@gmail.com";
-    private final String PASSWORD = "Password!111";
-    private final String NAME = "Member Name";
     private final Long ID = 1L;
-    private final String EXCEPTION_MESSAGE = "Exception message";
 
     @BeforeEach
     void setUp() {
-        member = getSessionMemberDto();
-        memberDto = getMemberDto();
+        member = new SessionMemberDto();
+            member.setId(ID);
+            member.setName("Member name");
+            member.setRole(AccountRole.USER);
+
+        memberDto = new MemberDto();
+            memberDto.setId(ID);
+            memberDto.setName("Member Name");
+            memberDto.setEmail("email@gmail.com");
+            memberDto.setRole(AccountRole.USER);
+            memberDto.setStatus(AccountStatus.ACTIVE);
+
         updateDto = new UpdateDto();
             updateDto.setName("New name");
             updateDto.setPassword("New password!1");

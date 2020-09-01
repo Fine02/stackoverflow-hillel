@@ -1,6 +1,6 @@
-package com.ra.course.com.stackoverflow.controller;
+package com.ra.course.com.stackoverflow.controller.view;
 
-import com.ra.course.com.stackoverflow.service.member.MemberService;
+import com.ra.course.com.stackoverflow.dto.post.QuestionFullDto;
 import com.ra.course.com.stackoverflow.service.post.QuestionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +10,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.ra.course.com.stackoverflow.utils.DtoCreationUtils.getMemberDto;
-import static com.ra.course.com.stackoverflow.utils.DtoCreationUtils.getQuestionFullDto;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
-@WebMvcTest(ViewController.class)
-public class ViewControllerTest {
+@WebMvcTest(ViewQuestionController.class)
+public class ViewQuestionControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -25,13 +24,10 @@ public class ViewControllerTest {
     @MockBean
     private QuestionService questionService;
 
-    @MockBean
-    private MemberService memberService;
-
     @Test
     void whenViewQuestionByIdThenReturnQuestionFullDto() throws Exception {
         //given
-        var question = getQuestionFullDto();
+        final var question = getQuestion();
         when(questionService.getQuestionById(1L)).thenReturn(question);
         //then
         mockMvc.perform(MockMvcRequestBuilders.get("/view/question/1"))
@@ -43,18 +39,14 @@ public class ViewControllerTest {
                         model().attributeExists("dto")
                 ));
     }
-    @Test
-    void whenViewQuestionByIdThenReturnMemberDto() throws Exception {
-        //given
-        var member = getMemberDto();
-        when(memberService.getMemberById(1L)).thenReturn(member);
-        //then
-        mockMvc.perform(MockMvcRequestBuilders.get("/view/member/1"))
-                .andDo(print())
-                .andExpect(ResultMatcher.matchAll(
-                        status().isOk(),
-                        view().name("view/member"),
-                        model().attribute("member", member)
-                ));
+
+    private QuestionFullDto getQuestion(){
+        final var question = new QuestionFullDto();
+            question.setId(1L);
+            question.setTitle("Title");
+            question.setText("Text");
+            question.setAuthor(1L);
+        return question;
     }
 }
+

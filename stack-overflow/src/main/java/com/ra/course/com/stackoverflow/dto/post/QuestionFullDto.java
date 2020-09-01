@@ -11,27 +11,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class QuestionFullDto {
 
     private Long id;
 
+    @EqualsAndHashCode.Include
     private String title;
 
+    @EqualsAndHashCode.Include
     private String text;
 
     private int viewCount;
 
     private int voteCount;
 
-    @EqualsAndHashCode.Exclude
     private LocalDateTime creationTime = LocalDateTime.MIN;
 
-    @EqualsAndHashCode.Exclude
     private LocalDateTime updateTime = LocalDateTime.MIN;
 
+    @EqualsAndHashCode.Include
     private QuestionStatus status = QuestionStatus.OPEN;
 
+    @EqualsAndHashCode.Include
     private Long author;
 
     private BountyDto bounty;

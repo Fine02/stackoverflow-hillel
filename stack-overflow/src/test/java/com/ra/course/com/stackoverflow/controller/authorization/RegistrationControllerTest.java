@@ -1,6 +1,8 @@
 package com.ra.course.com.stackoverflow.controller.authorization;
 
 import com.ra.course.com.stackoverflow.dto.member.RegisterDto;
+import com.ra.course.com.stackoverflow.dto.member.SessionMemberDto;
+import com.ra.course.com.stackoverflow.entity.enums.AccountRole;
 import com.ra.course.com.stackoverflow.exception.service.AlreadyExistAccountException;
 import com.ra.course.com.stackoverflow.service.member.MemberService;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +16,6 @@ import org.springframework.util.MultiValueMap;
 
 import javax.servlet.http.HttpSession;
 
-import static com.ra.course.com.stackoverflow.utils.DtoCreationUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.ResultMatcher.matchAll;
@@ -37,7 +38,7 @@ public class RegistrationControllerTest {
 
     @BeforeEach
     void setUp() {
-        registerDto = getRegisterDto();
+        registerDto = new RegisterDto("Member Name", "email@gmail.com", "Password!111");
     }
 
     @Test
@@ -81,7 +82,10 @@ public class RegistrationControllerTest {
     @Test
     public void whenPostRegisterThenSetSessionAttributeAccount() throws Exception {
         //given
-        var sessionMember = getSessionMemberDto();
+        final var sessionMember = new SessionMemberDto();
+            sessionMember.setId(1L);
+            sessionMember.setName("Member name");
+            sessionMember.setRole(AccountRole.USER);
         when(service.registerMember(registerDto)).thenReturn(sessionMember);
         //when
         HttpSession session = mockMvc.perform(post("/registration")

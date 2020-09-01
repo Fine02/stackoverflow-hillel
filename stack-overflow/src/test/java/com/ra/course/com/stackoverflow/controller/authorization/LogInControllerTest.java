@@ -1,6 +1,8 @@
 package com.ra.course.com.stackoverflow.controller.authorization;
 
 import com.ra.course.com.stackoverflow.dto.member.LogInDto;
+import com.ra.course.com.stackoverflow.dto.member.SessionMemberDto;
+import com.ra.course.com.stackoverflow.entity.enums.AccountRole;
 import com.ra.course.com.stackoverflow.exception.service.LoginMemberException;
 import com.ra.course.com.stackoverflow.exception.service.WrongPasswordException;
 import com.ra.course.com.stackoverflow.service.member.MemberService;
@@ -15,7 +17,6 @@ import org.springframework.util.MultiValueMap;
 
 import javax.servlet.http.HttpSession;
 
-import static com.ra.course.com.stackoverflow.utils.DtoCreationUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.ResultMatcher.matchAll;
@@ -38,7 +39,9 @@ public class LogInControllerTest {
 
     @BeforeEach
     void setUp() {
-        logInDto =  getLogInDto();
+        logInDto = new LogInDto();
+            logInDto.setEmail("email@gmail.com");
+            logInDto.setPassword("Password!111");
     }
 
     @Test
@@ -95,10 +98,13 @@ public class LogInControllerTest {
     @Test
     public void whenPostLoginThenSetSessionAttributeAccount() throws Exception {
         //given
-        var sessionMember = getSessionMemberDto();
+        final var sessionMember = new SessionMemberDto();
+            sessionMember.setId(1L);
+            sessionMember.setName("Member name");
+            sessionMember.setRole(AccountRole.USER);
         when(service.loginMember(logInDto)).thenReturn(sessionMember);
         //when
-        HttpSession session = mockMvc.perform(post("/login")
+        final HttpSession session = mockMvc.perform(post("/login")
                 .params(validParams()))
                 .andDo(print())
                 .andExpect(matchAll(
