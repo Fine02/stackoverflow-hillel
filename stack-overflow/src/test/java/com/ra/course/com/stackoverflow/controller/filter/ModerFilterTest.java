@@ -33,7 +33,10 @@ public class ModerFilterTest {
         response = new MockHttpServletResponse();
         chain = mock(FilterChain.class);
 
-        member = getSessionMemberDto();
+        member = new SessionMemberDto();
+            member.setId(1L);
+            member.setName("Member name");
+            member.setRole(AccountRole.USER);
     }
 
     @Test

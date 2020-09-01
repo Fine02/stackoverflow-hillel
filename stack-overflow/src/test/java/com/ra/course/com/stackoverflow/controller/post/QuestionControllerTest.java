@@ -1,7 +1,10 @@
 package com.ra.course.com.stackoverflow.controller.post;
 
 import com.ra.course.com.stackoverflow.dto.member.SessionMemberDto;
+import com.ra.course.com.stackoverflow.dto.post.CreateQuestionDto;
 import com.ra.course.com.stackoverflow.dto.post.QuestionFullDto;
+import com.ra.course.com.stackoverflow.dto.post.UpdateQuestionDto;
+import com.ra.course.com.stackoverflow.entity.enums.AccountRole;
 import com.ra.course.com.stackoverflow.service.post.QuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,10 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.ra.course.com.stackoverflow.utils.DtoCreationUtils.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -33,11 +32,21 @@ public class QuestionControllerTest {
 
     private SessionMemberDto member;
     private QuestionFullDto question;
+    
+    private final Long ID = 1L;
 
     @BeforeEach
     void setUp() {
-        member = getSessionMemberDto();
-        question = getQuestionFullDto();
+        member = new SessionMemberDto();
+            member.setId(ID);
+            member.setName("Member name");
+            member.setRole(AccountRole.USER);
+
+        question = new QuestionFullDto();
+            question.setId(ID);
+            question.setTitle("Title");
+            question.setText("Text");
+            question.setAuthor(ID);
     }
 
     @Test
@@ -55,8 +64,9 @@ public class QuestionControllerTest {
     @Test
     void whenPostCreateQuestionThenReturnModelWithDto() throws Exception {
         //given
-        var dto = getCreateQuestionDto();
-            dto.setTags(new ArrayList<>());
+        final var dto = new CreateQuestionDto();
+            dto.setText("Some text");
+            dto.setTitle("Some title");
         when(service.createQuestion(dto, member)).thenReturn(question);
         //then
         mockMvc.perform(post("/questions/create")
@@ -74,7 +84,7 @@ public class QuestionControllerTest {
     @Test
     void whenDeleteQuestion() throws Exception {
         //given
-        when(service.deleteQuestion(1L, member)).thenReturn(question);
+        when(service.deleteQuestion(ID, member)).thenReturn(question);
         //then
         mockMvc.perform(post("/questions/1/delete")
             .sessionAttr("account", member))
@@ -101,8 +111,10 @@ public class QuestionControllerTest {
     @Test
     void whenPostUpdateQuestionThenReturnModelWithDto() throws Exception {
         //given
-        var dto = getUpdateQuestionDto();
-        when(service.updateQuestion(dto,1L, member)).thenReturn(question);
+        final var dto = new UpdateQuestionDto();
+            dto.setText("New text");
+            dto.setTitle("New title");
+        when(service.updateQuestion(dto,ID, member)).thenReturn(question);
         //then
         mockMvc.perform(post("/questions/1/update")
                 .sessionAttr("account", member)
@@ -120,7 +132,7 @@ public class QuestionControllerTest {
     @Test
     void whenCloseQuestion() throws Exception {
         //given
-        when(service.closeQuestion(1L, member)).thenReturn(question);
+        when(service.closeQuestion(ID, member)).thenReturn(question);
         //then
         mockMvc.perform(post("/questions/1/close")
                 .sessionAttr("account", member))
@@ -131,4 +143,5 @@ public class QuestionControllerTest {
                         view().name("view/question")
                 ));
     }
+
 }

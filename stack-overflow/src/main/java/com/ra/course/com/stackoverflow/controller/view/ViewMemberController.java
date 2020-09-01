@@ -1,4 +1,4 @@
-package com.ra.course.com.stackoverflow.controller;
+package com.ra.course.com.stackoverflow.controller.view;
 
 import com.ra.course.com.stackoverflow.dto.post.CreateDto;
 import com.ra.course.com.stackoverflow.service.member.MemberService;
@@ -12,24 +12,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 @AllArgsConstructor
 @Controller
-@RequestMapping("/view")
-public class ViewController {
+@RequestMapping("/view/member")
+public class ViewMemberController {
 
-    private final QuestionService questionService;
     private final MemberService memberService;
 
-
-    @GetMapping("/question/{id}")
-    public ModelAndView questionView (@PathVariable final Long id){
-        final var question = questionService.getQuestionById(id);
-
-        final var model =  new ModelAndView("view/question");
-            model.addObject("question", question);
-            model.addObject("dto", new CreateDto());
-        return model;
-    }
-
-    @GetMapping("/member/{id}")
+    @GetMapping("/{id}")
     public ModelAndView memberView(@PathVariable final Long id) {
         final var member = memberService.getMemberById(id);
 
