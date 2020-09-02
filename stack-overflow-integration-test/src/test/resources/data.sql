@@ -73,3 +73,10 @@ INSERT INTO question_member_question_closing_remark (question_id, account_id, cl
 VALUES (2, 2, 'offtopic', true, false);
 INSERT INTO question_member_question_closing_remark (question_id, account_id, closing_remark, marked_for_closing, marked_for_deleting)
 VALUES (3, 3, 'duplicate', true, true);
+
+INSERT INTO notification (created_on, content)
+VALUES ('2020-03-19 13:32:37', '1,1,0,0,Your question was created,true');
+INSERT INTO notification (created_on, content)
+VALUES ('2020-08-03 17:27:37', '1,1,0,0,Your question was voting up,false');
+INSERT INTO notification (created_on, content)
+VALUES ('2020-03-19 13:55:14', '2,0,2,0,Your answer was created,false');

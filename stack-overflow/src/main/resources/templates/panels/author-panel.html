@@ -34,12 +34,12 @@
     <!-- button for author-->
     <div th:if="${session.account} !=null" >
         <div th:if="${session.account.getId()} == ${answer.getAuthor()}">
-            <form method="post" th:action="@{questions/{questionId}/answers/{id}/delete(questionId=${question.getId()}, id=${answer.getId()})}">
+            <form method="post" th:action="@{/questions/{questionId}/answers/{id}/delete(questionId=${question.getId()}, id=${answer.getId()})}">
                 <button class="btn btn-danger">Delete
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
             </form>
-            <form method="post" th:action="@{questions/{questionId}/answers/{id}/accept(questionId=${question.getId()}, id=${answer.getId()})}">
+            <form method="post" th:action="@{/questions/{questionId}/answers/{id}/accept(questionId=${question.getId()}, id=${answer.getId()})}">
                 <button class="btn btn-danger">accept
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>

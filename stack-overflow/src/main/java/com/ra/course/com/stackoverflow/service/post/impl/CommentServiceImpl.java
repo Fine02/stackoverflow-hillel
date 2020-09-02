@@ -28,6 +28,7 @@ public class CommentServiceImpl implements CommentService {
     private final NotificationService noteService;
 
     private static final String COMMENTED_NOTE = "commented";
+    private static final String CREATED_NOTE = "created";
 
 
     /**Member can add comments to any open question.**/
@@ -44,8 +45,9 @@ public class CommentServiceImpl implements CommentService {
             comment.setQuestion(question.getId());
             comment.setAuthor(member.getId());
 
-        commentRepo.save(comment);
+        final var savedComment = commentRepo.save(comment);
 
+        noteService.sendNotification(savedComment, CREATED_NOTE);
         noteService.sendNotification(question, COMMENTED_NOTE);
     }
 
@@ -66,8 +68,9 @@ public class CommentServiceImpl implements CommentService {
             comment.setAnswer(answer.getId());
             comment.setAuthor(member.getId());
 
-        commentRepo.save(comment);
+        final var savedComment = commentRepo.save(comment);
 
+        noteService.sendNotification(savedComment, CREATED_NOTE);
         noteService.sendNotification(question, COMMENTED_NOTE);
     }
 

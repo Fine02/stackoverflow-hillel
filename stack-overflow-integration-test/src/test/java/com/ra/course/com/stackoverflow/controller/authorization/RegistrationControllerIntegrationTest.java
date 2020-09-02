@@ -52,7 +52,7 @@ public class RegistrationControllerIntegrationTest {
     }
 
     @Test
-    @Rollback(value = false)
+    @Rollback
     @Transactional
     public void whenPostRegisterThenSetSessionAttributeAccount() throws Exception {
 

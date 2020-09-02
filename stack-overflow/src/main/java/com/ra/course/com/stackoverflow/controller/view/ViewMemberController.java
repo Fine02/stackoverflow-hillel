@@ -1,8 +1,6 @@
 package com.ra.course.com.stackoverflow.controller.view;
 
-import com.ra.course.com.stackoverflow.dto.post.CreateDto;
 import com.ra.course.com.stackoverflow.service.member.MemberService;
-import com.ra.course.com.stackoverflow.service.post.QuestionService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

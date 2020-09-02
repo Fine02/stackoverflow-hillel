@@ -41,9 +41,9 @@ public class AnswerServiceImpl implements AnswerService {
             answer.setQuestion(question.getId());
             answer.setAuthor(member.getId());
 
-        answerData.save(answer);
+        final var savedAnswer = answerData.save(answer);
 
-        noteService.sendNotification(answer, "created");
+        noteService.sendNotification(savedAnswer, "created");
     }
 
     /*User can accepted the answer to his own question. Moder/admin - any*/
