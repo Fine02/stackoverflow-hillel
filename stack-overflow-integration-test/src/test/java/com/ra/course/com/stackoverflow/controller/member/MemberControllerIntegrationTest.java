@@ -14,7 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.ResultMatcher.matchAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -53,6 +53,7 @@ public class MemberControllerIntegrationTest {
     @Transactional
     public void whenDeleteAccount() throws Exception {
 
+        //delete account
         mockMvc.perform(post("/members/delete")
                 .param("currentPassword", "password1")
                 .sessionAttr("account", member))
@@ -60,6 +61,14 @@ public class MemberControllerIntegrationTest {
                 .andExpect(matchAll(
                         status().isFound(),
                         redirectedUrl("/members/logout")));
+
+        //check deleting
+        memberDto.setStatus(AccountStatus.ARCHIVED);
+
+        var member = (MemberDto) mockMvc.perform(get("/view/member/1"))
+                .andReturn().getRequest().getAttribute("member");
+
+        assertEquals(member, memberDto);
     }
 
     @Test
@@ -80,6 +89,7 @@ public class MemberControllerIntegrationTest {
     @Transactional
     public void whenUpdateAccount() throws Exception {
 
+        //update account
         mockMvc.perform(post("/members/update")
                 .param("name", "New name")
                 .param("password", "New password!1")
@@ -90,12 +100,20 @@ public class MemberControllerIntegrationTest {
                         status().isFound(),
                         redirectedUrl("/members/logout")
                 ));
+
+        //check updating
+        memberDto.setName("New name");
+
+        var member = (MemberDto) mockMvc.perform(get("/view/member/1"))
+                .andReturn().getRequest().getAttribute("member");
+
+        assertEquals(member, memberDto);
     }
 
     @Test
     public void whenLogOutThenReturnMainTemplate() throws Exception {
 
-        final var request = mockMvc.perform(get("/members/logout")
+        var request = mockMvc.perform(get("/members/logout")
                 .sessionAttr("account", member))
                 .andDo(print())
                 .andExpect(matchAll(

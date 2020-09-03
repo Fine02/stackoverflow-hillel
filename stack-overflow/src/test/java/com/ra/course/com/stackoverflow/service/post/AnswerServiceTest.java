@@ -61,7 +61,7 @@ public class AnswerServiceTest {
     @Test
     void whenAddAnswer() {
         //given
-        answer.setId(null);
+        when(answerData.save(answer)).thenReturn(answer);
         when(securityService.checkStatusAndReturnMember(sessionMemberDto)).thenReturn(member);
         //when
         service.addAnswer(createDto, ID, sessionMemberDto);
