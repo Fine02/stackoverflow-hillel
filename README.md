@@ -18,7 +18,7 @@ At the moment, the project is under development.
 * **Further:**
   * Rest
   * Angular
-  * Spring Secyrity
+  * Spring Security
   * AWS
 
 ### Requirements and Goals of the System ###
