@@ -1,196 +1,126 @@
 package com.ra.course.com.stackoverflow.service.system;
 
-import com.ra.course.com.stackoverflow.entity.Account;
 import com.ra.course.com.stackoverflow.entity.Member;
 import com.ra.course.com.stackoverflow.entity.Question;
 import com.ra.course.com.stackoverflow.entity.enums.Badge;
-import com.ra.course.com.stackoverflow.entity.enums.QuestionClosingRemark;
-import com.ra.course.com.stackoverflow.entity.enums.QuestionStatus;
 import com.ra.course.com.stackoverflow.repository.MemberRepository;
+import com.ra.course.com.stackoverflow.service.RepositoryUtils;
+import com.ra.course.com.stackoverflow.service.system.impl.QuestionScoreBadgeAwarder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
+import static com.ra.course.com.stackoverflow.utils.Constants.ID;
+import static com.ra.course.com.stackoverflow.utils.EntityCreationUtil.getMember;
+import static com.ra.course.com.stackoverflow.utils.EntityCreationUtil.getQuestion;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class QuestionScoreBadgeAwarderTest {
-    private BadgeAwardService<Question> badgeAwardService;
-    private Set<Badge> expectedBadges;
-    private Member author;
 
-    private static final int SCR_FOR_STDNT_BDG = 1;
-    private static final int SCR_FOR_NICE_BDG = 10;
-    private static final int SCR_FOR_GOOD_BDG = 25;
-    private static final int SCR_FOR_GREAT_BDG = 100;
+    private BadgeAwardService<Question> badgeAwardService;
+
+    private final MemberRepository memberRepository = mock(MemberRepository.class);
+    private final RepositoryUtils utils = mock(RepositoryUtils.class);
+
+    private Question question;
+    private Member member;
 
     @BeforeEach
     void setUp() {
-        var mockedMemberRepository = mock(MemberRepository.class);
-        badgeAwardService = new QuestionScoreBadgeAwarder(mockedMemberRepository);
+        badgeAwardService = new QuestionScoreBadgeAwarder(memberRepository, utils);
 
-        author = setUpMemberBuilder(1L).build();
-        when(mockedMemberRepository.findById(1L)).thenReturn(Optional.of(author));
-        expectedBadges = new HashSet<>();
-        expectedBadges.add(Badge.STUDENT);
-        expectedBadges.add(Badge.NICE_QUESTION);
-        expectedBadges.add(Badge.GOOD_QUESTION);
-        expectedBadges.add(Badge.GREAT_QUESTION);
+        question = getQuestion();
+        member = getMember();
+
+        when(utils.getMemberFromDB(ID)).thenReturn(member);
+    }
+
+
+    @Test
+    public void whenQuestionWithLessThanStudentScorePassedThenAuthorShouldNotGetBadge() {
+        //when
+        var result = badgeAwardService.awardMember(question);
+        //then
+        assertTrue(result.getQuestionBadges().isEmpty());
+    }
+
+    @Test
+    public void whenQuestionWithMoreThenFirstScorePassedThenAuthorShouldGetStudentBadge() {
+        //given
+        question.setVoteCount(1);
+        var expectedMap = Map.of(Badge.STUDENT, Set.of(question));
+        //when
+        var result = badgeAwardService.awardMember(question);
+        //then
+        assertThat(expectedMap).containsExactlyInAnyOrderEntriesOf(result.getQuestionBadges());
+    }
+
+    @Test
+    public void whenQuestionWithMoreThenSecondScorePassedThenAuthorShouldGetNiceQuestionBadge() {
+        //given
+        question.setVoteCount(10);
+        var expectedMap = Map.of(Badge.STUDENT, Set.of(question),
+                Badge.NICE_QUESTION, Set.of(question));
+        //when
+        var result = badgeAwardService.awardMember(question);
+        //then
+        assertThat(expectedMap).containsExactlyInAnyOrderEntriesOf(result.getQuestionBadges());
+    }
+
+    @Test
+    public void whenQuestionWithMoreThanThirdScorePassedThenAuthorShouldGetGoodQuestionBadge() {
+        //given
+        question.setVoteCount(25);
+        var expectedMap = Map.of(Badge.STUDENT, Set.of(question),
+                Badge.NICE_QUESTION, Set.of(question),
+                Badge.GOOD_QUESTION,Set.of(question));
+        //when
+        var result = badgeAwardService.awardMember(question);
+        //then
+        assertThat(expectedMap).containsExactlyInAnyOrderEntriesOf(result.getQuestionBadges());
     }
 
     @Test
     public void whenQuestionWithMoreThanGreatScorePassedThenAuthorShouldGetFourBadges() {
         //given
-        Question givenQuestion = setUpQuestionBuilder(1L, author)
-                .voteCount(Integer.MAX_VALUE)
-                .build();
-
-
-        Question expectedQuestion = setUpQuestionBuilder(1L, author)
-                .voteCount(Integer.MAX_VALUE)
-                .build();
-
-        Map<Badge, Set<Question>> actualBadges = author.getQuestionBadges();
-
+        question.setVoteCount(Integer.MAX_VALUE);
+        var expectedMap = Map.of(Badge.STUDENT, Set.of(question),
+                Badge.NICE_QUESTION, Set.of(question),
+                Badge.GOOD_QUESTION,Set.of(question),
+                Badge.GREAT_QUESTION, Set.of(question));
         //when
-        badgeAwardService.awardMember(givenQuestion);
-
+        var result = badgeAwardService.awardMember(question);
         //then
-        assertEquals(4, actualBadges.size());
-
-        for (Badge expectedBadge : expectedBadges) {
-            assertTrue(actualBadges.get(expectedBadge).contains(expectedQuestion));
-        }
+        assertThat(expectedMap).containsExactlyInAnyOrderEntriesOf(result.getQuestionBadges());
     }
-
-
     @Test
-    public void whenQuestionWithLessThanStudentScorePassedThenAuthorShouldGetOnlyStudentBadge() {
+    public void whenQuestionWithMoreThanGreatScorePassedThenAuthorWithAnotherBadgesShouldGetMoreFourBadges() {
         //given
-        Question givenQuestion = setUpQuestionBuilder(1L, author)
-                .voteCount(SCR_FOR_STDNT_BDG - 1)
-                .build();
+        var questionFirst = getQuestion();
+            questionFirst.setText("Another question");
+        member.setQuestionBadges(new HashMap<>(Map.of(
+                Badge.STUDENT, new HashSet<>(Set.of(questionFirst)),
+                Badge.NICE_QUESTION, new HashSet<>(Set.of(questionFirst)),
+                Badge.GOOD_QUESTION, new HashSet<>(Set.of(questionFirst)),
+                Badge.GREAT_QUESTION, new HashSet<>(Set.of(questionFirst)))));
 
+        question.setVoteCount(Integer.MAX_VALUE);
+
+        var expectedMap = Map.of(Badge.STUDENT, Set.of(question, questionFirst),
+                Badge.NICE_QUESTION, Set.of(question, questionFirst),
+                Badge.GOOD_QUESTION,Set.of(question, questionFirst),
+                Badge.GREAT_QUESTION, Set.of(question, questionFirst));
         //when
-        badgeAwardService.awardMember(givenQuestion);
-
+        var result = badgeAwardService.awardMember(question);
         //then
-        assertNull(author.getQuestionBadges().get(Badge.STUDENT));
+        assertThat(expectedMap).containsExactlyInAnyOrderEntriesOf(result.getQuestionBadges());
     }
 
-    @Test
-    public void whenQuestionWithLessThanNiceScorePassedThenAuthorShouldGetOneBadge() {
-        //given
-        Badge studentBadge = Badge.STUDENT;
-        Badge niceQuestionBadge = Badge.NICE_QUESTION;
-
-        Question givenQuestion = setUpQuestionBuilder(1L, author)
-                .voteCount(SCR_FOR_NICE_BDG - 1)
-                .build();
-
-        Question expectedQuestion = setUpQuestionBuilder(1L, author)
-                .voteCount(SCR_FOR_NICE_BDG - 1)
-                .build();
-
-        //when
-        badgeAwardService.awardMember(givenQuestion);
-
-        //then
-        assertNull(author.getQuestionBadges().get(niceQuestionBadge));
-
-        assertEquals(1, author.getQuestionBadges().size());
-
-        assertTrue(author.getQuestionBadges().get(studentBadge).contains(expectedQuestion));
-    }
-
-
-    @Test
-    public void whenQuestionWithLessThanGoodScorePassedThenAuthorShouldGetTwoBadges() {
-        //given
-        expectedBadges.remove(Badge.GREAT_QUESTION);
-        expectedBadges.remove(Badge.GOOD_QUESTION);
-
-        Question givenQuestion = setUpQuestionBuilder(1L, author)
-                .voteCount(SCR_FOR_GOOD_BDG - 1)
-                .build();
-
-        Question expectedQuestion = setUpQuestionBuilder(1L, author)
-                .voteCount(SCR_FOR_GOOD_BDG - 1)
-                .build();
-
-        Map<Badge, Set<Question>> actualBadges = author.getQuestionBadges();
-
-        //when
-        badgeAwardService.awardMember(givenQuestion);
-
-        //then
-        assertNull(actualBadges.get(Badge.GOOD_QUESTION));
-
-        assertEquals(2, actualBadges.size());
-
-        for (Badge expectedBadge : expectedBadges) {
-            assertTrue(actualBadges.get(expectedBadge).contains(expectedQuestion));
-        }
-    }
-
-    @Test
-    public void whenQuestionWithLessThanGreatScorePassedThenAuthorShouldGetThreeBadges() {
-        //given
-        expectedBadges.remove(Badge.GREAT_QUESTION);
-
-        Question givenQuestion = setUpQuestionBuilder(1L, author)
-                .voteCount(SCR_FOR_GREAT_BDG - 1)
-                .build();
-
-        Question expectedQuestion = setUpQuestionBuilder(1L, author)
-                .voteCount(SCR_FOR_GREAT_BDG - 1)
-                .build();
-
-        Map<Badge, Set<Question>> actualBadges = author.getQuestionBadges();
-
-        //when
-        badgeAwardService.awardMember(givenQuestion);
-
-        //then
-        assertNull(actualBadges.get(Badge.GREAT_QUESTION));
-
-        assertEquals(3, actualBadges.size());
-
-        for (Badge expectedBadge : expectedBadges) {
-            assertTrue(actualBadges.get(expectedBadge).contains(expectedQuestion));
-        }
-    }
-
-    @Test
-    public void whenNullArgumentPassedThenThrowNpe() {
-        assertThrows(NullPointerException.class, () -> badgeAwardService.awardMember(null));
-    }
-
-    private Member.MemberBuilder<?, ?> setUpMemberBuilder(long id) {
-        return Member.builder()
-                .account(Account.builder()
-                        .id(1L)
-                        .name("Test")
-                        .password("test12345")
-                        .email("test@gmail.com")
-                        .build());
-    }
-
-    private Question.QuestionBuilder<?, ?> setUpQuestionBuilder(long id, Member author) {
-        return Question.builder()
-                .id(id)
-                .title("test")
-                .authorId(author.getAccount().getId())
-                .description("Some description")
-                .creationTime(LocalDateTime.now())
-                .updateTime(LocalDateTime.now())
-                .status(QuestionStatus.OPEN)
-                .closingRemark(QuestionClosingRemark.NOT_MARKED_FOR_CLOSING);
-    }
 }

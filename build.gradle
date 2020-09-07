@@ -35,8 +35,10 @@ configure(subprojects) { project ->
     }
 
     dependencies {
-        compile 'org.springframework.boot:spring-boot-starter'
+        compile 'org.springframework.boot:spring-boot-starter-web'
         testCompile 'org.springframework.boot:spring-boot-starter-test'
+        compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
+        compile hibernate.validator
     }
 }
 
@@ -81,6 +83,9 @@ project(':stack-overflow') {
         compileOnly utils.lombok
         annotationProcessor utils.lombok
         compile 'org.springframework.boot:spring-boot-starter-jooq'
+        implementation 'org.mapstruct:mapstruct:1.3.1.Final'
+        annotationProcessor 'org.mapstruct:mapstruct-processor:1.3.1.Final'
+        compile db.postgres
     }
 }
 project(':stack-overflow-integration-test') {

@@ -23,4 +23,7 @@ public interface QuestionRepository  {
     List<Question> findByTitle(String searchPhrase);
 
     List<Question> findByTitleAndTag(String searchPhrase, Tag tag);
+
+    void addTagToQuestion(Tag tag, Question question);
+
 }

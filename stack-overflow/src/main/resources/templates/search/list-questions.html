@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{head :: general_header(~{::title},_,_)}">
+    <title>StackOverflow Questions View</title>
+</head>
+<body>
+
+<div th:insert="${session.member} ? ~{fragments/navbar-member} : ~{fragments/navbar-nonmember}"></div>
+
+<div class="main">
+    <div class="container">
+
+        <h4 class="bg-warning" th:text="${text}"></h4>
+
+        <div class="row">
+
+            <div class="col-lg-8">
+
+                <h2 class="my-4">Search result
+                    <small>by
+                        <div th:each="search : ${searchBy}">
+                            <b><a th:text="${search}"> </a></b>
+                        </div>
+                    </small>
+                </h2>
+
+                <hr>
+
+                <div th:each="question : ${questions}">
+
+                    <!-- Question Post -->
+
+                    <!-- Title -->
+                    <h3 class="mt-4" >
+                        <a th:text="${question.getTitle()}" th:href="@{/view/question/{id}(id=${question.getId()})}">
+                        </a></h3>
+
+                    <!-- Author/Date/Time -->
+                    <p class="lead">
+                        by <a th:href="@{/view/member/{id}(id=${question.getAuthor()})}"
+                              th:text="${question.getAuthor()}"></a>
+                        <a th:text="'Last update: ' + ${#temporals.format(question.getUpdateTime(), 'dd-MM-yyyy HH:mm')}"></a>
+                    </p>
+
+                    <p th:text="'Status: ' + ${question.getStatus().name()}">
+                        <a th:each="tag : ${question.getTags()}">
+                            <a th:href="@{/search/questions(tag=${tag.getName()})}" role="button"
+                               class="btn btn-default btn-sm" th:text="${tag.getName()}"></a>
+                        </a>
+                    </p>
+                    <hr>
+
+                    <!-- Post Content -->
+                    <p class="lead" th:text="${question.getText()}"></p>
+
+                    <hr>
+
+                </div>
+            </div>
+
+            <div th:insert="~{fragments/sidebar}"></div>
+
+        </div>
+    </div>
+</div>
+
+<div th:insert="~{fragments/footer}"></div>
+</body>
+</html>

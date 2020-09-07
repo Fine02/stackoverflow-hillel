@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{head :: general_header(~{::title},_,_)}">
+    <title>StackOverflow Question Create</title>
+</head>
+<body>
+
+<div th:insert="~{fragments/navbar-member}"></div>
+
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+
+                <h4 th:class="bg-danger" th:text="${text}"></h4>
+
+                <h3 class="h3">Create new question</h3>
+
+                <form th:object="${dto}" method="post">
+
+                    <p>Title: </p>
+                    <p><label>
+                        <input type="text" placeholder="Enter title" required th:field="*{title}"/>
+                        <br><span class="bg-warning" th:text="${titleError}"></span>
+                    </label>
+
+                    <p>Description: </p>
+                    <p><label>
+                        <textarea class="form-control" rows="5" required th:field="*{text}"> </textarea>
+                        <br><span class=" bg-warning" th:text="${textError}"></span>
+                    </label>
+
+                    <p>Tags: </p>
+                    <p><label>
+                        <select multiple th:field="*{tags}" size="5">
+                            <option th:each="tag : ${session.tags}" th:value="${tag.getName()}" th:text="${tag.getName()}">
+                            </option>
+                        </select>
+                    </label>
+
+                    <p>
+                        <button type="submit" class="btn btn-default"> Ok
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                        <button type="reset" class="btn btn-default">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
+
+                </form>
+
+            </div>
+
+            <div th:insert="~{fragments/sidebar}"></div>
+
+        </div>
+    </div>
+</div>
+
+<div th:insert="~{fragments/footer}"></div>
+
+</body>
+</html>

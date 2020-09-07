@@ -2,7 +2,7 @@ package com.ra.course.com.stackoverflow.repository;
 
 import com.ra.course.com.stackoverflow.entity.Bounty;
 import com.ra.course.com.stackoverflow.entity.jooq.tables.records.BountyRecord;
-import com.ra.course.com.stackoverflow.repository.impl.BountyRepositoryImpl;
+import com.ra.course.com.stackoverflow.repository.impl.BountyRepositoryJooqImpl;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.tools.jdbc.MockConnection;
@@ -15,70 +15,96 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static com.ra.course.com.stackoverflow.entity.jooq.tables.BountyTable.BOUNTY_TABLE;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
+import static com.ra.course.com.stackoverflow.utils.Constants.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BountyRepositoryTest {
-    private static BountyRepository bountyRepository;
+    private static BountyRepository data;
     private Bounty bounty;
 
     @BeforeAll
     static void beforeAll() {
-        var provider = new BountyProvider();
-        var connection = new MockConnection(provider);
-        var dslContext = DSL.using(connection, SQLDialect.H2);
-        bountyRepository = new BountyRepositoryImpl(dslContext);
+        // Initialise data provider
+        // Pass the mock connection to a jOOQ DSLContext
+        var dslContext = DSL.using(new MockConnection(new BountyMockProvider()), SQLDialect.H2);
+
+        // Initialise BountyRepositoryJooqImpl with mocked DSL
+        data = new BountyRepositoryJooqImpl(dslContext);
     }
 
     @BeforeEach
     void setUp() {
-        bounty = new Bounty(1L, 10, LocalDateTime.MIN, 3L);
+        bounty = new Bounty();
+            bounty.setId(1L);
+            bounty.setReputation(1);
+            bounty.setExpiry(LocalDateTime.MIN);
+            bounty.setCreatorId(102L);
     }
 
     @Test
-    public void shouldSaveBounty() {
-        var bountyFromDb = bountyRepository.save(bounty);
-
-        assertThat(bountyFromDb.getId()).isGreaterThan(0);
+    public void whenBountySaveToDBThenReturnBountyWithId() {
+        //given
+        bounty.setId(null);
+        //when
+        var result = data.save(bounty);
+        //then
+        assertNotNull(result.getId());
     }
 
     @Test
-    public void shouldFindById() {
-        var bountyFromDb = bountyRepository.findById(1);
-
-        assertThat(bountyFromDb.get().getId()).isEqualTo(1);
+    public void whenFindBountyByIdThenReturnOptionalOfBounty() {
+        //when
+        var result = data.findById(ID);
+        //then
+        assertEquals(Optional.of(bounty), result);
     }
 
     @Test
-    public void shouldReturnEmptyIfBountyNotFound() {
-        assertThat(bountyRepository.findById(2L)).isEmpty();
+    public void whenFindBountyByIdAndNoSuchBountyThenReturnOptionalEmpty() {
+        //when
+        var result = data.findById(555L);
+        //then
+        assertTrue(result.isEmpty());
     }
 
     @Test
-    public void whenCommentDelete() {
-        assertThatCode(() -> bountyRepository.deleteById(3L)).doesNotThrowAnyException();
+    public void whenBountyDelete() {
+        //given
+        bounty.setId(555L);
+        //when
+        data.deleteById(555L);
+        var result = data.findById(555L);
+        //then
+        assertTrue(result.isEmpty());
     }
 }
 
-class BountyProvider implements MockDataProvider {
+class BountyMockProvider implements MockDataProvider {
+
     @Override
     public MockResult[] execute(MockExecuteContext ctx) {
+
+        //DSLContext need to create org.jooq.Result and org.jooq.Record objects
         var dslContext = DSL.using(SQLDialect.H2);
         var mock = new MockResult[1];
+
+        // The execute context contains SQL string(s), bind values, and other meta-data
         var sql = ctx.sql().toUpperCase();
         var bindings = ctx.bindings();
+
+        //Results for mock
         var result = dslContext.newResult(BOUNTY_TABLE);
         var record1 = new BountyRecord(1L, 1, Timestamp.valueOf(LocalDateTime.MIN), 102L);
+
+        //Stipulations for returning different results
         if (sql.startsWith("INSERT") || (sql.startsWith("SELECT") && bindings[0].equals(1L))) {
             result.add(record1);
             mock[0] = new MockResult(1, result);
-        } else if (sql.startsWith("DELETE") ||
-                   (sql.startsWith("SELECT") && bindings[0].equals(2L)) ||
-                   (sql.startsWith("SELECT") && bindings[0].equals(3L))) {
+        } else  {
             mock[0] = new MockResult(0, result);
-
         }
         return mock;
     }

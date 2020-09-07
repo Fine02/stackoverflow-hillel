@@ -1,33 +1,28 @@
 package com.ra.course.com.stackoverflow.entity;
 
+import com.ra.course.com.stackoverflow.entity.enums.AccountRole;
 import com.ra.course.com.stackoverflow.entity.enums.AccountStatus;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@SuperBuilder
-@Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = {"name", "email", "role", "status"})
 public class Account {
 
-    @EqualsAndHashCode.Include
-    final private long id;
+    private Long id;
 
-    @NonNull
-    private String password;
-
-    @NonNull
-    @Builder.Default
-    private AccountStatus status = AccountStatus.ACTIVE;
-
-    @NonNull
-    private String name;
-
-    @NonNull
     private String email;
 
-    @Builder.Default
-    private int reputation = 0;
+    private String name;
+
+    private String password;
+
+    private AccountRole role = AccountRole.USER;
+
+    private AccountStatus status = AccountStatus.ACTIVE;
+
+    private int reputation;
 }

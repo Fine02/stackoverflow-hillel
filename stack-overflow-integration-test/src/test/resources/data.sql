@@ -18,14 +18,14 @@ INSERT INTO  question (title, description, view_count, vote_count, creation_time
 VALUES('Just question title', 'Just question description', 11, 1, '2020-03-15 10:30:22', '2020-03-13 11:30:22', 'on_hold', 'too_broad', 3, 1);
 
 INSERT INTO  answer (answer_text, accepted, vote_count, flag_count, creation_date, author_id, question_id)
-VALUES('Some answer text', true, 3, 5, '2020-03-19 13:32:37', 1, 1);
+VALUES('Some answer text', false, 3, 5, '2020-03-19 13:32:37', 1, 1);
 INSERT INTO  answer (answer_text, accepted, vote_count, flag_count, creation_date, author_id, question_id)
 VALUES('Another answer text', false, 2, 4, '2020-03-19 14:55:14', 2, 2);
 INSERT INTO  answer (answer_text, accepted, vote_count, flag_count, creation_date, author_id, question_id)
 VALUES('Just answer text', false, 0, 0, '2020-03-15 10:30:22', 3, 3);
 
 INSERT INTO  comment (comment_text, creation_date, vote_count, author_id, question_id)
-VALUES('Some comment text', '2020-03-19 13:32:37', 3, 3, 1);
+VALUES('Some comment text', '2020-03-19 13:32:37', 3, 1, 1);
 INSERT INTO  comment (comment_text, creation_date, vote_count, author_id, answer_id)
 VALUES('Another comment text', '2020-03-19 14:55:14', 2,1, 2);
 INSERT INTO  comment (comment_text, creation_date, vote_count, author_id, answer_id)
@@ -73,3 +73,10 @@ INSERT INTO question_member_question_closing_remark (question_id, account_id, cl
 VALUES (2, 2, 'offtopic', true, false);
 INSERT INTO question_member_question_closing_remark (question_id, account_id, closing_remark, marked_for_closing, marked_for_deleting)
 VALUES (3, 3, 'duplicate', true, true);
+
+INSERT INTO notification (created_on, content)
+VALUES ('2020-03-19 13:32:37', '1,1,0,0,Your question was created,true');
+INSERT INTO notification (created_on, content)
+VALUES ('2020-08-03 17:27:37', '1,1,0,0,Your question was voting up,false');
+INSERT INTO notification (created_on, content)
+VALUES ('2020-03-19 13:55:14', '2,0,2,0,Your answer was created,false');
